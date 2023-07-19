@@ -1,0 +1,8 @@
+:root {
+  --border-color: #000000; /* Example for black*/
+  --background-color: #3c6982; /* Example for white */
+  --btn-color: #0000ff; /* Example for blue */
+}
+.container {
+  width: 100%;
+}
