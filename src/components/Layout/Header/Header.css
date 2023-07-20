@@ -17,6 +17,14 @@
   line-height: 24.05px;
 }
 
+.signInButton {
+  border: 0px transparent;
+  background: transparent;
+  color: white;
+  font-weight: 500;
+  font-size: 25px;
+}
+
 .menu_items {
   display: flex;
   flex-direction: row;
