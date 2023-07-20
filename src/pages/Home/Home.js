@@ -54,8 +54,8 @@ function Home() {
           <div className="over">Over $10M in loans fulfilled and growing! </div>
         </div>
         <HowItWorks />
-        <WhyUseRock />
       </div>
+      <WhyUseRocko />
     </>
   );
 }

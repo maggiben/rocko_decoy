@@ -1,0 +1,45 @@
+.whyUseRocko_container {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+.whyUseRocko_header {
+  margin-block: 20px;
+}
+.whyUseRocko_title {
+  font-size: 26px;
+  line-height: 31px;
+  padding: 10px 0 30px 0px;
+}
+
+.leftItem {
+  text-align: left;
+  width: 40%;
+  padding-inline: 40px;
+  margin-block: 20px;
+}
+.item_title {
+  font-size: 26px;
+  line-height: 31px;
+  padding-bottom: 10px;
+}
+.rightItemContainer {
+  text-align: right;
+  padding-inline: 40px;
+  width: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+.rightItem {
+  width: 40%;
+  text-align: left;
+  margin-block: 20px;
+}
+@media screen and (max-width: 767px) {
+  .rightItem {
+    width: 100%;
+  }
+  .leftItem {
+    width: 100%;
+  }
+}

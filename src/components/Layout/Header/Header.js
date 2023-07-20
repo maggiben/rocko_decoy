@@ -14,7 +14,7 @@ const Header = () => {
     width: menuCollapse ? "40%" : "-0%",
     transition: "width 0.4s ease-in-out",
     backgroundColor: "#3c6982",
-    position: "absolute",
+    position: "fixed",
     color: "white",
     top: "56px",
     margin: "10px",
