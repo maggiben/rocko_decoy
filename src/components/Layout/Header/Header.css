@@ -2,6 +2,8 @@
   width: 100%;
   background-color: var(--headerBar-color);
   font-weight: 500;
+  position: fixed;
+  top: 0px;
 }
 .headerBar {
   width: 95%;

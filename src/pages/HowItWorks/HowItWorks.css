@@ -1,0 +1,29 @@
+.howItWorks_container {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  font-weight: 400;
+}
+.howItWorks_header {
+  margin-block: 20px;
+}
+.howItWorks_title {
+  font-weight: 400;
+
+  font-size: 26px;
+  line-height: 31px;
+  padding: 60px 0 0 30px;
+}
+.howItWorks_content {
+  width: 80%;
+  margin: auto;
+  font-size: 18px;
+  line-height: 24px;
+  padding: 25px;
+  font-weight: 400;
+}
+.HowItWork_Img {
+  width: 100%;
+  height: auto;
+  margin-block: 30px;
+}

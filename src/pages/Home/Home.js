@@ -1,8 +1,10 @@
+import HowItWorks from "../HowItWorks/HowItWorks";
+import WhyUseRocko from "../WhyUseRocko/WhyUseRocko";
 import "./Home.css";
 function Home() {
   return (
     <>
-      <div className="body_container">
+      <div className="home_container">
         <div className="crytoBacked_container">
           <div className="crytoBacked_header">
             Crypto-backed loans for as low as 3.84% APR
@@ -50,8 +52,9 @@ function Home() {
         </div>
         <div className="bottom_container">
           <div className="over">Over $10M in loans fulfilled and growing! </div>
-          <div className="howItWorks">How it works</div>
         </div>
+        <HowItWorks />
+        <WhyUseRock />
       </div>
     </>
   );

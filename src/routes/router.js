@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/Home/Home";
-import Rocko from "../pages/Rocko/Rocko";
+// import Rocko from "../pages/Rocko/Rocko";
 export default function Router() {
   return useRoutes([
     {
@@ -12,10 +12,10 @@ export default function Router() {
           path: "/",
           element: <Home />,
         },
-        {
-          path: "/rocko",
-          element: <Rocko />,
-        },
+        // {
+        //   path: "/rocko",
+        //   element: <Rocko />,
+        // },
       ],
     },
   ]);

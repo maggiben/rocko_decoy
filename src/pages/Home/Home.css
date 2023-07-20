@@ -1,8 +1,9 @@
-.body_container {
+.home_container {
   width: 80%;
   margin: auto;
   text-align: center;
   font-weight: 400;
+  padding-top: 56px;
 }
 .crytoBacked_container {
   margin-block: 20px;
