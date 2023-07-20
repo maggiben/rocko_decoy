@@ -41,7 +41,7 @@
   font-weight: 400;
 }
 .get_started_btn {
-  width: 100%;
+  width: 29%;
   margin-block: 45px 15px;
   padding: 9px;
   font-size: 20px;
@@ -58,7 +58,7 @@
   margin-block: 00px 55px;
 }
 .over {
-  padding: 17px;
+  padding: 55px 17px 17px 17px;
   font-size: 18px;
   font-weight: 400;
 }
@@ -70,10 +70,17 @@
 }
 
 @media screen and (max-width: 767px) {
+  .body_container {
+    width: 100%;
+  }
   .items_container {
     display: block;
   }
   .item {
     width: 100%;
+    padding: 0px;
+  }
+  .get_started_btn {
+    width: 90%;
   }
 }

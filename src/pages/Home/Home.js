@@ -1,4 +1,4 @@
-import Header from "../../components/Layout/Header";
+import Header from "../../components/Layout/Header/Header";
 import "./Home.css";
 function Home() {
   return (
@@ -32,10 +32,6 @@ function Home() {
             <div className="item_content">
               Borrow at low rates from popular DeFi protocols like Compound and
               Aave
-              <button className="get_started_btn">Get Started</button>
-              <div>
-                or <span className="home_signIn">sign in</span>
-              </div>
             </div>
           </div>
           <div className="item">
@@ -48,7 +44,12 @@ function Home() {
             </div>
           </div>
         </div>
-
+        <div>
+          <button className="get_started_btn">Get Started</button>
+          <div>
+            or <span className="home_signIn">sign in</span>
+          </div>
+        </div>
         <div className="bottom_container">
           <div className="over">Over $10M in loans fulfilled and growing! </div>
           <div className="howItWorks">How it works</div>
