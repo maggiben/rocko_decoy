@@ -1,6 +1,7 @@
 .container {
   width: 100%;
-  background-color: var(--background-color);
+  background-color: var(--headerBar-color);
+  font-weight: 500;
 }
 .headerBar {
   width: 95%;
@@ -10,7 +11,6 @@
   min-height: 52px;
   color: white;
   margin: auto;
-  font-weight: 400;
   font-size: 20px;
   line-height: 24.05px;
 }

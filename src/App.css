@@ -1,8 +1,13 @@
 :root {
   --border-color: #000000; /* Example for black*/
-  --background-color: #3c6982; /* Example for white */
-  --btn-color: #0000ff; /* Example for blue */
+  --background-color: #ffffff; /* Example for white */
+  --headerBar-color: #3c6982;
+  --btn-color: #3c6982;
 }
-.container {
-  width: 100%;
+:root {
+}
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: "Inter var", sans-serif !important;
+  }
 }
