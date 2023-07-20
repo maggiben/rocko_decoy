@@ -64,12 +64,9 @@ const Header = () => {
             <div>FAQ</div>
           </div>
           <div className="signIn">
-            {isConnected ? 
-              <button className="signInButton" onClick={disconnect}>Disconnect</button>  
-              :            
-              <button className="signInButton" disabled={isLoading || loading} onClick={connectWallet}>
-                Sign in | Get started
-              </button>}
+            <div>Sign in</div>
+            <div>|</div>
+            <div>Get start</div>
           </div>
           <div className="sidebarOpenBtn" onClick={menuIconClick}>
             <img src="./assets/icons/menu.png" className="menuIconImg" />{" "}

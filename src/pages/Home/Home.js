@@ -30,8 +30,8 @@ function Home() {
               <img src="./assets/icons/dollar.png" className="item_img" />{" "}
             </div>
             <div className="item_content">
-              Borrow at low rates from popular DeFi protocols like Compound and
-              Aave
+              Receive funds directly to your preferred exchange or wallet within
+              minutes
             </div>
           </div>
           <div className="item">
@@ -39,8 +39,7 @@ function Home() {
               <img src="./assets/icons/dollar.png" className="item_img" />
             </div>
             <div className="item_content">
-              Borrow at low rates from popular DeFi protocols like Compound and
-              Aave
+              Repay your loan at anytime and receive your collateral back
             </div>
           </div>
         </div>
