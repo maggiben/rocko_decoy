@@ -1,4 +1,5 @@
 import "./HowItWorks.css";
+
 function HowItWorks() {
   return (
     <>
@@ -12,7 +13,7 @@ function HowItWorks() {
             preferred exchange account or wallet. You can then manage and repay
             your loan through your Rocko wallet.
           </div>
-          <img src="./assets/images/howToWork.png" className="HowItWork_Img" />
+          <img src="./assets/images/howToWork.png" alt="howtowork" className="HowItWork_Img" />
         </div>
       </div>
     </>

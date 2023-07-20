@@ -1,10 +1,11 @@
 import "./StartLoan.css";
+
 function StartLoan() {
   return (
     <>
       <div className="startLoan_container">
         <div className="go_back">
-          <img src="./assets/icons/leftarrow.png" className="goback_icon" />
+          <img src="./assets/icons/leftarrow.png" alt="leftarrow" className="goback_icon" />
           <span>Go back to home page</span>
         </div>
         <div className="customize_container">
@@ -20,6 +21,7 @@ function StartLoan() {
                 <div className="currency_item">
                   <img
                     src="./assets/images/usdc.png"
+                    alt="usdc"
                     className="currencyTypeImg"
                   />{" "}
                   <p>USDC</p>
@@ -28,6 +30,7 @@ function StartLoan() {
                   <img
                     src="./assets/images/usd.png"
                     className="currencyTypeImg"
+                    alt="usd"
                   />{" "}
                   <p style={{ opacity: "0.5" }}>USD (coming soon!)</p>
                 </div>
@@ -58,6 +61,7 @@ function StartLoan() {
                 <img
                   src="./assets/icons/exclamation.png"
                   className="exclamation"
+                  alt="exclamation"
                 />
               </div>
               <div className="detail">...</div>
@@ -68,6 +72,7 @@ function StartLoan() {
                 <img
                   src="./assets/icons/exclamation.png"
                   className="exclamation"
+                  alt="exclamation2"
                 />
               </div>
               <div className="detail">...</div>
@@ -78,6 +83,7 @@ function StartLoan() {
                 <img
                   src="./assets/icons/exclamation.png"
                   className="exclamation"
+                  alt="exclamation3"
                 />{" "}
               </div>
               <div className="detail">...</div>
@@ -88,6 +94,7 @@ function StartLoan() {
                 <img
                   src="./assets/icons/exclamation.png"
                   className="exclamation"
+                  alt="exclamation4"
                 />{" "}
               </div>
               <div className="detail">...</div>

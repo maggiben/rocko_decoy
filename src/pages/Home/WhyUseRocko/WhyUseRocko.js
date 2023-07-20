@@ -1,5 +1,5 @@
-import react from "react";
 import "./WhyUseRocko.css";
+
 function WhyUseRocko() {
   return (
     <>

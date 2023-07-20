@@ -18,7 +18,7 @@ function Home() {
         <div className="items_container">
           <div className="item">
             <div>
-              <img src="./assets/icons/protocol.png" className="item_img" />{" "}
+              <img src="./assets/icons/protocol.png" alt="protocol" className="item_img" />{" "}
             </div>{" "}
             <div className="item_content">
               Borrow at low rates from popular DeFi protocols like Compound and
@@ -27,7 +27,7 @@ function Home() {
           </div>
           <div className="item">
             <div>
-              <img src="./assets/icons/dollar.png" className="item_img" />{" "}
+              <img src="./assets/icons/dollar.png" alt="dollar" className="item_img" />{" "}
             </div>
             <div className="item_content">
               Receive funds directly to your preferred exchange or wallet within
@@ -36,7 +36,7 @@ function Home() {
           </div>
           <div className="item">
             <div>
-              <img src="./assets/icons/dollar.png" className="item_img" />
+              <img src="./assets/icons/dollar.png" alt="dollar2" className="item_img" />
             </div>
             <div className="item_content">
               Repay your loan at anytime and receive your collateral back

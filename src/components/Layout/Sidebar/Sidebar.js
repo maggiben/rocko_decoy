@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Sidebar.css";
 
 function Sidebar() {
   return (
-    <div claassName="sideBar">
+    <div className="sideBar">
       <div className="menuItem">Rocko</div>
       <div className="menuItem">About Us</div>
       <div className="menuItem">FAQ</div>
