@@ -11,7 +11,7 @@ const Header = () => {
     menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
   };
   const sideBarStyle = {
-    width: menuCollapse ? "80%" : "0%",
+    width: menuCollapse ? "40%" : "0%",
     transition: "width 0.4s ease-in-out",
     backgroundColor: "#3c6982",
     position: "absolute",
@@ -23,11 +23,11 @@ const Header = () => {
   };
   return (
     <div>
-      {sideBarStyle && (
+      {sideBarStyle ? (
         <div style={sideBarStyle} className="sidebar">
           {sideBarStyle && <Sidebar />}
         </div>
-      )}
+      ) : null}
       <div className="container">
         <div className="headerBar" id="header">
           <div className="menu_items">
