@@ -36,7 +36,7 @@ const Header = () => {
           <div className="signIn">
             <div>Sign in</div>
             <div>|</div>
-            <div>Get start</div>
+            <div>Get started</div>
           </div>
           <div className="sidebarOpenBtn" onClick={menuIconClick}>
             <img src="./assets/icons/menu.png" className="menuIconImg" />{" "}
