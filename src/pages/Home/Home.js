@@ -1,5 +1,5 @@
-import HowItWorks from "../HowItWorks/HowItWorks";
-import WhyUseRocko from "../WhyUseRocko/WhyUseRocko";
+import HowItWorks from "./HowItWorks/HowItWorks";
+import WhyUseRocko from "./WhyUseRocko/WhyUseRocko";
 import "./Home.css";
 function Home() {
   return (

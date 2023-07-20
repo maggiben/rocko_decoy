@@ -1,0 +1,116 @@
+.startLoan_container {
+  width: 90%;
+  margin: auto;
+  padding-top: 56px;
+}
+.go_back {
+  padding-block: 20px;
+  padding-inline: 30px;
+  text-decoration: underline;
+}
+.customize_container {
+  text-align: center;
+}
+.customize_container .title {
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 700;
+  padding: 20px;
+}
+.customize_container .input_form {
+  width: 60%;
+  margin-inline: auto;
+  margin-block: 20px;
+  text-align: left;
+  padding: 20px;
+  border: 1px solid #b7b4b4;
+  border-radius: 14px;
+}
+.customize_container .input_form .label {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  padding-block: 13px;
+}
+.borrow_number {
+}
+.input_number {
+  height: 34px;
+  border: 1px solid #b7b4b4;
+  border-radius: 22px;
+  width: 211px;
+  padding-inline: 13px;
+}
+.borrow_type {
+  margin-bottom: 20px;
+}
+.select_currency {
+  display: flex;
+  gap: 40px;
+}
+.currency_item {
+  text-align: center;
+}
+.currencyTypeImg {
+  width: 36px;
+  height: 36px;
+}
+.startLoan_container .description {
+  font-size: 14px;
+  line-height: 19px;
+}
+.loan_amount {
+  font-size: 14px;
+  line-height: 19px;
+}
+.back_next_container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.back_next_container .btn {
+  padding: 10px;
+  color: white;
+  width: 84px;
+  background: #3c6982;
+  border-radius: 25px;
+  border: none;
+  opacity: 0.5;
+}
+.summaryContainer {
+}
+.summaryContainer .label {
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 700;
+  padding-block: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.summaryContainer .detail_container {
+  border: 1px solid #b7b4b4;
+  border-radius: 14px;
+  padding: 0px 30px 10px 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.summaryContainer .detail_container .detail_item {
+  text-align: center;
+}
+.summaryContainer .detail_container .detail_item .label {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+}
+.exclamation {
+  width: 15px;
+  height: 15px;
+}
+.goback_icon {
+  width: 15px;
+  height: 15px;
+  padding-right: 10px;
+}
