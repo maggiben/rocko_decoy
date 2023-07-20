@@ -1,9 +1,7 @@
-import Header from "../../components/Layout/Header/Header";
 import "./Home.css";
 function Home() {
   return (
     <>
-      <Header />
       <div className="body_container">
         <div className="crytoBacked_container">
           <div className="crytoBacked_header">
