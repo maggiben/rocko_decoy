@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
-// import { getConfig } from "../../../config";
-import { Auth0WalletConnector } from '@zerodevapp/wagmi';
-import { configureChains, useAccount, useConnect, useDisconnect } from "wagmi";
-import { publicProvider } from 'wagmi/providers/public'
-import { goerli } from 'wagmi/chains'
-import { shortenAddress } from "../../../helper";
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Header = () => {
   const [menuCollapse, setMenuCollapse] = useState(false);
@@ -27,32 +21,31 @@ const Header = () => {
     zIndex: menuCollapse ? "1" : "0",
   };
 
-  // const config = getConfig();
-  const { chains } = configureChains( [goerli], [publicProvider()] );
-  const auth0Connector = new Auth0WalletConnector({chains, options: {
-    // projectId: config.projectId,
-    projectId: 'b5486fa4-e3d9-450b-8428-646e757c10f6',
-  }})
+  const { 
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    loginWithPopup,
+    logout
+  } = useAuth0();
+
+  const logoutWithRedirect = () =>
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      }
+  });
 
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false)
-  const { connect, isLoading } = useConnect()
-  const { address, isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
-
-  const connectWallet = async () => {
-    setLoading(true)
-    await connect({
-        connector: auth0Connector
-    })
-    setLoading(false)
-  }
-
   useEffect(() => {
-    isConnected ? 
+    isAuthenticated ? 
       navigate('/startloan') : 
       navigate('/');
-  }, [isConnected]);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    console.log('--isauthenticated---', isAuthenticated)
+  })
 
   return (
     <div>
@@ -67,13 +60,12 @@ const Header = () => {
             <div>FAQ</div>
           </div>
           <div className="signIn">
-            {isConnected ? 
-              <button className="signInButton" onClick={disconnect}>
-                {/* {shortenAddress(address)} | Disconnect */}
-                {address} | Disconnect
+            {isAuthenticated ? 
+              <button className="signInButton" onClick={() => logoutWithRedirect()}>
+                {user.email} | Disconnect
               </button>
               :
-              <button className="signInButton" disabled={isLoading || loading} onClick={connectWallet}>
+              <button className="signInButton" onClick={() => loginWithPopup()}>
                 Sign in | Get started
               </button>
             }
