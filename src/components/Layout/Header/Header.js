@@ -21,31 +21,26 @@ const Header = () => {
     zIndex: menuCollapse ? "1" : "0",
   };
 
-  const { 
-    user,
-    isAuthenticated,
-    loginWithRedirect,
-    loginWithPopup,
-    logout
-  } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, loginWithPopup, logout } =
+    useAuth0();
 
   const logoutWithRedirect = () =>
     logout({
       logoutParams: {
         returnTo: window.location.origin,
-      }
-  });
+      },
+    });
 
   const navigate = useNavigate();
-  useEffect(() => {
-    isAuthenticated ? 
-      navigate('/startloan') : 
-      navigate('/');
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   isAuthenticated ?
+  //     navigate('/startloan') :
+  //     navigate('/');
+  // }, [isAuthenticated]);
 
   useEffect(() => {
-    console.log('--isauthenticated---', isAuthenticated)
-  })
+    console.log("--isauthenticated---", isAuthenticated);
+  });
 
   return (
     <div>
@@ -60,18 +55,24 @@ const Header = () => {
             <div>FAQ</div>
           </div>
           <div className="signIn">
-            {isAuthenticated ? 
-              <button className="signInButton" onClick={() => logoutWithRedirect()}>
+            {isAuthenticated ? (
+              <button
+                className="signInButton"
+                onClick={() => logoutWithRedirect()}>
                 {user.email} | Disconnect
               </button>
-              :
+            ) : (
               <button className="signInButton" onClick={() => loginWithPopup()}>
                 Sign in | Get started
               </button>
-            }
+            )}
           </div>
           <div className="sidebarOpenBtn" onClick={menuIconClick}>
-            <img src="./assets/icons/menu.png" alt="menu" className="menuIconImg" />{" "}
+            <img
+              src="./assets/icons/menu.png"
+              alt="menu"
+              className="menuIconImg"
+            />{" "}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useRoutes } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/Home/Home";
 import StartLoan from "../pages/Loan/StartLoan/StartLoan";
+import ReviewLoan from "../pages/Loan/ReviewLoan/ReviewLoan";
 
 export default function Router() {
   return useRoutes([
@@ -16,6 +17,10 @@ export default function Router() {
         {
           path: "/startloan",
           element: <StartLoan />,
+        },
+        {
+          path: "/reviewloan",
+          element: <ReviewLoan />,
         },
       ],
     },
