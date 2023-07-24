@@ -76,7 +76,10 @@
 .btn {
   padding: 10px;
   color: white;
-  width: 84px;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 140px;
+  height: 60px;
   background: #3c6982;
   border-radius: 25px;
   border: none;

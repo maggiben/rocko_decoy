@@ -1,11 +1,16 @@
 import "./ReviewLoan.css";
 import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import { Link } from "react-router-dom";
-
+import {
+  useAddress,
+  ConnectWallet,
+  useSwitchChain,
+  useChainId,
+} from "@thirdweb-dev/react";
 import "swiper/swiper-bundle.min.css";
 SwiperCore.use([Navigation]);
+
 function ReviewLoan() {
   return (
     <>
@@ -93,7 +98,18 @@ function ReviewLoan() {
                     <div>Ethereum wallet</div>
                   </div>
                 </div>
-                <button className="btn">Connect</button>
+                <ConnectWallet
+                  className="btn"
+                  btnTitle="Connect"
+                  theme="light"
+                  style={{
+                    background: "#3c6982",
+                    color: "#495463",
+                    height: "60px",
+                    color: "white",
+                    borderRadius: "25px"
+                  }}
+                />                
               </div>
             </div>
             <div className="detail_item">
