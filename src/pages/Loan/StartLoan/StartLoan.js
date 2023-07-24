@@ -12,7 +12,7 @@ function StartLoan() {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperObj = useRef(null);
 
-  const [borrowing, setBorrowing] = useState();
+  const [borrowing, setBorrowing] = useState('10000');
   const [borrowMethod, setBorrowMethod] = useState(1);
   const [collateralMethod, setCollateralMethod] = useState(1);
   const next = () => {
