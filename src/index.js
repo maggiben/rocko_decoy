@@ -8,8 +8,14 @@ import reportWebVitals from "./reportWebVitals";
 import { Auth0Provider } from '@auth0/auth0-react';
 import { getConfig } from "./config";
 
-// Please see https://auth0.github.io/auth0-react/interfaces/Auth0ProviderOptions.html
-// for a full list of the available properties on the provider
+import {
+  ThirdwebProvider,
+  metamaskWallet,
+  coinbaseWallet,
+  walletConnect,
+  safeWallet,
+} from "@thirdweb-dev/react";
+// import { Ethereum } from "@thirdweb-dev/chains";
 const config = getConfig();
 
 const providerConfig = {
@@ -28,7 +34,9 @@ root.render(
         {...providerConfig}
       >
         <BrowserRouter>
-          <App />
+          <ThirdwebProvider activeChain="avalanche-fuji">
+            <App />
+          </ThirdwebProvider>
         </BrowserRouter>
       </Auth0Provider>
   </React.StrictMode>
