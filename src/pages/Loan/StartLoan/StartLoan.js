@@ -3,24 +3,32 @@ import React, { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import { Link } from "react-router-dom";
+import usePrice from "../../../hooks/usePrice";
+import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
-
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 SwiperCore.use([Navigation]);
+
 function StartLoan() {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperObj = useRef(null);
 
   const [borrowing, setBorrowing] = useState('10000');
+  const [APR, setAPR] = useState('3.84');
+  const [LTV, setLTV] = useState('70');
+  const [thresold, setThresold] = useState('82');
+  const [penalty, setPenalty] = useState('5');
+
   const [borrowMethod, setBorrowMethod] = useState(1);
   const [collateralMethod, setCollateralMethod] = useState(1);
+  const { ethprice } = usePrice();
+
   const next = () => {
     if (swiperObj && swiperObj.current) {
       swiperObj.current.slideNext();
     }
   };
-
   const prev = () => {
     if (swiperObj && swiperObj.current) {
       swiperObj.current.slidePrev();
@@ -118,7 +126,7 @@ function StartLoan() {
                   <div className="select_currency">
                     <div className="currency_item">
                       <img
-                        src="./assets/images/usdc.png"
+                        src="./assets/images/eth.png"
                         alt="usdc"
                         className={
                           collateralMethod == 1
@@ -127,7 +135,7 @@ function StartLoan() {
                         }
                         onClick={() => setCollateralMethod(1)}
                       />
-                      <p>USDC</p>
+                      <p>ETH</p>
                     </div>
                     <div className="currency_item">
                       <img
@@ -185,10 +193,10 @@ function StartLoan() {
                           src="./assets/icons/exclamation.png"
                           className="exclamation"
                           alt="exclamation"
-                          style={{ marginTop: "3px" }}
+                          style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">...</div>
+                      <div className="detail">70%</div>
                     </div>
                     <div className="text_center">
                       <div
@@ -202,10 +210,10 @@ function StartLoan() {
                           src="./assets/icons/exclamation.png"
                           className="exclamation"
                           alt="exclamation"
-                          style={{ marginTop: "3px" }}
+                          style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">...</div>
+                      <div className="detail">82%</div>
                     </div>
                     <div className="text_center">
                       <div
@@ -219,10 +227,10 @@ function StartLoan() {
                           src="./assets/icons/exclamation.png"
                           className="exclamation"
                           alt="exclamation"
-                          style={{ marginTop: "3px" }}
+                          style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">...</div>
+                      <div className="detail">5%</div>
                     </div>
                   </div>
                 </div>
@@ -243,7 +251,7 @@ function StartLoan() {
                   <div className="label2">
                     Choose how much collateral buffer you want
                   </div>
-                  <div className="select_currency">
+                  <div className="select_currency progressbar">
                     <ProgressBar bgcolor={"#05B516"} completed={60} />
                   </div>
                 </div>
@@ -285,7 +293,7 @@ function StartLoan() {
             <div className="text_center">
               <div className="label">Borrowing:</div>
               <div className="detail label">
-                {borrowing ? borrowing : "..."}
+                {borrowing ? borrowing + " USDC" : "..."}
               </div>
             </div>
             <div className="text_center">
@@ -300,7 +308,7 @@ function StartLoan() {
               <div
                 className="detail label"
                 style={{ fontSize: "19px !important" }}>
-                3.84%
+                {APR}%
               </div>
             </div>
             <div className="text_center">
@@ -318,25 +326,46 @@ function StartLoan() {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      width: "160px",
+                      width: "180px",
                     }}>
-                    <span>6 months:</span> $189.30
+                    <span>6 months:</span> 
+                    <span style={{ fontWeight: "600" }}>
+                      { borrowing ? 
+                        "$" + borrowing * APR / 400
+                        :
+                        <>...</>
+                      }
+                    </span>
                   </div>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      width: "160px",
+                      width: "180px",
                     }}>
-                    <span>12 months:</span> $384.60
+                    <span>12 months:</span>
+                    <span style={{ fontWeight: "600" }}>
+                      { borrowing ? 
+                        "$" + borrowing * APR / 200
+                        :
+                        <>...</>
+                      }
+                    </span>
                   </div>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      width: "160px",
+                      width: "180px",
                     }}>
-                    <span>24 months:</span> $769.20
+                    <span>24 months:</span>
+                    <span style={{ fontWeight: "600" }}>
+                      { borrowing ? 
+                        "$" + borrowing * APR / 100
+                        :
+                        <>...</>
+                      }
+                    </span>
                   </div>
                 </div>
               </div>
@@ -350,7 +379,10 @@ function StartLoan() {
                   alt="exclamation3"
                 />{" "}
               </div>
-              <div className="detail">...</div>
+              <div className="detail">
+                <div className="detailbold">{financial(borrowing * 10 / 7 / ethprice, 4)} Eth</div>
+              </div>
+              <div className="detail">(${financial(borrowing * 10 / 7, 2)})</div>
             </div>
             <div className="text_center">
               <div className="label">
@@ -361,7 +393,14 @@ function StartLoan() {
                   alt="exclamation4"
                 />{" "}
               </div>
-              <div className="detail">...</div>
+              <div className="detail">
+                <div className="detailbold">
+                  ${financial(ethprice * thresold / 100, 2)}
+                </div>
+              </div>
+              <div className="detail">Current price of Eth:  
+                <div className="detailbold"> ${ethprice}</div>
+              </div>
             </div>
           </div>
         </div>
