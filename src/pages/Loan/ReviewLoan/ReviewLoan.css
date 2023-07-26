@@ -62,6 +62,7 @@
 .startLoan_container .description {
   font-size: 14px;
   line-height: 19px;
+  margin-top: 20px;
 }
 .loan_amount {
   font-size: 14px;
@@ -101,7 +102,7 @@
 .summaryContainer .detail_container {
   border: 1px solid #b7b4b4;
   border-radius: 14px;
-  padding: 0px 30px 10px 30px;
+  padding: 0px 30px 30px 30px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -118,7 +119,7 @@
 .label2 {
   font-weight: 600;
   font-size: 15px;
-  line-height: 19px;
+  line-height: 10px;
   padding-block: 13px 35px;
 }
 .text_underline {
