@@ -21,8 +21,7 @@ const Header = () => {
     zIndex: menuCollapse ? "1" : "0",
   };
 
-  const { user, isAuthenticated, loginWithRedirect, loginWithPopup, logout } =
-    useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, loginWithPopup, logout } = useAuth0();
 
   const logoutWithRedirect = () =>
     logout({
