@@ -1,7 +1,7 @@
 import "./StartLoan.css";
 import React, { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation, Autoplay } from "swiper";
+import SwiperCore, { Navigation } from "swiper";
 import { Link } from "react-router-dom";
 import usePrice from "../../../hooks/usePrice";
 import { financial } from "../../../helper";
@@ -85,7 +85,7 @@ function StartLoan() {
                         src="./assets/images/usdc.png"
                         alt="usdc"
                         className={
-                          borrowMethod == 1
+                          borrowMethod === 1
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -97,7 +97,7 @@ function StartLoan() {
                       <img
                         src="./assets/images/usd.png"
                         className={
-                          borrowMethod == 2
+                          borrowMethod === 2
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -129,7 +129,7 @@ function StartLoan() {
                         src="./assets/images/eth.png"
                         alt="usdc"
                         className={
-                          collateralMethod == 1
+                          collateralMethod === 1
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -142,7 +142,7 @@ function StartLoan() {
                         src="./assets/images/usd.png"
                         alt="usdc"
                         className={
-                          collateralMethod == 2
+                          collateralMethod === 2
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -155,7 +155,7 @@ function StartLoan() {
                         src="./assets/images/WBTC.png"
                         alt="usdc"
                         className={
-                          collateralMethod == 3
+                          collateralMethod === 3
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -168,7 +168,7 @@ function StartLoan() {
                         src="./assets/images/Uniswap.png"
                         alt="usdc"
                         className={
-                          collateralMethod == 4
+                          collateralMethod === 4
                             ? "currencyTypeImgSelected"
                             : "currencyTypeImg"
                         }
@@ -273,7 +273,7 @@ function StartLoan() {
               Back
             </button>
 
-            {activeIndex == 2 ? (
+            {activeIndex === 2 ? (
               <Link to="/reviewloan">
                 <button className="btn" style={{ width: "198px" }}>
                   Continue to loan review
