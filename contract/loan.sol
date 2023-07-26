@@ -1,53 +1,73 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.5;
 
 interface IERC20 {
-    function balanceOf(address account) external view returns (uint256);
     function transfer(address recipient, uint256 amount) external returns (bool);
-    function approve(address spender, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 }
 
-contract LoanContract {
-    IERC20 public USDT;
-    IERC20 public ETH;
-    address owner;
-
-    uint256 public amountDue;
-    uint256 public dueDate;
-    uint256 public valueOfETH;
-    uint256 public loanToValue = 70;
-    uint256 public liquidationThreshold = 82;
-    uint256 public liquidationPenalty = 5;
+contract CryptoLoan {
+    IERC20 public USDC;
+    uint256 constant public LOAN_TO_VALUE = 70;
+    uint256 constant public LIQUIDATION_THRESHOLD = 82;
+    uint256 constant public LIQUIDATION_PENALTY = 5;
     
-    constructor(address _usdt, address _eth) public {
-        owner = msg.sender;
-        USDT = IERC20(_usdt);
-        ETH = IERC20(_eth);
+    uint256 public APR = 384; // APR represented in basis points
+    uint256 constant BASIS_POINT = 10000; // Basis point definition, 1 = 0.01%
+
+    mapping(address => uint256) public loans;
+
+    struct Loan {
+        uint256 amount;
+        uint256 interest;
+        uint256 buffer;
     }
 
-    function updateValueOfETH(uint256 _valueOfETH) external {
-        require(msg.sender == owner, "Only owner can update the ETH value.");
-        valueOfETH = _valueOfETH;
+    mapping(address => Loan) public loanInfo;
+
+    constructor(address _usdc) {
+        USDC = IERC20(_usdc);
     }
 
-    function borrow(uint256 _amount) external {
-        require(ETH.balanceOf(msg.sender) >= _amount * 100 / loanToValue, "Insufficient ETH collateral posted.");
-        USDT.transfer(msg.sender, _amount);
-        amountDue += _amount * 10384 / 10000; // APR 3.84%
-        dueDate = block.timestamp + 365 days; // One year term
+    function changeAPR(uint256 _newAPR) public {
+        APR = _newAPR;
     }
 
-    function repay() external {
-        require(USDT.balanceOf(msg.sender) >= amountDue, "Insufficient USDT.");
-        USDT.transferFrom(msg.sender, address(this), amountDue);
-        amountDue = 0;
+    function borrow(uint256 _loanAmount, uint256 _buffer) public payable {
+        require(_buffer >= 50 && _buffer <= 200, "Invalid buffer amount");
+        uint256 collateralNeeded = (_loanAmount / LOAN_TO_VALUE) * _buffer;
+        require(msg.value >= collateralNeeded, "Not enough collateral");
+        USDC.transfer(msg.sender, _loanAmount);
+        loans[msg.sender] += _loanAmount;
+        loanInfo[msg.sender] = Loan(_loanAmount, calculateInterest(_loanAmount), _buffer);
     }
 
-    function liquidate() external {
-        require(block.timestamp >= dueDate || ETH.balanceOf(msg.sender) * valueOfETH < amountDue * 100 / liquidationThreshold, "Loan is not due or undercollateralized.");
-        uint256 penalty = amountDue * liquidationPenalty / 100;
-        require(USDT.balanceOf(msg.sender) >= penalty, "Insufficient USDT to cover penalty.");
-        USDT.transferFrom(msg.sender, address(this), penalty);
-        ETH.transfer(msg.sender, ETH.balanceOf(address(this)));
+    function calculateInterest(uint256 _loanAmount) internal view returns(uint256) {
+        return (_loanAmount * APR) / BASIS_POINT;
+    }
+
+    function repay(uint256 _amount) public {
+        require(USDC.balanceOf(msg.sender) >= (loanInfo[msg.sender].amount * (APR / BASIS_POINT) + _amount), "Not enough USDC to repay loan and interest");
+        USDC.transferFrom(msg.sender, address(this), _amount + loanInfo[msg.sender].interest);
+        (bool success,) = msg.sender.call{value: loanInfo[msg.sender].amount}("");
+        require(success, "Transfer of ETH failed");
+        loanInfo[msg.sender].amount -= _amount;
+        loanInfo[msg.sender].interest = 0;
+        loans[msg.sender] -= _amount;
+    }
+
+    function addCollateral(uint256 _amount) public payable {
+        loanInfo[msg.sender].buffer += _amount;
+    }
+
+    function withdraw() public {
+        (bool success,) = msg.sender.call{value: address(this).balance}("");
+        require(success, "Withdraw of ETH failed");
+    }
+
+    function withdrawUSDC(uint256 _amount) public {
+        require(_amount <= USDC.balanceOf(address(this)), "Not enough USDC");
+        require(USDC.transfer(msg.sender, _amount), "USDC transfer failed");
     }
 }
