@@ -23,11 +23,12 @@ function StartLoan() {
   const [thresold, setThresold] = useState(0);
   const [penalty, setPenalty] = useState(0);
   const [price, setPrice] = useState(0);
-  const [bufferCollateral, setBufferCollateral] = useState(0);
+  const [bufferCollateral, setBufferCollateral] = useState(100);
   
-  const loanAmount = borrowing * (1 + bufferCollateral / 100);
-  const collateralNeededInUSD = loanAmount / LTV;
+  const loanAmount = borrowing;
+  const collateralNeededInUSD = loanAmount / LTV * (1 + bufferCollateral / 100);
   const collateralNeeded = collateralNeededInUSD / price;
+  const liquidationPrice = loanAmount / thresold / collateralNeeded;
 
   const {
     getETHPrice,
@@ -366,7 +367,7 @@ function StartLoan() {
               <div
                 className="detail label"
                 style={{ fontSize: "19px !important" }}>
-                {financial(APR, 4)}%
+                {financial(APR, 2)}%
               </div>
             </div>
             <div className="text_center">
@@ -389,7 +390,7 @@ function StartLoan() {
                     <span>6 months:</span> 
                     <span style={{ fontWeight: "600" }}>
                       { loanAmount ? 
-                        "$" + financial(loanAmount * APR / 400, 2)
+                        "$" + financial(loanAmount * APR / 200, 2)
                         :
                         <>...</>
                       }
@@ -404,7 +405,7 @@ function StartLoan() {
                     <span>12 months:</span>
                     <span style={{ fontWeight: "600" }}>
                       { loanAmount ? 
-                        "$" + financial(loanAmount * APR / 200, 2)
+                        "$" + financial(loanAmount * APR / 100, 2)
                         :
                         <>...</>
                       }
@@ -419,7 +420,7 @@ function StartLoan() {
                     <span>24 months:</span>
                     <span style={{ fontWeight: "600" }}>
                       { loanAmount ? 
-                        "$" + financial(loanAmount * APR / 100, 2)
+                        "$" + financial(loanAmount * APR / 50, 2)
                         :
                         <>...</>
                       }
@@ -453,7 +454,7 @@ function StartLoan() {
               </div>
               <div className="detail">
                 <div className="detailbold">
-                  ${financial(price * thresold, 2)}
+                  ${financial(liquidationPrice, 2)}
                 </div>
               </div>
               <div className="detail">Current price of Eth:  

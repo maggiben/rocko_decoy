@@ -19,7 +19,7 @@ export const ChainId = {
   
   export const LoanContract = {
     [ChainId["MAINNET"]]: "0x1622ddfe621F5a3fB43a95cD575fc164A7e6c158",
-    [ChainId["TESTNET"]]: "0xCc55828eC8F277AD03B07eE1878B5e4aaAB79650",
+    [ChainId["TESTNET"]]: "0xd5f47d7113991246f3d7b013849Ca32FA8d92E31",
   };
   
   export const USDCContract = {
