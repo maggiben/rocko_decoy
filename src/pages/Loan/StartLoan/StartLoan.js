@@ -1,30 +1,75 @@
 import "./StartLoan.css";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
-import { Link } from "react-router-dom";
 import usePrice from "../../../hooks/usePrice";
 import { financial } from "../../../helper";
+
+import { useLoan } from "../../../contract";
 
 import "swiper/swiper-bundle.min.css";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 SwiperCore.use([Navigation]);
 
 function StartLoan() {
+  const inputReference = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperObj = useRef(null);
 
-  const [borrowing, setBorrowing] = useState('10000');
-  const [APR, setAPR] = useState('3.84');
-  const [LTV, setLTV] = useState('70');
-  const [thresold, setThresold] = useState('82');
-  const [penalty, setPenalty] = useState('5');
+  const [borrowing, setBorrowing] = useState(0);
+  const [APR, setAPR] = useState(0);
+  const [LTV, setLTV] = useState(0);
+  const [thresold, setThresold] = useState(0);
+  const [penalty, setPenalty] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [bufferCollateral, setBufferCollateral] = useState(0);
+  
+  const loanAmount = borrowing * (1 + bufferCollateral / 100);
+  const collateralNeededInUSD = loanAmount / LTV;
+  const collateralNeeded = collateralNeededInUSD / price;
+
+  const {
+    getETHPrice,
+    getBorrowAPR,
+    getLTV,
+    getPenalty,
+    getThreshold
+  } = useLoan()
+
+  useEffect(() => {
+    console.log(borrowing * (1 + bufferCollateral / 100))
+
+    getETHPrice()
+    .then(value => setPrice(value))
+    .catch(e => console.log(e))
+
+    getBorrowAPR()
+    .then(value => setAPR(value))
+    .catch(e => console.log(e))
+
+    getLTV()
+    .then(value => setLTV(value))
+    .catch(e => console.log(e))
+
+    getPenalty()
+    .then(value => setPenalty(value))
+    .catch(e => console.log(e))
+
+    getThreshold()
+    .then(value => setThresold(value))
+    .catch(e => console.log(e))
+  })
 
   const [borrowMethod, setBorrowMethod] = useState(1);
   const [collateralMethod, setCollateralMethod] = useState(1);
-  const { ethprice } = usePrice();
-
+  
   const next = () => {
+    if (activeIndex == 0 && borrowing < 1000) {
+      inputReference.current.focus();
+      return
+    }
+
     if (swiperObj && swiperObj.current) {
       swiperObj.current.slideNext();
     }
@@ -68,6 +113,7 @@ function StartLoan() {
                 <div className="borrow_number">
                   <div className="label">How much do you want to borrow?</div>
                   <input
+                    ref={inputReference} 
                     className="input_number"
                     name="borrowing"
                     value={borrowing}
@@ -76,6 +122,9 @@ function StartLoan() {
                       setBorrowing(e.target.value);
                     }}
                   />
+                  {borrowing < 1000 && (
+                    <div style={{ fontSize: "12px", marginLeft: "12px", color: "red" }}>Min Borrow Value: 1000 USDC</div>
+                  )}
                 </div>
                 <div className="borrow_type">
                   <div className="label">What do you want to borrow?</div>
@@ -196,7 +245,7 @@ function StartLoan() {
                           style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">70%</div>
+                      <div className="detail">{LTV * 100}%</div>
                     </div>
                     <div className="text_center">
                       <div
@@ -213,7 +262,7 @@ function StartLoan() {
                           style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">82%</div>
+                      <div className="detail">{thresold * 100}%</div>
                     </div>
                     <div className="text_center">
                       <div
@@ -230,7 +279,7 @@ function StartLoan() {
                           style={{ marginTop: "3px", marginLeft: "2px" }}
                         />
                       </div>
-                      <div className="detail">5%</div>
+                      <div className="detail">{financial(penalty * 100, 1)}%</div>
                     </div>
                   </div>
                 </div>
@@ -252,7 +301,7 @@ function StartLoan() {
                     Choose how much collateral buffer you want
                   </div>
                   <div className="select_currency progressbar">
-                    <ProgressBar bgcolor={"#05B516"} completed={60} />
+                    <ProgressBar setBufferCollateral={setBufferCollateral} bufferCollateral={bufferCollateral}/>
                   </div>
                 </div>
 
@@ -261,7 +310,7 @@ function StartLoan() {
                   value, otherwise your collateral may be liquidated (i.e. sold)
                   by the lender. By posting more collateral than required, you
                   can reduce the projected liquidation price and the likelihood
-                  of this occurring.
+                  of this occurring.{" "}
                   <span className="text_underline">Learn more.</span>
                 </div>
               </div>
@@ -274,7 +323,16 @@ function StartLoan() {
             </button>
 
             {activeIndex === 2 ? (
-              <Link to="/reviewloan">
+              <Link 
+                to='/reviewloan'
+                state= {{
+                  loanAmount: {loanAmount},
+                  APR: {APR},
+                  collateral: {collateralNeeded},
+                  collateralNeededInUSD: {collateralNeededInUSD},
+                  bufferCollateral: {bufferCollateral}
+                }}
+              >
                 <button className="btn" style={{ width: "198px" }}>
                   Continue to loan review
                 </button>
@@ -293,7 +351,7 @@ function StartLoan() {
             <div className="text_center">
               <div className="label">Borrowing:</div>
               <div className="detail label">
-                {borrowing ? borrowing + " USDC" : "..."}
+                {loanAmount ? loanAmount + " USDC" : "..."}
               </div>
             </div>
             <div className="text_center">
@@ -308,7 +366,7 @@ function StartLoan() {
               <div
                 className="detail label"
                 style={{ fontSize: "19px !important" }}>
-                {APR}%
+                {financial(APR, 4)}%
               </div>
             </div>
             <div className="text_center">
@@ -330,8 +388,8 @@ function StartLoan() {
                     }}>
                     <span>6 months:</span> 
                     <span style={{ fontWeight: "600" }}>
-                      { borrowing ? 
-                        "$" + borrowing * APR / 400
+                      { loanAmount ? 
+                        "$" + financial(loanAmount * APR / 400, 2)
                         :
                         <>...</>
                       }
@@ -345,8 +403,8 @@ function StartLoan() {
                     }}>
                     <span>12 months:</span>
                     <span style={{ fontWeight: "600" }}>
-                      { borrowing ? 
-                        "$" + borrowing * APR / 200
+                      { loanAmount ? 
+                        "$" + financial(loanAmount * APR / 200, 2)
                         :
                         <>...</>
                       }
@@ -360,8 +418,8 @@ function StartLoan() {
                     }}>
                     <span>24 months:</span>
                     <span style={{ fontWeight: "600" }}>
-                      { borrowing ? 
-                        "$" + borrowing * APR / 100
+                      { loanAmount ? 
+                        "$" + financial(loanAmount * APR / 100, 2)
                         :
                         <>...</>
                       }
@@ -380,9 +438,9 @@ function StartLoan() {
                 />{" "}
               </div>
               <div className="detail">
-                <div className="detailbold">{financial(borrowing * 10 / 7 / ethprice, 4)} Eth</div>
+                <div className="detailbold">{financial(collateralNeeded, 4)} Eth</div>
               </div>
-              <div className="detail">(${financial(borrowing * 10 / 7, 2)})</div>
+              <div className="detail">(${financial(collateralNeededInUSD, 2)})</div>
             </div>
             <div className="text_center">
               <div className="label">
@@ -395,11 +453,11 @@ function StartLoan() {
               </div>
               <div className="detail">
                 <div className="detailbold">
-                  ${financial(ethprice * thresold / 100, 2)}
+                  ${financial(price * thresold, 2)}
                 </div>
               </div>
               <div className="detail">Current price of Eth:  
-                <div className="detailbold"> ${ethprice}</div>
+                <div className="detailbold"> ${financial(price, 3)}</div>
               </div>
             </div>
           </div>
