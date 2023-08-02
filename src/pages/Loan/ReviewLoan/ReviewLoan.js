@@ -1,17 +1,41 @@
 import "./ReviewLoan.css";
 import React, { useState } from "react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   useAddress,
+  useSigner,
   ConnectWallet,
   useSwitchChain,
   useChainId,
 } from "@thirdweb-dev/react";
+import { useLoan } from "../../../contract";
+import { financial } from "../../../helper";
+
 import "swiper/swiper-bundle.min.css";
 SwiperCore.use([Navigation]);
 
+
 function ReviewLoan() {
+  const location = useLocation();
+  const { loanAmount, APR, collateral, collateralNeededInUSD, bufferCollateral } = location.state;
+  const loan = loanAmount.loanAmount;
+  const apr = APR.APR;
+  const collateralNeeded = collateral.collateralNeeded;
+  const collateralUSD = collateralNeededInUSD.collateralNeededInUSD;
+  const buffer = bufferCollateral.bufferCollateral;
+
+  const signer = useSigner();
+  const { approve, deposit, addCollateral, borrowLoan } = useLoan();
+  const onFinalize = async () => {
+    const depositResult = await deposit(collateralNeeded);
+    if (depositResult) {
+      const approveResult = await approve();
+      const supplyResult = await addCollateral(collateralNeeded);
+      const borrowResult = await borrowLoan(loan);
+    }
+  }
+
   return (
     <>
       <div className="reivewLoan_container">
@@ -47,11 +71,11 @@ function ReviewLoan() {
                 </div>
                 <div className="summary_content_container">
                   <div className="content">Compound Finance</div>
-                  <div className="content">10,000 USDC (~$10,000)</div>
+                  <div className="content">{loan} USDC (~${loan})</div>
 
-                  <div className="content">3.84%</div>
-                  <div className="content">14.7341 ETH ($27,647.01)</div>
-                  <div className="content">~100%</div>
+                  <div className="content">{financial(apr, 4)}%</div>
+                  <div className="content">{financial(collateralNeeded, 4)} ETH (${financial(collateralUSD, 2)})</div>
+                  <div className="content">{buffer}%</div>
                   <div className="content">15 minutes*</div>
                 </div>
               </div>
@@ -92,7 +116,7 @@ function ReviewLoan() {
                   justifyContent: "space-between",
                 }}>
                 <div className="label">
-                  <input type="radio" name="radio" className="radio" />
+                  <input type="radio" name="radio" className="radio" checked="checked" />
 
                   <div>
                     <div>Ethereum wallet</div>
@@ -159,7 +183,7 @@ function ReviewLoan() {
               </div>
             </div>
           </div>
-          <div style={{ fontSize: "14px", paddingBottom: "60px" }}>
+          <div style={{ fontSize: "14px" }}>
             <div
               className="flex"
               style={{
@@ -189,6 +213,14 @@ function ReviewLoan() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="finalize_container">
+          <button 
+            className="btn_finalize" 
+            disabled={(signer ? false : true)}
+            onClick={onFinalize}
+          >Finalize loan request</button>
         </div>
       </div>
     </>

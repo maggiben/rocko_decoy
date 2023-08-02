@@ -45,6 +45,10 @@
   width: 50%;
   padding-inline: 13px;
 }
+.input_number:focus {
+  outline: none;
+  border-color: #3c6982;
+}
 .borrow_type {
   margin-bottom: 20px;
 }
@@ -86,8 +90,37 @@
   border: none;
 }
 .btn:hover {
+  opacity: 0.9;
+}
+
+.btn_finalize {
+  padding: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 259px;
+  height: 66px;
+  background: #3c6982;
+  border-radius: 15px;
+  border: none;
+  font-size: 24px;
+  font-weight: 600;
+  color: #F5F5F5;
+}
+.btn_finalize:hover {
+  opacity: 0.9;
+}
+.btn_finalize:disabled {
   opacity: 0.5;
 }
+
+.finalize_container{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 60px;
+  padding-bottom: 20px;
+}
+
 .summaryContainer {
 }
 .summaryContainer .label {
