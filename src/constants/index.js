@@ -19,13 +19,23 @@ export const ChainId = {
   
   export const LoanContract = {
     [ChainId["MAINNET"]]: "0x1622ddfe621F5a3fB43a95cD575fc164A7e6c158",
-    [ChainId["TESTNET"]]: "0x508Fdb71629E509DFF53B42746042D35AdFB2Dea",
+    [ChainId["TESTNET"]]: "0xCc55828eC8F277AD03B07eE1878B5e4aaAB79650",
   };
   
   export const USDCContract = {
     [ChainId["MAINNET"]]: "0x1622ddfe621F5a3fB43a95cD575fc164A7e6c158",
     [ChainId["TESTNET"]]: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
   };
+
+  export const CometContract = {
+    [ChainId["MAINNET"]]: "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+    [ChainId["TESTNET"]]: "0x3EE77595A8459e93C2888b13aDB354017B198188",
+  }
+
+  export const WETHContract = {
+    [ChainId["MAINNET"]]: "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+    [ChainId["TESTNET"]]: "0x42a71137C09AE83D8d05974960fd607d40033499",
+  }
 
   export const mainNetworkChainId = ChainId.MAINNET;
   export const testNetworkChainId = ChainId.TESTNET;
