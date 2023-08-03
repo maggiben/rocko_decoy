@@ -1,6 +1,7 @@
 import "./ReviewLoan.css";
 import React, { useState } from "react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
+import Modal from 'react-modal';
 import { Link, useLocation } from "react-router-dom";
 import {
   useAddress,
@@ -14,7 +15,6 @@ import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
 SwiperCore.use([Navigation]);
-
 
 function ReviewLoan() {
   const location = useLocation();
@@ -34,6 +34,15 @@ function ReviewLoan() {
       const supplyResult = await addCollateral(collateralNeeded);
       const borrowResult = await borrowLoan(loan);
     }
+  }
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal(){
+    setIsOpen(false);
   }
 
   return (
@@ -219,10 +228,19 @@ function ReviewLoan() {
           <button 
             className="btn_finalize" 
             disabled={(signer ? false : true)}
-            onClick={onFinalize}
+            onClick={openModal}
           >Finalize loan request</button>
         </div>
       </div>
+      <Modal
+        className="Modal"
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+      >
+        <div>Loan finalized!</div>
+        <div>Please approve the collateral withdrawal request in your Ethereum wallet. You can track the status of your loan on the next page</div>
+        <button>Continue</button>
+      </Modal>
     </>
   );
 }
