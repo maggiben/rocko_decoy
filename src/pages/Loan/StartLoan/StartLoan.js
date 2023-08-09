@@ -334,7 +334,7 @@ function StartLoan() {
                   bufferCollateral: {bufferCollateral}
                 }}
               >
-                <button className="btn" style={{ width: "198px" }}>
+                <button className="btn" style={{ width: "250px" }}>
                   Continue to loan review
                 </button>
               </Link>
