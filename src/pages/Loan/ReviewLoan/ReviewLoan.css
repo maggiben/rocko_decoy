@@ -227,10 +227,64 @@
 }
 .Modal {
   position: absolute;
-  top: 196px;
-  left: 396px;
-  width: 487px;
-  height: 267px;
+  top: 30%;
+  left: 35%;
+  width: 28%;
+  height: 32%;
   border-radius: 15px;
   background-color: #D9D9D9;
+}
+.contentClass {
+  display: flex;
+  justify-content: center !important;
+}
+.primaryProgressBtn {
+  margin-top: 200px;
+  /* display: none; */
+}
+.secondaryProgressBtn {
+  display: none;
+}
+.submitProgressBtn {
+  display: none;
+}
+.labelClass {
+  background-color: aqua;
+}
+.stepTitle {
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+.stepDetail {
+  font-weight: 400;
+  font-size: 16px;
+}
+.stepContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 60px;
+}
+.btnContinue {
+  width: 276px;
+  height: 51px;
+  border: 0px;
+  border-radius: 15px;
+  background-color: #3c6982;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+}
+.btnContinue:hover {
+  width: 276px;
+  height: 51px;
+  border: 0px;
+  border-radius: 15px;
+  background-color: #3c6982;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  opacity: 90%;
 }
