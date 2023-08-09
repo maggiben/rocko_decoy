@@ -1,8 +1,8 @@
 import "./ReviewLoan.css";
 import React, { useState } from "react";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
-import Modal from 'react-modal';
-import { Link, useLocation } from "react-router-dom";
+import Modal from "react-modal";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   useAddress,
   useSigner,
@@ -20,7 +20,13 @@ SwiperCore.use([Navigation]);
 function ReviewLoan() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { loanAmount, APR, collateral, collateralNeededInUSD, bufferCollateral } = location.state;
+  const {
+    loanAmount,
+    APR,
+    collateral,
+    collateralNeededInUSD,
+    bufferCollateral,
+  } = location.state;
   const loan = loanAmount.loanAmount;
   const apr = APR.APR;
   const collateralNeeded = collateral.collateralNeeded;
@@ -37,12 +43,12 @@ function ReviewLoan() {
     setIsOpen(true);
   }
 
-  function closeModal(){
+  function closeModal() {
     setIsOpen(false);
   }
 
-  const step1Validator = async() => {
-    console.log("ssssssssssssssssssssssssssssssss")
+  const step1Validator = async () => {
+    console.log("ssssssssssssssssssssssssssssssss");
     const depositResult = await deposit(collateralNeeded);
     if (depositResult) {
       const approveResult = await approve();
@@ -50,51 +56,51 @@ function ReviewLoan() {
     } else {
       return false;
     }
-  }
+  };
 
-  const step2Validator = async() => {
-    console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+  const step2Validator = async () => {
+    console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
     const supplyResult = await addCollateral(collateralNeeded);
     return supplyResult;
-  }
+  };
 
-  const step3Validator = async() => {
-    console.log("tttttttttttttttttttttttttttt")
+  const step3Validator = async () => {
+    console.log("tttttttttttttttttttttttttttt");
     const borrowResult = await borrowLoan(loan);
     return borrowResult;
-  }
+  };
 
   const continueInModal = () => {
     setIsStart(true);
     closeModal();
-  }
+  };
 
   const finalizeLoan = () => {
-    navigate('/dashboard');
-  }
+    navigate("/dashboard");
+  };
 
   const OnContinue = async () => {
     switch (step) {
       case 1:
         // const step1Result = await step1Validator();
         // if (step1Result)
-          setStep(2)
+        setStep(2);
         break;
       case 2:
         // const step2Result = await step2Validator();
         // if (step2Result)
-          setStep(3)
+        setStep(3);
         break;
       case 3:
         // const step3Result = await step3Validator();
         // if (step3Result)
-          setStep(4)
+        setStep(4);
         break;
       default:
         finalizeLoan();
         break;
     }
-  }
+  };
 
   return (
     <>
@@ -111,7 +117,9 @@ function ReviewLoan() {
             </div>
           </Link>
           <div className="loan_detail_container">
-            <div className="title">Finalize your loan with Compound Finance</div>
+            <div className="title">
+              Finalize your loan with Compound Finance
+            </div>
             <div style={{ paddingBottom: "40px" }}>
               You’re borrowing USDC and pledging Eth
             </div>
@@ -132,10 +140,15 @@ function ReviewLoan() {
                   </div>
                   <div className="summary_content_container">
                     <div className="content">Compound Finance</div>
-                    <div className="content">{loan} USDC (~${loan})</div>
+                    <div className="content">
+                      {loan} USDC (~${loan})
+                    </div>
 
                     <div className="content">{financial(apr, 4)}%</div>
-                    <div className="content">{financial(collateralNeeded, 4)} ETH (${financial(collateralUSD, 2)})</div>
+                    <div className="content">
+                      {financial(collateralNeeded, 4)} ETH ($
+                      {financial(collateralUSD, 2)})
+                    </div>
                     <div className="content">{buffer}%</div>
                     <div className="content">15 minutes*</div>
                   </div>
@@ -177,7 +190,12 @@ function ReviewLoan() {
                     justifyContent: "space-between",
                   }}>
                   <div className="label">
-                    <input type="radio" name="radio" className="radio" checked="checked" />
+                    <input
+                      type="radio"
+                      name="radio"
+                      className="radio"
+                      checked="checked"
+                    />
 
                     <div>
                       <div>Ethereum wallet</div>
@@ -192,9 +210,9 @@ function ReviewLoan() {
                       color: "#495463",
                       height: "60px",
                       color: "white",
-                      borderRadius: "25px"
+                      borderRadius: "25px",
                     }}
-                  />                
+                  />
                 </div>
               </div>
               <div className="detail_item">
@@ -232,7 +250,9 @@ function ReviewLoan() {
                     />
 
                     <div style={{ opacity: 0.6 }}>
-                      <div style={{ fontWeight: 700 }}>Enter wallet address</div>
+                      <div style={{ fontWeight: 700 }}>
+                        Enter wallet address
+                      </div>
                       <div style={{ paddingBottom: "15px" }}>
                         {" "}
                         Caution: Please ensure this address is correct as
@@ -253,19 +273,23 @@ function ReviewLoan() {
                 }}>
                 <div className="dot"></div>
                 <div>
-                  By finalizing your loan request, you will receive a Rocko wallet
-                  that will help facilitate and manager your loan. Rocko will have
-                  no access or control over funds inside your wallet.
+                  By finalizing your loan request, you will receive a Rocko
+                  wallet that will help facilitate and manager your loan. Rocko
+                  will have no access or control over funds inside your wallet.
                 </div>
               </div>
-              <div className="flex" style={{ gap: "10px", alignItems: "center" }}>
+              <div
+                className="flex"
+                style={{ gap: "10px", alignItems: "center" }}>
                 <div className="dot"></div>
                 <div>
-                  If your Rocko wallet does not receive the required amount, your
-                  loan may not be fulfilled.
+                  If your Rocko wallet does not receive the required amount,
+                  your loan may not be fulfilled.
                 </div>
               </div>
-              <div className="flex" style={{ gap: "10px", alignItems: "center" }}>
+              <div
+                className="flex"
+                style={{ gap: "10px", alignItems: "center" }}>
                 <div className="dot"></div>
                 <div>
                   Rocko’s service fee will be taken out of the initial amount
@@ -277,11 +301,12 @@ function ReviewLoan() {
           </div>
 
           <div className="finalize_container">
-            <button 
-              className="btn_finalize" 
-              disabled={(signer ? false : true)}
-              onClick={openModal}
-            >Finalize loan request</button>
+            <button
+              className="btn_finalize"
+              disabled={signer ? false : true}
+              onClick={openModal}>
+              Finalize loan request
+            </button>
           </div>
         </div>
       )}
@@ -289,41 +314,82 @@ function ReviewLoan() {
         <div>
           <div className="stepContainer">
             {step === 2 && (
-                <>
-                  <div className="stepTitle">Depositing collateral...</div>
-                  <div className="stepDetail">Estimated time remaining: less than 10 minutes</div>
-                </>
+              <>
+                <div className="stepTitle">Depositing collateral...</div>
+                <div className="stepDetail">
+                  Estimated time remaining: less than 10 minutes
+                </div>
+              </>
             )}
             {step >= 3 && (
-                <>
-                  <div className="stepTitle">Loan delivered!</div>
-                  <div className="stepDetail">Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided. </div>
-                </>
+              <>
+                <div className="stepTitle">Loan delivered!</div>
+                <div className="stepDetail">
+                  Your loan has been fulfilled and you can access your funds in
+                  the exchange account or wallet address provided.{" "}
+                </div>
+              </>
             )}
             {step === 1 && (
-                <>
-                  <div className="stepTitle">Transferring collateral...</div>
-                  <div className="stepDetail">Estimated time remaining: ...</div>
-                </>
+              <>
+                <div className="stepTitle">Transferring collateral...</div>
+                <div className="stepDetail">Estimated time remaining: ...</div>
+              </>
             )}
           </div>
           <Slider step={step} />
-          <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "150px" }}>
-            <button className="btnContinue" onClick={ async () => { await OnContinue() } }>Continue</button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: "150px",
+            }}>
+            <button
+              className="btnContinue"
+              onClick={async () => {
+                await OnContinue();
+              }}>
+              Continue
+            </button>
           </div>
         </div>
       )}
-      <Modal
-        className="Modal"
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-      >
-        <div style={{ padding: "30px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-          <div style={{ marginBottom: "20px", fontSize: "26px", fontWeight: "700", textAlign: "center" }}>Loan finalized!</div>
-          <div style={{ width: "408px", marginBottom: "80px", fontSize: "18px", fontWeight: "500", textAlign: "center" }}>Please approve the collateral withdrawal request in your Ethereum wallet. You can track the status of your loan on the next page</div>
-          <button 
+      <Modal className="Modal" isOpen={modalIsOpen} onRequestClose={closeModal}>
+        <div
+          style={{
+            padding: "30px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <div
+            style={{
+              marginBottom: "20px",
+              fontSize: "26px",
+              fontWeight: "700",
+              textAlign: "center",
+            }}>
+            Loan finalized!
+          </div>
+          <div
+            style={{
+              width: "408px",
+              marginBottom: "80px",
+              fontSize: "18px",
+              fontWeight: "500",
+              textAlign: "center",
+            }}>
+            Please approve the collateral withdrawal request in your Ethereum
+            wallet. You can track the status of your loan on the next page
+          </div>
+          <button
             className="btnContinue"
-            onClick={() => { continueInModal() }}>Continue</button>
+            onClick={() => {
+              continueInModal();
+            }}>
+            Continue
+          </button>
         </div>
       </Modal>
     </>
