@@ -1,10 +1,25 @@
-import React, { useState } from "react";
-import "./Dashboard.css";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import "./Dashboard.css";
 
 const Dashboard = ({ step }) => {
   const navigate = useNavigate();
+  const [loanData, setLoanData] = useState(null);
 
+  useEffect(() => {
+    const getLoanData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/loan");
+        console.log("response", response.data);
+        setLoanData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getLoanData();
+  }, []);
   return (
     <div className="dashboard">
       <div className="titleContainer">
