@@ -10,12 +10,28 @@ import {
   useSwitchChain,
   useChainId,
 } from "@thirdweb-dev/react";
+import axios from "axios";
 import { useLoan } from "../../../contract";
 import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
 import Slider from "../../../components/Slider/Slider";
 SwiperCore.use([Navigation]);
+
+const modalStyle = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#ffffff",
+    width: "fit-content",
+    height: "fit-content",
+    border: "1px solid",
+  },
+};
 
 function ReviewLoan() {
   const location = useLocation();
@@ -32,6 +48,7 @@ function ReviewLoan() {
   const collateralNeeded = collateral.collateralNeeded;
   const collateralUSD = collateralNeededInUSD.collateralNeededInUSD;
   const buffer = bufferCollateral.bufferCollateral;
+  // above 5 params + time
 
   const signer = useSigner();
   const { approve, deposit, addCollateral, borrowLoan } = useLoan();
@@ -76,7 +93,19 @@ function ReviewLoan() {
   };
 
   const finalizeLoan = () => {
-    navigate("/dashboard");
+    const loanObject = {
+      loan: loan,
+      apr: apr,
+      collateralNeeded: collateralNeeded,
+      collateralUSD: collateralUSD,
+      buffer: buffer,
+    };
+    console.log("loanObject", loanObject);
+    axios.post(`http://localhost:5000/add`, loanObject).then((res) => {
+      console.log(res);
+      console.log(res.data);
+      navigate("/dashboard");
+    });
   };
 
   const OnContinue = async () => {
@@ -354,7 +383,11 @@ function ReviewLoan() {
           </div>
         </div>
       )}
-      <Modal className="Modal" isOpen={modalIsOpen} onRequestClose={closeModal}>
+      <Modal
+        className="Modal"
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={modalStyle}>
         <div
           style={{
             padding: "30px",

@@ -4,7 +4,7 @@ import Home from "../pages/Home/Home";
 import StartLoan from "../pages/Loan/StartLoan/StartLoan";
 import ReviewLoan from "../pages/Loan/ReviewLoan/ReviewLoan";
 import Dashboard from "../pages/Dashboard/Dashboard";
-
+import ManageLoan from "../pages/Loan/ManageLoan/ManageLoan";
 export default function Router() {
   return useRoutes([
     {
@@ -26,7 +26,11 @@ export default function Router() {
         {
           path: "/dashboard",
           element: <Dashboard />,
-        }
+        },
+        {
+          path: "/manage",
+          element: <ManageLoan />,
+        },
       ],
     },
   ]);
