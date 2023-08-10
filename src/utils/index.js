@@ -28,3 +28,10 @@ export const getDurationFromUnixTime = (unixTimestamp) => {
 
     return `${days}D ${hours}H ${mins}M`;
 }
+
+export const getInterest = (loan, apr, startLoan) => {
+    const durationInDays = new Date().getDay() - new Date(startLoan).getDay(); 
+    const interest = (durationInDays * loan * apr / 100) / 365;
+
+    return interest;
+}
