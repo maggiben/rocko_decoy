@@ -77,7 +77,7 @@ export const useLoan = () => {
       "baseTrackingBorrowSpeed"
     )
 
-    const formattedValue = ethers.utils.formatEther( value )
+    const formattedValue = ethers.utils.formatEther( value ) * 365 * 60 * 60 * 24;
     return formattedValue
   }
 
