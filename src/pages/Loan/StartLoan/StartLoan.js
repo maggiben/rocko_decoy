@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
-import usePrice from "../../../hooks/usePrice";
 import { financial } from "../../../helper";
 
 import { useLoan } from "../../../contract";

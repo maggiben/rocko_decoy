@@ -6,8 +6,34 @@ import axios from "axios";
 import { useLoan } from "../../../contract";
 import { getInterest } from "../../../utils";
 import { financial } from "../../../helper";
+import { useCompPrice } from "../../../hooks/usePrice";
+import Modal from "react-modal";
+
+const modalStyle = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#ffffff",
+    width: "fit-content",
+    height: "fit-content",
+    border: "1px solid",
+  },
+};
 
 function ManageLoan() {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   const location = useLocation();
   const { loanInfo } = location.state;
   const loanAmount = loanInfo.loan.loan;
@@ -25,6 +51,7 @@ function ManageLoan() {
   const [reward, setReward] = useState(0);
   const [rewardrate, setRewardRate] = useState(0);
   const highestETHPrice = 4891.7
+  const { compprice } = useCompPrice();
 
   const {
     getETHPrice,
@@ -79,12 +106,14 @@ function ManageLoan() {
   const handleClick = () => setToggle(!isToggled);
 
   const OnRepay = async() => {
-    const approveResult = await approveUSDC();
-    if (approveResult) {
-      const result = await addLoan(loanAmount + interest);
-      const repayResult = await borrowCollateral(collateral);
-      const rewardResult = await claimReward();
-    }
+    openModal()
+
+    // const approveResult = await approveUSDC();
+    // if (approveResult) {
+    //   const result = await addLoan(loanAmount + interest);
+    //   const repayResult = await borrowCollateral(collateral);
+    //   const rewardResult = await claimReward();
+    // }
   }
 
   const OnAddCollateral = () => {
@@ -103,7 +132,6 @@ function ManageLoan() {
           <span>Go back to all loans</span>
         </Link>
       </div>
-
       <div className="compound-container">
         <div className="title">Loan with Compound Finance</div>
 
@@ -246,10 +274,10 @@ function ManageLoan() {
                     <p>
                       {financial(reward, 6)} Comp{" "}
                       <span style={{ fontSize: "16px", fontWeight: "500" }}>
-                        (~$0.07)
+                        (~${financial(reward * compprice, 2)})
                       </span>
                     </p>
-                    <p>{rewardrate}%</p>
+                    <p>{financial(rewardrate, 2)}%</p>
                   </div>
                 </div>
               </div>
@@ -267,6 +295,44 @@ function ManageLoan() {
           </div>
         </div>
       </div>
+      <Modal
+        className="Modal"
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={modalStyle}>
+        <div
+          style={{
+            padding: "30px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <div
+            style={{
+              marginBottom: "20px",
+              fontSize: "26px",
+              fontWeight: "700",
+              textAlign: "center",
+            }}>
+            Choose payment amount
+          </div>
+          <div
+            style={{
+              width: "408px",
+              marginBottom: "80px",
+              fontSize: "18px",
+              fontWeight: "500",
+              textAlign: "center",
+            }}>
+            Please approve the collateral withdrawal request in your Ethereum
+            wallet. You can track the status of your loan on the next page
+          </div>
+          <button className="btnContinue">
+            Continue
+          </button>
+        </div>
+      </Modal>      
     </div>
   );
 }

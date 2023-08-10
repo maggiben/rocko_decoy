@@ -114,3 +114,12 @@ input[type="checkbox"]:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+.Modal {
+  position: absolute;
+  top: 30%;
+  left: 35%;
+  width: 28%;
+  height: 32%;
+  border-radius: 15px;
+  background-color: #D9D9D9;
+}
