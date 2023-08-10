@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import GradientProgressBar from "./GradientProgressBar ";
+import GradientProgressBar from "../../../components/GradientProgressBar/GradientProgressBar ";
 import "./ManageLoan.css";
 import axios from "axios";
 import { useLoan } from "../../../contract";
@@ -8,6 +8,7 @@ import { getInterest } from "../../../utils";
 import { financial } from "../../../helper";
 import { useCompPrice } from "../../../hooks/usePrice";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
 
 const modalStyle = {
   content: {
@@ -50,8 +51,12 @@ function ManageLoan() {
   const [penalty, setPenalty] = useState(0);
   const [reward, setReward] = useState(0);
   const [rewardrate, setRewardRate] = useState(0);
-  const highestETHPrice = 4891.7
+  const highestETHPrice = 4891.7;
   const { compprice } = useCompPrice();
+
+  const [selectedOption, setSelectedOption] = useState("option1");
+  const [amount, setAmount] = useState(0);
+  const [currentBalence, setCurrentBalence] = useState(1012.13);
 
   const {
     getETHPrice,
@@ -64,49 +69,49 @@ function ManageLoan() {
     addLoan,
     borrowCollateral,
     addCollateral,
-    claimReward
-  } = useLoan()
+    claimReward,
+  } = useLoan();
 
   useEffect(() => {
     getETHPrice()
-    .then(value => setPrice(value))
-    .catch(e => console.log(e))
+      .then((value) => setPrice(value))
+      .catch((e) => console.log(e));
 
     getBorrowAPR()
-    .then(value => setAPR(value))
-    .catch(e => console.log(e))
+      .then((value) => setAPR(value))
+      .catch((e) => console.log(e));
 
     getPenalty()
-    .then(value => setPenalty(value))
-    .catch(e => console.log(e))
+      .then((value) => setPenalty(value))
+      .catch((e) => console.log(e));
 
     getThreshold()
-    .then(value => setThresold(value))
-    .catch(e => console.log(e))
+      .then((value) => setThresold(value))
+      .catch((e) => console.log(e));
 
     getRewardAmount()
-    .then(value => setReward(value))
-    .catch(e => console.log(e))
+      .then((value) => setReward(value))
+      .catch((e) => console.log(e));
 
     getRewardRate()
-    .then(value => setRewardRate(value))
-    .catch(e => console.log(e))
+      .then((value) => setRewardRate(value))
+      .catch((e) => console.log(e));
 
     const value = getInterest(loanAmount, APR, time);
-    setInterest(value)
+    setInterest(value);
 
     const priceValue = loanAmount / thresold / collateral;
     setLiquidationPrice(priceValue);
 
-    const percent = liquidationprice / highestETHPrice * 100;
+    const percent = (liquidationprice / highestETHPrice) * 100;
     setLiquidationPercent(percent);
-  })
+  });
 
   const [isToggled, setToggle] = useState(false);
   const handleClick = () => setToggle(!isToggled);
 
-  const OnRepay = async() => {
-    openModal()
+  const OnRepay = async () => {
+    openModal();
 
     // const approveResult = await approveUSDC();
     // if (approveResult) {
@@ -114,12 +119,21 @@ function ManageLoan() {
     //   const repayResult = await borrowCollateral(collateral);
     //   const rewardResult = await claimReward();
     // }
-  }
+  };
 
-  const OnAddCollateral = () => {
+  const OnAddCollateral = () => {};
 
-  }
-  
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  let navigate = useNavigate();
+  const goToRepay = () => {
+    navigate("/repay", {
+      state: { amount: selectedOption == "option1" ? currentBalence : amount },
+    });
+  };
+
   return (
     <div className="reivewLoan_container">
       <div className="go_back">
@@ -156,7 +170,9 @@ function ManageLoan() {
                   lineHeight: "29px",
                 }}>
                 {financial(loanAmount + interest, 2)} USDC{" "}
-                <span style={{ fontSize: "20px" }}>(${financial(loanAmount + interest, 2)})</span>
+                <span style={{ fontSize: "20px" }}>
+                  (${financial(loanAmount + interest, 2)})
+                </span>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -171,7 +187,13 @@ function ManageLoan() {
                 </div>
               </div>
               <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                <button className="btn" onClick={async () => { await OnRepay() }}>Make payment</button>
+                <button
+                  className="btn"
+                  onClick={async () => {
+                    await OnRepay();
+                  }}>
+                  Make payment
+                </button>
                 <div
                   style={{
                     textAlign: "center",
@@ -195,7 +217,10 @@ function ManageLoan() {
                     <p>Collateral posted</p>
                   </div>
                   <div style={{ width: "50%", fontWeight: "700" }}>
-                    <p>{financial(collateral, 6)} ETH (${financial(price * collateral, 2)}) </p>
+                    <p>
+                      {financial(collateral, 6)} ETH ($
+                      {financial(price * collateral, 2)}){" "}
+                    </p>
                   </div>
                 </div>
                 <div style={{ display: "flex" }}>
@@ -225,7 +250,12 @@ function ManageLoan() {
                     justifyContent: "space-between",
                     gap: "30px",
                   }}>
-                  <GradientProgressBar liquidationPrice={liquidationprice} currentPrice={price} percentage1={liquidationpercent} percentage2={price / highestETHPrice * 100} />
+                  <GradientProgressBar
+                    liquidationPrice={liquidationprice}
+                    currentPrice={price}
+                    percentage1={liquidationpercent}
+                    percentage2={(price / highestETHPrice) * 100}
+                  />
                   <div
                     style={{
                       textAlign: "center",
@@ -247,7 +277,9 @@ function ManageLoan() {
                   </div>
                 </div>
                 <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                  <button className="btn" onClick={() => OnAddCollateral()}>Add collateral</button>
+                  <button className="btn" onClick={() => OnAddCollateral()}>
+                    Add collateral
+                  </button>
                   <div
                     style={{
                       textAlign: "center",
@@ -323,16 +355,62 @@ function ManageLoan() {
               marginBottom: "80px",
               fontSize: "18px",
               fontWeight: "500",
-              textAlign: "center",
             }}>
-            Please approve the collateral withdrawal request in your Ethereum
-            wallet. You can track the status of your loan on the next page
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                marginBlock: "15px",
+              }}>
+              <input
+                type="radio"
+                name="radio"
+                className="radio"
+                checked={selectedOption === "option1"}
+                value="option1"
+                onChange={handleRadioChange}
+              />
+
+              <div>
+                <div style={{ fontSize: "20px" }}>1012.13</div>
+                <div style={{ fontSize: "16px" }}>Current balance</div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+              }}>
+              <input
+                type="radio"
+                name="radio"
+                className="radio"
+                checked={selectedOption === "option2"}
+                value="option2"
+                onChange={handleRadioChange}
+              />
+              <div style={{ fontSize: "24px", fontWeight: "600" }}>
+                Other amount
+              </div>
+            </div>
+            {selectedOption === "option2" && (
+              <input
+                className="input_number"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                style={{ marginTop: "10px", marginLeft: "75px" }}
+              />
+            )}
           </div>
-          <button className="btnContinue">
+
+          <button className="btnContinue" onClick={goToRepay}>
             Continue
           </button>
         </div>
-      </Modal>      
+      </Modal>
     </div>
   );
 }

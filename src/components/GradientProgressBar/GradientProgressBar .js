@@ -1,7 +1,12 @@
 import React from "react";
-import { financial } from "../../../helper";
+import { financial } from "../../helper";
 
-const GradientProgressBar = ({ liquidationPrice, currentPrice, percentage1 = 0, percentage2 = 90 }) => {
+const GradientProgressBar = ({
+  liquidationPrice,
+  currentPrice,
+  percentage1 = 0,
+  percentage2 = 90,
+}) => {
   const style = {
     width: "0",
     height: "0",
