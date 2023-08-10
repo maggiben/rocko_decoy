@@ -1,6 +1,6 @@
 import React from "react";
 
-const GradientProgressBar = ({ percentage1 = 10, percentage2 = 70 }) => {
+const GradientProgressBar = ({ percentage1 = 0, percentage2 = 90 }) => {
   const style = {
     width: "0",
     height: "0",
