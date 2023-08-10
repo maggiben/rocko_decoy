@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -49,9 +49,20 @@ const Header = () => {
       <div className="container">
         <div className="headerBar" id="header">
           <div className="menu_items">
-            <div>Rocko</div>
-            <div>About Us</div>
-            <div>FAQ</div>
+            {!isAuthenticated && (
+              <>
+                <div>Rocko</div>
+                <div>About Us</div>
+                <div>FAQ</div>
+              </>
+            )}
+            {isAuthenticated && (
+              <>
+                <Link className="link" to='/dashboard'>Dashboard</Link>
+                <Link className="link" to='/startloan'>Request loan</Link>
+                <div>FAQ</div>
+              </>
+            )}
           </div>
           <div className="signIn">
             {isAuthenticated ? (
