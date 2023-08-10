@@ -22,6 +22,8 @@ function ManageLoan() {
   const [liquidationprice, setLiquidationPrice] = useState(0);
   const [liquidationpercent, setLiquidationPercent] = useState(0);
   const [penalty, setPenalty] = useState(0);
+  const [reward, setReward] = useState(0);
+  const [rewardrate, setRewardRate] = useState(0);
   const highestETHPrice = 4891.7
 
   const {
@@ -29,10 +31,13 @@ function ManageLoan() {
     getBorrowAPR,
     getPenalty,
     getThreshold,
+    getRewardAmount,
+    getRewardRate,
     approveUSDC,
     addLoan,
     borrowCollateral,
     addCollateral,
+    claimReward
   } = useLoan()
 
   useEffect(() => {
@@ -50,6 +55,14 @@ function ManageLoan() {
 
     getThreshold()
     .then(value => setThresold(value))
+    .catch(e => console.log(e))
+
+    getRewardAmount()
+    .then(value => setReward(value))
+    .catch(e => console.log(e))
+
+    getRewardRate()
+    .then(value => setRewardRate(value))
     .catch(e => console.log(e))
 
     const value = getInterest(loanAmount, APR, time);
@@ -70,6 +83,7 @@ function ManageLoan() {
     if (approveResult) {
       const result = await addLoan(loanAmount + interest);
       const repayResult = await borrowCollateral(collateral);
+      const rewardResult = await claimReward();
     }
   }
 
@@ -230,12 +244,12 @@ function ManageLoan() {
                   </div>
                   <div style={{ width: "50%", fontWeight: "700" }}>
                     <p>
-                      0.0214 Comp{" "}
+                      {financial(reward, 6)} Comp{" "}
                       <span style={{ fontSize: "16px", fontWeight: "500" }}>
                         (~$0.07)
                       </span>
                     </p>
-                    <p>2.54%</p>
+                    <p>{rewardrate}%</p>
                   </div>
                 </div>
               </div>

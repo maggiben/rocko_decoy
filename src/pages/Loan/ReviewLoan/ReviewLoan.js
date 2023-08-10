@@ -113,18 +113,18 @@ function ReviewLoan() {
   const OnContinue = async () => {
     switch (step) {
       case 1:
-        // const step1Result = await step1Validator();
-        // if (step1Result)
+        const step1Result = await step1Validator();
+        if (step1Result)
         setStep(2);
         break;
       case 2:
-        // const step2Result = await step2Validator();
-        // if (step2Result)
+        const step2Result = await step2Validator();
+        if (step2Result)
         setStep(3);
         break;
       case 3:
-        // const step3Result = await step3Validator();
-        // if (step3Result)
+        const step3Result = await step3Validator();
+        if (step3Result)
         setStep(4);
         break;
       default:
