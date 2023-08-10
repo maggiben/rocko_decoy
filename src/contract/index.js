@@ -2,13 +2,14 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { ethers } from 'ethers'
 import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { LoanContract, USDCContract, CometContract, WETHContract, testNetworkChainId } from "../constants";
+import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, testNetworkChainId } from "../constants";
 import { parseBalance } from '../utils';
 
 const LOANABI = require('../constants/loan.json')
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
 const USDCABI = require('../constants/usdc.json')
+const REWARDABI = require('../constants/reward.json')
 
 export const useLoan = () => {
   const address = useAddress()
@@ -64,6 +65,35 @@ export const useLoan = () => {
 
     const formattedValue = 1 - ethers.utils.formatEther( penalty )
     console.log("---penalty---", formattedValue)
+    return formattedValue
+  }
+
+  const getRewardRate = async() => {
+    if (!address) return;
+
+    const sdk = new ThirdwebSDK('Goerli');
+    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const value = await contract.call( 
+      "baseTrackingBorrowSpeed"
+    )
+
+    const formattedValue = ethers.utils.formatEther( value )
+    return formattedValue
+  }
+
+  const getRewardAmount = async() => {
+    if (!address) return;
+
+    const sdk = new ThirdwebSDK('Goerli');
+    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const value = await contract.call( 
+      "userBasic",
+      [
+        address
+      ]
+    )
+
+    const formattedValue = ethers.utils.formatEther( value[2] ) * 10 ** 12
     return formattedValue
   }
 
@@ -211,6 +241,28 @@ export const useLoan = () => {
     }
   }
 
+  const claimReward = async() => {
+    if (!address) return;
+    
+    const sdk = ThirdwebSDK.fromSigner(signer);
+    const contract = await sdk.getContract(CometRewardContract[testNetworkChainId], REWARDABI)
+
+    try {
+      const tx = await contract.call(
+        "claim",
+        [
+          CometContract[testNetworkChainId],
+          address,
+          true
+        ]
+      );
+      return tx;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  }
+
   return {
       approveWETH,
       approveUSDC,
@@ -223,7 +275,10 @@ export const useLoan = () => {
       getBorrowAPR,
       getLTV,
       getThreshold,
-      getPenalty
+      getPenalty,
+      getRewardAmount,
+      getRewardRate,
+      claimReward
   }
 }
 
