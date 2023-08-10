@@ -51,7 +51,7 @@ function ReviewLoan() {
   // above 5 params + time
 
   const signer = useSigner();
-  const { approve, deposit, addCollateral, borrowLoan } = useLoan();
+  const { approveWETH, deposit, addCollateral, borrowLoan } = useLoan();
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isStart, setIsStart] = useState(false);
@@ -68,7 +68,7 @@ function ReviewLoan() {
     console.log("ssssssssssssssssssssssssssssssss");
     const depositResult = await deposit(collateralNeeded);
     if (depositResult) {
-      const approveResult = await approve();
+      const approveResult = await approveWETH();
       return approveResult != null;
     } else {
       return false;
@@ -93,11 +93,13 @@ function ReviewLoan() {
   };
 
   const finalizeLoan = () => {
+    console.log("---collateralNeeded---", collateralNeeded.toString());
+    console.log("---collateralUSD---", collateralUSD.toString());
     const loanObject = {
       loan: loan,
       apr: apr,
-      collateralNeeded: collateralNeeded,
-      collateralUSD: collateralUSD,
+      collateralNeeded: collateralNeeded.toString(),
+      collateralUSD: collateralUSD.toString(),
       buffer: buffer,
     };
     console.log("loanObject", loanObject);

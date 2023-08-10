@@ -39,8 +39,6 @@ function StartLoan() {
   } = useLoan()
 
   useEffect(() => {
-    console.log(borrowing * (1 + bufferCollateral / 100))
-
     getETHPrice()
     .then(value => setPrice(value))
     .catch(e => console.log(e))
