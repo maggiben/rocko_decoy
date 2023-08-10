@@ -7,6 +7,8 @@ import "./Dashboard.css";
 const Dashboard = ({ step }) => {
   const navigate = useNavigate();
   const [loanData, setLoanData] = useState(null);
+  const [loancount, setLoanCount] = useState(0);
+  const [totalloan, setTotalLoan] = useState(0);
 
   useEffect(() => {
     const getLoanData = async () => {
@@ -14,18 +16,24 @@ const Dashboard = ({ step }) => {
         const response = await axios.get("http://localhost:5000/loan");
         console.log("response", response.data);
         setLoanData(response.data);
+        setLoanCount(response.data.length);
+
+        let sumOfLoan = response.data.reduce((total, obj) => total + obj.loan, 0);
+        console.log(sumOfLoan);
+        setTotalLoan(sumOfLoan);
       } catch (error) {
         console.error(error);
       }
     };
     getLoanData();
   }, []);
+
   return (
     <div className="dashboard">
       <div className="titleContainer">
         <div className="title">Loan dashboard</div>
         <div className="titleDetail">
-          You have 3 loans outstanding for 5000 USDC
+          You have {loancount} loans outstanding for {totalloan} USDC
         </div>
       </div>
       <div className="loansContainer">
@@ -52,44 +60,56 @@ const Dashboard = ({ step }) => {
           </div>
         </div>
         <div className="loans">
-          <div className="eachLoan">
-            <div className="loanDetails">
-              <div
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "700",
-                  marginBottom: "10px",
-                }}>
-                Compound - ETH:USDC
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ marginBottom: "5px" }}>Balance</div>
-                  <div>Current APR</div>
-                </div>
-                <div>
+          {loanData && loanData.map((loan) => {
+            const date = new Date(loan.time);
+            const formattedDate = `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}, ${date.getFullYear()}`;
+
+            return (
+              <div className="eachLoan" key={loan.id}>
+                <div className="loanDetails">
                   <div
                     style={{
-                      fontSize: "16px",
+                      fontSize: "20px",
                       fontWeight: "700",
-                      marginBottom: "5px",
+                      marginBottom: "10px",
                     }}>
-                    $1012
+                    Compound - ETH:USDC
                   </div>
-                  <div style={{ fontSize: "16px", fontWeight: "700" }}>
-                    3.84%
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div>
+                      <div style={{ marginBottom: "5px" }}>Balance</div>
+                      <div>Current APR</div>
+                    </div>
+                    <div style={{ marginLeft: "20px" }}>
+                      <div
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: "700",
+                          marginBottom: "5px",
+                        }}>
+                        ${loan.loan}
+                      </div>
+                      <div style={{ fontSize: "16px", fontWeight: "700" }}>
+                        {loan.apr}%
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div className="manageLoan">
+                  {/* <div>Opened: March 11, 2023</div> */}
+                  <div>Opened: {loan.time ? formattedDate : 'N/A'}</div>
+                  <Link 
+                    to="/manage"
+                    state={{
+                      loanInfo: {loan}
+                    }}>
+                    {" "}
+                    <button className="btn">Manage loan</button>
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="manageLoan">
-              <div>Opened: March 11, 2023</div>
-              <Link to="/manage">
-                {" "}
-                <button className="btn">Manage loan</button>
-              </Link>
-            </div>
-          </div>
+            );
+          })}
         </div>
         <div className="btnContainer">
           <button className="btn" onClick={() => navigate("/startloan")}>

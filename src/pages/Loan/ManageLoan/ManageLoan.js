@@ -1,22 +1,86 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GradientProgressBar from "./GradientProgressBar ";
 import "./ManageLoan.css";
 import axios from "axios";
+import { useLoan } from "../../../contract";
+import { getInterest } from "../../../utils";
+import { financial } from "../../../helper";
+
 function ManageLoan() {
-  const [isToggled, setToggle] = useState(false);
+  const location = useLocation();
+  const { loanInfo } = location.state;
+  const loanAmount = loanInfo.loan.loan;
+  const collateral = loanInfo.loan.collateralNeeded;
+  const buffer = loanInfo.loan.buffer;
+  const time = loanInfo.loan.time;
+
+  const [price, setPrice] = useState(0);
+  const [APR, setAPR] = useState(0);
+  const [interest, setInterest] = useState(0);
+  const [thresold, setThresold] = useState(0);
+  const [liquidationprice, setLiquidationPrice] = useState(0);
+  const [liquidationpercent, setLiquidationPercent] = useState(0);
+  const [penalty, setPenalty] = useState(0);
+
+  const {
+    getETHPrice,
+    getBorrowAPR,
+    getPenalty,
+    getThreshold,
+    approveUSDC,
+    addLoan,
+    borrowCollateral,
+    addCollateral,
+  } = useLoan()
 
   useEffect(() => {
-    // axios.get(`http://localhost:5000/get`).then((res) => {
-    //   console.log(res);
-    //   console.log(res.data);
-    // });
-  }, []);
+    getETHPrice()
+    .then(value => setPrice(value))
+    .catch(e => console.log(e))
+
+    getBorrowAPR()
+    .then(value => setAPR(value))
+    .catch(e => console.log(e))
+
+    getPenalty()
+    .then(value => setPenalty(value))
+    .catch(e => console.log(e))
+
+    getThreshold()
+    .then(value => setThresold(value))
+    .catch(e => console.log(e))
+
+    const value = getInterest(loanAmount, APR, time);
+    setInterest(value)
+
+    const priceValue = loanAmount / thresold / collateral;
+    setLiquidationPrice(priceValue);
+
+    const percent = liquidationprice / price * 100;
+    console.log('---percent---', percent);
+    setLiquidationPercent(percent);
+  })
+
+  const [isToggled, setToggle] = useState(false);
   const handleClick = () => setToggle(!isToggled);
+
+  const OnRepay = async() => {
+    const approveResult = await approveUSDC();
+    if (approveResult) {
+      const result = await addLoan(loanAmount + interest);
+      const repayResult = await borrowCollateral(collateral);
+    }
+  }
+
+  const OnAddCollateral = () => {
+
+  }
+  
   return (
     <div className="reivewLoan_container">
       <div className="go_back">
-        <Link to="/startloan">
+        <Link to="/dashboard">
           <img
             src="./assets/icons/leftarrow.png"
             alt="leftarrow"
@@ -31,7 +95,7 @@ function ManageLoan() {
 
         <div className="">
           <div className="compound-label" style={{ textAlign: "left" }}>
-            Compound - Eth: USDC
+            Compound - ETH: USDC
           </div>
           <div className="payment_container">
             <div style={{ paddingBottom: "30px" }}>
@@ -49,8 +113,8 @@ function ManageLoan() {
                   fontWeight: "700",
                   lineHeight: "29px",
                 }}>
-                1,012.13 USDC{" "}
-                <span style={{ fontSize: "20px" }}>($1,012.13)</span>
+                {financial(loanAmount + interest, 2)} USDC{" "}
+                <span style={{ fontSize: "20px" }}>(${financial(loanAmount + interest, 2)})</span>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -60,19 +124,19 @@ function ManageLoan() {
                   <p>Current APR</p>
                 </div>
                 <div style={{ width: "50%", fontWeight: "700" }}>
-                  <p>Interest accrued</p>
-                  <p>Current APR</p>
+                  <p>{financial(interest, 2)} USDC</p>
+                  <p>{financial(APR, 2)}%</p>
                 </div>
               </div>
               <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                <button className="btn">Make payment</button>
+                <button className="btn" onClick={async () => { await OnRepay() }}>Make payment</button>
                 <div
                   style={{
                     textAlign: "center",
                     marginTop: "20px",
                     fontSize: "12px",
                   }}>
-                  There is no payment due date for this loan. YOu can repay it
+                  There is no payment due date for this loan. You can repay it
                   in part or in full at anytime.
                 </div>
               </div>
@@ -89,7 +153,7 @@ function ManageLoan() {
                     <p>Collateral posted</p>
                   </div>
                   <div style={{ width: "50%", fontWeight: "700" }}>
-                    <p>1.841889238923 Eth ($2,791.49) </p>
+                    <p>{financial(collateral, 6)} ETH (${financial(price * collateral, 2)}) </p>
                   </div>
                 </div>
                 <div style={{ display: "flex" }}>
@@ -97,7 +161,7 @@ function ManageLoan() {
                     <p>Liquidation price</p>
                   </div>
                   <div style={{ width: "50%", fontWeight: "700" }}>
-                    <p>$1,301.55</p>
+                    <p>${financial(liquidationprice, 2)}</p>
                   </div>
                 </div>
                 <div style={{ display: "flex" }}>
@@ -105,7 +169,7 @@ function ManageLoan() {
                     <p>Collateral buffer</p>
                   </div>
                   <div style={{ width: "50%", fontWeight: "700" }}>
-                    <p>101%</p>
+                    <p>{buffer}%</p>
                   </div>
                 </div>
               </div>
@@ -119,7 +183,7 @@ function ManageLoan() {
                     justifyContent: "space-between",
                     gap: "30px",
                   }}>
-                  <GradientProgressBar value={100} />
+                  <GradientProgressBar percentage1={100 - liquidationpercent} percentage2={buffer / 5} />
                   <div
                     style={{
                       textAlign: "center",
@@ -141,7 +205,7 @@ function ManageLoan() {
                   </div>
                 </div>
                 <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                  <button className="btn">Add collateral</button>
+                  <button className="btn" onClick={() => OnAddCollateral()}>Add collateral</button>
                   <div
                     style={{
                       textAlign: "center",
