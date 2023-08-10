@@ -22,6 +22,7 @@ function ManageLoan() {
   const [liquidationprice, setLiquidationPrice] = useState(0);
   const [liquidationpercent, setLiquidationPercent] = useState(0);
   const [penalty, setPenalty] = useState(0);
+  const highestETHPrice = 4891.7
 
   const {
     getETHPrice,
@@ -57,8 +58,7 @@ function ManageLoan() {
     const priceValue = loanAmount / thresold / collateral;
     setLiquidationPrice(priceValue);
 
-    const percent = liquidationprice / price * 100;
-    console.log('---percent---', percent);
+    const percent = liquidationprice / highestETHPrice * 100;
     setLiquidationPercent(percent);
   })
 
@@ -183,7 +183,7 @@ function ManageLoan() {
                     justifyContent: "space-between",
                     gap: "30px",
                   }}>
-                  <GradientProgressBar percentage1={100 - liquidationpercent} percentage2={buffer / 5} />
+                  <GradientProgressBar liquidationPrice={liquidationprice} currentPrice={price} percentage1={liquidationpercent} percentage2={price / highestETHPrice * 100} />
                   <div
                     style={{
                       textAlign: "center",

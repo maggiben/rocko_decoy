@@ -1,6 +1,7 @@
 import React from "react";
+import { financial } from "../../../helper";
 
-const GradientProgressBar = ({ percentage1 = 0, percentage2 = 90 }) => {
+const GradientProgressBar = ({ liquidationPrice, currentPrice, percentage1 = 0, percentage2 = 90 }) => {
   const style = {
     width: "0",
     height: "0",
@@ -26,23 +27,53 @@ const GradientProgressBar = ({ percentage1 = 0, percentage2 = 90 }) => {
           borderRadius: "5px",
         }}
       />
+
       <div
         style={{
           position: "absolute",
           left: `${percentage1}%`,
-          top: "15px",
+          top: "-25px",
           color: "#000",
         }}>
-        <div style={style}></div>
         <div style={{ position: "absolute", left: "-18px", paddingTop: "3px" }}>
-          liquidation
+          ${financial(liquidationPrice, 2)}
         </div>
       </div>
       <div
         style={{
           position: "absolute",
           left: `${percentage2}%`,
-          top: "15px",
+          top: "-25px",
+          color: "#000",
+        }}>
+        <div
+          style={{
+            position: "absolute",
+            left: "-18px",
+            paddingTop: "3px",
+            textAlign: "center",
+          }}>
+          ${financial(currentPrice, 2)}
+        </div>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          left: `${percentage1}%`,
+          top: "20px",
+          color: "#000",
+        }}>
+        <div style={style}></div>
+        <div style={{ position: "absolute", left: "-18px", paddingTop: "3px" }}>
+          Liquidation price
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: `${percentage2}%`,
+          top: "20px",
           color: "#000",
         }}>
         <div style={style}></div>
@@ -53,7 +84,7 @@ const GradientProgressBar = ({ percentage1 = 0, percentage2 = 90 }) => {
             paddingTop: "3px",
             textAlign: "center",
           }}>
-          Collateral butter
+          Current price
         </div>
       </div>
     </div>
