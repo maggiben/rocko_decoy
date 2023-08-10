@@ -8,6 +8,7 @@ import { parseBalance } from '../utils';
 const LOANABI = require('../constants/loan.json')
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
+const USDCABI = require('../constants/usdc.json')
 
 export const useLoan = () => {
   const address = useAddress()
@@ -66,7 +67,7 @@ export const useLoan = () => {
     return formattedValue
   }
 
-  const approve = async () => {
+  const approveWETH = async () => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const uintMax =
       '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
@@ -82,6 +83,27 @@ export const useLoan = () => {
       )
       return tx;
     } catch {
+      return null;
+    }
+  }
+
+  const approveUSDC = async () => {
+    const sdk = ThirdwebSDK.fromSigner(signer);
+    const uintMax =
+      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+
+    const contract = await sdk.getContract(USDCContract[testNetworkChainId], USDCABI)
+    try {
+      const tx = await contract.call(
+        "approve",
+        [
+          CometContract[testNetworkChainId],
+          uintMax
+        ]
+      )
+      return tx;
+    } catch(e) {
+      console.log(e)
       return null;
     }
   }
@@ -126,6 +148,27 @@ export const useLoan = () => {
     }
   }
 
+  const addLoan = async ( amount ) => {
+    const sdk = ThirdwebSDK.fromSigner(signer);
+    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+
+    console.log(parseBalance(amount.toString(), 6))
+
+    try {
+      const tx = await contract.call(
+        "supply",
+        [
+          USDCContract[testNetworkChainId],
+          parseBalance(amount.toString(), 6)
+        ]
+      );
+      return tx;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  }
+
   const borrowLoan = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
@@ -147,11 +190,35 @@ export const useLoan = () => {
     }
   }
 
+  const borrowCollateral = async ( amount ) => {
+    const sdk = ThirdwebSDK.fromSigner(signer);
+    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+
+    console.log(parseBalance(amount.toString()))
+
+    try {
+      const tx = await contract.call(
+        "withdraw",
+        [
+          WETHContract[testNetworkChainId],
+          parseBalance(amount.toString())
+        ]
+      );
+      return tx;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+  }
+
   return {
-      approve,
+      approveWETH,
+      approveUSDC,
       deposit,
       addCollateral,
+      addLoan,
       borrowLoan,
+      borrowCollateral,
       getETHPrice,
       getBorrowAPR,
       getLTV,
