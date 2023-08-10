@@ -32,6 +32,11 @@ export const ChainId = {
     [ChainId["TESTNET"]]: "0x3EE77595A8459e93C2888b13aDB354017B198188",
   }
 
+  export const CometRewardContract = {
+    [ChainId["MAINNET"]]: "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+    [ChainId["TESTNET"]]: "0xef9e070044d62C38D2e316146dDe92AD02CF2c2c",
+  }
+
   export const WETHContract = {
     [ChainId["MAINNET"]]: "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
     [ChainId["TESTNET"]]: "0x42a71137C09AE83D8d05974960fd607d40033499",
