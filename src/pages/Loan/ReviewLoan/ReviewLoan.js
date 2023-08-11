@@ -10,6 +10,8 @@ import {
   useSwitchChain,
   useChainId,
 } from "@thirdweb-dev/react";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import axios from "axios";
 import { useLoan } from "../../../contract";
 import { financial } from "../../../helper";
@@ -52,6 +54,7 @@ function ReviewLoan() {
 
   const signer = useSigner();
   const { approveWETH, deposit, addCollateral, borrowLoan } = useLoan();
+  const { user } = useAuth0();
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isStart, setIsStart] = useState(false);
@@ -91,11 +94,13 @@ function ReviewLoan() {
 
   const finalizeLoan = () => {
     const loanObject = {
+      user: user.email,
       loan: loan,
       apr: apr,
       collateralNeeded: collateralNeeded.toString(),
       collateralUSD: collateralUSD.toString(),
       buffer: buffer,
+      active: true,
     };
     console.log("loanObject", loanObject);
     axios.post(`http://localhost:5000/add`, loanObject).then((res) => {
@@ -109,18 +114,15 @@ function ReviewLoan() {
     switch (step) {
       case 1:
         const step1Result = await step1Validator();
-        if (step1Result)
-        setStep(2);
+        if (step1Result) setStep(2);
         break;
       case 2:
         const step2Result = await step2Validator();
-        if (step2Result)
-        setStep(3);
+        if (step2Result) setStep(3);
         break;
       case 3:
         const step3Result = await step3Validator();
-        if (step3Result)
-        setStep(4);
+        if (step3Result) setStep(4);
         break;
       default:
         finalizeLoan();

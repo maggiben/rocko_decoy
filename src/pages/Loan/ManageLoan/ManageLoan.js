@@ -42,6 +42,7 @@ function ManageLoan() {
   const collateral = loanInfo.loan.collateralNeeded;
   const buffer = loanInfo.loan.buffer;
   const time = loanInfo.loan.time;
+  const id = loanInfo.loan.id;
 
   const [price, setPrice] = useState(0);
   const [APR, setAPR] = useState(0);
@@ -117,19 +118,32 @@ function ManageLoan() {
     setSelectedOption(event.target.value);
   };
 
-  const goToRepay = () => {
-    if (selectedOption == "option1") {
-      navigate("/repay", {
-        state: { fullyRepaid: true, amount: loanAmount + interest, collateral: collateral },
+  const goToRepay = async () => {
+    const response = await axios
+      .post("http://localhost:5000/update", {
+        amount: selectedOption == "option1" ? 0 : loanAmount - amount,
+        active: selectedOption == "option1" ? false : true,
+        id: id,
+      })
+      .then((res) => {
+        if (selectedOption == "option1") {
+          navigate("/repay", {
+            state: {
+              fullyRepaid: true,
+              amount: loanAmount + interest,
+              collateral: collateral,
+            },
+          });
+        } else {
+          if (amount < 50 || amount > loanAmount + interest) return;
+          navigate("/repay", {
+            state: { fullyRepaid: false, amount: amount },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    } else {
-      if (amount < 50 || amount > (loanAmount + interest))
-        return;
-
-      navigate("/repay", {
-        state: { fullyRepaid: false, amount: amount },
-      });
-    }
   };
 
   return (
@@ -185,9 +199,7 @@ function ManageLoan() {
                 </div>
               </div>
               <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                <button
-                  className="btn"
-                  onClick={openModal}>
+                <button className="btn" onClick={openModal}>
                   Make payment
                 </button>
                 <div
@@ -369,7 +381,9 @@ function ManageLoan() {
               />
 
               <div>
-                <div style={{ fontSize: "20px" }}>{financial(loanAmount + interest, 2)}</div>
+                <div style={{ fontSize: "20px" }}>
+                  {financial(loanAmount + interest, 2)}
+                </div>
                 <div style={{ fontSize: "16px" }}>Current balance</div>
               </div>
             </div>
