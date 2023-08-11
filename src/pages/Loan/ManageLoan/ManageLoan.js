@@ -120,7 +120,7 @@ function ManageLoan() {
   const goToRepay = () => {
     if (selectedOption == "option1") {
       navigate("/repay", {
-        state: { fullyRepaid: true, amount: loanAmount + interest },
+        state: { fullyRepaid: true, amount: loanAmount + interest, collateral: collateral },
       });
     } else {
       if (amount < 50 || amount > (loanAmount + interest))
