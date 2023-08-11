@@ -33,7 +33,7 @@ function RepayLoan() {
 
   const step2Validator = async () => {
     console.log(amount)
-    const result = await addLoan(amount);
+    const result = await addLoan(financial(amount, 6));
     return result != null;
   };
 
