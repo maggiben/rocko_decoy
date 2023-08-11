@@ -35,6 +35,7 @@ function ManageLoan() {
     setIsOpen(false);
   }
 
+  const navigate = useNavigate();
   const location = useLocation();
   const { loanInfo } = location.state;
   const loanAmount = loanInfo.loan.loan;
@@ -110,28 +111,25 @@ function ManageLoan() {
   const [isToggled, setToggle] = useState(false);
   const handleClick = () => setToggle(!isToggled);
 
-  const OnRepay = async () => {
-    openModal();
-
-    // const approveResult = await approveUSDC();
-    // if (approveResult) {
-    //   const result = await addLoan(loanAmount + interest);
-    //   const repayResult = await borrowCollateral(collateral);
-    //   const rewardResult = await claimReward();
-    // }
-  };
-
   const OnAddCollateral = () => {};
 
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
-  let navigate = useNavigate();
   const goToRepay = () => {
-    navigate("/repay", {
-      state: { amount: selectedOption == "option1" ? currentBalence : amount },
-    });
+    if (selectedOption == "option1") {
+      navigate("/repay", {
+        state: { fullyRepaid: true, amount: loanAmount + interest },
+      });
+    } else {
+      if (amount < 50 || amount > (loanAmount + interest))
+        return;
+
+      navigate("/repay", {
+        state: { fullyRepaid: false, amount: amount },
+      });
+    }
   };
 
   return (
@@ -189,9 +187,7 @@ function ManageLoan() {
               <div style={{ textAlign: "center", maxWidth: "30%" }}>
                 <button
                   className="btn"
-                  onClick={async () => {
-                    await OnRepay();
-                  }}>
+                  onClick={openModal}>
                   Make payment
                 </button>
                 <div
@@ -373,7 +369,7 @@ function ManageLoan() {
               />
 
               <div>
-                <div style={{ fontSize: "20px" }}>1012.13</div>
+                <div style={{ fontSize: "20px" }}>{financial(loanAmount + interest, 2)}</div>
                 <div style={{ fontSize: "16px" }}>Current balance</div>
               </div>
             </div>

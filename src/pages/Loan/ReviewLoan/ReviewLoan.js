@@ -65,7 +65,6 @@ function ReviewLoan() {
   }
 
   const step1Validator = async () => {
-    console.log("ssssssssssssssssssssssssssssssss");
     const depositResult = await deposit(collateralNeeded);
     if (depositResult) {
       const approveResult = await approveWETH();
@@ -76,13 +75,11 @@ function ReviewLoan() {
   };
 
   const step2Validator = async () => {
-    console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
     const supplyResult = await addCollateral(collateralNeeded);
     return supplyResult;
   };
 
   const step3Validator = async () => {
-    console.log("tttttttttttttttttttttttttttt");
     const borrowResult = await borrowLoan(loan);
     return borrowResult;
   };
@@ -93,8 +90,6 @@ function ReviewLoan() {
   };
 
   const finalizeLoan = () => {
-    console.log("---collateralNeeded---", collateralNeeded.toString());
-    console.log("---collateralUSD---", collateralUSD.toString());
     const loanObject = {
       loan: loan,
       apr: apr,
