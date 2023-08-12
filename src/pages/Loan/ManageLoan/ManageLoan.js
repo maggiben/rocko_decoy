@@ -27,12 +27,23 @@ const modalStyle = {
 
 function ManageLoan() {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("option1");
+  const [amount, setAmount] = useState(0);
+  const [currentBalence, setCurrentBalence] = useState(1012.13);
   function openModal() {
     setIsOpen(true);
   }
-
   function closeModal() {
     setIsOpen(false);
+  }
+
+  const [addModalIsOpen, setAddModalIsOpen] = useState(false);
+  const [addAmount, setAddAmount] = useState(0);
+  function openAddModal() {
+    setAddModalIsOpen(true);
+  }
+  function closeAddModal() {
+    setAddModalIsOpen(false);
   }
 
   const navigate = useNavigate();
@@ -56,9 +67,6 @@ function ManageLoan() {
   const highestETHPrice = 4891.7;
   const { compprice } = useCompPrice();
 
-  const [selectedOption, setSelectedOption] = useState("option1");
-  const [amount, setAmount] = useState(0);
-  const [currentBalence, setCurrentBalence] = useState(1012.13);
 
   const {
     getETHPrice,
@@ -112,7 +120,17 @@ function ManageLoan() {
   const [isToggled, setToggle] = useState(false);
   const handleClick = () => setToggle(!isToggled);
 
-  const OnAddCollateral = () => {};
+  const OnAddCollateral = () => {
+    if (addAmount > 0) {
+      navigate("/addcollateral", {
+        state: {
+          id: id,
+          collateral: collateral,
+          amount: addAmount,
+        }
+      })
+    }
+  };
 
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
@@ -281,7 +299,7 @@ function ManageLoan() {
                   </div>
                 </div>
                 <div style={{ textAlign: "center", maxWidth: "30%" }}>
-                  <button className="btn" onClick={() => OnAddCollateral()}>
+                  <button className="btn" onClick={openAddModal}>
                     Add collateral
                   </button>
                   <div
@@ -417,6 +435,48 @@ function ManageLoan() {
           </button>
         </div>
       </Modal>
+      <Modal
+        className="Modal"
+        isOpen={addModalIsOpen}
+        onRequestClose={closeAddModal}
+        style={modalStyle}>
+        <div
+          style={{
+            padding: "30px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <div
+            style={{
+              marginBottom: "20px",
+              fontSize: "26px",
+              fontWeight: "700",
+              textAlign: "center",
+            }}>
+            Input collateral amount
+          </div>
+          <div
+            style={{
+              width: "408px",
+              marginBottom: "80px",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}>
+            <input
+              className="input_number"
+              type="number"
+              value={addAmount}
+              onChange={(e) => setAddAmount(e.target.value)}
+              style={{ marginTop: "10px", marginLeft: "75px" }}
+            /> ETH
+          </div>
+          <button className="btnContinue" onClick={OnAddCollateral}>
+            Add Collateral
+          </button>
+        </div>
+      </Modal>      
     </div>
   );
 }
