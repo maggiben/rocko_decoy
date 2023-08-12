@@ -34,7 +34,7 @@ root.render(
         {...providerConfig}
       >
         <BrowserRouter>
-          <ThirdwebProvider activeChain="avalanche-fuji">
+          <ThirdwebProvider activeChain="goerli">
             <App />
           </ThirdwebProvider>
         </BrowserRouter>

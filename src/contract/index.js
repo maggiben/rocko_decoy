@@ -16,7 +16,7 @@ export const useLoan = () => {
   const signer = useSigner();
 
   const getETHPrice = async () => {
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
   
     const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
     const price = await contract.call( "getETHPrice" )
@@ -26,7 +26,7 @@ export const useLoan = () => {
   }
 
   const getBorrowAPR = async () => {
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
   
     const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
     const APR = await contract.call( "getAPR" )
@@ -36,7 +36,7 @@ export const useLoan = () => {
   }
 
   const getLTV = async () => {
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
   
     const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
     const LTV = await contract.call( "getLoanToValue" )
@@ -47,7 +47,7 @@ export const useLoan = () => {
   }
 
   const getThreshold = async () => {
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
   
     const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
     const threshold = await contract.call( "getLiquidationThreshold" )
@@ -58,7 +58,7 @@ export const useLoan = () => {
   }
 
   const getPenalty = async () => {
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
   
     const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
     const penalty = await contract.call( "getLiquidationPenalty" )
@@ -71,7 +71,7 @@ export const useLoan = () => {
   const getRewardRate = async() => {
     if (!address) return;
 
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
     const value = await contract.call( 
       "baseTrackingBorrowSpeed"
@@ -84,7 +84,7 @@ export const useLoan = () => {
   const getRewardAmount = async() => {
     if (!address) return;
 
-    const sdk = new ThirdwebSDK('Goerli');
+    const sdk = new ThirdwebSDK('goerli');
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
     const value = await contract.call( 
       "userBasic",
