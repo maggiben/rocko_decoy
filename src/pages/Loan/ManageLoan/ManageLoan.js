@@ -119,31 +119,27 @@ function ManageLoan() {
   };
 
   const goToRepay = async () => {
-    const response = await axios
-      .post("http://localhost:5000/update", {
-        amount: selectedOption == "option1" ? 0 : loanAmount - amount,
-        active: selectedOption == "option1" ? false : true,
-        id: id,
-      })
-      .then((res) => {
-        if (selectedOption == "option1") {
-          navigate("/repay", {
-            state: {
-              fullyRepaid: true,
-              amount: loanAmount + interest,
-              collateral: collateral,
-            },
-          });
-        } else {
-          if (amount < 50 || amount > loanAmount + interest) return;
-          navigate("/repay", {
-            state: { fullyRepaid: false, amount: amount },
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+    if (selectedOption == "option1") {
+      navigate("/repay", {
+        state: {
+          fullyRepaid: true,
+          amount: loanAmount + interest,
+          collateral: collateral,
+          id: id,
+          loanAmount: loanAmount,
+        },
       });
+    } else {
+      if (amount < 50 || amount > loanAmount + interest) return;
+      navigate("/repay", {
+        state: {
+          fullyRepaid: false,
+          amount: amount,
+          id: id,
+          loanAmount: loanAmount,
+        },
+      });
+    }
   };
 
   return (

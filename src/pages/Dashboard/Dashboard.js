@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { url } from "../../config";
 
 import "./Dashboard.css";
 
@@ -17,9 +18,7 @@ const Dashboard = ({ step }) => {
   useEffect(() => {
     const getLoanData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/loan?user=${user.email}`
-        );
+        const response = await axios.get(`${url}/loan?user=${user.email}`);
         console.log("response", response.data);
         setLoanData(response.data);
         setLoanCount(response.data.length);

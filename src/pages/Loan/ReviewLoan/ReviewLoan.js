@@ -17,6 +17,7 @@ import { useLoan } from "../../../contract";
 import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
+import { url } from "../../../config";
 import Slider from "../../../components/Slider/Slider";
 SwiperCore.use([Navigation]);
 
@@ -103,7 +104,7 @@ function ReviewLoan() {
       active: true,
     };
     console.log("loanObject", loanObject);
-    axios.post(`http://localhost:5000/add`, loanObject).then((res) => {
+    axios.post(`${url}/add`, loanObject).then((res) => {
       console.log(res);
       console.log(res.data);
       navigate("/dashboard");

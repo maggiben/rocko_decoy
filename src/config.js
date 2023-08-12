@@ -13,3 +13,5 @@ export function getConfig() {
     ...(audience ? { audience } : null),
   };
 }
+
+export const url = "http://localhost:5000";
