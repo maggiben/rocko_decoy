@@ -6,6 +6,7 @@ import ReviewLoan from "../pages/Loan/ReviewLoan/ReviewLoan";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import ManageLoan from "../pages/Loan/ManageLoan/ManageLoan";
 import RepayLoan from "../pages/Loan/RepayLoan/RepayLoan";
+import AddCollateral from "../pages/Loan/AddCollateral/AddCollateral";
 export default function Router() {
   return useRoutes([
     {
@@ -36,6 +37,10 @@ export default function Router() {
           path: "/repay",
           element: <RepayLoan />,
         },
+        {
+          path: "/addcollateral",
+          element: <AddCollateral />,
+        }
       ],
     },
   ]);
