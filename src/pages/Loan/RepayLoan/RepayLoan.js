@@ -45,7 +45,7 @@ function RepayLoan() {
 
   const finalizeRepay = async () => {
     await axios
-      .post(`${url}/update`, {
+      .post(`${url}/updateLoan`, {
         amount: fullyRepaid ? 0 : loanAmount - amount,
         active: !fullyRepaid,
         id: id,
@@ -101,7 +101,7 @@ function RepayLoan() {
             <div className="title">Repay your loan to Compound Finance</div>
             <div style={{ paddingBottom: "40px" }}>
               You’re borrowing <span style={{ fontWeight: "700" }}>USDC</span>{" "}
-              and pledging <span style={{ fontWeight: "700" }}>Eth</span>
+              and pledging <span style={{ fontWeight: "700" }}>ETH</span>
             </div>
             <div>
               <div className="summary_container">
