@@ -68,6 +68,21 @@ export const useLoan = () => {
     return formattedValue
   }
 
+  const getCollateralBalanceOf = async () => {
+    const sdk = new ThirdwebSDK('goerli');
+  
+    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const value = await contract.call( 
+      "collateralBalanceOf",
+      [
+        address
+      ] )
+
+    const formattedValue = ethers.utils.formatEther( value )
+    console.log("---collateralBalanceOf---", formattedValue)
+    return formattedValue
+  }
+
   const getRewardRate = async() => {
     if (!address) return;
 
@@ -295,6 +310,7 @@ export const useLoan = () => {
       getLTV,
       getThreshold,
       getPenalty,
+      getCollateralBalanceOf,
       getRewardAmount,
       getRewardRate,
       claimReward

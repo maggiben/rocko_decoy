@@ -61,6 +61,7 @@ function ManageLoan() {
   const [APR, setAPR] = useState(0);
   const [interest, setInterest] = useState(0);
   const [thresold, setThresold] = useState(0);
+  const [collateralBalanceOf, setCollateralBalanceOf] = useState(0);
   const [LTV, setLTV] = useState(0);
   const [liquidationprice, setLiquidationPrice] = useState(0);
   const [liquidationpercent, setLiquidationPercent] = useState(0);
@@ -76,6 +77,7 @@ function ManageLoan() {
     getPenalty,
     getLTV,
     getThreshold,
+    getCollateralBalanceOf,
     getRewardAmount,
     getRewardRate,
     approveUSDC,
@@ -104,6 +106,10 @@ function ManageLoan() {
 
     getThreshold()
       .then((value) => setThresold(value))
+      .catch((e) => console.log(e));
+
+    getCollateralBalanceOf()
+      .then((value) => setCollateralBalanceOf(value))
       .catch((e) => console.log(e));
 
     getRewardAmount()
@@ -157,6 +163,8 @@ function ManageLoan() {
   };
 
   const goToRepay = async () => {
+    if (liquidationprice > price && collateralBalanceOf == 0) return;
+
     if (selectedOption == "option1") {
       navigate("/repay", {
         state: {
