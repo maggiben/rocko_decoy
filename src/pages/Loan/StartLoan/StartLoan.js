@@ -451,7 +451,7 @@ function StartLoan() {
               </div>
               <div className="detail">
                 <div className="detailbold">
-                  ${financial(liquidationPrice, 2)}
+                  {loanAmount ? "$" + financial(liquidationPrice, 2) : "..."}
                 </div>
               </div>
               <div className="detail">Current price of Eth:  
