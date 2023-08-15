@@ -31,6 +31,7 @@ function ManageLoan() {
   const [amount, setAmount] = useState(0);
   const [currentBalence, setCurrentBalence] = useState(1012.13);
   function openModal() {
+    setSelectedOption("option1");
     setIsOpen(true);
   }
   function closeModal() {
@@ -40,6 +41,7 @@ function ManageLoan() {
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [addAmount, setAddAmount] = useState(0);
   function openAddModal() {
+    setSelectedOption("option3");
     setAddModalIsOpen(true);
   }
   function closeAddModal() {
@@ -59,6 +61,7 @@ function ManageLoan() {
   const [APR, setAPR] = useState(0);
   const [interest, setInterest] = useState(0);
   const [thresold, setThresold] = useState(0);
+  const [LTV, setLTV] = useState(0);
   const [liquidationprice, setLiquidationPrice] = useState(0);
   const [liquidationpercent, setLiquidationPercent] = useState(0);
   const [penalty, setPenalty] = useState(0);
@@ -67,11 +70,11 @@ function ManageLoan() {
   const highestETHPrice = 4891.7;
   const { compprice } = useCompPrice();
 
-
   const {
     getETHPrice,
     getBorrowAPR,
     getPenalty,
+    getLTV,
     getThreshold,
     getRewardAmount,
     getRewardRate,
@@ -93,6 +96,10 @@ function ManageLoan() {
 
     getPenalty()
       .then((value) => setPenalty(value))
+      .catch((e) => console.log(e));
+
+    getLTV()
+      .then((value) => setLTV(value))
       .catch((e) => console.log(e));
 
     getThreshold()
@@ -121,16 +128,29 @@ function ManageLoan() {
   const handleClick = () => setToggle(!isToggled);
 
   const OnAddCollateral = () => {
+    const max = getMaxWithdrawalCollateral();
+    if (selectedOption === "option4" && addAmount > max)
+      return;
+
     if (addAmount > 0) {
       navigate("/addcollateral", {
         state: {
           id: id,
           collateral: collateral,
           amount: addAmount,
+          isAdd: (selectedOption === "option3")
         }
       })
     }
   };
+
+  const getMaxWithdrawalCollateral = () => {
+    const minETH = loanAmount / LTV / price;
+    console.log(minETH)
+    console.log(price)
+    const maxValue = collateral - minETH;
+    return maxValue;
+  }
 
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
@@ -455,7 +475,7 @@ function ManageLoan() {
               fontWeight: "700",
               textAlign: "center",
             }}>
-            Input collateral amount
+            Choose payment amount
           </div>
           <div
             style={{
@@ -464,16 +484,63 @@ function ManageLoan() {
               fontSize: "18px",
               fontWeight: "500",
             }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                marginBlock: "15px",
+              }}>
+              <input
+                type="radio"
+                name="radio"
+                className="radio"
+                checked={selectedOption === "option3"}
+                value="option3"
+                onChange={handleRadioChange}
+              />
+              <div>
+                <div style={{ fontSize: "20px" }}>
+                  Add collateral
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                marginBlock: "15px",
+              }}>
+              <input
+                type="radio"
+                name="radio"
+                className="radio"
+                checked={selectedOption === "option4"}
+                value="option4"
+                onChange={handleRadioChange}
+              />
+              <div>
+                <div style={{ fontSize: "20px" }}>
+                  Withdraw collateral
+                </div>
+              </div>
+            </div>
             <input
-              className="input_number"
-              type="number"
-              value={addAmount}
-              onChange={(e) => setAddAmount(e.target.value)}
-              style={{ marginTop: "10px", marginLeft: "75px" }}
+                className="input_number"
+                type="number"
+                value={addAmount}
+                onChange={(e) => setAddAmount(e.target.value)}
+                style={{ marginTop: "10px", marginLeft: "10px" }}
             /> ETH
+            {selectedOption === "option4" && (
+              <div style={{ color: "red", marginLeft: "10px" }}>
+                max withdrawal amount is { financial(getMaxWithdrawalCollateral(), 4) } ETH
+              </div>
+            )}
           </div>
           <button className="btnContinue" onClick={OnAddCollateral}>
-            Add Collateral
+            {selectedOption === "option4" ? "Withdraw Collateral" : "Add Collateral"}
           </button>
         </div>
       </Modal>      
