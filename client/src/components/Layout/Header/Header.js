@@ -30,12 +30,12 @@ const Header = () => {
       },
     });
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    isAuthenticated ?
-      navigate('/startloan') :
-      navigate('/');
-  }, [isAuthenticated]);
+  // const navigate = useNavigate();
+  // // useEffect(() => {
+  // //   isAuthenticated ?
+  // //     navigate('/startloan') :
+  // //     navigate('/');
+  // // }, [isAuthenticated]);
 
   useEffect(() => {
     console.log("--isauthenticated---", isAuthenticated);
