@@ -12,7 +12,24 @@ import { url } from "../../../config";
 function AddCollateral() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, collateral, amount, isAdd } = location.state;
+  
+  const [id, setId] = useState(0);
+  const [collateral, setCollateral] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [isAdd, setIsAdd] = useState(0);
+
+  useEffect(() => {
+    if (location.state) {
+      const { id, collateral, amount, isAdd } = location.state;
+    
+      setId(id);
+      setCollateral(collateral);
+      setAmount(amount);
+      setIsAdd(isAdd);
+    } else {
+      navigate('/dashboard');
+    }
+  })
 
   const { approveWETH, deposit, addCollateral, wethToETH, borrowCollateral } = useLoan();
 

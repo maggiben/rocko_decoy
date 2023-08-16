@@ -12,7 +12,27 @@ import { url } from "../../../config";
 function RepayLoan() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { fullyRepaid, collateral, amount, id, loanAmount } = location.state;
+
+  const [fullyRepaid, setFullyRepaid] = useState(true);
+  const [collateral, setCollateral] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [id, setId] = useState(0);
+  const [loanAmount, setLoanAmount] = useState(0);
+
+  useEffect(() => {
+    if (location.state) {
+      const { fullyRepaid, collateral, amount, id, loanAmount } = location.state;
+
+      setFullyRepaid(fullyRepaid);
+      setCollateral(collateral);
+      setAmount(amount);
+      setId(id);
+      setLoanAmount(loanAmount);
+    } else {
+      navigate('/dashboard');
+    }
+  })
+
 
   const { approveUSDC, addLoan, borrowCollateral, addCollateral, claimReward } =
     useLoan();

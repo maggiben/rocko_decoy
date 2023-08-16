@@ -33,7 +33,7 @@ const Dashboard = ({ step }) => {
       }
     };
     getLoanData();
-  }, []);
+  }, [user]);
 
   return (
     <div className="dashboard">

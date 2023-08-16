@@ -50,13 +50,12 @@ function ManageLoan() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { loanInfo } = location.state;
-  const loanAmount = loanInfo.loan.loan;
-  const collateral = loanInfo.loan.collateralNeeded;
-  const buffer = loanInfo.loan.buffer;
-  const time = loanInfo.loan.time;
-  const id = loanInfo.loan.id;
 
+  const [loanAmount, setLoanAmount] = useState(0);
+  const [collateral, setCollateral] = useState(0);
+  const [buffer, setBuffer] = useState(0);
+  const [time, setTime] = useState(0);
+  const [id, setId] = useState(0);
   const [price, setPrice] = useState(0);
   const [APR, setAPR] = useState(0);
   const [interest, setInterest] = useState(0);
@@ -70,6 +69,22 @@ function ManageLoan() {
   const [rewardrate, setRewardRate] = useState(0);
   const highestETHPrice = 4891.7;
   const { compprice } = useCompPrice();
+
+  useEffect(() => {
+    if (location.state) {
+      const {
+        loanInfo
+      } = location.state;
+
+      setLoanAmount(loanInfo.loan.loan);
+      setCollateral(loanInfo.loan.collateralNeeded);
+      setBuffer(loanInfo.loan.buffer);
+      setTime(loanInfo.loan.time);
+      setId(loanInfo.loan.id);
+    } else {
+      navigate("/dashboard");
+    }
+  }, [])
 
   const {
     getETHPrice,

@@ -1,8 +1,9 @@
 import "./ReviewLoan.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import Modal from "react-modal";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   useAddress,
   useSigner,
@@ -11,8 +12,6 @@ import {
   useChainId,
 } from "@thirdweb-dev/react";
 import { useAuth0 } from "@auth0/auth0-react";
-
-import axios from "axios";
 import { useLoan } from "../../../contract";
 import { financial } from "../../../helper";
 
@@ -39,18 +38,35 @@ const modalStyle = {
 function ReviewLoan() {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    loanAmount,
-    APR,
-    collateral,
-    collateralNeededInUSD,
-    bufferCollateral,
-  } = location.state;
-  const loan = loanAmount.loanAmount;
-  const apr = APR.APR;
-  const collateralNeeded = collateral.collateralNeeded;
-  const collateralUSD = collateralNeededInUSD.collateralNeededInUSD;
-  const buffer = bufferCollateral.bufferCollateral;
+
+  const [loan, setLoan] = useState(0);
+  const [apr, setAPR] = useState(0);
+  const [collateralNeeded, setCollateralNeeded] = useState(0);
+  const [collateralUSD, setCollateralUSD] = useState(0);
+  const [buffer, setBuffer] = useState(0);
+
+  useEffect(() => {
+    if (location.state) {
+      const {
+        loanAmount,
+        APR,
+        collateral,
+        collateralNeededInUSD,
+        bufferCollateral,
+      } = location.state;
+
+      console.log(location.state)
+      console.log(loanAmount)
+      
+      setLoan(loanAmount.loanAmount);
+      setAPR(APR.APR);
+      setCollateralNeeded(collateral.collateralNeeded);
+      setCollateralUSD(collateralNeededInUSD.collateralNeededInUSD);
+      setBuffer(bufferCollateral.bufferCollateral);
+    } else {
+      navigate('/startloan');
+    }
+  }, [])
   // above 5 params + time
 
   const signer = useSigner();
@@ -236,6 +252,7 @@ function ReviewLoan() {
                     theme="light"
                     style={{
                       background: "#3c6982",
+                      minWidth: "200px",
                       color: "#495463",
                       height: "60px",
                       color: "white",
