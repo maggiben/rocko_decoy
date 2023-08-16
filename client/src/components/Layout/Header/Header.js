@@ -21,21 +21,20 @@ const Header = () => {
     zIndex: menuCollapse ? "1" : "0",
   };
 
-  const { user, isAuthenticated, loginWithRedirect, loginWithPopup, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, loginWithRedirect, loginWithPopup, logout } = useAuth0();
 
   const logoutWithRedirect = () =>
     logout({
       logoutParams: {
         returnTo: window.location.origin,
       },
-    });
+  });
 
-  // const navigate = useNavigate();
-  // // useEffect(() => {
-  // //   isAuthenticated ?
-  // //     navigate('/startloan') :
-  // //     navigate('/');
-  // // }, [isAuthenticated]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated)
+      navigate('/')
+  }, [isLoading, isAuthenticated])
 
   useEffect(() => {
     console.log("--isauthenticated---", isAuthenticated);
