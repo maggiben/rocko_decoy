@@ -7,6 +7,8 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import ManageLoan from "../pages/Loan/ManageLoan/ManageLoan";
 import RepayLoan from "../pages/Loan/RepayLoan/RepayLoan";
 import AddCollateral from "../pages/Loan/AddCollateral/AddCollateral";
+import CoinbaseCallback from "../pages/CoinbaseCallback/CoinbaseCallback";
+
 export default function Router() {
   return useRoutes([
     {
@@ -40,6 +42,14 @@ export default function Router() {
         {
           path: "/addcollateral",
           element: <AddCollateral />,
+        },
+        {
+          path: "/cb-callback",
+          element: <CoinbaseCallback />,
+        },
+        {
+          path: '*',
+          element: <div>404 Not Found</div>
         }
       ],
     },

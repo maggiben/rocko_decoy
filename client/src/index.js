@@ -30,15 +30,15 @@ const providerConfig = {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
       <Auth0Provider
         {...providerConfig}
       >
-        <BrowserRouter>
           <ThirdwebProvider activeChain="goerli">
             <App />
           </ThirdwebProvider>
-        </BrowserRouter>
       </Auth0Provider>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

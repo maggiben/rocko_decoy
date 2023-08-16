@@ -51,6 +51,7 @@
   background-color: var(--btn-color);
   border: none;
   color: white;
+  cursor: pointer;
 }
 .home_signIn {
   text-decoration: underline;

@@ -1,11 +1,23 @@
 const express = require("express");
+require('dotenv').config();
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const {connectDB, db} = require('./db');
 const cors = require("cors");
 const router = require('./routes');
 const app = express();
-app.use(cors());
+
+const CLIENT_URL = 'http://localhost:3000'
+
+// Set up CORS
+const corsOptions = {
+  origin: CLIENT_URL,
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Connect Database
 connectDB();
