@@ -6,8 +6,8 @@ const axios = require('axios');
 const OAUTH_TOKEN_URL = 'https://api.coinbase.com/oauth/token';  
 const CLIENT_ID = process.env.COINBASE_CLIENT_ID;
 const CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
-const REDIRECT_URI = process.env.COINBASE_REDIRECT_URI; 
-const CLIENT_CALLBACK_URL = "http://localhost:3000/cb-callback";
+const REDIRECT_URI = `${process.env.BACKEND_URL}/cb-callback`; 
+const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/cb-callback`;
 
 router.get('/cb-callback', async (req, res) => {
     const authorizationCode = req.query.code;
@@ -31,7 +31,7 @@ router.get('/cb-callback', async (req, res) => {
         // Set the access token as a cookie
         res.cookie('access_token', accessToken, {
             httpOnly: true,
-            // secure: true,  // Uncomment this when on HTTPS
+            secure: REDIRECT_URI.startsWith("https:"),
             maxAge: 3600000  // 1 hour in milliseconds
         });
 

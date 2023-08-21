@@ -30,11 +30,12 @@ const Header = () => {
       },
   });
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated)
-      navigate('/')
-  }, [isLoading, isAuthenticated])
+  // TODO Alberto, please adjust this with a permanent fix so routing will work
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (!isLoading && !isAuthenticated)
+  //     navigate('/')
+  // }, [isLoading, isAuthenticated])
 
   useEffect(() => {
     console.log("--isauthenticated---", isAuthenticated);
