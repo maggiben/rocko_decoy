@@ -7,7 +7,7 @@ const cors = require("cors");
 const router = require('./routes');
 const app = express();
 
-const CLIENT_URL = 'http://localhost:3000'
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
 
 // Set up CORS
 const corsOptions = {
