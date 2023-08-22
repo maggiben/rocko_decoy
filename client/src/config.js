@@ -1,4 +1,5 @@
 import configJson from "./config.json";
+import { BACKEND_URL } from "./constants/env";
 
 export function getConfig() {
   const audience =
@@ -14,4 +15,4 @@ export function getConfig() {
   };
 }
 
-export const url = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'
+export const url = BACKEND_URL || 'http://localhost:5000'

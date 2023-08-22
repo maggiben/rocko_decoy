@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
 import { financial } from "../../../helper";
 import { useLoan } from "../../../contract";
+import { IS_DEMO_MODE } from "../../../constants/env";
 
 import "swiper/swiper-bundle.min.css";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
@@ -19,7 +20,7 @@ function StartLoan() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
   useEffect(() => {
-    if (!isLoading && !isAuthenticated)
+    if (!IS_DEMO_MODE && !isLoading && !isAuthenticated)
       navigate('/')
   }, [isLoading, isAuthenticated])
 

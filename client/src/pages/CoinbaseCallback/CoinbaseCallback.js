@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useState } from 'react';
 import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
+import { WITHDRAWAL_ADDRESS } from "../../constants/env";
 
 const initiateWithdrawal = (accountId) => {
 
     const withdrawalAmount = '1.00'; 
     const currency = 'USDC'; 
-    const withdrawalAddress = process.env.REACT_APP_WITHDRAWAL_ADDRESS; 
+    const withdrawalAddress = WITHDRAWAL_ADDRESS; 
 
     axios.post(`http://localhost:5000/send-withdrawal`, {
     accountId,
