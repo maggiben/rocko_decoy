@@ -18,6 +18,8 @@ import { financial } from "../../../helper";
 import "swiper/swiper-bundle.min.css";
 import { url } from "../../../config";
 import Slider from "../../../components/Slider/Slider";
+import CoinbaseLoginButton from "../../../components/CoinbaseLoginButton";
+import { IS_DEMO_MODE } from "../../../constants/env";
 SwiperCore.use([Navigation]);
 
 const modalStyle = {
@@ -57,7 +59,19 @@ function ReviewLoan() {
 
       console.log(location.state)
       console.log(loanAmount)
-      
+
+      setLoan(loanAmount.loanAmount);
+      setAPR(APR.APR);
+      setCollateralNeeded(collateral.collateralNeeded);
+      setCollateralUSD(collateralNeededInUSD.collateralNeededInUSD);
+      setBuffer(bufferCollateral.bufferCollateral);
+    } else if (IS_DEMO_MODE) {
+      const loanAmount = {loanAmount: '1000'};
+      const collateral = {collateralNeeded: 1.4708287435460627};
+      const collateralNeededInUSD = {collateralNeededInUSD: 2439.0243902439024};
+      const bufferCollateral = {bufferCollateral: 100};
+      const APR = {APR: '1.506966113952'};
+          
       setLoan(loanAmount.loanAmount);
       setAPR(APR.APR);
       setCollateralNeeded(collateral.collateralNeeded);
@@ -223,7 +237,7 @@ function ReviewLoan() {
                       </div>
                     </div>
                   </div>
-                  <button className="btn">Sign in</button>
+                  <CoinbaseLoginButton />
                 </div>
               </div>
               <div className="detail_item">

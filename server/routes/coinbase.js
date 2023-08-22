@@ -7,7 +7,7 @@ const OAUTH_TOKEN_URL = 'https://api.coinbase.com/oauth/token';
 const CLIENT_ID = process.env.COINBASE_CLIENT_ID;
 const CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
 const REDIRECT_URI = `${process.env.BACKEND_URL}/cb-callback`; 
-const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/cb-callback`;
+const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/reviewloan`;
 
 router.get('/cb-callback', async (req, res) => {
     const authorizationCode = req.query.code;
