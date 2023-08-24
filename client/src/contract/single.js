@@ -42,7 +42,6 @@ export const useLoan = () => {
     const LTV = await contract.call( "getLoanToValue" )
 
     const formattedValue = ethers.utils.formatEther( LTV )
-    console.log("---LTV---", formattedValue)
     return formattedValue
   }
 
@@ -53,7 +52,6 @@ export const useLoan = () => {
     const threshold = await contract.call( "getLiquidationThreshold" )
 
     const formattedValue = ethers.utils.formatEther( threshold )
-    console.log("---threshold---", formattedValue)
     return formattedValue
   }
 
@@ -64,7 +62,6 @@ export const useLoan = () => {
     const penalty = await contract.call( "getLiquidationPenalty" )
 
     const formattedValue = 1 - ethers.utils.formatEther( penalty )
-    console.log("---penalty---", formattedValue)
     return formattedValue
   }
 
@@ -79,7 +76,6 @@ export const useLoan = () => {
       ] )
 
     const formattedValue = ethers.utils.formatEther( value )
-    console.log("---collateralBalanceOf---", formattedValue)
     return formattedValue
   }
 
@@ -194,8 +190,6 @@ export const useLoan = () => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
 
-    console.log(parseBalance(amount.toString()))
-
     try {
       const tx = await contract.call(
         "supply",
@@ -214,8 +208,6 @@ export const useLoan = () => {
   const addLoan = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
-
-    console.log(parseBalance(amount.toString(), 6))
 
     try {
       const tx = await contract.call(
@@ -236,8 +228,6 @@ export const useLoan = () => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
 
-    console.log(parseBalance(amount.toString(), 6))
-
     try {
       const tx = await contract.call(
         "withdraw",
@@ -256,8 +246,6 @@ export const useLoan = () => {
   const borrowCollateral = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
-
-    console.log(parseBalance(amount.toString()))
 
     try {
       const tx = await contract.call(

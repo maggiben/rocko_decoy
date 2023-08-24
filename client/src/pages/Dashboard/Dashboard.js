@@ -18,7 +18,7 @@ const Dashboard = ({ step }) => {
     const getLoanData = async () => {
       if (!userInfo)
         return;
-      
+
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/loan?user=${userInfo.email}`);
         console.log("response", response.data);
@@ -35,7 +35,7 @@ const Dashboard = ({ step }) => {
       }
     };
     getLoanData();
-  }, [user]);
+  }, [userInfo]);
 
   return (
     <div className="dashboard">

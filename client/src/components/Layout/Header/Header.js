@@ -34,10 +34,6 @@ const Header = () => {
   const { address, isConnected } = useAccount();
   const { userInfo } = useUserInfo();
 
-  useEffect(() => {
-    console.log(userInfo)
-  })
-
   const OnLogin = async () => {
     await connect({
       connector: auth0Connector

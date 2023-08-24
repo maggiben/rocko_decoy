@@ -111,7 +111,6 @@ function StartLoan() {
               swiperObj.current = swiper;
             }}
             onSlideChange={(swiper) => {
-              console.log(swiper.activeIndex);
               setActiveIndex(swiper.activeIndex);
             }}>
             <SwiperSlide>
