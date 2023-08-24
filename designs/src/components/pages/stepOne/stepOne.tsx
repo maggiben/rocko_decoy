@@ -8,6 +8,7 @@ import useLoanData from "@/hooks/useLoanData";
 
 const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
+  const [activeInputField, setActiveInputField] = useState(false);
   const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
     useLoanData();
 
@@ -38,6 +39,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               2
             ).toFixed(2)
           ),
+          activeNextButton: true,
         };
       });
     }
@@ -45,17 +47,21 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
 
   const handleSelect = (info: any) => {
     setSelectedCoin(info.coinShortName);
+    // when select coin then can type value
+    setActiveInputField(true);
+
     if (setLoanData) {
       setLoanData((prevLoanData) => {
         return {
           ...prevLoanData,
-          coin: selectedCoin,
+          coin: info.coinShortName,
           currentAPR: parseFloat(info.currentAPR),
-          coinIcon: info.coinIcon
+          coinIcon: info.coinIcon,
         };
       });
     }
   };
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -74,16 +80,16 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
             <div className="grid grid-cols-2 gap-6 w-full my-4 py-4 max-w-[420px]">
               {currency?.map((singleCurrency) => (
                 // <div key={singleCurrency.id} className="max-w-[200px] flex-1">
-                  <CoinCard
-                  key={singleCurrency.id} 
-                    coinIcon={singleCurrency.symbol || ""}
-                    coinShortName={singleCurrency.name || ""}
-                    coinName={singleCurrency.fullName || ""}
-                    selectedCoin={selectedCoin}
-                    handleSelect={handleSelect}
-                    label={singleCurrency.label}
-                    currentAPR={singleCurrency.currentAPR}
-                  />
+                <CoinCard
+                  key={singleCurrency.id}
+                  coinIcon={singleCurrency.symbol || ""}
+                  coinShortName={singleCurrency.name || ""}
+                  coinName={singleCurrency.fullName || ""}
+                  selectedCoin={selectedCoin}
+                  handleSelect={handleSelect}
+                  label={singleCurrency.label}
+                  currentAPR={singleCurrency.currentAPR}
+                />
                 // </div>
               ))}
             </div>
@@ -94,11 +100,12 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               <div className="flex items-center justify-start gap-4 p-4 rounded-[10px] border border-[#E6E6E6] max-w-[310px] w-full bg-white ">
                 <input
                   onChange={handleBorrowValueChange}
-                  type="text"
+                  type="number"
                   name="num"
                   id="num"
-                  className="w-60 md:flex-1 focus:outline-none border-none "
+                  className="w-52 md:w-auto md:flex-1 focus:outline-none border-none bg-white"
                   placeholder="10,000"
+                  disabled={!activeInputField}
                 />
                 <label htmlFor="num">{selectedCoin}</label>
               </div>
@@ -106,7 +113,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
             <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
               <p className="text-sm text-blackSecondary">
                 Only USDC (a USD-backed stablecoin) is available at this time.
-                However, you can convert USDC into USD on most crypto exchanges.
+                However, you can convert USDC into USD on most crypto exchanges.{" "}
                 <Link href={"/"} className="underline">
                   Learn more.
                 </Link>

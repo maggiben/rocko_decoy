@@ -10,7 +10,7 @@ const ChooseCoins = ({ assets }: any) => {
   // console.log(loanData)
   const [selectedCoin, setSelectedCoin] = useState("");
   const handleSelect = (info: any) => {
-    console.log(info, "choose coin");
+    // console.log(info, "choose coin");
     setSelectedCoin(info.coinShortName);
     if (setLoanData) {
       setLoanData((prevLoanData) => {
@@ -25,6 +25,7 @@ const ChooseCoins = ({ assets }: any) => {
           subCollateralPrice: info.subCollateralPrice,
           liquidationPrice: info.liquidationPrice,
           subLiquidationPrice: info.subLiquidationPrice,
+          activeNextButton:true,
         };
       });
     }

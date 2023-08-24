@@ -2,11 +2,12 @@
 import Image from "next/image";
 import HoverTooltip from "@/components/shared/tooltip/tooltip";
 import useLoanData from "@/hooks/useLoanData";
+import formatCurrency from "@/utility/currencyFormate";
 
 const LoanSummary = () => {
   const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
     useLoanData();
-  console.log(loanData);
+  // console.log(loanData);
   return (
     <>
       <p className="text-2xl font-medium text-blackPrimary">Loan Summary</p>
@@ -14,7 +15,7 @@ const LoanSummary = () => {
         <p className="text-blackPrimary">Borrowing</p>
         <div className="flex items-center mt-4 mb-2 justify-between">
           <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {loanData?.borrowing ? loanData?.borrowing : "--"}
+            {loanData?.borrowing ? formatCurrency(loanData?.borrowing) : "--"}
             <span className="text-base"> {loanData?.coin}</span>
           </p>
           {loanData?.coinIcon && (
@@ -22,7 +23,7 @@ const LoanSummary = () => {
           )}
         </div>
         <p className="text-sm text-blackSecondary">
-          ~${loanData?.borrowing ? loanData?.borrowing : "--"}
+          {loanData?.borrowing && `~$ ${loanData?.borrowing}` || ''}
         </p>
       </div>
       <hr className=" border-whiteSecondary" />
@@ -51,7 +52,7 @@ const LoanSummary = () => {
           <span className="text-blackSecondary">6 months</span>
           <span className="text-blackPrimary">
             {(loanData?.sixMonthInterest && (
-              <>${loanData?.sixMonthInterest}</>
+              <>${formatCurrency(loanData?.sixMonthInterest)}</>
             )) ||
               "--"}
           </span>
@@ -61,7 +62,7 @@ const LoanSummary = () => {
           <span className="text-blackPrimary">
             {" "}
             {(loanData?.twelveMonthInterest && (
-              <> ${loanData?.twelveMonthInterest}</>
+              <> ${formatCurrency(loanData?.twelveMonthInterest)}</>
             )) ||
               "--"}
           </span>
@@ -71,7 +72,7 @@ const LoanSummary = () => {
           <span className="text-blackPrimary">
             {" "}
             {(loanData?.twentyFourMonthInterest && (
-              <>${loanData?.twentyFourMonthInterest}</>
+              <>${formatCurrency(loanData?.twentyFourMonthInterest)}</>
             )) ||
               "--"}
           </span>
@@ -84,25 +85,34 @@ const LoanSummary = () => {
           Collateral Needed
           <HoverTooltip text="Collateral Needed tooltip" />
         </div>
-        <div className="flex items-center
-         justify-between gap-1">
+        <div
+          className="flex items-center
+         justify-between gap-1"
+        >
           <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-      
-      {loanData?.collateralPrice && loanData?.cryptoName ? (
-        <>
-          {" "}
-          {loanData?.collateralPrice} <span className="text-base"> {loanData?.cryptoName}</span>
-        </>
-      ) : (
-        "--"
-      )}
-    </p>
-   { loanData?.cryptoIcon && <Image src={loanData?.cryptoIcon ||''} alt={loanData?.cryptoName||''} width={24} height={24} />}   
-         </div>
-        
+            {loanData?.collateralPrice && loanData?.cryptoName ? (
+              <>
+                {" "}
+                {loanData?.collateralPrice}{" "}
+                <span className="text-base"> {loanData?.cryptoName}</span>
+              </>
+            ) : (
+              "--"
+            )}
+          </p>
+          {loanData?.cryptoIcon && (
+            <Image
+              src={loanData?.cryptoIcon || ""}
+              alt={loanData?.cryptoName || ""}
+              width={24}
+              height={24}
+            />
+          )}
+        </div>
+
         <p className="text-[#545454] text-sm ">
           {(loanData?.subCollateralPrice && (
-            <> ${loanData?.subCollateralPrice}</>
+            <> ${formatCurrency(loanData?.subCollateralPrice)}</>
           )) ||
             ""}
         </p>
@@ -114,18 +124,19 @@ const LoanSummary = () => {
           <HoverTooltip text="Liquidation Price tooltip" />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-          {(loanData?.liquidationPrice && loanData?.liquidationPrice) || "--"}
+          {(loanData?.liquidationPrice && `$ ${formatCurrency(loanData?.liquidationPrice)}`) || "--"}
         </p>
-        {loanData?.liquidationPrice && (
+        {(loanData?.liquidationPrice && (
           <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">
               Current Price of {loanData?.cryptoName}
             </span>
             <span className="text-blackPrimary">
-              ${loanData?.subLiquidationPrice}
+              ${formatCurrency(loanData?.subLiquidationPrice)}
             </span>
           </p>
-        ) || ''}
+        )) ||
+          ""}
       </div>
     </>
   );

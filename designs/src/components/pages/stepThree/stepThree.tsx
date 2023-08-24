@@ -1,22 +1,33 @@
-import LoanSummary from "../home/loanSummary/loanSummary";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ProtocolStep } from "@/types/type";
 import FilterOptions from "@/components/filterOptions/filterOptions";
 import SortOptions from "@/components/sortOptions/sortOptions";
-import Image from "next/image";
-import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import Protocol from "@/components/protocolinfo/protocolinfo";
+import useLoanData from "@/hooks/useLoanData";
 
 const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
+  const { loanData, setLoanData } = useLoanData();
+  const [selectProtocol, setSelectProtocol] = useState("");
+  const [sortOption, setSortOption] = useState("");
+  const handleProtocol = (name: string) => {
+    setSelectProtocol(name);
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        activeNextButton: true,
+      }));
+    }
+  };
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
-      <div className="flex items-center justify-between flex-wrap">
+      <div className="flex items-center justify-between flex-wrap gap-6">
         <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
           Customize Your Loan
         </h1>
-        <div className="flex items-center justify-start gap-[14px]">
+        <div className="flex items-center justify-start gap-1 md:gap-[14px]">
           {/* filter btn */}
-          <div className="py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
+          <div className="py-[10px] px-2 md:px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
             <p className="text-[#2C3B8D] font-medium ">Filter</p>
             <p className="w-5 h-5 text-sm flex items-center justify-center rounded-full bg-blue text-white">
               3
@@ -26,8 +37,8 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
             <FilterOptions />
           </div>
           {/* sort btn */}
-          <div className="py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
-            <p className="text-[#2C3B8D] font-medium ">Sort by: APR (lowest)</p>
+          <div className="py-[10px] px-2 md:px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group min-w-[150px]">
+            <p className="text-[#2C3B8D] font-medium ">Sort by: {sortOption}</p>
             <div className="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +57,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
             </div>
 
             {/* sort options */}
-            <SortOptions />
+            <SortOptions setSortOption={setSortOption} />
           </div>
         </div>
       </div>
@@ -59,81 +70,20 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
             <p className=" text-xl font-medium  text-blackPrimary lg:text-start text-center">
               {title}
             </p>
-            {protocols?.map((protocol) => (
-              <div className="my-4" key={protocol.id}>
-                {/* protocol name */}
-                <div className="flex items-center justify-between flex-col md:flex-row gap-2">
-                  <div className="flex items-center justify-start gap-1">
-                    <Image
-                      src={protocol.symbol || ""}
-                      alt={protocol.name || ""}
-                      width={20}
-                      height={20}
-                    />
-                    <h1 className="font-medium text-xl text-blackPrimary">
-                      {protocol.name}
-                    </h1>
-                  </div>
-
-                  <div className="flex items-center justify-end gap-8">
-                    <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
-                      <p className="text-xl font-medium text-blackPrimary">
-                        {protocol.interestRate} <span className="text-base">%</span>
-                      </p>
-
-                      <p className="font-medium text-xs text-[#276EF1] bg-[#EFF3FE] rounded-md py-[2px] px-2">
-                        Floating Rate
-                      </p>
-                    </div>
-
-                    <div className="rounded-full py-[10px] px-6 bg-[#eee] text-[#2C3B8D] text-sm font-semibold">
-                      Select
-                    </div>
-                  </div>
-                </div>
-
-                {/* protocol info */}
-                <div className="py-4 px-6 overflow-auto w-full">
-                  <div className="flex items-start justify-between gap-4 w-full">
-                    {protocol.protocolInfos?.map((protocolInfo) => (
-                      <div
-                        className="flex-1 max-w-[210px]"
-                        key={protocolInfo.id}
-                      >
-                        {/* info title */}
-                        <div className="flex items-center gap-1">
-                          <p className="font-medium text-blackPrimary">
-                            {protocolInfo.title}
-                          </p>
-                          {protocolInfo.tooltip && (
-                            <HoverTooltip text={protocolInfo.tooltip || ""} />
-                          )}
-                        </div>
-                        {/* info */}
-                        <div className="py-3">
-                          {protocolInfo.options?.map((info) => (
-                            <div
-                              className="space-y-3"
-                              key={info.name + "=" + info.subInfo}
-                            >
-                              <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                                <span className="">{info.name} </span>
-                                {info.subInfo && (
-                                  <HoverTooltip text={info.subInfo || ""} />
-                                )}
-                              </p>
-                              <p className="font-semibold text-blackPrimary">
-                                {info.value}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+            <div className="divide-y-2 divide-[#E2E2E2]">
+              {protocols?.map((protocol) => (
+                <Protocol
+                  key={protocol.id}
+                  interestRate={protocol.interestRate}
+                  name={protocol.name}
+                  protocolInfos={protocol.protocolInfos}
+                  symbol={protocol.symbol}
+                  id={protocol.id}
+                  handleProtocol={handleProtocol}
+                  selectProtocol={selectProtocol}
+                />
+              ))}
+            </div>
           </div>
         </div>
         {/* <div className="p-6 border border-[#E2E2E2] flex-1 rounded-2xl">

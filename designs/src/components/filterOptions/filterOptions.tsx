@@ -6,7 +6,6 @@ const FilterOptions = () => {
           type="checkbox"
           className="checkbox"
           id="custom-checkbox-1"
-          checked
         />
         <label
           htmlFor="custom-checkbox-1"
