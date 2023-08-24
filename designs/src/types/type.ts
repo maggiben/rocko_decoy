@@ -59,25 +59,28 @@ export interface AssetStep {
 }
 
 // Interface for protocol step
+export interface ProtocolProps  {
+  id?: string;
+  name?: string;
+  symbol?: string;
+  interestRate?: number;
+  selectProtocol?: string;
+  handleProtocol?:Function;
+  protocolInfos?: {
+    id?: string;
+    title?: string;
+    tooltip?: string;
+    options?: {
+      name?: string;
+      value?: number | string;
+      subInfo?: string;
+    }[];
+  }[];
+}
 export interface ProtocolStep {
   id?: number;
   title?: string;
-  protocols?: {
-    id?: string;
-    name?: string;
-    symbol?: string;
-    interestRate?: number;
-    protocolInfos?: {
-      id?: string;
-      title?: string;
-      tooltip?: string;
-      options?: {
-        name?: string;
-        value?: number | string;
-        subInfo?: string;
-      }[];
-    }[];
-  }[];
+  protocols?: ProtocolProps[];
   description?: string;
 }
 
@@ -109,6 +112,7 @@ export interface LoanData {
   subCollateralPrice: number;
   liquidationPrice: number;
   subLiquidationPrice: number;
+  activeNextButton?:boolean;
 }
 // ContextValues interface using the above step interfaces
 export interface ContextValues {

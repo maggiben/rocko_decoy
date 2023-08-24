@@ -1,13 +1,15 @@
 "use client";
 import LoanSummary from "../home/loanSummary/loanSummary";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, use, useEffect, useRef, useState } from "react";
 import { RiskStep } from "@/types/type";
 import Link from "next/link";
+import useLoanData from "@/hooks/useLoanData";
 
 const StepFour: FC<RiskStep> = ({ title }) => {
   const [value, setValue] = useState<number>(0);
   const [thumbPosition, setThumbPosition] = useState<number>(0);
   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
+  const {loanData,setLoanData} = useLoanData()
 
   
   const valueDivRef = useRef<HTMLDivElement | null>(null);
@@ -26,6 +28,14 @@ const StepFour: FC<RiskStep> = ({ title }) => {
         (parseInt(event.target.max, 10) - parseInt(event.target.min, 10))) *
         100
     );
+
+    if(setLoanData){
+      setLoanData((prevLoanData)=>({
+        ...prevLoanData,
+         activeNextButton:true,
+      }))
+    }
+
   };
 const isEnd = thumbPosition === 100 ;
   const adjustedThumbPosition = isEnd
@@ -33,7 +43,7 @@ const isEnd = thumbPosition === 100 ;
     : thumbPosition;
 
   const valueDivStyle = {
-    left: `calc(${thumbPosition}% - ${valueDivWidth/2}px)`,
+    left: `calc(${thumbPosition}% - ${80/2}px)`,
   };
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
@@ -52,7 +62,7 @@ const isEnd = thumbPosition === 100 ;
             </p>
 
             <div className="flex items-end justify-between gap-3 min-h-[160px] py-4">
-              <p className="">Heigh Risk</p>
+              <p className="">Higher Risk</p>
 
               <div className="relative flex-1">
                 <input
@@ -64,12 +74,12 @@ const isEnd = thumbPosition === 100 ;
                   onChange={handleInputChange}
                   data-value={value}
                   style={{
-                    background: `linear-gradient(to right, #2C3B8D 0%, #2C3B8D ${thumbPosition}%, gray ${thumbPosition}%, gray 100%)`,
+                    background: `linear-gradient(to right, #2C3B8D 0%, #2C3B8D ${thumbPosition}%, #E2E2E2 ${thumbPosition}%, #E2E2E2 100%)`,
                   }}
                 />
                 <div
                 ref={valueDivRef}
-                  className="absolute left-0 -top-16 text-white bg-[#2C3B8D] rounded-full py-3 px-4"
+                  className="absolute w-20 h-12 left-0 -top-16 text-center text-white bg-[#2C3B8D] rounded-full py-3 px-4"
                   style={valueDivStyle}
                 >
                   <p className="">{value}%</p>
@@ -79,7 +89,7 @@ const isEnd = thumbPosition === 100 ;
               <p className="">Lower Risk</p>
             </div>
             <p className="pt-6   text-sm text-blackSecondary">
-            Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. By posting more collateral than required, you can reduce the projected liquidation price and the likelihood of this occurring.
+            Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. By posting more collateral than required, you can reduce the projected liquidation price and the likelihood of this occurring.{" "}
                   <Link href={"/"} className="underline">
                     Learn more.
                   </Link>

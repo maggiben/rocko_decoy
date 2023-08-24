@@ -29,7 +29,7 @@ const StepTow:FC<AssetStep> = ({assets,id,title,description}) => {
                 <ChooseCoins assets={assets}/>
               <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
                 <p className="text-blackPrimary font-medium">
-                  Asset Parameters
+                Collateral Parameters
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ">
                   <AssetParameter title="Loan-to-Value" value={loanData?.loanToValue} />

@@ -7,13 +7,28 @@ import StepTow from "@/components/pages/stepTow/stepTow";
 import useLoanData from "@/hooks/useLoanData";
 
 const Steps = [StepOne, StepTow, StepThree, StepFour, StepFive];
+const stepsName = [
+  "Loan Amount",
+  "Collateral Asset",
+  "Lending Protocol",
+  "Collateral Buffer",
+  "Loan Summary",
+];
 
 export default function Home() {
-  const { loanSteps, currentStep, setCurrentStep } = useLoanData();
+  const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
+    useLoanData();
 
   const nextStep = () => {
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
+     
       setCurrentStep(currentStep + 1);
+       if (setLoanData) {
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          activeNextButton: false,
+        }));
+      }
     }
   };
   const prevStep = () => {
@@ -25,7 +40,8 @@ export default function Home() {
   const CurrentStepComponent = Steps[currentStep];
   const currentData = loanSteps[currentStep];
 
-  console.log(currentStep, loanSteps.length);
+  // console.log(currentStep, loanSteps.length);
+  console.log(loanData?.activeNextButton)
   return (
     <>
       {<CurrentStepComponent {...currentData} />}
@@ -43,13 +59,15 @@ export default function Home() {
         </div>
         <div className="container mx-auto">
           <div className="p-4 flex items-center justify-between  ">
-            <p className="text-blackPrimary text-sm font-medium">
-              Collateral Asset: {currentStep + 1}/ {loanSteps.length}
+            <p className="text-blackPrimary text-xs md:text-sm font-medium">
+              {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
+              {/* //todo remove it later */}
+            {loanData?.activeNextButton?.valueOf()}
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={prevStep}
-                className={`font-semibold  text-sm text-blue  py-[10px]  px-6 rounded-full ${
+                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
                   currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
                 }`}
                 disabled={currentStep === 0}
@@ -58,12 +76,14 @@ export default function Home() {
               </button>
               <button
                 onClick={nextStep}
-                className={`font-semibold  text-sm ${
-                  currentStep < loanSteps.length - 1 ? "bg-blue" : "bg-blue/40"
-                } py-[10px]  px-6 rounded-full text-white`}
-                disabled={currentStep === loanSteps.length - 1}
+                className={`font-semibold  text-xs md:text-sm ${
+                  loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
+                } py-[10px]  px-6 rounded-full text-white `}
+                disabled={!loanData?.activeNextButton}
               >
-                Next
+                {currentStep === loanSteps.length - 1
+                  ? "Finalize Loan"
+                  : "Next"}
               </button>
             </div>
           </div>

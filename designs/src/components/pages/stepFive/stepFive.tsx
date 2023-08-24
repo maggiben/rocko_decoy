@@ -1,4 +1,5 @@
-import React from "react";
+import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import React, { useState } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
 
 interface InnerInfo {
@@ -21,7 +22,7 @@ interface Term {
 const invoice: Info[] = [
   {
     description: "Lending Protocol",
-    details: "Compound Finance",
+    details: <span className="underline">Compound Finance</span>,
   },
   {
     description: "Loan Amount",
@@ -62,49 +63,55 @@ const invoice: Info[] = [
     subDescription: [
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Loan-to-value-ratio <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1">
+            <span className="inline-block mr-3">Loan-to-value-ratio </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `${83} %`,
       },
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Liquidation Threshold <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="inline-block mr-3">Liquidation Threshold </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `${90} %`,
       },
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Liquidation Penalty <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1">
+            <span className="inline-block mr-3">Liquidation Penalty </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `${5} %`,
       },
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Loan Term <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1">
+            <span className="inline-block mr-3">Loan Term </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `Open Ended`,
       },
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Minimum Monthly Payment <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="inline-block mr-1">Minimum Monthly Payment </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `None`,
       },
       {
         description: (
-          <p className="lg:flex items-center lg:gap-x-1 inline">
-            Protocol Rewards <BsExclamationCircle className="inline" />
-          </p>
+          <div className="flex items-center lg:gap-x-1">
+            <span className="inline-block mr-3">Protocol Rewards </span>{" "}
+            <HoverTooltip text="this is tooltip" />
+          </div>
         ),
         details: `${2.01} %`,
       },
@@ -146,22 +153,25 @@ const terms: Term[] = [
 ];
 
 const StepFive: React.FC = () => {
+  const [paymentMethod, setPaymentMethod] = useState("");
   return (
-    <main className="pt-20 lg:pt-28 px-4 md:px-6 lg:pl-8">
+    <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6">
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-5">
-          <h3 className="text-xl font-medium mb-3">Loan Summary</h3>
+        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
+          <h3 className="text-xl font-medium mb-4">Loan Summary</h3>
           <div className="divide-y-2">
             {invoice.map((info, i) => (
               <React.Fragment key={i}>
-                <div className="flex pb-3 pt-2 flex-wrap items-start">
-                  <p className="font-medium w-1/2">{info?.description}</p>
-                  <div className="pl-1 lg:pl-0 w-1/2">
+                <div className="flex pb-3 pt-2 flex-wrap items-center space-y-2">
+                  <p className="font-medium w-[62%] md:w-1/2">
+                    {info?.description}
+                  </p>
+                  <div className="w-[38%] md:w-1/2 text-right md:text-left">
                     <p>{info?.details}</p>
                     {info?.subDetails && (
-                      <p className="w-1/2 text-sm text-gray-500">
+                      <p className="text-sm text-gray-500">
                         {info?.subDetails}
                       </p>
                     )}
@@ -169,13 +179,13 @@ const StepFive: React.FC = () => {
                   {info?.subDescription &&
                     info?.subDescription.map((innerInfo, i) => (
                       <React.Fragment key={i}>
-                        <div className="w-1/2 pl-1 lg:pl-6 pt-2">
+                        <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
                           {innerInfo?.description}
                         </div>
-                        <div className="pt-2 lg:pt-0 pl-1 lg:pl-0">
+                        <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
                           <p>{innerInfo?.details}</p>
                           {innerInfo?.subDetails && (
-                            <p className="w-1/2 text-sm text-gray-500">
+                            <p className="text-sm text-gray-500">
                               {innerInfo?.subDetails}
                             </p>
                           )}
@@ -198,22 +208,23 @@ const StepFive: React.FC = () => {
       {/* ---------------------- Second Section Start ------------------------ */}
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-5">
-          <h3 className="text-xl font-medium mb-3">
+          <h3 className="text-xl font-medium mb-6">
             Where do you want to receive your loan?
           </h3>
           <div className="md:flex justify-between mb-7">
-            <div className="flex items-center">
+            <div className="flex md:items-center">
               <input
                 type="radio"
                 id="wallet1"
                 name="contact"
-                value="email"
-                className="w-7 h-7 border-2 border-black"
+                value="default"
+                className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
+                onChange={(e) => setPaymentMethod(e.target.value)}
               />
               <label htmlFor="wallet1" className="pl-4">
                 <p className="font-semibold">
                   Coinbase or Gemini Account{" "}
-                  <span className="font-medium text-sm lg:text-base lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-2 lg:my-0">
+                  <span className="font-medium text-xs md:text-sm lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
                     Recommended
                   </span>
                 </p>
@@ -222,8 +233,15 @@ const StepFive: React.FC = () => {
                 </p>
               </label>
             </div>
-            <div className="text-center md:text-left mt-3 lg:mt-0">
-              <button className="bg-[#EEEEEE] w-32 h-10 rounded-3xl text-[#2C3B8D] mt-2 lg:mt-0">
+            <div className="text-center md:text-left mt-1 lg:mt-0">
+              <button
+                disabled={paymentMethod !== "default"}
+                className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                  paymentMethod === "default"
+                    ? "text-[#eee] bg-[#2C3B8D]"
+                    : "bg-[#eee] text-[#2C3B8D]"
+                }`}
+              >
                 Sign in
               </button>
             </div>
@@ -234,15 +252,23 @@ const StepFive: React.FC = () => {
                 type="radio"
                 id="wallet2"
                 name="contact"
-                value="email"
-                className="w-7 h-7 border-2 border-black"
+                value="ethereum"
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
                 <p className="font-semibold">Ethereum Wallet</p>
               </label>
             </div>
-            <div className="text-center md:text-left mt-3 lg:mt-0">
-              <button className="bg-[#EEEEEE] w-32 h-10 rounded-3xl text-[#2C3B8D] mt-2 lg:mt-0">
+            <div className="text-center md:text-left mt-1 lg:mt-0">
+              <button
+                disabled={paymentMethod !== "ethereum"}
+                className={`w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                  paymentMethod === "ethereum"
+                    ? "text-[#eee] bg-[#2C3B8D]"
+                    : "bg-[#eee] text-[#2C3B8D]"
+                }`}
+              >
                 Connect
               </button>
             </div>
@@ -252,8 +278,9 @@ const StepFive: React.FC = () => {
               type="radio"
               id="wallet3"
               name="contact"
-              value="email"
-              className="w-7 h-7 border-2 border-black"
+              value="other"
+              className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
+              onChange={(e) => setPaymentMethod(e.target.value)}
             />
             <label htmlFor="wallet3" className="pl-4">
               <p className="font-semibold">Other Exchange or Wallet Address</p>

@@ -36,6 +36,7 @@ export const loneContext = createContext<ContextValues>({
     coinIcon:'',
     cryptoIcon: '',
     cryptoName: '',
+    activeNextButton:false,
   },
   loanSteps: [],
   currentStep: 0,
@@ -69,6 +70,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     coinIcon:'',
     cryptoIcon: '',
     cryptoName: '',
+    activeNextButton:false,
   });
   const [currentStep, setCurrentStep] = useState(0);
   const loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[] = [
@@ -88,7 +90,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
         {
           id: "currency-2",
           name: "USD",
-          fullName: "USD Dollar",
+          fullName: "US Dollar",
           symbol: usdIcon,
 
           label: "Coming Soon",
@@ -100,7 +102,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     // step-2 Choose which asset you will post as collateral.
     {
       id: 2,
-      title: "What asset do you want to borrow?",
+      title: "Choose which asset you will post as collateral.",
       assets: [
         {
           id: "asset-1",
@@ -180,12 +182,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: 4.01, //value will percentage
+                  value: '4.01%', //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: 3.76, //value will percentage
+                  value: '3.76%', //value will percentage
                   subInfo: "",
                 },
               ],
@@ -198,17 +200,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: 83, //value will percentage
+                  value: '83%', //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: 90, //value will percentage
+                  value: '90%', //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: 5, //value will percentage
+                  value: '5%', //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
@@ -220,12 +222,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Current Rate",
-                  value: "2.01 %", //value will percentage
+                  value: "2.01%", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "Trailing 365 average",
-                  value: '2.83 %', //value will percentage
+                  value: '2.83%', //value will percentage
                   subInfo: "",
                 },
               ],
@@ -246,12 +248,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: 4.01, //value will percentage
+                  value: '4.01%', //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: 3.76, //value will percentage
+                  value: '3.76%', //value will percentage
                   subInfo: "",
                 },
               ],
@@ -263,17 +265,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: 82.5, //value will percentage
+                  value: '82.5%', //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: 86, //value will percentage
+                  value: '86%', //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: 5, //value will percentage
+                  value: '5%', //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
@@ -310,12 +312,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: 5.87, //value will percentage
+                  value: '5.87%', //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: 6.2, //value will percentage
+                  value: '6.2%', //value will percentage
                   subInfo: "",
                 },
               ],
@@ -327,17 +329,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: 70, //value will percentage
+                  value: '70%', //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: 82, //value will percentage
+                  value: '82%', //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: 5, //value will percentage
+                  value: '5%', //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
