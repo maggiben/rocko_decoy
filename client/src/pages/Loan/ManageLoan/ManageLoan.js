@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import GradientProgressBar from "../../../components/GradientProgressBar/GradientProgressBar ";
 import "./ManageLoan.css";
 import axios from "axios";
-import { useLoan } from "../../../contract";
+import { useLoan } from "../../../contract/single";
 import { getInterest } from "../../../utils";
 import { financial } from "../../../helper";
 import { useCompPrice } from "../../../hooks/usePrice";

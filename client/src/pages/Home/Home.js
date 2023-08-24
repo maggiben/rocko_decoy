@@ -1,18 +1,16 @@
 import HowItWorks from "./HowItWorks/HowItWorks";
 import WhyUseRocko from "./WhyUseRocko/WhyUseRocko";
 import "./Home.css";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { isAuthenticated, loginWithPopup } = useAuth0();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const onGetStarted = () => {
-    !isAuthenticated ? 
-      loginWithPopup() :
-      navigate('/startloan')
-  }
+  // const onGetStarted = () => {
+  //   !isAuthenticated ? 
+  //     loginWithPopup() :
+  //     navigate('/startloan')
+  // }
 
   return (
     <>
@@ -56,14 +54,7 @@ function Home() {
           </div>
         </div>
         <div>
-          <button className="get_started_btn" onClick={() => {onGetStarted()}}>Get Started</button>
-          {!isAuthenticated && 
-          <div>
-            or <button className="home_signIn"
-                style={{ border: "0px", background: "transparent", fontSize: "18px" }} 
-                onClick={loginWithPopup}>sign in</button>
-          </div>
-          }
+          <button className="get_started_btn">Get Started</button>
         </div>
         <div className="bottom_container">
           <div className="over">Over $10M in loans fulfilled and growing! </div>

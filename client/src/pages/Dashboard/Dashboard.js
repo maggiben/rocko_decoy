@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react";
-import { url } from "../../config";
+import { useUserInfo } from "../../hooks/useZerodev";
 
 import "./Dashboard.css";
 
 const Dashboard = ({ step }) => {
   const navigate = useNavigate();
-  const { user } = useAuth0();
+  const { userInfo } = useUserInfo();
   const [tab, setTab] = useState("active");
 
   const [loanData, setLoanData] = useState(null);
@@ -17,8 +16,11 @@ const Dashboard = ({ step }) => {
 
   useEffect(() => {
     const getLoanData = async () => {
+      if (!userInfo)
+        return;
+      
       try {
-        const response = await axios.get(`${url}/loan?user=${user.email}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/loan?user=${userInfo.email}`);
         console.log("response", response.data);
         setLoanData(response.data);
         setLoanCount(response.data.length);

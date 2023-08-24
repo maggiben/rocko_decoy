@@ -3,11 +3,10 @@ import "./AddCollateral.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { financial } from "../../../helper";
-import { useLoan } from "../../../contract";
+import { useLoan } from "../../../contract/single";
 import AddSlider from "../../../components/Slider/AddSlider";
 
 import axios from "axios";
-import { url } from "../../../config";
 
 function AddCollateral() {
   const navigate = useNavigate();
@@ -60,7 +59,7 @@ function AddCollateral() {
 
   const finalize = async () => {
     await axios
-      .post(`${url}/updateCollateral`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/updateCollateral`, {
         id: id,
         active: true,
         collateral: isAdd ? (Number(collateral) + Number(amount)) : (Number(collateral) - Number(amount)),
