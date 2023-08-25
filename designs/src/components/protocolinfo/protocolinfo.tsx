@@ -13,7 +13,7 @@ const Protocol: FC<ProtocolProps> = ({
   handleProtocol,
 }) => {
   return (
-    <div className="py-8  overflow-auto">
+    <div className="py-8">
       {/* protocol name */}
       <div className="flex items-center justify-between flex-col md:flex-row gap-2">
         <div className="flex items-center justify-start gap-1">
@@ -24,7 +24,7 @@ const Protocol: FC<ProtocolProps> = ({
         <div className="flex items-center justify-end gap-2 md:gap-8 ">
           <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
             <p className="text-xl font-medium text-blackPrimary">
-              {interestRate} <span className="text-base">%</span>
+              {interestRate}<span className="text-base">%</span>
             </p>
 
             <p className="font-medium text-xs text-[#276EF1] bg-[#EFF3FE] rounded-md py-[2px] px-2">
@@ -51,7 +51,7 @@ const Protocol: FC<ProtocolProps> = ({
 
       {/* protocol info */}
       <div className="py-4 px-6 w-full mt-4">
-        <div className="flex items-start justify-between gap-4 w-full">
+        <div className="flex items-start justify-between gap-4 w-full flex-wrap">
           {protocolInfos?.map((protocolInfo) => (
             <div className="flex-1 min-w-[205px]" key={id}>
               {/* info title */}

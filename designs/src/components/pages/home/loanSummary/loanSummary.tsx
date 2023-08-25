@@ -23,7 +23,10 @@ const LoanSummary = () => {
           )}
         </div>
         <p className="text-sm text-blackSecondary">
-          {loanData?.borrowing && `~$ ${loanData?.borrowing}` || ''}
+          {(loanData?.coin !== "USD" &&
+            loanData?.borrowing &&
+            `~$${formatCurrency(loanData?.borrowing)}`) ||
+            ""}
         </p>
       </div>
       <hr className=" border-whiteSecondary" />
@@ -124,7 +127,9 @@ const LoanSummary = () => {
           <HoverTooltip text="Liquidation Price tooltip" />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-          {(loanData?.liquidationPrice && `$ ${formatCurrency(loanData?.liquidationPrice)}`) || "--"}
+          {(loanData?.liquidationPrice &&
+            `$ ${formatCurrency(loanData?.liquidationPrice)}`) ||
+            "--"}
         </p>
         {(loanData?.liquidationPrice && (
           <p className="text-sm flex items-center justify-between font-medium ">

@@ -2,17 +2,32 @@
 import Link from "next/link";
 import LoanSummary from "../home/loanSummary/loanSummary";
 import { CurrencyStep } from "@/types/type";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import CoinCard from "../home/coinCard/coinCard";
 import useLoanData from "@/hooks/useLoanData";
+import { useForm } from "react-hook-form";
+interface FormData {
+  numberInput: string;
+}
 
 const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
   const [activeInputField, setActiveInputField] = useState(false);
+  const {
+    register,
+    formState: { errors, isLoading, isValid, isValidating },
+    setValue,
+  } = useForm<FormData>();
   const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
     useLoanData();
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+
+    if (/^-?\d*\.?\d*$/.test(inputValue)) {
+      setValue("numberInput", inputValue, { shouldValidate: true });
+    }
+    console.log(" inside on change", errors);
     if (setLoanData) {
       setLoanData((prevLoanData) => {
         return {
@@ -39,7 +54,6 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               2
             ).toFixed(2)
           ),
-          activeNextButton: true,
         };
       });
     }
@@ -62,6 +76,17 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     }
   };
 
+  useEffect(() => {
+    if (setLoanData) {
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          activeNextButton: isValid,
+        };
+      });
+    }
+    console.log({ isValid });
+  }, [isValid]);
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -99,16 +124,39 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               </p>
               <div className="flex items-center justify-start gap-4 p-4 rounded-[10px] border border-[#E6E6E6] max-w-[310px] w-full bg-white ">
                 <input
-                  onChange={handleBorrowValueChange}
+                  {...register("numberInput", {
+                    required: "Number is required",
+                    validate: (value) => {
+                      const num = parseFloat(value);
+                      if (isNaN(num)) {
+                        return "Invalid number";
+                      }
+                      if (num < 1000) {
+                        return "Number must be at least 1000";
+                      }
+                      return true;
+                    },
+                  })}
                   type="number"
-                  name="num"
-                  id="num"
-                  className="w-52 md:w-auto md:flex-1 focus:outline-none border-none bg-white"
+                  id="numberField"
+                  min={1}
+                  onKeyDown={(event) => {
+                    if (event.key === "-") {
+                      event.preventDefault();
+                    }
+                  }}
+                  className="w-52 md:w-auto md:flex-1 focus:outline-none border-none bg-white number-input"
                   placeholder="10,000"
                   disabled={!activeInputField}
+                  onChange={handleBorrowValueChange}
                 />
-                <label htmlFor="num">{selectedCoin}</label>
+                <label htmlFor="numberField">{selectedCoin}</label>
               </div>
+              {errors.numberInput && (
+                <div className="text-xs text-red-500">
+                  {errors.numberInput.message}
+                </div>
+              )}
             </div>
             <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
               <p className="text-sm text-blackSecondary">

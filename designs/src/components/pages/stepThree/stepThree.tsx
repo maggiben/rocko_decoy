@@ -5,10 +5,14 @@ import SortOptions from "@/components/sortOptions/sortOptions";
 import Protocol from "@/components/protocolinfo/protocolinfo";
 import useLoanData from "@/hooks/useLoanData";
 
+type FilterOptionsProps = string;
+
 const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
   const { loanData, setLoanData } = useLoanData();
   const [selectProtocol, setSelectProtocol] = useState("");
-  const [sortOption, setSortOption] = useState("");
+  const [sortOption, setSortOption] = useState("APR (lowest)");
+  const [filterOptions, setFilterOptions] = useState<FilterOptionsProps[]>([]);
+
   const handleProtocol = (name: string) => {
     setSelectProtocol(name);
     if (setLoanData) {
@@ -18,6 +22,16 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
       }));
     }
   };
+  const handleFilterOption = (name: string, isChecked: boolean) => {
+    const index = filterOptions.indexOf(name);
+
+    if (index === -1) {
+      setFilterOptions([...filterOptions, name]);
+    } else {
+      setFilterOptions(filterOptions.filter((item) => item !== name));
+    }
+  };
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -25,20 +39,26 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
         <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
           Customize Your Loan
         </h1>
-        <div className="flex items-center justify-start gap-1 md:gap-[14px]">
+        <div className="flex items-center justify-start max-[368px]:gap-1 min-[368px]:gap-4">
           {/* filter btn */}
-          <div className="py-[10px] px-2 md:px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
-            <p className="text-[#2C3B8D] font-medium ">Filter</p>
-            <p className="w-5 h-5 text-sm flex items-center justify-center rounded-full bg-blue text-white">
-              3
+          <div className="py-2 md:py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
+            <p className="text-[#2C3B8D] font-medium max-[355px]:text-sm ">
+              Filter
             </p>
+            {filterOptions.length > 0 && (
+              <p className="w-5 h-5 text-sm flex items-center justify-center rounded-full bg-blue text-white">
+                {filterOptions.length}
+              </p>
+            )}
 
             {/* filter options */}
-            <FilterOptions />
+            <FilterOptions handleFilterOption={handleFilterOption} />
           </div>
           {/* sort btn */}
-          <div className="py-[10px] px-2 md:px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group min-w-[150px]">
-            <p className="text-[#2C3B8D] font-medium ">Sort by: {sortOption}</p>
+          <div className="py-2 md:py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group min-w-[150px]">
+            <p className="text-[#2C3B8D] font-medium max-[355px]:text-sm ">
+              Sort by: {sortOption}
+            </p>
             <div className="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +77,10 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
             </div>
 
             {/* sort options */}
-            <SortOptions setSortOption={setSortOption} />
+            <SortOptions
+              setSortOption={setSortOption}
+              sortOption={sortOption}
+            />
           </div>
         </div>
       </div>

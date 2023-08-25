@@ -1,6 +1,5 @@
 import HoverTooltip from "@/components/shared/tooltip/tooltip";
 import React, { useState } from "react";
-import { BsExclamationCircle } from "react-icons/bs";
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -26,8 +25,8 @@ const invoice: Info[] = [
   },
   {
     description: "Loan Amount",
-    details: `${10000} USDC `,
-    subDetails: `~$10000.00`,
+    details: `$10,000 USDC `,
+    subDetails: `~$10,000.00`,
   },
   {
     description: "Current APR",
@@ -64,34 +63,34 @@ const invoice: Info[] = [
       {
         description: (
           <div className="flex items-center lg:gap-x-1">
-            <span className="inline-block mr-3">Loan-to-value-ratio </span>{" "}
+            <span className="mr-1 lg:mr-0">Loan-to-value-ratio </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
-        details: `${83} %`,
+        details: `${83}%`,
       },
       {
         description: (
           <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="inline-block mr-3">Liquidation Threshold </span>{" "}
+            <span className="mr-1 lg:mr-0">Liquidation Threshold </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
-        details: `${90} %`,
+        details: `${90}%`,
       },
       {
         description: (
           <div className="flex items-center lg:gap-x-1">
-            <span className="inline-block mr-3">Liquidation Penalty </span>{" "}
+            <span className="mr-1 lg:mr-0">Liquidation Penalty </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
-        details: `${5} %`,
+        details: `${5}%`,
       },
       {
         description: (
           <div className="flex items-center lg:gap-x-1">
-            <span className="inline-block mr-3">Loan Term </span>{" "}
+            <span className="mr-1 lg:mr-0">Loan Term </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
@@ -100,7 +99,7 @@ const invoice: Info[] = [
       {
         description: (
           <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="inline-block mr-1">Minimum Monthly Payment </span>{" "}
+            <span className="mr-1 lg:mr-0">Minimum Monthly Payment </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
@@ -109,11 +108,11 @@ const invoice: Info[] = [
       {
         description: (
           <div className="flex items-center lg:gap-x-1">
-            <span className="inline-block mr-3">Protocol Rewards </span>{" "}
+            <span className="mr-1 lg:mr-0">Protocol Rewards </span>{" "}
             <HoverTooltip text="this is tooltip" />
           </div>
         ),
-        details: `${2.01} %`,
+        details: `${2.01}%`,
       },
     ],
   },
