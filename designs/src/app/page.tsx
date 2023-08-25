@@ -41,7 +41,7 @@ export default function Home() {
   const currentData = loanSteps[currentStep];
 
   // console.log(currentStep, loanSteps.length);
-  console.log(loanData?.activeNextButton)
+  // console.log(loanData?.activeNextButton)
   return (
     <>
       {<CurrentStepComponent {...currentData} />}
