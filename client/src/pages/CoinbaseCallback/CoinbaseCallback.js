@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
-import { WITHDRAWAL_ADDRESS } from "../../constants/env";
+import { WITHDRAWAL_ADDRESS, BACKEND_URL } from "../../constants/env";
 
 const initiateWithdrawal = ({accountId, cb2fa, address, amount}) => {
 
@@ -9,7 +9,7 @@ const initiateWithdrawal = ({accountId, cb2fa, address, amount}) => {
     const currency = 'USDC'; 
     const withdrawalAddress = address; 
 
-    axios.post(`http://localhost:5000/send-withdrawal`, {
+    axios.post(`${BACKEND_URL}/send-withdrawal`, {
     accountId,
     amount: withdrawalAmount,
     currency: currency,
@@ -35,7 +35,7 @@ export default function CoinbaseCallback() {
   const [getAmount, setAmount] = useState('1.00');
 
   const fetchCoinbaseBalance = () => {
-    fetch('http://localhost:5000/coinbase-balance', {
+    fetch(`${BACKEND_URL}/coinbase-balance`, {
     method: 'GET',
     credentials: 'include'
     })
