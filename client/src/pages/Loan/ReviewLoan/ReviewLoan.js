@@ -4,19 +4,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import Modal from "react-modal";
 import axios from "axios";
+import { useAccount, useContractRead } from "wagmi";
+import { WETHContract, testNetworkChainId } from "../../../constants";
 import {
-  useAddress,
   useSigner,
   ConnectWallet,
-  useSwitchChain,
-  useChainId,
 } from "@thirdweb-dev/react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useLoan } from "../../../contract";
+import { useLoan } from "../../../contract/single";
+import { useUserInfo } from "../../../hooks/useZerodev";
+import { useGetLoan } from "../../../contract/batch";
 import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
-import { url } from "../../../config";
 import Slider from "../../../components/Slider/Slider";
 import CoinbaseLoginButton from "../../../components/CoinbaseLoginButton";
 import { IS_DEMO_MODE } from "../../../constants/env";
@@ -37,6 +36,8 @@ const modalStyle = {
   },
 };
 
+const WETHABI = require('../../../constants/weth.json')
+
 function ReviewLoan() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,7 +48,11 @@ function ReviewLoan() {
   const [collateralUSD, setCollateralUSD] = useState(0);
   const [buffer, setBuffer] = useState(0);
 
+  const { isConnected } = useAccount();
+
   useEffect(() => {
+    console.log(isConnected)
+
     if (location.state) {
       const {
         loanAmount,
@@ -56,9 +61,6 @@ function ReviewLoan() {
         collateralNeededInUSD,
         bufferCollateral,
       } = location.state;
-
-      console.log(location.state)
-      console.log(loanAmount)
 
       setLoan(loanAmount.loanAmount);
       setAPR(APR.APR);
@@ -85,7 +87,8 @@ function ReviewLoan() {
 
   const signer = useSigner();
   const { approveWETH, deposit, addCollateral, borrowLoan } = useLoan();
-  const { user } = useAuth0();
+  const { userInfo } = useUserInfo();
+  const { executeBatchGetLoan } = useGetLoan();
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isStart, setIsStart] = useState(false);
@@ -124,8 +127,11 @@ function ReviewLoan() {
   };
 
   const finalizeLoan = () => {
+    if (!userInfo)
+      return;
+
     const loanObject = {
-      user: user.email,
+      user: userInfo.email,
       loan: loan,
       apr: apr,
       collateralNeeded: collateralNeeded.toString(),
@@ -134,7 +140,7 @@ function ReviewLoan() {
       active: true,
     };
     console.log("loanObject", loanObject);
-    axios.post(`${url}/add`, loanObject).then((res) => {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/add`, loanObject).then((res) => {
       console.log(res);
       console.log(res.data);
       navigate("/dashboard");
@@ -363,7 +369,7 @@ function ReviewLoan() {
           <div className="finalize_container">
             <button
               className="btn_finalize"
-              disabled={signer ? false : true}
+              disabled={(signer || isConnected) ? false : true}
               onClick={openModal}>
               Finalize loan request
             </button>

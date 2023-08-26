@@ -27,7 +27,7 @@ const Header = () => {
 
   const { chains } = configureChains( [goerli], [publicProvider()] );
   const auth0Connector = new Auth0WalletConnector({chains, options: {
-    projectId: process.env.REACT_APP_ZERODEV_PROJECT_DEFAULT_ID,
+    projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID,
   }});
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -79,7 +79,7 @@ const Header = () => {
               <button
                 className="signInButton"
                 onClick={() => OnLogout()}>
-                {userInfo ? address : ""} | Disconnect
+                {userInfo ? userInfo.email : ""} | Disconnect
               </button>
             ) : (
               <button className="signInButton" onClick={() => OnLogin()}>
