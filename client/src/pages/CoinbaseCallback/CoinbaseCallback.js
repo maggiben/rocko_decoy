@@ -3,17 +3,18 @@ import { useState } from 'react';
 import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
 import { WITHDRAWAL_ADDRESS } from "../../constants/env";
 
-const initiateWithdrawal = (accountId) => {
+const initiateWithdrawal = (accountId, cb2fa, address) => {
 
     const withdrawalAmount = '1.00'; 
     const currency = 'USDC'; 
-    const withdrawalAddress = WITHDRAWAL_ADDRESS; 
+    const withdrawalAddress = address; 
 
     axios.post(`http://localhost:5000/send-withdrawal`, {
     accountId,
     amount: withdrawalAmount,
     currency: currency,
-    crypto_address: withdrawalAddress
+    crypto_address: withdrawalAddress,
+    cb_2fa_token: cb2fa,
     }, {
         withCredentials: true
     })
@@ -29,6 +30,8 @@ const initiateWithdrawal = (accountId) => {
 export default function CoinbaseCallback() {
 
   const [balance, setBalance] = useState(null);
+  const [get2fa, set2fa] = useState('');
+  const [getAddress, setAddress] = useState(WITHDRAWAL_ADDRESS);
 
   const fetchCoinbaseBalance = () => {
     fetch('http://localhost:5000/coinbase-balance', {
@@ -58,7 +61,11 @@ export default function CoinbaseCallback() {
         <button onClick={fetchCoinbaseBalance}>Get Balance</button>
         {balance && <><br/>
         <h1>Send $1.00</h1>
-        <button onClick={() => initiateWithdrawal(balance?.response?.id)}>Withdrawal</button></>}
+        <input type="text" onChange={(e) => setAddress(e.target.value)} placeholder={"Address"} value={getAddress} />
+        <br />       
+        <input type="text" onChange={(e) => set2fa(e.target.value)} placeholder={"2FA Token"} value={get2fa} />
+        <br /> 
+        <button onClick={() => initiateWithdrawal(balance?.response?.id, get2fa, getAddress)}>Withdrawal</button></>}
       </div>
   );
 }

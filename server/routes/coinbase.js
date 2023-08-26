@@ -78,6 +78,7 @@ router.post('/send-withdrawal', async (req, res) => {
     const CURRENCY = req.body.currency;
     const CRYPTO_ADDRESS = req.body.crypto_address;
     const ACCOUNT_ID = req.body.accountId;
+    const CB_2FA_TOKEN = req.body.cb_2fa_token;
 
     if (!ACCESS_TOKEN || !AMOUNT) {
         return res.status(400).json({
@@ -86,10 +87,13 @@ router.post('/send-withdrawal', async (req, res) => {
         });
     }
 
+    const cb2faHeader = CB_2FA_TOKEN ? { 'CB-2FA-TOKEN': CB_2FA_TOKEN } : {};
+
     try {
         const headers = {
             'Authorization': `Bearer ${ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...cb2faHeader
         };
 
         const data = {
@@ -109,7 +113,9 @@ router.post('/send-withdrawal', async (req, res) => {
             transaction: response.data
         });
     } catch (error) {
+        
         console.error('Error sending withdrawal:', error);
+
         res.status(error.response.status).json({
             success: false,
             message: `Failed to send withdrawal: ${error} ${error.response.statusText}`
