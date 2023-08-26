@@ -5,9 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Auth0Provider } from '@auth0/auth0-react';
-import { getConfig } from "./config";
 
+import ZeroDevWrapper from "./ZeroDevWrapper";
 import {
   ThirdwebProvider,
   metamaskWallet,
@@ -15,30 +14,17 @@ import {
   walletConnect,
   safeWallet,
 } from "@thirdweb-dev/react";
-// import { Ethereum } from "@thirdweb-dev/chains";
-const config = getConfig();
-
-const providerConfig = {
-  domain: config.domain,
-  clientId: config.clientId,
-  authorizationParams: {
-    redirect_uri: window.location.origin,
-    ...(config.audience ? { audience: config.audience } : null),
-  },
-};
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Auth0Provider
-        {...providerConfig}
-      >
-          <ThirdwebProvider activeChain="goerli">
-            <App />
-          </ThirdwebProvider>
-      </Auth0Provider>
+    <ZeroDevWrapper>
+      <BrowserRouter>
+        <ThirdwebProvider activeChain="goerli">
+          <App />
+        </ThirdwebProvider>
       </BrowserRouter>
+    </ZeroDevWrapper>
   </React.StrictMode>
 );
 

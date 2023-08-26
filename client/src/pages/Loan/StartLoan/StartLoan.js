@@ -1,11 +1,11 @@
 import "./StartLoan.css";
 import React, { useState, useRef, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
 import { financial } from "../../../helper";
-import { useLoan } from "../../../contract";
+import { useAccount } from "wagmi";
+import { useLoan } from "../../../contract/single";
 import { IS_DEMO_MODE } from "../../../constants/env";
 
 import "swiper/swiper-bundle.min.css";
@@ -17,12 +17,13 @@ function StartLoan() {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperObj = useRef(null);
 
+  const { isConnected, isConnecting, isDisconnected } = useAccount();
+
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth0();
   useEffect(() => {
-    if (!IS_DEMO_MODE && !isLoading && !isAuthenticated)
+    if (!IS_DEMO_MODE && !isConnecting && !isConnected)
       navigate('/')
-  }, [isLoading, isAuthenticated])
+  }, [isConnecting, isConnected])
 
   const [borrowing, setBorrowing] = useState(0);
   const [APR, setAPR] = useState(0);
@@ -110,7 +111,6 @@ function StartLoan() {
               swiperObj.current = swiper;
             }}
             onSlideChange={(swiper) => {
-              console.log(swiper.activeIndex);
               setActiveIndex(swiper.activeIndex);
             }}>
             <SwiperSlide>

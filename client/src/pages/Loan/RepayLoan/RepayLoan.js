@@ -3,11 +3,10 @@ import "./RepayLoan.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { financial } from "../../../helper";
-import { useLoan } from "../../../contract";
+import { useLoan } from "../../../contract/single";
 import RepaySlider from "../../../components/Slider/RepaySlider";
 
 import axios from "axios";
-import { url } from "../../../config";
 
 function RepayLoan() {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ function RepayLoan() {
 
   const finalizeRepay = async () => {
     await axios
-      .post(`${url}/updateLoan`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/updateLoan`, {
         amount: fullyRepaid ? 0 : loanAmount - amount,
         active: !fullyRepaid,
         id: id,

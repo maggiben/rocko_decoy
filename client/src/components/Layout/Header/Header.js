@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
-import "./Header.css";
-import { useAuth0 } from "@auth0/auth0-react";
+import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
+import { publicProvider } from 'wagmi/providers/public';
+import { goerli } from 'wagmi/chains';
+import { Auth0WalletConnector } from '@zerodevapp/wagmi';
+import { useUserInfo } from "../../../hooks/useZerodev";
 
 const Header = () => {
   const [menuCollapse, setMenuCollapse] = useState(false);
@@ -21,14 +25,24 @@ const Header = () => {
     zIndex: menuCollapse ? "1" : "0",
   };
 
-  const { user, isAuthenticated, isLoading, loginWithRedirect, loginWithPopup, logout } = useAuth0();
+  const { chains } = configureChains( [goerli], [publicProvider()] );
+  const auth0Connector = new Auth0WalletConnector({chains, options: {
+    projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID,
+  }});
+  const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { address, isConnected } = useAccount();
+  const { userInfo } = useUserInfo();
 
-  const logoutWithRedirect = () =>
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-  });
+  const OnLogin = async () => {
+    await connect({
+      connector: auth0Connector
+    });
+  };
+
+  const OnLogout = async () => {
+    await disconnect();
+  };
 
   // TODO Alberto, please adjust this with a permanent fix so routing will work
   // const navigate = useNavigate();
@@ -36,10 +50,6 @@ const Header = () => {
   //   if (!isLoading && !isAuthenticated)
   //     navigate('/')
   // }, [isLoading, isAuthenticated])
-
-  useEffect(() => {
-    console.log("--isauthenticated---", isAuthenticated);
-  });
 
   return (
     <div>
@@ -49,14 +59,14 @@ const Header = () => {
       <div className="container">
         <div className="headerBar" id="header">
           <div className="menu_items">
-            {!isAuthenticated && (
+            {!isConnected && (
               <>
                 <div>Rocko</div>
                 <div>About Us</div>
                 <div>FAQ</div>
               </>
             )}
-            {isAuthenticated && (
+            {isConnected && (
               <>
                 <Link className="link" to='/dashboard'>Dashboard</Link>
                 <Link className="link" to='/startloan'>Request loan</Link>
@@ -65,14 +75,14 @@ const Header = () => {
             )}
           </div>
           <div className="signIn">
-            {isAuthenticated ? (
+            {isConnected ? (
               <button
                 className="signInButton"
-                onClick={() => logoutWithRedirect()}>
-                {user.email} | Disconnect
+                onClick={() => OnLogout()}>
+                {userInfo ? userInfo.email : ""} | Disconnect
               </button>
             ) : (
-              <button className="signInButton" onClick={() => loginWithPopup()}>
+              <button className="signInButton" onClick={() => OnLogin()}>
                 Sign in | Get started
               </button>
             )}
