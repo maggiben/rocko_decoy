@@ -3,9 +3,9 @@ import { useState } from 'react';
 import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
 import { WITHDRAWAL_ADDRESS } from "../../constants/env";
 
-const initiateWithdrawal = (accountId, cb2fa, address) => {
+const initiateWithdrawal = ({accountId, cb2fa, address, amount}) => {
 
-    const withdrawalAmount = '1.00'; 
+    const withdrawalAmount = amount; 
     const currency = 'USDC'; 
     const withdrawalAddress = address; 
 
@@ -32,6 +32,7 @@ export default function CoinbaseCallback() {
   const [balance, setBalance] = useState(null);
   const [get2fa, set2fa] = useState('');
   const [getAddress, setAddress] = useState(WITHDRAWAL_ADDRESS);
+  const [getAmount, setAmount] = useState('1.00');
 
   const fetchCoinbaseBalance = () => {
     fetch('http://localhost:5000/coinbase-balance', {
@@ -60,12 +61,14 @@ export default function CoinbaseCallback() {
         <h1>{balance?.balance?.amount}</h1>
         <button onClick={fetchCoinbaseBalance}>Get Balance</button>
         {balance && <><br/>
-        <h1>Send $1.00</h1>
+        <h1>Send</h1>
+        <input type="text" onChange={(e) => setAmount(e.target.value)} placeholder={"Amount"} value={getAmount} />
+        <br />  
         <input type="text" onChange={(e) => setAddress(e.target.value)} placeholder={"Address"} value={getAddress} />
         <br />       
         <input type="text" onChange={(e) => set2fa(e.target.value)} placeholder={"2FA Token"} value={get2fa} />
-        <br /> 
-        <button onClick={() => initiateWithdrawal(balance?.response?.id, get2fa, getAddress)}>Withdrawal</button></>}
+        <br />
+        <button onClick={() => initiateWithdrawal({accountId: balance?.response?.id, cb2fa: get2fa, address: getAddress, amount: getAmount})}>Withdrawal</button></>}
       </div>
   );
 }
