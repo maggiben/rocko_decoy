@@ -141,8 +141,7 @@ const terms: Term[] = [
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
         Rocko’s service fee will be taken out of the initial amount transferred
-        to your Rocko wallet. More info on Rocko’s service fee can be found
-        <a href="" className="underline ml-2">
+        to your Rocko wallet. More info on Rocko’s service fee can be found <a href="" className="underline">
           here
         </a>
         .
