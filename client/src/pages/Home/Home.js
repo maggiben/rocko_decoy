@@ -1,69 +1,97 @@
-import HowItWorks from "./HowItWorks/HowItWorks";
-import WhyUseRocko from "./WhyUseRocko/WhyUseRocko";
-import "./Home.css";
-import { useNavigate } from "react-router-dom";
+import StepOne from "../Steps/StepOne/StepOne";
+import StepTwo from "../Steps/StepTwo/StepTwo";
+import StepThree from "../Steps/StepThree/StepThree";
+import StepFour from "../Steps/StepFour/StepFour";
+import useLoanData from "../../hooks/useLoanData";
+import StepFive from "../Steps/StepFive/StepFive";
 
-function Home() {
-  // const navigate = useNavigate();
+const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
+const stepsName = [
+  "Loan Amount",
+  "Collateral Asset",
+  "Lending Protocol",
+  "Collateral Buffer",
+  "Loan Summary",
+];
 
-  // const onGetStarted = () => {
-  //   !isAuthenticated ? 
-  //     loginWithPopup() :
-  //     navigate('/startloan')
-  // }
+export default function Home() {
+  const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
+    useLoanData();
 
+  console.log(currentStep)
+  console.log(loanSteps)
+  console.log(loanData)
+
+  const nextStep = () => {
+    if (currentStep < loanSteps.length - 1 && setCurrentStep) {
+     
+      setCurrentStep(currentStep + 1);
+       if (setLoanData) {
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          activeNextButton: false,
+        }));
+      }
+    }
+  };
+  const prevStep = () => {
+    if (currentStep > 0 && setCurrentStep) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const CurrentStepComponent = Steps[currentStep];
+  const currentData = loanSteps[currentStep];
+
+  // console.log(currentStep, loanSteps.length);
+  // console.log(loanData?.activeNextButton)
   return (
     <>
-      <div className="home_container">
-        <div className="crytoBacked_container">
-          <div className="crytoBacked_header">
-            Crypto-backed loans for as low as 3.84% APR
-          </div>
-          <div className="crytoBacked_body">
-             Rocko helps you quickly and securely borrow from DeFi protocols
-            using your crypto as collateral so you can access cash without
-            having to sell your portfolio
+      {<CurrentStepComponent {...currentData} />}
+
+      {/* footer */}
+      <div className="h-20 w-full"></div>
+      <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
+        <div className="bg-[#F7F7F7] h-1 w-full relative">
+          <div
+            style={{
+              width: `${(100 / loanSteps.length) * (currentStep + 1)}%`,
+            }}
+            className={`duration-500 bg-blue h-full absolute left-0 top-0`}
+          ></div>
+        </div>
+        <div className="container mx-auto">
+          <div className="p-4 flex items-center justify-between  ">
+            <p className="text-blackPrimary text-xs md:text-sm font-medium">
+              {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
+              {/* //todo remove it later */}
+            {loanData?.activeNextButton?.valueOf()}
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={prevStep}
+                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
+                  currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
+                }`}
+                disabled={currentStep === 0}
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className={`font-semibold  text-xs md:text-sm ${
+                  loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
+                } py-[10px]  px-6 rounded-full`}
+                disabled={!loanData?.activeNextButton}
+              >
+                {currentStep === loanSteps.length - 1
+                  ? "Finalize Loan"
+                  : "Next"}
+              </button>
+            </div>
           </div>
         </div>
-        <div className="items_container">
-          <div className="item">
-            <div>
-              <img src="./assets/icons/protocol.png" alt="protocol" className="item_img" />{" "}
-            </div>{" "}
-            <div className="item_content">
-              Borrow at low rates from popular DeFi protocols like Compound and
-              Aave
-            </div>
-          </div>
-          <div className="item">
-            <div>
-              <img src="./assets/icons/dollar.png" alt="dollar" className="item_img" />{" "}
-            </div>
-            <div className="item_content">
-              Receive funds directly to your preferred exchange or wallet within
-              minutes
-            </div>
-          </div>
-          <div className="item">
-            <div>
-              <img src="./assets/icons/dollar.png" alt="dollar2" className="item_img" />
-            </div>
-            <div className="item_content">
-              Repay your loan at anytime and receive your collateral back
-            </div>
-          </div>
-        </div>
-        <div>
-          <button className="get_started_btn">Get Started</button>
-        </div>
-        <div className="bottom_container">
-          <div className="over">Over $10M in loans fulfilled and growing! </div>
-        </div>
-        <HowItWorks />
       </div>
-      <WhyUseRocko />
     </>
   );
 }
-
-export default Home;
