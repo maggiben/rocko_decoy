@@ -6,6 +6,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import CoinCard from "../home/coinCard/coinCard";
 import useLoanData from "@/hooks/useLoanData";
 import { useForm } from "react-hook-form";
+import formatCurrency from "@/utility/currencyFormate";
 interface FormData {
   numberInput: string;
 }
@@ -13,18 +14,23 @@ interface FormData {
 const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
   const [activeInputField, setActiveInputField] = useState(false);
+  const [ inputNumber, setInputNumber] = useState('')
+  const [changeInputType, setChangeInputType] = useState<string>('number');
   const {
     register,
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
+    getValues,
   } = useForm<FormData>();
   const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
     useLoanData();
+    
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-
+    
     if (/^-?\d*\.?\d*$/.test(inputValue)) {
+      setInputNumber(inputValue)
       setValue("numberInput", inputValue, { shouldValidate: true });
     }
     console.log(" inside on change", errors);
@@ -137,10 +143,17 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                       return true;
                     },
                   })}
-                  type="number"
+                  type={changeInputType}
                   id="numberField"
                   min={1}
                   onKeyDown={(event) => {
+                    const keyPressed = event.key;
+                    const isDecimalDigit = /^\d+$/.test(keyPressed);
+                    const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
+
+                    if ((!isDecimalDigit && !(event.key==='Backspace')) || isAllowedHexChar) {
+                      event.preventDefault();
+                    }
                     if (event.key === "-") {
                       event.preventDefault();
                     }
@@ -148,6 +161,19 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                   className="w-52 md:w-auto md:flex-1 focus:outline-none border-none bg-white number-input"
                   placeholder="10,000"
                   disabled={!activeInputField}
+                  value={inputNumber}
+                  onFocus={()=>{
+                    const valueWithoutCommas = inputNumber.replace(/,/g, '');
+                    setInputNumber(valueWithoutCommas)
+                    setChangeInputType('number')
+                  }}
+                  onBlur={
+                    (event) => {
+                      setChangeInputType('text')
+                      setInputNumber( new Intl.NumberFormat('en-US').format(parseFloat(getValues('numberInput'))))
+                      
+                    }
+                  }
                   onChange={handleBorrowValueChange}
                 />
                 <label htmlFor="numberField">{selectedCoin}</label>

@@ -368,7 +368,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     // Choose how much collateral buffer you want.
     {
       id: 4,
-      title: "Choose how much collateral buffer you want",
+      title: "Choose how much excess collateral you want to provide.",
       risk: {
         minRisk: 0,
         maxRisk: 200,
