@@ -153,3 +153,8 @@ input[type='checkbox'] {
 .number-input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* loading */
+.circle-gradient {
+  fill: conic-gradient(from 0deg #276EF1 var(--fill-percentage, 0%), red var(--fill-percentage, 0%));
+}

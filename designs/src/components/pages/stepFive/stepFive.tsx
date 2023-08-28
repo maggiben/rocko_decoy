@@ -1,6 +1,13 @@
+"use client";
 import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import Image from "next/image";
 import React, { useState } from "react";
-
+import StatusWarning from "@/assets/StatusWarning.svg";
+import closeIcon from "@/assets/Close.svg";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
+import ModalContent from "@/components/shared/modalContainer/modalContent/modalContent";
+import ChooseWallet from "./chooseWallet/chooseWallet";
+import LoanFinalized from "./loanFinalized/loanFinalized";
 interface InnerInfo {
   description: string | JSX.Element;
   details?: string | number | JSX.Element;
@@ -141,7 +148,8 @@ const terms: Term[] = [
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
         Rocko’s service fee will be taken out of the initial amount transferred
-        to your Rocko wallet. More info on Rocko’s service fee can be found <a href="" className="underline">
+        to your Rocko wallet. More info on Rocko’s service fee can be found{" "}
+        <a href="" className="underline">
           here
         </a>
         .
@@ -152,12 +160,14 @@ const terms: Term[] = [
 
 const StepFive: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [openModalFor, setOpenModalFor] = useState("");
+  const [modalStep,setModalStep] = useState(0);
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6">
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
+        <div className="lg:max-w-4xl border-2 rounded-2xl p-3 lg:p-6">
           <h3 className="text-xl font-medium mb-4">Loan Summary</h3>
           <div className="divide-y-2">
             {invoice.map((info, i) => (
@@ -205,7 +215,7 @@ const StepFive: React.FC = () => {
       {/* ---------------------- First Section End ------------------------ */}
       {/* ---------------------- Second Section Start ------------------------ */}
       <section className="my-6">
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-5">
+        <div className="lg:max-w-4xl border-2 rounded-2xl p-3 lg:p-5">
           <h3 className="text-xl font-medium mb-6">
             Where do you want to receive your loan?
           </h3>
@@ -233,6 +243,7 @@ const StepFive: React.FC = () => {
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
+                onClick={() => setOpenModalFor("Coinbase or Gemini")}
                 disabled={paymentMethod !== "default"}
                 className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
                   paymentMethod === "default"
@@ -271,7 +282,7 @@ const StepFive: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="flex items-center mb-7">
+          <div className="flex items-start mb-7">
             <input
               type="radio"
               id="wallet3"
@@ -280,10 +291,46 @@ const StepFive: React.FC = () => {
               className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               onChange={(e) => setPaymentMethod(e.target.value)}
             />
-            <label htmlFor="wallet3" className="pl-4">
-              <p className="font-semibold">Other Exchange or Wallet Address</p>
-            </label>
+            <div className="pl-4">
+              <label htmlFor="wallet3" className="">
+                <p className="font-semibold mb-6">
+                  Other Exchange or Wallet Address
+                </p>
+              </label>
+
+              {/* if select other address then it will be active  start*/}
+              {paymentMethod === "other" && (
+                <>
+                  <div className="">
+                    <p className="text-sm font-semibold font-inter mb-2">
+                      Enter Wallet Address
+                    </p>
+                    <div className="max-w-[426px] w-full">
+                      <input
+                        type="text"
+                        className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        defaultValue={"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"}
+                      />
+                    </div>
+                    <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
+                      <Image
+                        src={StatusWarning}
+                        width={24}
+                        height={24}
+                        alt="warning"
+                      />
+                      <p className="text-sm font-inter text-[#010304]">
+                        Caution: Please ensure this address is correct as
+                        inputting an incorrect address could lead to lost funds.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+              {/* if select other address then it will be active  end*/}
+            </div>
           </div>
+
           <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
             <ul className="list-disc">
               {terms.map((term, i) => (
@@ -294,6 +341,22 @@ const StepFive: React.FC = () => {
         </div>
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
+
+      {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
+      {paymentMethod === "default" && openModalFor && (
+        <>
+          <ModalContainer>
+            {
+              modalStep===0 && <ChooseWallet setModalStep={setModalStep} setOpenModalFor={setOpenModalFor} />
+            }
+
+            {
+              modalStep === 1 && <LoanFinalized setOpenModalFor={setOpenModalFor}/>
+            }
+          </ModalContainer>
+        </>
+      )}
+      {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}
     </main>
   );
 };
