@@ -4,6 +4,7 @@ import StepThree from "../Steps/StepThree/StepThree";
 import StepFour from "../Steps/StepFour/StepFour";
 import useLoanData from "../../hooks/useLoanData";
 import StepFive from "../Steps/StepFive/StepFive";
+import { useAccount } from "wagmi";
 
 const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
 const stepsName = [
@@ -15,6 +16,7 @@ const stepsName = [
 ];
 
 export default function Home() {
+  const { isConnected } = useAccount();
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
@@ -76,7 +78,7 @@ export default function Home() {
                 className={`font-semibold  text-xs md:text-sm ${
                   loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
                 } py-[10px]  px-6 rounded-full`}
-                disabled={!loanData?.activeNextButton}
+                disabled={!loanData?.activeNextButton || !isConnected}
               >
                 {currentStep === loanSteps.length - 1
                   ? "Finalize Loan"
