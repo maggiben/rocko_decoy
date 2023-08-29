@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
+import CoinbaseLoginBtn from '../../components/CoinbaseLoginBtn/CoinbaseLoginBtn';
 import { WITHDRAWAL_ADDRESS, BACKEND_URL } from "../../constants/env";
 import { useSearchParams } from 'react-router-dom'
 
@@ -68,7 +68,7 @@ export default function CoinbaseCallback() {
         <br />
         <br />
         <br />
-        <CoinbaseLoginButton />
+        <CoinbaseLoginBtn />
         <br />
         <h1>{balance?.balance?.amount}</h1>
         <button onClick={fetchCoinbaseBalance}>Get Balance</button>

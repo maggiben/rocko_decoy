@@ -1,7 +1,7 @@
 import {
     COINBASE_CLIENT_ID,
     BACKEND_URL
-} from '../constants/env';
+} from '../../constants/env';
 
 const COINBASE_REDIRECT_URI = `${BACKEND_URL}/cb-callback`;
 const COINBASE_SCOPES = [
@@ -24,7 +24,7 @@ const SPEND_LIMIT_AMOUNT = "1"; // need to get app aproved to be more than 1
 
 
 
-export default function LoginButton() {
+export default function CoinbaseLoginBtn() {
     const handleLogin = () => {
     const params = new URLSearchParams({
             response_type: 'code',
