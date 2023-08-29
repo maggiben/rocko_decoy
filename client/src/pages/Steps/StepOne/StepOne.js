@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import LoanSummary from "../../../components/LoanSummary/LoanSummary";
 import CoinCard from "../../../components/CoinCard/CoinCard";
 import useLoanData from "../../../hooks/useLoanData";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import { useLoan } from "../../../contract/single";
+import { financial } from "../../../helper";
 
 const StepOne = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
@@ -13,8 +15,9 @@ const StepOne = ({ title, currency }) => {
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
   } = useForm();
-  const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-    useLoanData();
+
+  const { loanData, setLoanData } = useLoanData();
+  const { getBorrowAPR } = useLoan();
 
   const handleBorrowValueChange = (event) => {
     const inputValue = event.target.value;
@@ -27,34 +30,17 @@ const StepOne = ({ title, currency }) => {
       setLoanData((prevLoanData) => {
         return {
           ...prevLoanData,
-          borrowing: parseFloat(event.target.value || "0"),
-          sixMonthInterest: parseFloat(
-            (
-              (prevLoanData.currentAPR / 100) *
-              parseFloat(event.target.value || "0") *
-              0.5
-            ).toFixed(2)
-          ),
-          twelveMonthInterest: parseFloat(
-            (
-              (prevLoanData.currentAPR / 100) *
-              parseFloat(event.target.value || "0") *
-              1
-            ).toFixed(2)
-          ),
-          twentyFourMonthInterest: parseFloat(
-            (
-              (prevLoanData.currentAPR / 100) *
-              parseFloat(event.target.value || "0") *
-              2
-            ).toFixed(2)
-          ),
+          borrowing: (inputValue || "0"),
+          // sixMonthInterest: (inputValue * prevLoanData.currentAPR / 200),
+          // twelveMonthInterest: (inputValue * prevLoanData.currentAPR / 100),
+          // twentyFourMonthInterest: (inputValue * prevLoanData.currentAPR / 50),
         };
       });
     }
   };
 
   const handleSelect = (info) => {
+    console.log(info)
     setSelectedCoin(info.coinShortName);
     // when select coin then can type value
     setActiveInputField(true);
@@ -81,7 +67,48 @@ const StepOne = ({ title, currency }) => {
       });
     }
     console.log({ isValid });
-  }, [isValid]);  
+  }, [isValid]);
+
+  const updateLoanData = async () => {
+    try {
+        const borrowing = loanData?.borrowing;
+        const borrowAPR = await getBorrowAPR();
+        const interestSixMonths = borrowing * borrowAPR / 200;
+        const interestOneYear = borrowing * borrowAPR / 100;
+        const interestTwoYears = borrowing * borrowAPR / 50;
+        // const loanToValue = await getLTV();
+        // const penalty = await getPenalty();
+        // const threshold = await getThreshold();
+        // const ethPrice = await getETHPrice();
+        // const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
+        // const collateral = collateralInUSD / ethPrice;
+        // const liquidationPrice = borrowing / threshold / collateral;
+        
+        if (setLoanData) {
+            setLoanData((prevLoanData) => {
+                return {
+                    ...prevLoanData,
+                    currentAPR: borrowAPR,
+                    sixMonthInterest: interestSixMonths,
+                    twelveMonthInterest: interestOneYear,
+                    twentyFourMonthInterest: interestTwoYears,
+                    // loanToValue: loanToValue,
+                    // liquidationPenalty: penalty,
+                    // liquidationThreshold: threshold,
+                    // collateralPrice: ethPrice,
+                    // collateralNeeded: collateral,
+                    // liquidationPrice: liquidationPrice,
+                }
+            })
+        }
+    } catch (e) {
+        console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    updateLoanData();
+  })
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">

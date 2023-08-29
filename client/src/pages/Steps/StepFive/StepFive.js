@@ -1,105 +1,8 @@
 import HoverTooltip from "../../../components/HoverTooltip/HoverTooltip";
 import React, { useState } from "react";
-
-const invoice = [
-  {
-    description: "Lending Protocol",
-    details: <span className="underline">Compound Finance</span>,
-  },
-  {
-    description: "Loan Amount",
-    details: `$10,000 USDC `,
-    subDetails: `~$10,000.00`,
-  },
-  {
-    description: "Current APR",
-    details: 3.84 + "%",
-  },
-  {
-    description: "Amount Required for Loan",
-    details: `${14.7341} ETH`,
-    subDetails: `$27,647.01`,
-    subDescription: [
-      {
-        description: "Collateral",
-        details: `${14.6241} ETH`,
-        subDetails: `$27,647.01`,
-      },
-      {
-        description: "Rocko Service Fee",
-        details: `${0.11} ETH`,
-        subDetails: `$200.00`,
-      },
-    ],
-  },
-  {
-    description: "Collateral Buffer",
-    details: 1.0 + "%",
-  },
-  {
-    description: "Estimated Time to Receive Loan",
-    details: "<15 Minutes*",
-  },
-  {
-    description: "Collateral Parameters & Loan Terms",
-    subDescription: [
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">Loan-to-value-ratio </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `${83}%`,
-      },
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">Liquidation Threshold </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `${90}%`,
-      },
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">Liquidation Penalty </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `${5}%`,
-      },
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">Loan Term </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `Open Ended`,
-      },
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">Minimum Monthly Payment </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `None`,
-      },
-      {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">Protocol Rewards </span>{" "}
-            <HoverTooltip text="this is tooltip" />
-          </div>
-        ),
-        details: `${2.01}%`,
-      },
-    ],
-  },
-];
+import useLoanData from "../../../hooks/useLoanData";
+import { financial } from "../../../helper";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 const terms = [
   {
@@ -135,6 +38,110 @@ const terms = [
 ];
 
 const StepFive = () => {
+  const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
+    useLoanData();
+
+  const invoice = [
+    {
+      description: "Lending Protocol",
+      details: <span className="underline">Compound Finance</span>,
+    },
+    {
+      description: "Loan Amount",
+      details: `~$${loanData?.borrowing} USDC`,
+      subDetails: `~$${loanData?.borrowing}`,
+    },
+    {
+      description: "Current APR",
+      details: `${financial(loanData?.currentAPR, 2)}%`,
+    },
+    {
+      description: "Amount Required for Loan",
+      details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
+      subDetails: `$${financial(loanData?.collateralNeeded * loanData?.collateralPrice, 2)}`,
+      subDescription: [
+        {
+          description: "Collateral",
+          details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
+          subDetails: `$${financial(loanData?.collateralNeeded * loanData?.collateralPrice, 2)}`,
+        },
+        {
+          description: "Rocko Service Fee",
+          details: `${0} ETH`,
+          subDetails: `$0.00`,
+        },
+      ],
+    },
+    {
+      description: "Collateral Buffer",
+      details: loanData?.buffer + "%",
+    },
+    {
+      description: "Estimated Time to Receive Loan",
+      details: "<15 Minutes*",
+    },
+    {
+      description: "Collateral Parameters & Loan Terms",
+      subDescription: [
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1">
+              <span className="mr-1 lg:mr-0">Loan-to-value-ratio </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `${loanData?.loanToValue * 100}%`,
+        },
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1 w-max">
+              <span className="mr-1 lg:mr-0">Liquidation Threshold </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `${loanData?.liquidationThreshold * 100}%`,
+        },
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1">
+              <span className="mr-1 lg:mr-0">Liquidation Penalty </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `${financial(loanData?.liquidationPenalty * 100)}%`,
+        },
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1">
+              <span className="mr-1 lg:mr-0">Loan Term </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `Open Ended`,
+        },
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1 w-max">
+              <span className="mr-1 lg:mr-0">Minimum Monthly Payment </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `None`,
+        },
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1">
+              <span className="mr-1 lg:mr-0">Protocol Rewards </span>{" "}
+              <HoverTooltip text="this is tooltip" />
+            </div>
+          ),
+          details: `${financial(loanData?.rewardRate, 2)}%`,
+        },
+      ],
+    },
+  ];
+  
+
   const [paymentMethod, setPaymentMethod] = useState("");
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
@@ -243,16 +250,16 @@ const StepFive = () => {
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
-              <button
-                disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
-                  paymentMethod === "ethereum"
-                    ? "text-[#eee] bg-[#2C3B8D]"
-                    : "bg-[#eee] text-[#2C3B8D]"
-                }`}
-              >
-                Connect
-              </button>
+              <ConnectWallet
+                btnTitle="Connect"
+                theme="light"
+                style={{
+                  background: paymentMethod === "ethereum" ? "#2C3B8D" : "#eee",
+                  color: paymentMethod === "ethereum" ? "#eee" : "#2C3B8D",
+                  borderRadius: "1.5rem",
+                  minWidth: "8rem",
+                }}
+              />
             </div>
           </div>
           <div className="flex items-center mb-7">

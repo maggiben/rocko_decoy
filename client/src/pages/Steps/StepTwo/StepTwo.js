@@ -1,12 +1,14 @@
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import AssetParameter from "../../../components/AssetParameter/AssetParameter"
 import ChooseCoins from "../../../components/ChooseCoins/ChooseCoins"
 import LoanSummary from "../../../components/LoanSummary/LoanSummary"
 import useLoanData from "../../../hooks/useLoanData"
+import { financial } from "../../../helper"
 
 const StepTwo = ({assets, id, title, description}) => {
     const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-    useLoanData();
+        useLoanData();
 
     return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
@@ -22,16 +24,15 @@ const StepTwo = ({assets, id, title, description}) => {
                 {title}
                 </p>
                 
-                
                 <ChooseCoins assets={assets}/>
                 <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
                 <p className="text-blackPrimary font-medium">
                 Collateral Parameters
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ">
-                    <AssetParameter title="Loan-to-Value" value={loanData?.loanToValue} />
-                    <AssetParameter active title="Liquidation Threshold" value={loanData?.liquidationThreshold} />
-                    <AssetParameter title="Liquidation Penalty" value={loanData?.liquidationPenalty}/>
+                    <AssetParameter title="Loan-to-Value" value={loanData?.loanToValue * 100} />
+                    <AssetParameter active title="Liquidation Threshold" value={loanData?.liquidationThreshold * 100} />
+                    <AssetParameter title="Liquidation Penalty" value={financial(loanData?.liquidationPenalty * 100)}/>
                 </div>
                 <p className="pt-6   text-sm text-blackSecondary">
                     Lending protocols determine which assets are able to be used

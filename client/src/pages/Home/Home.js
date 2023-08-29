@@ -18,10 +18,6 @@ export default function Home() {
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
-  console.log(currentStep)
-  console.log(loanSteps)
-  console.log(loanData)
-
   const nextStep = () => {
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
      
@@ -43,8 +39,6 @@ export default function Home() {
   const CurrentStepComponent = Steps[currentStep];
   const currentData = loanSteps[currentStep];
 
-  // console.log(currentStep, loanSteps.length);
-  // console.log(loanData?.activeNextButton)
   return (
     <>
       {<CurrentStepComponent {...currentData} />}

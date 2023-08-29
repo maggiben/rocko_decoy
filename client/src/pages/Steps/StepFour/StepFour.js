@@ -2,13 +2,18 @@ import { use, useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import LoanSummary from "../../../components/LoanSummary/LoanSummary";
 import useLoanData from "../../../hooks/useLoanData";
+import { useLoan } from "../../../contract/single";
 
 const StepFour = ({ title }) => {
   const [value, setValue] = useState(0);
   const [thumbPosition, setThumbPosition] = useState(0);
   const [valueDivWidth, setValueDivWidth] = useState(0);
   const {loanData,setLoanData} = useLoanData()
-
+  const {
+    getETHPrice,
+    getLTV,
+    getThreshold,
+  } = useLoan();
   
   const valueDivRef = useRef(null);
 
@@ -18,7 +23,32 @@ const StepFour = ({ title }) => {
     }
   }, [value]);
 
-  const handleInputChange = (event) => {
+  const updateLoanData = async (newBuffer) => {
+    try {
+      const loanToValue = await getLTV();
+      const threshold = await getThreshold();
+      const ethPrice = await getETHPrice();
+      const collateralInUSD = loanData?.borrowing / loanToValue * (1 + newBuffer / 100);
+      const collateral = collateralInUSD / ethPrice;
+      const liquidationPrice = loanData?.borrowing / threshold / collateral;
+      
+      if (setLoanData) {
+        setLoanData((prevLoanData) => {
+          return {
+              ...prevLoanData,
+              buffer: newBuffer,
+              collateralNeeded: collateral,
+              liquidationPrice: liquidationPrice,
+              activeNextButton:true,
+            }
+        })
+      }
+    } catch (e) {
+        console.error(e);
+    }
+  }
+
+  const handleInputChange = async (event) => {
     const newValue = parseInt(event.target.value, 10);
     setValue(newValue);
     setThumbPosition(
@@ -28,17 +58,14 @@ const StepFour = ({ title }) => {
     );
 
     if(setLoanData){
-      setLoanData((prevLoanData)=>({
-        ...prevLoanData,
-         activeNextButton:true,
-      }))
+      await updateLoanData(newValue);
     }
-
   };
-const isEnd = thumbPosition === 100 ;
-  const adjustedThumbPosition = isEnd
-    ? thumbPosition - (valueDivWidth / 2)  // Subtract half of value div width
-    : thumbPosition;
+  
+  const isEnd = thumbPosition === 100 ;
+    const adjustedThumbPosition = isEnd
+      ? thumbPosition - (valueDivWidth / 2)  // Subtract half of value div width
+      : thumbPosition;
 
   const valueDivStyle = {
     left: `calc(${thumbPosition}% - ${80/2}px)`,

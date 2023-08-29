@@ -2,6 +2,7 @@ import { useState } from "react";
 import FilterOptions from "../../../components/FilterOptions/FilterOptions";
 import SortOptions from "../../../components/SortOptions/SortOptions";
 import Protocol from "../../../components/Protocol/Protocol";
+import CompoundProtocol from "../../../components/Protocol/CompoundProtocol";
 import useLoanData from "../../../hooks/useLoanData";
 
 const StepThree = ({ title, protocols }) => {
@@ -91,6 +92,14 @@ const StepThree = ({ title, protocols }) => {
               {title}
             </p>
             <div className="divide-y-2 divide-[#E2E2E2]">
+              <CompoundProtocol 
+                id="protocol-1"
+                interestRate="3.88"
+                name="Compound Finance"
+                symbol="/icons/Compound (COMP).svg"
+                handleProtocol={handleProtocol}
+                selectProtocol={selectProtocol}
+              />              
               {protocols?.map((protocol) => (
                 <Protocol
                   key={protocol.id}
