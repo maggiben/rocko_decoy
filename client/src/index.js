@@ -14,14 +14,18 @@ import {
   walletConnect,
   safeWallet,
 } from "@thirdweb-dev/react";
+import LoneProvider from "./context/loanContext/loanContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+console.log("LoneProvider", LoneProvider)
 root.render(
   <React.StrictMode>
     <ZeroDevWrapper>
       <BrowserRouter>
         <ThirdwebProvider activeChain="goerli">
-          <App />
+          <LoneProvider>
+            <App />
+          </LoneProvider>
         </ThirdwebProvider>
       </BrowserRouter>
     </ZeroDevWrapper>
