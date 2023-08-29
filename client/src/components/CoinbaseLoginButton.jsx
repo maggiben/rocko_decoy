@@ -40,7 +40,8 @@ export default function LoginButton() {
 
         const authUrl = `https://www.coinbase.com/oauth/authorize?${params.toString()}`;
             
-        window.location.href = authUrl;
+        // window.location.href = authUrl;
+        window.open(authUrl,"Coinbase Oauth",'height=600,width=800,left=10,top=10,titlebar=no,toolbar=no,menubar=no,location=no,directories=no,status=no');
     };
 
     return <button className="btn" onClick={handleLogin}>Sign in</button>;

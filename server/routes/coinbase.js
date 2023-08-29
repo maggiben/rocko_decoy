@@ -7,7 +7,7 @@ const OAUTH_TOKEN_URL = 'https://api.coinbase.com/oauth/token';
 const CLIENT_ID = process.env.COINBASE_CLIENT_ID;
 const CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
 const REDIRECT_URI = `${process.env.BACKEND_URL}/cb-callback`; 
-const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/reviewloan`;
+const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/cb-callback?close=true`;
 
 router.get('/cb-callback', async (req, res) => {
     const authorizationCode = req.query.code;
@@ -64,8 +64,8 @@ router.get('/coinbase-balance', async (req, res) => {
             response:  response.data.data[0]
         });
     } catch (error) {
-        console.error('Error fetching balance from Coinbase:', error);
-        res.status(res.status).json({
+        console.error('Error fetching balance from Coinbase:', error, {statz: res.status});
+        res.status(error.response.status).json({
             success: false,
             message: 'Failed to fetch balance from Coinbase'
         });

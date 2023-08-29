@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CoinbaseLoginButton from "../../components/CoinbaseLoginButton";
 import { WITHDRAWAL_ADDRESS, BACKEND_URL } from "../../constants/env";
+import { useSearchParams } from 'react-router-dom'
+
 
 const initiateWithdrawal = ({accountId, cb2fa, address, amount}) => {
 
@@ -28,11 +30,21 @@ const initiateWithdrawal = ({accountId, cb2fa, address, amount}) => {
 }
 
 export default function CoinbaseCallback() {
+  const [searchParams] = useSearchParams();
+  const close = searchParams.get("close")
 
   const [balance, setBalance] = useState(null);
   const [get2fa, set2fa] = useState('');
   const [getAddress, setAddress] = useState(WITHDRAWAL_ADDRESS);
   const [getAmount, setAmount] = useState('1.00');
+
+  useEffect(() => {
+    console.log({close})
+    if (close) {
+      console.log("close window")
+      window.close();
+    }
+  }, [close]);
 
   const fetchCoinbaseBalance = () => {
     fetch(`${BACKEND_URL}/coinbase-balance`, {

@@ -186,7 +186,7 @@ function ReviewLoan() {
               Finalize your loan with Compound Finance
             </div>
             <div style={{ paddingBottom: "40px" }}>
-              You’re borrowing USDC and pledging Eth
+              You're borrowing USDC and pledging Eth
             </div>
             <div>
               <div className="summary_container">
@@ -358,8 +358,8 @@ function ReviewLoan() {
                 style={{ gap: "10px", alignItems: "center" }}>
                 <div className="dot"></div>
                 <div>
-                  Rocko’s service fee will be taken out of the initial amount
-                  transferred to your Rocko wallet. More info on Rocko’s service
+                  Rockos service fee will be taken out of the initial amount
+                  transferred to your Rocko wallet. More info on Rocko's service
                   fee can be found <span className="text_underline">here.</span>
                 </div>
               </div>
