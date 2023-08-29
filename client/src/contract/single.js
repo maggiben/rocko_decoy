@@ -80,8 +80,6 @@ export const useLoan = () => {
   }
 
   const getRewardRate = async() => {
-    if (!address) return;
-
     const sdk = new ThirdwebSDK('goerli');
     const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
     const value = await contract.call( 

@@ -9,13 +9,16 @@ export const loneContext = createContext({
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
 
-    liquidationPenalty: 0,
-    liquidationThreshold: 0,
+    buffer: 0,
     loanToValue: 0,
     collateralPrice: 0,
     subCollateralPrice: 0,
+    collateralNeeded: 0,
+    liquidationPenalty: 0,
+    liquidationThreshold: 0,
     liquidationPrice: 0,
     subLiquidationPrice: 0,
+    rewardRate: 0,
     coinIcon:'',
     cryptoIcon: '',
     cryptoName: '',
@@ -39,13 +42,16 @@ const LoneProvider = ({ children }) => {
     sixMonthInterest: 0,
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
-    liquidationPenalty: 0,
-    liquidationThreshold: 0,
+    buffer: 0,
+    collateralNeeded: 0,
     loanToValue: 0,
     collateralPrice: 0,
     subCollateralPrice: 0,
+    liquidationPenalty: 0,
+    liquidationThreshold: 0,
     liquidationPrice: 0,
     subLiquidationPrice: 0,
+    rewardRate: 0,
     coinIcon:'',
     cryptoIcon: '',
     cryptoName: '',
@@ -64,7 +70,7 @@ const LoneProvider = ({ children }) => {
           fullName: "USD Coin",
           symbol: "./assets/coins/USD Coin (USDC).svg",
 
-          currentAPR: 3.84, // apr is  calculated in percentage
+          currentAPR: 0, // apr is  calculated in percentage
         },
         {
           id: "currency-2",
@@ -89,9 +95,9 @@ const LoneProvider = ({ children }) => {
           fullName: "Ether",
           symbol: "./assets/coins/Ether (ETH).svg",
 
-          loanToValue: 70, // data is  in percentage
-          liquidationThreshold: 82, // data is in percentage
-          liquidationPenalty: 5, // data is in percentage
+          loanToValue: 0.7, // data is  in percentage
+          liquidationThreshold: 0.82, // data is in percentage
+          liquidationPenalty: 0.05, // data is in percentage
           collateralPrice: 8.3145,
           subCollateralPrice: 16548.6,
           liquidationPrice: 1902.48,
@@ -104,9 +110,9 @@ const LoneProvider = ({ children }) => {
           fullName: "Compound",
           symbol: "./assets/coins/Compound (COMP).svg",
 
-          loanToValue: 80, // data is  in percentage
-          liquidationThreshold: 10, // data is in percentage
-          liquidationPenalty: 6, // data is in percentage
+          loanToValue: 0.8, // data is  in percentage
+          liquidationThreshold: 0.1, // data is in percentage
+          liquidationPenalty: 0.06, // data is in percentage
           collateralPrice: 7.3121,
           subCollateralPrice: 13823.6,
           liquidationPrice: 1712.48,
@@ -119,9 +125,9 @@ const LoneProvider = ({ children }) => {
           fullName: "Wrapped Bitcoin",
           symbol: "./assets/coins/Wrapped Bitcoin (WBTC).svg",
 
-          loanToValue: 90, // data is  in percentage
-          liquidationThreshold: 60, // data is in percentage
-          liquidationPenalty: 4, // data is in percentage
+          loanToValue: 0.9, // data is  in percentage
+          liquidationThreshold: 0.6, // data is in percentage
+          liquidationPenalty: 0.04, // data is in percentage
           collateralPrice: 9.0421,
           subCollateralPrice: 30823.6,
           liquidationPrice: 1212.48,
@@ -133,9 +139,9 @@ const LoneProvider = ({ children }) => {
           fullName: "Uniswap",
           symbol: "./assets/coins/Uniswap (UNI).svg",
 
-          loanToValue: 80, // data is  in percentage
-          liquidationThreshold: 80, // data is in percentage
-          liquidationPenalty: 2, // data is in percentage
+          loanToValue: 0.8, // data is  in percentage
+          liquidationThreshold: 0.8, // data is in percentage
+          liquidationPenalty: 0.02, // data is in percentage
           collateralPrice: 9.3121,
           subCollateralPrice: 62823.6,
           liquidationPrice: 1542.48,
@@ -148,71 +154,6 @@ const LoneProvider = ({ children }) => {
       id: 3,
       title: "Choose the lending protocol to borrow from",
       protocols: [
-        {
-          id: "protocol-1",
-          name: "Compound Finance",
-          symbol: "/icons/Compound (COMP).svg",
-          interestRate:3.88,
-          protocolInfos: [
-            {
-              id: "protocol-info-1",
-              title: "Trailing APR’s",
-              tooltip: "tooltip information",
-              options: [
-                {
-                  name: "30 Day",
-                  value: '4.01%', //value will percentage
-                  subInfo: "",
-                },
-                {
-                  name: "365 Day",
-                  value: '3.76%', //value will percentage
-                  subInfo: "",
-                },
-              ],
-            },
-            {
-              id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
-              tooltip: "",
-
-              options: [
-                {
-                  name: "Loan-to-value",
-                  value: '83%', //value will percentage
-                  subInfo: "Loan-to-value tooltip",
-                },
-                {
-                  name: "Liquidation Threshold",
-                  value: '90%', //value will percentage
-                  subInfo: "Liquidation Threshold tooltip",
-                },
-                {
-                  name: "Liquidation Penalty",
-                  value: '5%', //value will percentage
-                  subInfo: "Liquidation Penalty",
-                },
-              ],
-            },
-            {
-              id: "protocol-info-3",
-              title: "Rewards",
-              tooltip: "tooltip information",
-              options: [
-                {
-                  name: "Current Rate",
-                  value: "2.01%", //value will percentage
-                  subInfo: "",
-                },
-                {
-                  name: "Trailing 365 average",
-                  value: '2.83%', //value will percentage
-                  subInfo: "",
-                },
-              ],
-            },
-          ],
-        },
         {
           id: "protocol-2",
           name: "Aave",
