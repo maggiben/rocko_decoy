@@ -1,5 +1,6 @@
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
+import { financial } from "../../helper";
 import formatCurrency from "../../utils/currencyFormate";
 
 const LoanSummary = () => {
@@ -13,7 +14,7 @@ const LoanSummary = () => {
         <p className="text-blackPrimary">Borrowing</p>
         <div className="flex items-center mt-4 mb-2 justify-between">
             <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {/* {loanData?.borrowing ? formatCurrency(loanData?.borrowing) : "--"} */}
+            {loanData?.borrowing ? formatCurrency(loanData?.borrowing) : "--"}
             <span className="text-base"> {loanData?.coin}</span>
             </p>
             {loanData?.coinIcon && (
@@ -36,7 +37,7 @@ const LoanSummary = () => {
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.currentAPR && (
             <>
-                {loanData?.currentAPR}
+                {financial(loanData?.currentAPR, 2)}
                 <span className="text-base">%</span>
             </>
             )) ||
@@ -53,7 +54,7 @@ const LoanSummary = () => {
             <span className="text-blackSecondary">6 months</span>
             <span className="text-blackPrimary">
             {(loanData?.sixMonthInterest && (
-                <>${formatCurrency(loanData?.sixMonthInterest)}</>
+                <>${financial(loanData?.sixMonthInterest, 2)}</>
             )) ||
                 "--"}
             </span>
@@ -63,7 +64,7 @@ const LoanSummary = () => {
             <span className="text-blackPrimary">
             {" "}
             {(loanData?.twelveMonthInterest && (
-                <> ${formatCurrency(loanData?.twelveMonthInterest)}</>
+                <> ${financial(loanData?.twelveMonthInterest, 2)}</>
             )) ||
                 "--"}
             </span>
@@ -73,7 +74,7 @@ const LoanSummary = () => {
             <span className="text-blackPrimary">
             {" "}
             {(loanData?.twentyFourMonthInterest && (
-                <>${formatCurrency(loanData?.twentyFourMonthInterest)}</>
+                <>${financial(loanData?.twentyFourMonthInterest, 2)}</>
             )) ||
                 "--"}
             </span>
@@ -91,10 +92,10 @@ const LoanSummary = () => {
             justify-between gap-1"
         >
             <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {loanData?.collateralPrice && loanData?.cryptoName ? (
+            {loanData?.collateralNeeded && loanData?.cryptoName ? (
                 <>
                 {" "}
-                {loanData?.collateralPrice}{" "}
+                {financial(loanData?.collateralNeeded, 3)}{" "}
                 <span className="text-base"> {loanData?.cryptoName}</span>
                 </>
             ) : (
@@ -126,7 +127,7 @@ const LoanSummary = () => {
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.liquidationPrice &&
-            `$ ${formatCurrency(loanData?.liquidationPrice)}`) ||
+            `$ ${financial(loanData?.liquidationPrice, 2)}`) ||
             "--"}
         </p>
         {(loanData?.liquidationPrice && (
@@ -135,7 +136,7 @@ const LoanSummary = () => {
                 Current Price of {loanData?.cryptoName}
             </span>
             <span className="text-blackPrimary">
-                ${formatCurrency(loanData?.subLiquidationPrice)}
+                ${financial(loanData?.collateralPrice, 2)}
             </span>
             </p>
         )) ||
