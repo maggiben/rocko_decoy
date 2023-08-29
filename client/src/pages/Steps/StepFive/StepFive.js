@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import useLoanData from "../../../hooks/useLoanData";
 import { financial } from "../../../helper";
 import { ConnectWallet } from "@thirdweb-dev/react";
+import ModalContainer from "../../../components/ModalContainer/ModalContainer";
+import ModalContent from "../../../components/ModalContent/ModalContent";
+import ChooseWallet from "../../../components/ChooseWallet/ChooseWallet";
+import LoanFinalized from "../../../components/LoanFinalized/LoanFinalized";
 
 const terms = [
   {
@@ -38,8 +42,7 @@ const terms = [
 ];
 
 const StepFive = () => {
-  const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-    useLoanData();
+  const { loanData } = useLoanData();
 
   const invoice = [
     {
@@ -140,9 +143,11 @@ const StepFive = () => {
       ],
     },
   ];
-  
 
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [openModalFor, setOpenModalFor] = useState("");
+  const [modalStep,setModalStep] = useState(0);
+
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
@@ -224,6 +229,7 @@ const StepFive = () => {
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
+                onClick={() => setOpenModalFor("Coinbase or Gemini")}
                 disabled={paymentMethod !== "default"}
                 className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
                   paymentMethod === "default"
@@ -285,6 +291,22 @@ const StepFive = () => {
         </div>
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
+
+      {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
+      {paymentMethod === "default" && openModalFor && (
+        <>
+          <ModalContainer>
+            {
+              modalStep===0 && <ChooseWallet setModalStep={setModalStep} setOpenModalFor={setOpenModalFor} />
+            }
+
+            {
+              modalStep === 1 && <LoanFinalized setOpenModalFor={setOpenModalFor}/>
+            }
+          </ModalContainer>
+        </>
+      )}
+      {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}
     </main>
   );
 };

@@ -44,5 +44,5 @@ export default function CoinbaseLoginBtn() {
         window.open(authUrl,"Coinbase Oauth",'height=600,width=800,left=10,top=10,titlebar=no,toolbar=no,menubar=no,location=no,directories=no,status=no');
     };
 
-    return <button className="btn" onClick={handleLogin}>Sign in</button>;
+    return <button className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white" onClick={handleLogin}>Continue</button>;
 }
