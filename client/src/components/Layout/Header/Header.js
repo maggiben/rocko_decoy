@@ -10,6 +10,7 @@ const Header = () => {
   const { chains } = configureChains( [goerli], [publicProvider()] );
   const auth0Connector = new Auth0WalletConnector({chains, options: {
     projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID,
+    shimDisconnect: false
   }});
 
   const [toggle, setToggle] = useState(false);
