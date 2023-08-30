@@ -163,7 +163,7 @@ const StepFive: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep,setModalStep] = useState(0);
   return (
-    <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
+    <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6">
