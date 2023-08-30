@@ -1,7 +1,7 @@
 import {
     COINBASE_CLIENT_ID,
     BACKEND_URL
-} from '../constants/env';
+} from '../../constants/env';
 
 const COINBASE_REDIRECT_URI = `${BACKEND_URL}/cb-callback`;
 const COINBASE_SCOPES = [
@@ -24,7 +24,7 @@ const SPEND_LIMIT_AMOUNT = "1"; // need to get app aproved to be more than 1
 
 
 
-export default function LoginButton() {
+export default function CoinbaseLoginBtn() {
     const handleLogin = () => {
     const params = new URLSearchParams({
             response_type: 'code',
@@ -44,5 +44,5 @@ export default function LoginButton() {
         window.open(authUrl,"Coinbase Oauth",'height=600,width=800,left=10,top=10,titlebar=no,toolbar=no,menubar=no,location=no,directories=no,status=no');
     };
 
-    return <button className="btn" onClick={handleLogin}>Sign in</button>;
+    return <button className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white" onClick={handleLogin}>Continue</button>;
 }

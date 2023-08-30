@@ -17,7 +17,7 @@ import { financial } from "../../../helper";
 
 import "swiper/swiper-bundle.min.css";
 import Slider from "../../../components/Slider/Slider";
-import CoinbaseLoginButton from "../../../components/CoinbaseLoginButton";
+import CoinbaseLoginBtn from "../../../components/CoinbaseLoginBtn/CoinbaseLoginBtn";
 import { IS_DEMO_MODE } from "../../../constants/env";
 SwiperCore.use([Navigation]);
 
@@ -243,7 +243,7 @@ function ReviewLoan() {
                       </div>
                     </div>
                   </div>
-                  <CoinbaseLoginButton />
+                  <CoinbaseLoginBtn />
                 </div>
               </div>
               <div className="detail_item">

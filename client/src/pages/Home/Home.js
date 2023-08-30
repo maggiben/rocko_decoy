@@ -77,7 +77,7 @@ export default function Home() {
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
                   loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
-                } py-[10px]  px-6 rounded-full`}
+                } py-[10px]  px-6 rounded-full text-white`}
                 disabled={!loanData?.activeNextButton || !isConnected}
               >
                 {currentStep === loanSteps.length - 1
