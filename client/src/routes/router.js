@@ -8,6 +8,7 @@ import ManageLoan from "../pages/Loan/ManageLoan/ManageLoan";
 import RepayLoan from "../pages/Loan/RepayLoan/RepayLoan";
 import AddCollateral from "../pages/Loan/AddCollateral/AddCollateral";
 import CoinbaseCallback from "../pages/CoinbaseCallback/CoinbaseCallback";
+import DepositeCollateral from "../pages/Steps/DepositeCollateral/DepositCollateral";
 
 export default function Router() {
   return useRoutes([
@@ -18,6 +19,14 @@ export default function Router() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/depositing-collateral",
+          element: <DepositeCollateral />
+        },
+        {
+          path: "/cb-callback",
+          element: <CoinbaseCallback />,
         },
         {
           path: "/startloan",
@@ -42,10 +51,6 @@ export default function Router() {
         {
           path: "/addcollateral",
           element: <AddCollateral />,
-        },
-        {
-          path: "/cb-callback",
-          element: <CoinbaseCallback />,
         },
         {
           path: '*',

@@ -268,7 +268,7 @@ const StepFive = () => {
               />
             </div>
           </div>
-          <div className="flex items-center mb-7">
+          <div className="flex items-start mb-7">
             <input
               type="radio"
               id="wallet3"
@@ -277,10 +277,46 @@ const StepFive = () => {
               className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               onChange={(e) => setPaymentMethod(e.target.value)}
             />
-            <label htmlFor="wallet3" className="pl-4">
-              <p className="font-semibold">Other Exchange or Wallet Address</p>
-            </label>
+            <div className="pl-4">
+              <label htmlFor="wallet3" className="">
+                <p className="font-semibold mb-6">
+                  Other Exchange or Wallet Address
+                </p>
+              </label>
+
+              {/* if select other address then it will be active  start*/}
+              {paymentMethod === "other" && (
+                <>
+                  <div className="">
+                    <p className="text-sm font-semibold font-inter mb-2">
+                      Enter Wallet Address
+                    </p>
+                    <div className="max-w-[426px] w-full">
+                      <input
+                        type="text"
+                        className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        defaultValue={"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"}
+                      />
+                    </div>
+                    <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
+                      <img
+                        src="./assets/StatusWarning.svg"
+                        width={24}
+                        height={24}
+                        alt="warning"
+                      />
+                      <p className="text-sm font-inter text-[#010304]">
+                        Caution: Please ensure this address is correct as
+                        inputting an incorrect address could lead to lost funds.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+              {/* if select other address then it will be active  end*/}
+            </div>
           </div>
+
           <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
             <ul className="list-disc">
               {terms.map((term, i) => (
