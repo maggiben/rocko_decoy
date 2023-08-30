@@ -15,12 +15,12 @@ const invoices = [
         img: comp,
       },
       {
-        title: "ETH :",
-        img: eth,
+        title: "USDC :",
+        img:usdc ,
       },
       {
-        title: "USDC",
-        img: usdc,
+        title: "ETH ",
+        img: eth,
       },
     ],
     balance: {
@@ -43,12 +43,12 @@ const invoices = [
         img: comp,
       },
       {
-        title: "COMP :",
-        img: comp,
+        title: "USDC :",
+        img:usdc ,
       },
       {
-        title: "USDC",
-        img: usdc,
+        title: "COMP",
+        img: comp,
       },
     ],
     balance: {
@@ -71,12 +71,12 @@ const invoices = [
         img: aave,
       },
       {
-        title: "ETH :",
-        img: eth,
+        title: "USDC :",
+        img: usdc,
       },
       {
-        title: "USDC",
-        img: usdc,
+        title: "ETH ",
+        img: eth,
       },
     ],
     balance: {
@@ -98,15 +98,15 @@ const Dashboard = () => {
   const [active, setActive] = useState(true);
 
   return (
-    <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 font-semibold">
-      <h1 className="text-center md:text-left text-2xl md:text-3xl">
+    <main className="container mx-auto px-4 py-6  lg:py-10 ">
+      <h1 className="text-center md:text-left text-2xl md:text-[28px] font-medium">
         Loan Dashboard
       </h1>
       <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6 mt-8">
-        <h4 className="text-xl">Loans</h4>
+        <h4 className="text-xl font-medium">Loans</h4>
         <div className="mt-4 mb-4">
           <button
-            className={`py-[6px] px-4 text-sm relative ${
+            className={`py-[6px] px-4 text-xs relative font-medium ${
               active
                 ? "bg-[#2C3B8D] text-white z-10 rounded-3xl"
                 : "text-[#2C3B8D] bg-gray-200 z-0 rounded-s-3xl"
@@ -116,7 +116,7 @@ const Dashboard = () => {
             Active Loans
           </button>
           <button
-            className={`py-[6px] px-4 text-sm -ml-[10px] relative ${
+            className={`py-[6px] px-4 text-xs -ml-[10px] relative font-medium ${
               !active
                 ? "bg-[#2C3B8D] text-white z-10 rounded-3xl"
                 : "text-[#2C3B8D] bg-gray-200 z-0 rounded-e-3xl"
@@ -142,12 +142,12 @@ const Dashboard = () => {
                       alt=""
                       className="w-5 h-5"
                     />
-                    <h1 className="md:text-xl">{title.title}</h1>
+                    <h1 className="md:text-xl font-medium">{title.title}</h1>
                   </div>
                 ))}
                 <Link
                   href={`/dashboard/${"invoice"}`}
-                  className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max"
+                  className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
                 >
                   Manage Loan
                 </Link>
@@ -176,7 +176,7 @@ const Dashboard = () => {
             </div>
           ))}
           <div className="text-center md:text-left pb-2 md:pb-0">
-            <button className="mt-6 py-2 px-6 rounded-3xl bg-[#2C3B8D] text-white">
+            <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
               Create New Loan
             </button>
           </div>
