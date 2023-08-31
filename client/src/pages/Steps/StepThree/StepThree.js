@@ -12,10 +12,12 @@ const StepThree = ({ title, protocols }) => {
   const [filterOptions, setFilterOptions] = useState([]);
 
   const handleProtocol = (name) => {
+    console.log(name)
     setSelectProtocol(name);
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
+        protocol: name,
         activeNextButton: true,
       }));
     }

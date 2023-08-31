@@ -2,6 +2,7 @@ import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
 import { financial } from "../../helper";
 import formatCurrency from "../../utils/currencyFormate";
+import { IS_DEMO_MODE, DEFAULT_PROTOCOL } from "../../constants/env";
 
 const LoanSummary = () => {
     const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
@@ -35,7 +36,7 @@ const LoanSummary = () => {
             <HoverTooltip text="Current APR tooltip" />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {(loanData?.currentAPR && (
+            {(loanData?.currentAPR && loanData?.protocol === DEFAULT_PROTOCOL && (
             <>
                 {financial(loanData?.currentAPR, 2)}
                 <span className="text-base">%</span>
@@ -53,7 +54,7 @@ const LoanSummary = () => {
         <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">6 months</span>
             <span className="text-blackPrimary">
-            {(loanData?.sixMonthInterest && (
+            {(loanData?.sixMonthInterest && loanData?.protocol === DEFAULT_PROTOCOL && (
                 <>${financial(loanData?.sixMonthInterest, 2)}</>
             )) ||
                 "--"}
@@ -63,7 +64,7 @@ const LoanSummary = () => {
             <span className="text-blackSecondary">12 months</span>
             <span className="text-blackPrimary">
             {" "}
-            {(loanData?.twelveMonthInterest && (
+            {(loanData?.twelveMonthInterest && loanData?.protocol === DEFAULT_PROTOCOL && (
                 <> ${financial(loanData?.twelveMonthInterest, 2)}</>
             )) ||
                 "--"}
@@ -73,10 +74,10 @@ const LoanSummary = () => {
             <span className="text-blackSecondary">24 months</span>
             <span className="text-blackPrimary">
             {" "}
-            {(loanData?.twentyFourMonthInterest && (
-                <>${financial(loanData?.twentyFourMonthInterest, 2)}</>
+            {(loanData?.twentyFourMonthInterest && loanData?.protocol === DEFAULT_PROTOCOL && (
+                <> ${financial(loanData?.twentyFourMonthInterest, 2)}</>
             )) ||
-                "--"}
+                "--"}            
             </span>
         </p>
         </div>
@@ -92,7 +93,7 @@ const LoanSummary = () => {
             justify-between gap-1"
         >
             <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {loanData?.collateralNeeded && loanData?.cryptoName ? (
+            {loanData?.protocol === DEFAULT_PROTOCOL && loanData?.collateralNeeded && loanData?.cryptoName ? (
                 <>
                 {" "}
                 {financial(loanData?.collateralNeeded, 3)}{" "}
@@ -113,8 +114,8 @@ const LoanSummary = () => {
         </div>
 
         <p className="text-[#545454] text-sm ">
-            {(loanData?.subCollateralPrice && (
-            <> ${formatCurrency(loanData?.subCollateralPrice)}</>
+            {(loanData?.collateralNeeded && loanData?.protocol === DEFAULT_PROTOCOL && (
+            <> ${financial(loanData?.collateralNeeded * loanData?.collateralPrice)}</>
             )) ||
             ""}
         </p>
@@ -126,11 +127,11 @@ const LoanSummary = () => {
             <HoverTooltip text="Liquidation Price tooltip" />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {(loanData?.liquidationPrice &&
+            {(loanData?.liquidationPrice && loanData?.protocol === DEFAULT_PROTOCOL &&
             `$ ${financial(loanData?.liquidationPrice, 2)}`) ||
             "--"}
         </p>
-        {(loanData?.liquidationPrice && (
+        {(loanData?.collateralPrice && (
             <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">
                 Current Price of {loanData?.cryptoName}

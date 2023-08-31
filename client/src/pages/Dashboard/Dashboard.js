@@ -1,201 +1,187 @@
-import React, { useState, useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useUserInfo } from "../../hooks/useZerodev";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import "./Dashboard.css";
+const comp = "./assets/coins/Compound (COMP).svg";
+const eth = "./assets/coins/Ether (ETH).svg";
+const usdc = "./assets/coins/USD Coin (USDC).svg";
+const aave = "./assets/coins/Aave (AAVE) (1).svg";
 
-const Dashboard = ({ step }) => {
-  const navigate = useNavigate();
-  const { userInfo } = useUserInfo();
-  const [tab, setTab] = useState("active");
+const invoices = [
+  {
+    titles: [
+      {
+        title: "Compound -",
+        img: comp,
+      },
+      {
+        title: "USDC :",
+        img:usdc ,
+      },
+      {
+        title: "ETH ",
+        img: eth,
+      },
+    ],
+    balance: {
+      text: "Balance",
+      price: "$1,012.13",
+    },
+    apr: {
+      text: "Current APR",
+      rate: "3.84%",
+    },
+    date: {
+      text: "Date Opened",
+      date: "March 11, 2023",
+    },
+  },
+  {
+    titles: [
+      {
+        title: "Compound -",
+        img: comp,
+      },
+      {
+        title: "USDC :",
+        img:usdc ,
+      },
+      {
+        title: "COMP",
+        img: comp,
+      },
+    ],
+    balance: {
+      text: "Balance",
+      price: "$1,012.13",
+    },
+    apr: {
+      text: "Current APR",
+      rate: "3.84%",
+    },
+    date: {
+      text: "Date Opened",
+      date: "March 11, 2023",
+    },
+  },
+  {
+    titles: [
+      {
+        title: "Aave -",
+        img: aave,
+      },
+      {
+        title: "USDC :",
+        img: usdc,
+      },
+      {
+        title: "ETH ",
+        img: eth,
+      },
+    ],
+    balance: {
+      text: "Balance",
+      price: "$1,012.13",
+    },
+    apr: {
+      text: "Current APR",
+      rate: "3.84%",
+    },
+    date: {
+      text: "Date Opened",
+      date: "March 11, 2023",
+    },
+  },
+];
 
-  const [loanData, setLoanData] = useState(null);
-  const [loancount, setLoanCount] = useState(0);
-  const [totalloan, setTotalLoan] = useState(0);
-
-  useEffect(() => {
-    const getLoanData = async () => {
-      if (!userInfo)
-        return;
-
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/loan?user=${userInfo.email}`);
-        console.log("response", response.data);
-        setLoanData(response.data);
-        setLoanCount(response.data.length);
-        let sumOfLoan = response.data.reduce(
-          (total, obj) => total + obj.loan,
-          0
-        );
-        console.log(sumOfLoan);
-        setTotalLoan(sumOfLoan);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getLoanData();
-  }, [userInfo]);
+const Dashboard = () => {
+  const [active, setActive] = useState(true);
 
   return (
-    <div className="dashboard">
-      <div className="titleContainer">
-        <div className="title">Loan dashboard</div>
-        <div className="titleDetail">
-          You have {loancount} loans outstanding for {totalloan} USDC
-        </div>
-      </div>
-      <div className="loansContainer">
-        <div className="header">
-          <div
-            style={{
-              padding: "10px",
-              paddingLeft: "20px",
-              paddingRight: "40px",
-              fontSize: "20px",
-              fontWeight: tab === "active" ? "700" : "400",
-              borderRight: "1px solid #B7B4B4",
-              cursor: "pointer",
-            }}
-            onClick={() => setTab("active")}>
-            Active loans
-          </div>
-          <div
-            style={{
-              fontSize: "20px",
-              fontWeight: tab === "closed" ? "700" : "400",
-              padding: "10px",
-              paddingLeft: "20px",
-              cursor: "pointer",
-            }}
-            onClick={() => setTab("closed")}>
-            Closed loans
-          </div>
-        </div>
-        {tab == "active" ? (
-          <div className="loans">
-            {loanData &&
-              loanData.map((loan) => {
-                if (loan.active == true) {
-                  const date = new Date(loan.time);
-                  const formattedDate = `${date.toLocaleString("default", {
-                    month: "long",
-                  })} ${date.getDate()}, ${date.getFullYear()}`;
-                  return (
-                    <div className="eachLoan" key={loan.id}>
-                      <div className="loanDetails">
-                        <div
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "700",
-                            marginBottom: "10px",
-                          }}>
-                          Compound - ETH:USDC
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}>
-                          <div>
-                            <div style={{ marginBottom: "5px" }}>Balance</div>
-                            <div>Current APR</div>
-                          </div>
-                          <div style={{ marginLeft: "20px" }}>
-                            <div
-                              style={{
-                                fontSize: "16px",
-                                fontWeight: "700",
-                                marginBottom: "5px",
-                              }}>
-                              ${loan.loan}
-                            </div>
-                            <div
-                              style={{ fontSize: "16px", fontWeight: "700" }}>
-                              {loan.apr}%
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="manageLoan">
-                        {/* <div>Opened: March 11, 2023</div> */}
-                        <div>Opened: {loan.time ? formattedDate : "N/A"}</div>
-                        <Link
-                          to="/manage"
-                          state={{
-                            loanInfo: { loan },
-                          }}>
-                          {" "}
-                          <button className="btn">Manage loan</button>
-                        </Link>
-                      </div>
-                    </div>
-                  );
-                }
-              })}
-          </div>
-        ) : (
-          <div className="loans">
-            {loanData &&
-              loanData.map((loan) => {
-                if (loan.active == false) {
-                  const date = new Date(loan.time);
-                  const formattedDate = `${date.toLocaleString("default", {
-                    month: "long",
-                  })} ${date.getDate()}, ${date.getFullYear()}`;
-                  return (
-                    <div className="eachLoan" key={loan.id}>
-                      <div className="loanDetails">
-                        <div
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "700",
-                            marginBottom: "10px",
-                          }}>
-                          Compound - ETH:USDC
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}>
-                          <div>
-                            <div style={{ marginBottom: "5px" }}>Balance</div>
-                            <div>Current APR</div>
-                          </div>
-                          <div style={{ marginLeft: "20px" }}>
-                            <div
-                              style={{
-                                fontSize: "16px",
-                                fontWeight: "700",
-                                marginBottom: "5px",
-                              }}>
-                              ${loan.loan}
-                            </div>
-                            <div
-                              style={{ fontSize: "16px", fontWeight: "700" }}>
-                              {loan.apr}%
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="manageLoan">
-                        {/* <div>Opened: March 11, 2023</div> */}
-                        <div>Opened: {loan.time ? formattedDate : "N/A"}</div>
-                      </div>
-                    </div>
-                  );
-                }
-              })}
-          </div>
-        )}
-        <div className="btnContainer">
-          <button className="btn" onClick={() => navigate("/startloan")}>
-            Start new loan
+    <main className="container mx-auto px-4 py-6  lg:py-10 ">
+      <h1 className="text-center md:text-left text-2xl md:text-[28px] font-medium">
+        Loan Dashboard
+      </h1>
+      <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6 mt-8">
+        <h4 className="text-xl font-medium">Loans</h4>
+        <div className="mt-4 mb-4">
+          <button
+            className={`py-[6px] px-4 text-xs relative font-medium ${
+              active
+                ? "bg-[#2C3B8D] text-white z-10 rounded-3xl"
+                : "text-[#2C3B8D] bg-gray-200 z-0 rounded-s-3xl"
+            }`}
+            onClick={() => setActive(true)}
+          >
+            Active Loans
+          </button>
+          <button
+            className={`py-[6px] px-4 text-xs -ml-[10px] relative font-medium ${
+              !active
+                ? "bg-[#2C3B8D] text-white z-10 rounded-3xl"
+                : "text-[#2C3B8D] bg-gray-200 z-0 rounded-e-3xl"
+            }`}
+            onClick={() => setActive(false)}
+          >
+            Closed Loans
           </button>
         </div>
+        <div className="divide-y-2 space-y-5">
+          {/* grandparent */}
+          {invoices.map((invoice, i) => (
+            <div key={i} className="space-y-6 pt-4">
+              {/* Parents */}
+              <div className="flex gap-x-2 items-center mb-3 relative">
+                {/* title Container */}
+                {invoice.titles.map((title, i) => (
+                  <div key={i} className="flex items-center gap-x-1">
+                    <img
+                      width={20}
+                      height={20}
+                      src={title.img}
+                      alt=""
+                      className="w-5 h-5"
+                    />
+                    <h1 className="md:text-xl font-medium">{title.title}</h1>
+                  </div>
+                ))}
+                <Link
+                  to="/manage"
+                  className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
+                >
+                  Manage Loan
+                </Link>
+              </div>
+              <div className="space-y-1 pb-11 md:pb-0">
+                {/* info Conatiner */}
+                <div className="flex">
+                  <p className="w-1/2">{invoice.balance.text}</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    {invoice.balance.price}
+                  </p>
+                </div>
+                <div className="flex">
+                  <p className="w-1/2">{invoice.apr.text}</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    {invoice.apr.rate}
+                  </p>
+                </div>
+                <div className="flex">
+                  <p className="w-1/2">{invoice.date.text}</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    {invoice.date.date}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div className="text-center md:text-left pb-2 md:pb-0">
+            <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
+              Create New Loan
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

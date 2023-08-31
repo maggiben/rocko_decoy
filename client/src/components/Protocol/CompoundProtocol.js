@@ -1,6 +1,8 @@
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
+import { useLoan } from "../../contract/single";
 import { financial } from "../../helper";
+import { useEffect } from "react";
 
 const CompoundProtocol = ({
   interestRate,
@@ -9,7 +11,60 @@ const CompoundProtocol = ({
   selectProtocol,
   handleProtocol,
 }) => {
-    const { loanData } = useLoanData();
+    const { loanData, setLoanData } = useLoanData();
+    const {
+        getBorrowAPR,
+        getETHPrice,
+        getLTV,
+        getPenalty,
+        getThreshold,
+        getRewardRate
+    } = useLoan();
+
+    const updateLoanData = async () => {
+        try {
+            const borrowing = loanData?.borrowing;
+            const currentAPR = await getBorrowAPR();
+            const loanToValue = await getLTV();
+            const penalty = await getPenalty();
+            const threshold = await getThreshold();
+            const ethPrice = await getETHPrice();
+            const rewardRate = await getRewardRate();
+            const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
+            const collateral = collateralInUSD / ethPrice;
+            const liquidationPrice = borrowing / threshold / collateral;
+            const interestSixMonths = borrowing * currentAPR / 200;
+            const interestOneYear = borrowing * currentAPR / 100;
+            const interestTwoYears = borrowing * currentAPR / 50;
+
+            if (setLoanData) {
+                setLoanData((prevLoanData) => {
+                    return {
+                        ...prevLoanData,
+                        currentAPR: currentAPR,
+                        sixMonthInterest: interestSixMonths,
+                        twelveMonthInterest: interestOneYear,
+                        twentyFourMonthInterest: interestTwoYears,
+                        loanToValue: loanToValue,
+                        liquidationPenalty: penalty,
+                        liquidationThreshold: threshold,
+                        collateralPrice: ethPrice,
+                        collateralNeeded: collateral,
+                        liquidationPrice: liquidationPrice,
+                        rewardRate: rewardRate,
+                        activeNextButton:true,
+                    }
+                })
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        console.log(loanData)
+        updateLoanData();
+    }, [loanData])
 
     return (
     <div className="py-8">

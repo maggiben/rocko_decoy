@@ -1,11 +1,12 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoanSummary from "../../../components/LoanSummary/LoanSummary";
 import CoinCard from "../../../components/CoinCard/CoinCard";
 import useLoanData from "../../../hooks/useLoanData";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useLoan } from "../../../contract/single";
 import { financial } from "../../../helper";
+import { IS_DEMO_MODE } from "../../../constants/env";
 
 const StepOne = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
@@ -31,9 +32,6 @@ const StepOne = ({ title, currency }) => {
         return {
           ...prevLoanData,
           borrowing: (inputValue || "0"),
-          // sixMonthInterest: (inputValue * prevLoanData.currentAPR / 200),
-          // twelveMonthInterest: (inputValue * prevLoanData.currentAPR / 100),
-          // twentyFourMonthInterest: (inputValue * prevLoanData.currentAPR / 50),
         };
       });
     }
@@ -70,19 +68,13 @@ const StepOne = ({ title, currency }) => {
   }, [isValid]);
 
   const updateLoanData = async () => {
-    try {
+    if (!IS_DEMO_MODE) {
+      try {
         const borrowing = loanData?.borrowing;
         const borrowAPR = await getBorrowAPR();
         const interestSixMonths = borrowing * borrowAPR / 200;
         const interestOneYear = borrowing * borrowAPR / 100;
         const interestTwoYears = borrowing * borrowAPR / 50;
-        // const loanToValue = await getLTV();
-        // const penalty = await getPenalty();
-        // const threshold = await getThreshold();
-        // const ethPrice = await getETHPrice();
-        // const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
-        // const collateral = collateralInUSD / ethPrice;
-        // const liquidationPrice = borrowing / threshold / collateral;
         
         if (setLoanData) {
             setLoanData((prevLoanData) => {
@@ -92,17 +84,12 @@ const StepOne = ({ title, currency }) => {
                     sixMonthInterest: interestSixMonths,
                     twelveMonthInterest: interestOneYear,
                     twentyFourMonthInterest: interestTwoYears,
-                    // loanToValue: loanToValue,
-                    // liquidationPenalty: penalty,
-                    // liquidationThreshold: threshold,
-                    // collateralPrice: ethPrice,
-                    // collateralNeeded: collateral,
-                    // liquidationPrice: liquidationPrice,
                 }
             })
         }
-    } catch (e) {
-        console.error(e);
+      } catch (e) {
+          console.error(e);
+      }      
     }
   }
 
