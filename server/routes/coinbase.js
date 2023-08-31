@@ -39,7 +39,8 @@ router.get('/cb-callback', async (req, res) => {
 
     } catch (error) {
         console.error('Error fetching access token:', error);
-        res.status(500).send('Failed to fetch access token');
+        // TODO dont send error back to client, may leak data
+        res.status(500).send('Failed to fetch access token', error);
     }
 });
 
