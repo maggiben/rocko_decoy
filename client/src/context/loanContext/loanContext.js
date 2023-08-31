@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 export const loneContext = createContext({
   loanData: {
     borrowing: 0,
+    protocol: "",
     currentAPR: 0,
     coin: "",
     sixMonthInterest: 0,
@@ -37,6 +38,7 @@ export const loneContext = createContext({
 const LoneProvider = ({ children }) => {
   const [loanData, setLoanData] = useState({
     borrowing: 0,
+    protocol: "",
     currentAPR: 0,
     coin: "",
     sixMonthInterest: 0,

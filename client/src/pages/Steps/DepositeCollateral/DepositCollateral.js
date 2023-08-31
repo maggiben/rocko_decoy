@@ -3,7 +3,6 @@ import CircleProgressBar from "../../../components/CircleProgressBar/CircleProgr
 import ModalContainer from "../../../components/ModalContainer/ModalContainer";
 import { useEffect, useState } from "react";
 
-
 const DepositingCollateral = () => {
   const [counter, setCounter] = useState(20);
   const [progress, setProgress] = useState(0);
@@ -18,8 +17,8 @@ const DepositingCollateral = () => {
         setCounter(counter - 1);
         setProgress((prevProg) => {
           if (prevProg === 100) {
-            setProgressTracker((prevProgTra) => {
-              return prevProgTra + 1;
+            setProgressTracker(() => {
+              return progressTracker + 1;
             });
 
             return 20;
@@ -35,6 +34,7 @@ const DepositingCollateral = () => {
     return () => clearInterval(interval);
   }, [counter, progress, progressTracker]);
   useEffect(() => {
+    console.log(progressTracker)
     {
       progressTracker === 0 &&
         progress === 100 &&

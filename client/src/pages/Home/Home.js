@@ -78,7 +78,7 @@ export default function Home() {
                 className={`font-semibold  text-xs md:text-sm ${
                   loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
                 } py-[10px]  px-6 rounded-full text-white`}
-                disabled={!loanData?.activeNextButton || !isConnected}
+                disabled={!loanData?.activeNextButton}
               >
                 {currentStep === loanSteps.length - 1
                   ? "Finalize Loan"

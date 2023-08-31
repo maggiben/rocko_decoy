@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/Home/Home";
-import Dashboard from "../pages/Dashboard/Dashboard_Previous";
+import Dashboard from "../pages/Dashboard/Dashboard";
 import ManageLoan from "../pages/ManageLoan/ManageLoan";
 import CoinbaseCallback from "../pages/CoinbaseCallback/CoinbaseCallback";
 import DepositeCollateral from "../pages/Steps/DepositeCollateral/DepositCollateral";
