@@ -39,7 +39,7 @@ const SortOptions = ({ setSortOption,sortOption }) => {
             htmlFor="custom-radio-3"
             className="text-sm font-medium text-blackPrimary cursor-pointer"
           >
-            Label-1
+            Max LTV (highest to lowest)
           </label>
           <input
             type="radio"
@@ -55,7 +55,7 @@ const SortOptions = ({ setSortOption,sortOption }) => {
             htmlFor="custom-radio-4"
             className="text-sm font-medium text-blackPrimary cursor-pointer"
           >
-            Label-2
+            Max LTV (lowest to highest)
           </label>
           <input
             type="radio"

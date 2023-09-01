@@ -10,7 +10,7 @@ const FilterOptions = ({handleFilterOption}) => {
           htmlFor="custom-checkbox-1"
           className="text-sm font-medium text-blackPrimary"
         >
-          Filter Options 1 selected
+          Floating rate
         </label>
       </div>
       <div className="p-4 flex items-center justify-start gap-3">
@@ -19,7 +19,7 @@ const FilterOptions = ({handleFilterOption}) => {
           htmlFor="custom-checkbox-2"
           className="text-sm font-medium text-blackPrimary"
         >
-          Filter Options 2
+          Fixed rate
         </label>
       </div>
       <div className="p-4 flex items-center justify-start gap-3">
@@ -28,7 +28,7 @@ const FilterOptions = ({handleFilterOption}) => {
           htmlFor="custom-checkbox-3"
           className="text-sm font-medium text-blackPrimary"
         >
-          Filter Options 3
+          Rewards offered
         </label>
       </div>
     </div>

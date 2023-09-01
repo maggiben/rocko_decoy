@@ -9,8 +9,8 @@ import { financial } from "../../../helper";
 import { IS_DEMO_MODE } from "../../../constants/env";
 
 const StepOne = ({ title, currency }) => {
-  const [selectedCoin, setSelectedCoin] = useState("");
-  const [activeInputField, setActiveInputField] = useState(false);
+  const [selectedCoin, setSelectedCoin] = useState("USDC");
+  const [activeInputField, setActiveInputField] = useState(true);
   const {
     register,
     formState: { errors, isLoading, isValid, isValidating },

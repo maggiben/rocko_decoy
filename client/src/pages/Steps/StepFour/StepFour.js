@@ -94,7 +94,7 @@ const StepFour = ({ title }) => {
                   type="range"
                   className="range w-full"
                   min="0"
-                  max="200"
+                  max="400"
                   value={value}
                   onChange={handleInputChange}
                   data-value={value}
