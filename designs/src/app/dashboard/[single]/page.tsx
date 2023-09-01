@@ -1,5 +1,5 @@
 import Image from "next/image";
-import compund from "@/assets/coins/Compound (COMP).svg";
+import compound from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import ToggleBTN from "@/components/pages/Dashboard/toggleBTN/toggleBTN";
@@ -7,8 +7,8 @@ import HoverTooltip from "@/components/shared/tooltip/tooltip";
 
 const headings = [
   {
-    img: compund,
-    text: "Compund -",
+    img: compound,
+    text: "Compound -",
   },
 
   {
@@ -234,7 +234,7 @@ function SinglePage() {
                 <Image
                   width={24}
                   height={24}
-                  src={compund}
+                  src={compound}
                   alt=""
                   className="w-6 h-6"
                 />

@@ -81,7 +81,6 @@ const LoneProvider = ({ children }) => {
           name: "USD",
           fullName: "US Dollar",
           symbol: "./assets/coins/USD.svg",
-
           label: "Coming Soon",
           currentAPR: 2.56, // apr is calculated in percent
         },

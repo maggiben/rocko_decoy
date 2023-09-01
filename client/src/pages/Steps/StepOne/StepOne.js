@@ -15,7 +15,8 @@ const StepOne = ({ title, currency }) => {
     register,
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
-  } = useForm();
+    // TODO figure out why onBlur isnt working
+  } = useForm({mode: "onBlur"});
 
   const { loanData, setLoanData } = useLoanData();
   const { getBorrowAPR } = useLoan();
@@ -126,6 +127,9 @@ const StepOne = ({ title, currency }) => {
                   {...register("numberInput", {
                     required: "Number is required",
                     validate: (value) => {
+                      if (IS_DEMO_MODE) {
+                        return true
+                      }
                       const num = parseFloat(value);
                       if (isNaN(num)) {
                         return "Invalid number";
