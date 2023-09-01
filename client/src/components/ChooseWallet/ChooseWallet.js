@@ -76,7 +76,7 @@ const ChooseWallet = ({setOpenModalFor,setModalStep}) => {
     {/* continue button */}
     <div className="">
         {selectedWallet === "Coinbase" ? (
-            <CoinbaseLoginBtn />
+            <CoinbaseLoginBtn setModalStep={setModalStep} />
         ) : (
             <button onClick={()=>setModalStep(1)} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
                 Continue

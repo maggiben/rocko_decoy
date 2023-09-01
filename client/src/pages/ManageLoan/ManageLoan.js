@@ -1,15 +1,15 @@
 import ToggleBtn from "../../components/ToggleBtn/ToogleBtn";
 import HoverTooltip from "../../components/HoverTooltip/HoverTooltip";
 
-const compund = "./assets/coins/Compound (COMP).svg";
+const compound = "./assets/coins/Compound (COMP).svg";
 const eth = "./assets/coins/Ether (ETH).svg";
 const usdc = "./assets/coins/USD Coin (USDC).svg";
 const aave = "./assets/coins/Aave (AAVE) (1).svg";
 
 const headings = [
   {
-    img: compund,
-    text: "Compund -",
+    img: compound,
+    text: "Compound -",
   },
 
   {
@@ -235,7 +235,7 @@ function SinglePage() {
                 <img
                   width={24}
                   height={24}
-                  src={compund}
+                  src={compound}
                   alt=""
                   className="w-6 h-6"
                 />

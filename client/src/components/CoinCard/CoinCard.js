@@ -12,10 +12,12 @@ const CoinCard = ({
   collateralPrice,
   subCollateralPrice,
   liquidationPrice,
-  subLiquidationPrice,
+  subLiquidationPrice
 }) => {
+
   return (
     <div
+    style={coinShortName === "USD" ? {pointerEvents: "none"} : {}}
       onClick={() =>
         handleSelect({
           coinIcon,
