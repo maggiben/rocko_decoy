@@ -146,8 +146,8 @@ const CompoundProtocol = ({
                 <div className="py-3 space-y-3">
                 <div>
                     <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                        <span className="">Loan-to-value</span>
-                        <HoverTooltip text="Loan-to-value tooltip" />
+                        <span className="">Max Loan-to-value</span>
+                        <HoverTooltip text="Max Loan-to-value tooltip" />
                     </p>
                     <p className="font-semibold text-blackPrimary">
                         {loanData?.loanToValue * 100}%
