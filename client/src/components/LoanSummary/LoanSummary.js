@@ -115,7 +115,7 @@ const LoanSummary = () => {
 
         <p className="text-[#545454] text-sm ">
             {(loanData?.collateralNeeded && loanData?.protocol === DEFAULT_PROTOCOL && (
-            <> ${financial(loanData?.collateralNeeded * loanData?.collateralPrice)}</>
+            <> ${financial(loanData?.collateralNeeded * loanData?.collateralPrice, 2)}</>
             )) ||
             ""}
         </p>
@@ -128,7 +128,7 @@ const LoanSummary = () => {
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.liquidationPrice && loanData?.protocol === DEFAULT_PROTOCOL &&
-            `$ ${financial(loanData?.liquidationPrice, 2)}`) ||
+            `$${financial(loanData?.liquidationPrice, 2)}`) ||
             "--"}
         </p>
         {(loanData?.collateralPrice && (
