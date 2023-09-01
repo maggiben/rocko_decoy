@@ -1,5 +1,6 @@
 import HoverTooltip from "../../../components/HoverTooltip/HoverTooltip";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import useLoanData from "../../../hooks/useLoanData";
 import { financial } from "../../../helper";
 import { ConnectWallet } from "@thirdweb-dev/react";
@@ -31,10 +32,10 @@ const terms = [
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
         Rocko’s service fee will be taken out of the initial amount transferred
-        to your Rocko wallet. More info on Rocko’s service fee can be found
-        <a href="" className="underline ml-2">
-          here
-        </a>
+        to your Rocko wallet. More info on Rocko’s service fee can be found{" "}
+        <Link href={"/"} className="underline">
+        here
+        </Link>
         .
       </li>
     ),
