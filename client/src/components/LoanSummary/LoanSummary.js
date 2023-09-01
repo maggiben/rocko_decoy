@@ -1,12 +1,10 @@
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
 import { financial } from "../../helper";
-import formatCurrency from "../../utils/currencyFormate";
-import { IS_DEMO_MODE, DEFAULT_PROTOCOL } from "../../constants/env";
 
 const LoanSummary = () => {
-    const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-        useLoanData();
+    const DEFAULT_PROTOCOL = "Compound Finance";
+    const { loanData } = useLoanData();
 
     return (
     <>
@@ -15,7 +13,7 @@ const LoanSummary = () => {
         <p className="text-blackPrimary">Borrowing</p>
         <div className="flex items-center mt-4 mb-2 justify-between">
             <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {loanData?.borrowing ? formatCurrency(loanData?.borrowing) : "--"}
+            {loanData?.borrowing ? financial(loanData?.borrowing) : "--"}
             <span className="text-base"> {loanData?.coin}</span>
             </p>
             {loanData?.coinIcon && (
@@ -25,7 +23,7 @@ const LoanSummary = () => {
         <p className="text-sm text-blackSecondary">
             {(loanData?.coin !== "USD" &&
             loanData?.borrowing &&
-            `~$${formatCurrency(loanData?.borrowing)}`) ||
+            `~$${financial(loanData?.borrowing)}`) ||
             ""}
         </p>
         </div>
@@ -115,7 +113,7 @@ const LoanSummary = () => {
 
         <p className="text-[#545454] text-sm ">
             {(loanData?.collateralNeeded && loanData?.protocol === DEFAULT_PROTOCOL && (
-            <> ${financial(loanData?.collateralNeeded * loanData?.collateralPrice)}</>
+            <> ${financial(loanData?.collateralNeeded * loanData?.collateralPrice, 2)}</>
             )) ||
             ""}
         </p>
@@ -128,7 +126,7 @@ const LoanSummary = () => {
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.liquidationPrice && loanData?.protocol === DEFAULT_PROTOCOL &&
-            `$ ${financial(loanData?.liquidationPrice, 2)}`) ||
+            `$${financial(loanData?.liquidationPrice, 2)}`) ||
             "--"}
         </p>
         {(loanData?.collateralPrice && (

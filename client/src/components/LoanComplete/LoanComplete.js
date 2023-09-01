@@ -25,8 +25,8 @@ const LoanComplete = () => {
   
 {/* continue button */}
 <div className="my-6">
-  <Link to='/dashboard' className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
-    okay
+  <Link to='/manage' className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
+    Okay
   </Link>
 </div>
 </ModalContent>

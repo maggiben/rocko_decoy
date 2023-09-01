@@ -3,12 +3,10 @@ import AssetParameter from "../../../components/AssetParameter/AssetParameter"
 import ChooseCoins from "../../../components/ChooseCoins/ChooseCoins"
 import LoanSummary from "../../../components/LoanSummary/LoanSummary"
 import useLoanData from "../../../hooks/useLoanData"
-import { financial } from "../../../helper"
 import { IS_DEMO_MODE } from "../../../constants/env"
 
 const StepTwo = ({assets, id, title, description}) => {
-    const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-        useLoanData();
+    const { loanData } = useLoanData();
 
     return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">

@@ -42,7 +42,7 @@ const terms = [
 ];
 
 const StepFive = () => {
-  const { loanData } = useLoanData();
+  const { loanData, setLoanData } = useLoanData();
 
   const invoice = [
     {
@@ -51,8 +51,8 @@ const StepFive = () => {
     },
     {
       description: "Loan Amount",
-      details: `~$${loanData?.borrowing} USDC`,
-      subDetails: `~$${loanData?.borrowing}`,
+      details: `~$${financial(loanData?.borrowing)} USDC`,
+      subDetails: `~$${financial(loanData?.borrowing)}`,
     },
     {
       description: "Current APR",
@@ -148,6 +148,20 @@ const StepFive = () => {
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep,setModalStep] = useState(0);
 
+  const handlePaymentMethodChange = (event) => {
+    const inputValue = event.target.value;
+    setPaymentMethod(inputValue);
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          paymentMethod: (inputValue || ""),
+        };
+      });
+    }
+  };
+
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
@@ -213,7 +227,7 @@ const StepFive = () => {
                 name="contact"
                 value="default"
                 className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
-                onChange={(e) => setPaymentMethod(e.target.value)}
+                onChange={(e) => handlePaymentMethodChange(e)}
               />
               <label htmlFor="wallet1" className="pl-4">
                 <p className="font-semibold">
@@ -248,7 +262,7 @@ const StepFive = () => {
                 id="wallet2"
                 name="contact"
                 value="ethereum"
-                onChange={(e) => setPaymentMethod(e.target.value)}
+                onChange={(e) => handlePaymentMethodChange(e)}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
@@ -275,7 +289,7 @@ const StepFive = () => {
               name="contact"
               value="other"
               className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => handlePaymentMethodChange(e)}
             />
             <div className="pl-4">
               <label htmlFor="wallet3" className="">
@@ -333,7 +347,7 @@ const StepFive = () => {
         <>
           <ModalContainer>
             {
-              modalStep===0 && <ChooseWallet setModalStep={setModalStep} setOpenModalFor={setOpenModalFor} />
+              modalStep === 0 && <ChooseWallet setModalStep={setModalStep} setOpenModalFor={setOpenModalFor} />
             }
 
             {

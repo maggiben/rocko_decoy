@@ -9,6 +9,7 @@ export const loneContext = createContext({
     sixMonthInterest: 0,
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
+    paymentMethod: "",
 
     buffer: 0,
     loanToValue: 0,
@@ -44,6 +45,7 @@ const LoneProvider = ({ children }) => {
     sixMonthInterest: 0,
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
+    paymentMethod: "",
     buffer: 0,
     collateralNeeded: 0,
     loanToValue: 0,
