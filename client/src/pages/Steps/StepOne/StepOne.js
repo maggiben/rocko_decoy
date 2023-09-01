@@ -23,16 +23,15 @@ const StepOne = ({ title, currency }) => {
 
   const handleBorrowValueChange = (event) => {
     const inputValue = event.target.value;
+    const num = inputValue === "" ? 0 : parseFloat(inputValue.replace(/,/g, ''));
+    
+    setValue("numberInput", financial(num), { shouldValidate: true });
 
-    if (/^-?\d*\.?\d*$/.test(inputValue)) {
-      setValue("numberInput", inputValue, { shouldValidate: true });
-    }
-    console.log(" inside on change", errors);
     if (setLoanData) {
       setLoanData((prevLoanData) => {
         return {
           ...prevLoanData,
-          borrowing: (inputValue || "0"),
+          borrowing: (num || "0"),
         };
       });
     }
@@ -40,6 +39,8 @@ const StepOne = ({ title, currency }) => {
 
   const initialize = () => {
     setSelectedCoin("USDC");
+    if (loanData?.borrowing != 0)
+      setValue("numberInput", financial(loanData?.borrowing), { shouldValidate: true });
 
     if (setLoanData) {
       setLoanData((prevLoanData) => {
@@ -127,24 +128,24 @@ const StepOne = ({ title, currency }) => {
                   {...register("numberInput", {
                     required: "Number is required",
                     validate: (value) => {
-                      if (IS_DEMO_MODE) {
-                        return true
-                      }
-                      const num = parseFloat(value);
+                      const num = parseFloat(value.replace(/,/g, ''))
                       if (isNaN(num)) {
                         return "Invalid number";
                       }
                       if (num < 1000) {
                         return "Number must be at least 1000";
                       }
+                      if (num > 10000000) {
+                        return "Maximum amount is 10,000,000";
+                      }
                       return true;
                     },
                   })}
-                  type="number"
+                  type="text"
                   id="numberField"
                   min={1}
                   onKeyDown={(event) => {
-                    if (event.key === "-") {
+                    if (!/^\d$/.test(event.key) && !/^Control|Tab|Arrow|Backspace|Delete$/.test(event.key)) {
                       event.preventDefault();
                     }
                   }}
