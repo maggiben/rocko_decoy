@@ -78,7 +78,7 @@ const CompoundProtocol = ({
         <div className="flex items-center justify-end gap-2 md:gap-8 ">
             <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
             <p className="text-xl font-bold text-[#141414]">
-                <span style={{ fontSize: "32px" }}>{interestRate}</span><span className="text-base">% APR</span>
+                <span style={{ fontSize: "32px" }}>{financial(loanData?.currentAPR, 2)}</span><span className="text-base">% APR</span>
             </p>
 
             <p className="font-medium text-xs text-[#7356BF] bg-[#F4F1FA] rounded-md py-[2px] px-2">

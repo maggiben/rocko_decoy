@@ -4,7 +4,10 @@ import StepThree from "../Steps/StepThree/StepThree";
 import StepFour from "../Steps/StepFour/StepFour";
 import useLoanData from "../../hooks/useLoanData";
 import StepFive from "../Steps/StepFive/StepFive";
-import { useAccount } from "wagmi";
+import { useAddress } from "@thirdweb-dev/react";
+import { useEffect, useState } from "react";
+import ModalContainer from "../../components/ModalContainer/ModalContainer";
+import LoanFinalized from "../../components/LoanFinalized/LoanFinalized";
 
 const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
 const stepsName = [
@@ -16,11 +19,15 @@ const stepsName = [
 ];
 
 export default function Home() {
-  const { isConnected } = useAccount();
+  const address = useAddress();
+  const [isFinalized, setIsFinalized] = useState(false);
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
   const nextStep = () => {
+    if (currentStep == loanSteps.length - 1)
+      setIsFinalized(true);
+
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
      
       setCurrentStep(currentStep + 1);
@@ -40,6 +47,23 @@ export default function Home() {
 
   const CurrentStepComponent = Steps[currentStep];
   const currentData = loanSteps[currentStep];
+
+  const isValidateNextButton = () => {
+    if (currentStep == loanSteps.length - 1) {
+      const isValidate = loanData?.paymentMethod === "ethereum" ? 
+          address != null :
+          loanData?.paymentMethod != "";
+
+      return isValidate;
+    }
+
+    return loanData?.activeNextButton;
+  }
+
+  useEffect(() => {
+    console.log(isValidateNextButton())
+    console.log(loanData)
+  })
 
   return (
     <>
@@ -76,9 +100,9 @@ export default function Home() {
               <button
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
-                  loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
+                  isValidateNextButton() ? "bg-blue" : "bg-blue/40"
                 } py-[10px]  px-6 rounded-full text-white`}
-                disabled={!loanData?.activeNextButton}
+                disabled={!isValidateNextButton()}
               >
                 {currentStep === loanSteps.length - 1
                   ? "Finalize Loan"
@@ -88,6 +112,12 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {isFinalized && (
+        <ModalContainer>
+          <LoanFinalized />
+        </ModalContainer>
+      )}
     </>
   );
 }

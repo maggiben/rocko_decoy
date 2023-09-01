@@ -9,7 +9,7 @@ import { financial } from "../../../helper";
 import { IS_DEMO_MODE } from "../../../constants/env";
 
 const StepOne = ({ title, currency }) => {
-  const [selectedCoin, setSelectedCoin] = useState("USDC");
+  const [selectedCoin, setSelectedCoin] = useState("");
   const [activeInputField, setActiveInputField] = useState(true);
   const {
     register,
@@ -36,6 +36,25 @@ const StepOne = ({ title, currency }) => {
       });
     }
   };
+
+  const initialize = () => {
+    setSelectedCoin("USDC");
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          coin: "USDC",
+          currentAPR: 0,
+          coinIcon: "./assets/coins/USD Coin (USDC).svg",
+        };
+      });
+    }
+  };
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   const handleSelect = (info) => {
     console.log(info)
@@ -66,36 +85,6 @@ const StepOne = ({ title, currency }) => {
     }
     console.log({ isValid });
   }, [isValid]);
-
-  const updateLoanData = async () => {
-    if (!IS_DEMO_MODE) {
-      try {
-        const borrowing = loanData?.borrowing;
-        const borrowAPR = await getBorrowAPR();
-        const interestSixMonths = borrowing * borrowAPR / 200;
-        const interestOneYear = borrowing * borrowAPR / 100;
-        const interestTwoYears = borrowing * borrowAPR / 50;
-        
-        if (setLoanData) {
-            setLoanData((prevLoanData) => {
-                return {
-                    ...prevLoanData,
-                    currentAPR: borrowAPR,
-                    sixMonthInterest: interestSixMonths,
-                    twelveMonthInterest: interestOneYear,
-                    twentyFourMonthInterest: interestTwoYears,
-                }
-            })
-        }
-      } catch (e) {
-          console.error(e);
-      }      
-    }
-  }
-
-  useEffect(() => {
-    updateLoanData();
-  })
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
