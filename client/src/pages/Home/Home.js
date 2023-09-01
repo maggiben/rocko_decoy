@@ -83,7 +83,7 @@ export default function Home() {
         <div className="container mx-auto">
           <div className="p-4 flex items-center justify-between  ">
             <p className="text-blackPrimary text-xs md:text-sm font-medium">
-              {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
+              {stepsName[currentStep]}: {currentStep + 1}/{loanSteps.length} 
               {/* //todo remove it later */}
             {loanData?.activeNextButton?.valueOf()}
             </p>
