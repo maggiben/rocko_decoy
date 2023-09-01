@@ -177,7 +177,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           protocolInfos: [
             {
               id: "protocol-info-1",
-              title: "Trailing APR’s",
+              title: "Trailing APRs",
               tooltip: "tooltip information",
               options: [
                 {
@@ -243,7 +243,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           protocolInfos: [
             {
               id: "protocol-info-1",
-              title: "Trailing APR’s",
+              title: "Trailing APRs",
               tooltip: "tooltip information",
               options: [
                 {
@@ -307,7 +307,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           protocolInfos: [
             {
               id: "protocol-info-1",
-              title: "Trailing APR’s",
+              title: "Trailing APRs",
               tooltip: "tooltip information",
               options: [
                 {

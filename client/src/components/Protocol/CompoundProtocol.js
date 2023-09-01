@@ -110,7 +110,7 @@ const CompoundProtocol = ({
                 {/* info title */}
                 <div className="flex items-center gap-1">
                 <p className="font-medium text-blackPrimary">
-                Trailing APR’s
+                Trailing APRs
                 </p>
                 <HoverTooltip text="tooltip information" />
                 </div>
