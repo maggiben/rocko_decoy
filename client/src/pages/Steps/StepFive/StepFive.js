@@ -90,7 +90,7 @@ const StepFive = () => {
         {
           description: (
             <div className="flex items-center lg:gap-x-1">
-              <span className="mr-1 lg:mr-0">Loan-to-value-ratio </span>{" "}
+              <span className="mr-1 lg:mr-0">Max Loan-to-value-ratio </span>{" "}
               <HoverTooltip text="this is tooltip" />
             </div>
           ),

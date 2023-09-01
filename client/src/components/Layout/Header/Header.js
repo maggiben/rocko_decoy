@@ -64,7 +64,7 @@ const Header = () => {
               </div>
             </button>
             <Link href="/">
-              <img className="w-[86px] lg:w-[148px] inline-block pb-2" src="./assets/logo.png" alt="logo" width={148} height={51.728} />
+              <img className="w-[56px] lg:w-[97px] inline-block pb-2" src="./assets/logo.png" alt="logo" width={97} height={51.728} />
             </Link>
             <div className="flex items-center gap-12 justify-end">
               <div className="hidden  lg:flex items-center gap-8 justify-end">

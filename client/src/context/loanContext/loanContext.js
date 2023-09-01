@@ -155,7 +155,7 @@ const LoneProvider = ({ children }) => {
     // Choose the lending protocol to borrow from
     {
       id: 3,
-      title: "Choose the lending protocol to borrow from",
+      title: "Choose a lender and loan offer.",
       protocols: [
         {
           id: "protocol-2",
