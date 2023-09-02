@@ -37,7 +37,7 @@ const StepThree = ({ title, protocols }) => {
   }, [])
 
   return (
-    <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
+    <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10 ">
       {/* title start  */}
       <div className="flex items-center justify-between flex-wrap gap-6">
         <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
@@ -91,7 +91,7 @@ const StepThree = ({ title, protocols }) => {
       {/* title end  */}
 
       {/* Choose section  */}
-      <section className="flex gap-4 lg:gap-10 my-6 flex-col sm:flex-row ">
+      <section className="flex gap-4 lg:gap-10 my-6 flex-col sm:flex-row">
         <div className="w-full">
           <div className="p-6 border border-whiteSecondary rounded-2xl">
             <p className=" text-xl font-medium  text-blackPrimary lg:text-start text-center">

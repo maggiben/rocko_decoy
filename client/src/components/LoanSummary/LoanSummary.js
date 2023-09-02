@@ -121,7 +121,7 @@ const LoanSummary = () => {
         <hr className=" border-whiteSecondary" />
         <div className="my-4 space-y-2">
         <div className="flex items-center gap-2 text-blackPrimary">
-            Liquidation Price
+            Liquidation Price {`(${loanData?.cryptoName})`}
             <HoverTooltip text="Liquidation Price tooltip" />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
