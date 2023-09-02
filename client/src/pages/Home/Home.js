@@ -60,11 +60,6 @@ export default function Home() {
     return loanData?.activeNextButton;
   }
 
-  useEffect(() => {
-    console.log(isValidateNextButton())
-    console.log(loanData)
-  })
-
   return (
     <>
       {<CurrentStepComponent {...currentData} />}

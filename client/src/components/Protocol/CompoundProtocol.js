@@ -52,7 +52,6 @@ const CompoundProtocol = ({
                         collateralNeeded: collateral,
                         liquidationPrice: liquidationPrice,
                         rewardRate: rewardRate,
-                        activeNextButton:true,
                     }
                 })
             }
@@ -62,7 +61,6 @@ const CompoundProtocol = ({
     }
 
     useEffect(() => {
-        console.log(loanData)
         updateLoanData();
     }, [loanData])
 
@@ -138,7 +136,7 @@ const CompoundProtocol = ({
                 {/* info title */}
                 <div className="flex items-center gap-1">
                 <p className="font-medium text-blackPrimary">
-                ETH Collateral Parameters
+                Collateral Parameters (ETH)
                 </p>
                 <HoverTooltip text="tooltip information" />
                 </div>

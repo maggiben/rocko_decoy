@@ -194,7 +194,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
             },
             {
               id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
+              title: "Collateral Parameters (ETH)",
               tooltip: "",
 
               options: [
@@ -260,7 +260,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
             },
             {
               id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
+              title: "Collateral Parameters (ETH)",
               tooltip: "",
               options: [
                 {
@@ -324,7 +324,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
             },
             {
               id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
+              title: "Collateral Parameters (ETH)",
               tooltip: "",
               options: [
                 {

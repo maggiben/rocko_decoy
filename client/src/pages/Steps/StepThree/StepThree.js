@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterOptions from "../../../components/FilterOptions/FilterOptions";
 import SortOptions from "../../../components/SortOptions/SortOptions";
 import Protocol from "../../../components/Protocol/Protocol";
@@ -31,6 +31,10 @@ const StepThree = ({ title, protocols }) => {
       setFilterOptions(filterOptions.filter((item) => item !== name));
     }
   };
+
+  useEffect(() => {
+    console.log(loanData)
+  }, [])
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
