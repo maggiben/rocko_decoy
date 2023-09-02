@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoanSummary from "../../../components/LoanSummary/LoanSummary";
 import CoinCard from "../../../components/CoinCard/CoinCard";
@@ -9,8 +9,6 @@ import { financial } from "../../../helper";
 import { IS_DEMO_MODE } from "../../../constants/env";
 
 const StepOne = ({ title, currency }) => {
-  const inputRef = useRef(null);
-
   const [selectedCoin, setSelectedCoin] = useState("");
   const [activeInputField, setActiveInputField] = useState(true);
   const {
@@ -26,7 +24,7 @@ const StepOne = ({ title, currency }) => {
   const handleBorrowValueChange = (event) => {
     const inputValue = event.target.value;
     const num = inputValue === "" ? 0 : parseFloat(inputValue.replace(/,/g, ''));
-    
+    console.log(num)
     setValue("numberInput", financial(num), { shouldValidate: true });
 
     if (setLoanData) {
@@ -57,9 +55,10 @@ const StepOne = ({ title, currency }) => {
   };
 
   useEffect(() => {
-    if(inputRef.current) {
-      inputRef.current.focus();
-    }
+    const inputElement = document.getElementById("numberField");
+    if (inputElement) {
+      inputElement.focus();
+    };
 
     initialize();
   }, []);
@@ -147,7 +146,6 @@ const StepOne = ({ title, currency }) => {
                       return true;
                     },
                   })}
-                  // ref={inputRef}
                   type="text"
                   id="numberField"
                   min={1}
