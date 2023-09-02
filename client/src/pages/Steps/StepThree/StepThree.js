@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterOptions from "../../../components/FilterOptions/FilterOptions";
 import SortOptions from "../../../components/SortOptions/SortOptions";
 import Protocol from "../../../components/Protocol/Protocol";
 import CompoundProtocol from "../../../components/Protocol/CompoundProtocol";
 import useLoanData from "../../../hooks/useLoanData";
+import LoanSummary from "../../../components/LoanSummary/LoanSummary";
 
 const StepThree = ({ title, protocols }) => {
   const { loanData, setLoanData } = useLoanData();
@@ -32,8 +33,12 @@ const StepThree = ({ title, protocols }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(loanData)
+  }, [])
+
   return (
-    <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
+    <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10 ">
       {/* title start  */}
       <div className="flex items-center justify-between flex-wrap gap-6">
         <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
@@ -87,8 +92,8 @@ const StepThree = ({ title, protocols }) => {
       {/* title end  */}
 
       {/* Choose section  */}
-      <section className="flex gap-4 lg:gap-10 my-6 flex-col sm:flex-row ">
-        <div className="w-full">
+      <section className="flex gap-4 lg:gap-10 my-6 flex-col sm:flex-row">
+        <div className="w-full sm:w-8/12">
           <div className="p-6 border border-whiteSecondary rounded-2xl">
             <p className=" text-xl font-medium  text-blackPrimary lg:text-start text-center">
               {title}
@@ -117,9 +122,9 @@ const StepThree = ({ title, protocols }) => {
             </div>
           </div>
         </div>
-        {/* <div className="p-6 border border-[#E2E2E2] flex-1 rounded-2xl">
+        <div className="p-6 border border-[#E2E2E2] flex-1 rounded-2xl h-fit">
           <LoanSummary />
-        </div> */}
+        </div>
       </section>
     </main>
   );

@@ -15,6 +15,7 @@ const Header = () => {
   }});
 
   const [toggle, setToggle] = useState(false);
+  const [toggleDown, setToggleDown] = useState(false);
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
@@ -64,7 +65,7 @@ const Header = () => {
               </div>
             </button>
             <Link href="/">
-              <img className="w-[86px] lg:w-[148px] inline-block pb-2" src="./assets/logo.png" alt="logo" width={148} height={51.728} />
+              <img className="w-[56px] lg:w-[97px] inline-block pb-2" src="./assets/logo.png" alt="logo" width={97} height={51.728} />
             </Link>
             <div className="flex items-center gap-12 justify-end">
               <div className="hidden  lg:flex items-center gap-8 justify-end">
@@ -106,10 +107,33 @@ const Header = () => {
                   Logout
                 </button>
               ) : (
-                <button className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
-                  onClick={OnLogin}>
-                  {IS_DEMO_MODE ? "Logout" : "Login"}
-                </button>
+                <>
+                {IS_DEMO_MODE ? (
+                  <div className="relative inline-block text-left">
+                    <button 
+                      onClick={() => setToggleDown(!toggleDown)}
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
+                    >
+                      <img className="h-7" src="./assets/images/user.png" />
+                    </button>
+                    {
+                      toggleDown && 
+                      <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div className="" role="menu" aria-orientation="vertical">
+                          <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem">View Profile</button>
+                          <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                  ) : (
+                    <button className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
+                      onClick={OnLogin}>
+                      Login
+                    </button>
+                  )
+                }
+                </>
               )}
             </div>
           </div>

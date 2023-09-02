@@ -114,11 +114,13 @@ const StepFour = ({ title }) => {
               <p className="">Lower Risk</p>
             </div>
             <p className="pt-6   text-sm text-blackSecondary">
-            Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. A collateral buffer is the percentage of collateral you provide above what is required for your loan. A larger collateral buffer will reduce the collateral asset price at which your collateral would be liquidated (i.e. liquidation price).{" "}
-                  <Link href={"/"} className="underline">
-                    Learn more.
-                  </Link>
-                </p>
+            Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender.{" "}
+            <span className="font-bold">A collateral buffer is the percentage of collateral you provide above what is required for your loan.{" "}</span>
+            A larger collateral buffer will reduce the collateral asset price at which your collateral would be liquidated (i.e. liquidation price).{" "}
+              <Link href={"/"} className="underline">
+                Learn more.
+              </Link>
+            </p>
            
           </div>
         </div>

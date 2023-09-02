@@ -155,7 +155,7 @@ const LoneProvider = ({ children }) => {
     // Choose the lending protocol to borrow from
     {
       id: 3,
-      title: "Choose the lending protocol to borrow from",
+      title: "Choose a lender and loan offer.",
       protocols: [
         {
           id: "protocol-2",
@@ -166,7 +166,7 @@ const LoneProvider = ({ children }) => {
           protocolInfos: [
             {
               id: "protocol-info-1",
-              title: "Trailing APR’s",
+              title: "Trailing APRs",
               tooltip: "tooltip information",
               options: [
                 {
@@ -183,13 +183,13 @@ const LoneProvider = ({ children }) => {
             },
             {
               id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
+              title: "Collateral Parameters (ETH)",
               tooltip: "",
               options: [
                 {
-                  name: "Loan-to-value",
+                  name: "Max Loan-to-value",
                   value: '82.5%', //value will percentage
-                  subInfo: "Loan-to-value tooltip",
+                  subInfo: "Max Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
@@ -230,7 +230,7 @@ const LoneProvider = ({ children }) => {
           protocolInfos: [
             {
               id: "protocol-info-1",
-              title: "Trailing APR’s",
+              title: "Trailing APRs",
               tooltip: "tooltip information",
               options: [
                 {
@@ -247,13 +247,13 @@ const LoneProvider = ({ children }) => {
             },
             {
               id: "protocol-info-2",
-              title: "ETH Collateral Parameters",
+              title: "Collateral Parameters (ETH)",
               tooltip: "",
               options: [
                 {
-                  name: "Loan-to-value",
+                  name: "Max Loan-to-value",
                   value: '70%', //value will percentage
-                  subInfo: "Loan-to-value tooltip",
+                  subInfo: "Max Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
