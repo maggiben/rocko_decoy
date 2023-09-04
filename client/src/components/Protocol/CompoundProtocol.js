@@ -3,6 +3,7 @@ import useLoanData from "../../hooks/useLoanData";
 import { useLoan } from "../../contract/single";
 import { financial } from "../../helper";
 import { useEffect } from "react";
+import { IS_DEMO_MODE } from "../../constants/env";
 
 const CompoundProtocol = ({
   interestRate,
@@ -77,7 +78,15 @@ const CompoundProtocol = ({
             <div className="flex items-center justify-end gap-2 md:gap-8 ">
                 <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
                 <p className="text-xl font-bold text-[#141414]">
-                    <span style={{ fontSize: "32px" }}>{financial(loanData?.currentAPR, 2)}</span><span className="text-base">% APR</span>
+                    {IS_DEMO_MODE ? (
+                        <>
+                            <span style={{ fontSize: "32px" }}>3.94</span><span className="text-base">% APR</span>
+                        </>
+                    ) : (
+                        <>
+                            <span style={{ fontSize: "32px" }}>{financial(loanData?.currentAPR, 2)}</span><span className="text-base">% APR</span>
+                        </>
+                    )}
                 </p>
 
                 <p className="font-medium text-xs text-[#7356BF] bg-[#F4F1FA] rounded-md py-[2px] px-2">
@@ -119,9 +128,15 @@ const CompoundProtocol = ({
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">30 Day</span>
                         </p>
-                        <p className="font-semibold text-blackPrimary">
-                            {financial(loanData?.currentAPR * 30/365, 2)}%
-                        </p>
+                        {IS_DEMO_MODE ? (
+                            <p className="font-semibold text-blackPrimary">
+                                4.24%
+                            </p>
+                        ) : (
+                            <p className="font-semibold text-blackPrimary">
+                                {financial(loanData?.currentAPR * 30/365, 2)}%
+                            </p>
+                        )}
                     </div>                
                     <div className="" key={"30 Day"}>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
@@ -139,14 +154,13 @@ const CompoundProtocol = ({
                     <p className="font-medium text-blackPrimary">
                     Collateral Parameters (ETH)
                     </p>
-                    <HoverTooltip text="tooltip information" />
                     </div>
                     {/* info */}
                     <div className="py-3 space-y-3">
                     <div>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                            <span className="">Max Loan-to-value</span>
-                            <HoverTooltip text="Max Loan-to-value tooltip" />
+                            <span className="">Max Loan-to-Value</span>
+                            <HoverTooltip text="Max Loan-to-Value tooltip" />
                         </p>
                         <p className="font-semibold text-blackPrimary">
                             {loanData?.loanToValue * 100}%
@@ -193,7 +207,7 @@ const CompoundProtocol = ({
                             <span className="">Trailing 365 average</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            2.83%
+                            2.00%
                         </p>
                     </div>                   
                     </div>

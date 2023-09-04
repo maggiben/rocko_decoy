@@ -187,9 +187,9 @@ const LoneProvider = ({ children }) => {
               tooltip: "",
               options: [
                 {
-                  name: "Max Loan-to-value",
+                  name: "Max Loan-to-Value",
                   value: '82.5%', //value will percentage
-                  subInfo: "Max Loan-to-value tooltip",
+                  subInfo: "Max Loan-to-Value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
@@ -251,9 +251,9 @@ const LoneProvider = ({ children }) => {
               tooltip: "",
               options: [
                 {
-                  name: "Max Loan-to-value",
+                  name: "Max Loan-to-Value",
                   value: '70%', //value will percentage
-                  subInfo: "Max Loan-to-value tooltip",
+                  subInfo: "Max Loan-to-Value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
