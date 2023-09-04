@@ -34,7 +34,6 @@ const DepositingCollateral = () => {
     return () => clearInterval(interval);
   }, [counter, progress, progressTracker]);
   useEffect(() => {
-    console.log(progressTracker)
     {
       progressTracker === 0 &&
         progress === 100 &&
@@ -58,7 +57,6 @@ const DepositingCollateral = () => {
     }
   }, [progress, progressTracker]);
 
-  console.log(doneTracker);
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">

@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CoinCard from "../CoinCard/CoinCard";
 import useLoanData from "../../hooks/useLoanData";
 import { useLoan } from "../../contract/single";
 import { IS_DEMO_MODE } from "../../constants/env";
 
 const ChooseCoins = ({ assets }) => {
-  const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
-    useLoanData();
+  const { loanData, setLoanData } = useLoanData();
   const {
       getETHPrice,
       getLTV,
@@ -14,9 +13,19 @@ const ChooseCoins = ({ assets }) => {
       getThreshold,
       getRewardRate
   } = useLoan();
-
-  // console.log(loanData)
   const [selectedCoin, setSelectedCoin] = useState("");
+
+  const initialize = () => {
+    if (loanData?.cryptoName !== "") {
+      setSelectedCoin(loanData?.cryptoName);
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          activeNextButton:true,
+        }
+      });
+    }
+  };
 
   const updateLoanData = async (info) => {
     if (IS_DEMO_MODE) { 
@@ -69,6 +78,7 @@ const ChooseCoins = ({ assets }) => {
   }
 
   const handleSelect = async (info) => {
+    console.log(info)
     setSelectedCoin(info.coinShortName);
     if (info.coinShortName == "ETH") {
       await updateLoanData(info);
@@ -92,6 +102,10 @@ const ChooseCoins = ({ assets }) => {
       }
     }
   };
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   return (
     <div className="my-4 py-4 grid grid-cols-2 lg:grid-cols-4 gap-6">

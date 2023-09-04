@@ -64,11 +64,6 @@ const CompoundProtocol = ({
         updateLoanData();
     }, [loanData])
 
-    useEffect(() => {
-        console.log(selectProtocol)
-        console.log(name)
-    })
-
     return (
     <div className={selectProtocol === name ? "py-8 rounded-t-lg bg-zinc-50" : "py-8"}>
         <div className="px-5">
