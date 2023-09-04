@@ -17,11 +17,21 @@ const StepFour = ({ title }) => {
   
   const valueDivRef = useRef(null);
 
-  useEffect(() => {
-    if (valueDivRef.current) {
-      setValueDivWidth(valueDivRef.current.offsetWidth);
+  const initialize = () => {
+    if (loanData?.buffer !== 0) {
+      setValue(loanData?.buffer);
+      setThumbPosition(
+        (loanData?.buffer / 400) * 100
+      );
+    
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          activeNextButton:true,
+        }
+      });
     }
-  }, [value]);
+  };
 
   const updateLoanData = async (newBuffer) => {
     try {
@@ -57,9 +67,8 @@ const StepFour = ({ title }) => {
         100
     );
 
-    if(setLoanData){
+    if(setLoanData)
       await updateLoanData(newValue);
-    }
   };
   
   const isEnd = thumbPosition === 100 ;
@@ -70,6 +79,16 @@ const StepFour = ({ title }) => {
   const valueDivStyle = {
     left: `calc(${thumbPosition}% - ${80/2}px)`,
   };
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    if (valueDivRef.current)
+      setValueDivWidth(valueDivRef.current.offsetWidth);
+  }, [value]);
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}

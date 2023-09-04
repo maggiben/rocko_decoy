@@ -24,7 +24,6 @@ const StepOne = ({ title, currency }) => {
   const handleBorrowValueChange = (event) => {
     const inputValue = event.target.value;
     const num = inputValue === "" ? 0 : parseFloat(inputValue.replace(/,/g, ''));
-    console.log(num)
     setValue("numberInput", financial(num), { shouldValidate: true });
 
     if (setLoanData) {

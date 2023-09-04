@@ -15,7 +15,7 @@ const terms = [
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
         By finalizing your loan request, you will receive a Rocko wallet that
         will help facilitate and manage your loan. Rocko will have no access or
-        control over funds inside your wallet
+        control over funds inside your wallet.
       </li>
     ),
   },
@@ -90,7 +90,7 @@ const StepFive = () => {
         {
           description: (
             <div className="flex items-center lg:gap-x-1">
-              <span className="mr-1 lg:mr-0">Max Loan-to-value-ratio </span>{" "}
+              <span className="mr-1 lg:mr-0">Max Loan-to-Value </span>{" "}
               <HoverTooltip text="this is tooltip" />
             </div>
           ),
@@ -227,6 +227,7 @@ const StepFive = () => {
                 id="wallet1"
                 name="contact"
                 value="default"
+                checked={paymentMethod === "default"}
                 className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
                 onChange={(e) => handlePaymentMethodChange(e)}
               />
@@ -244,13 +245,8 @@ const StepFive = () => {
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
-                onClick={() => setOpenModalFor("Coinbase or Gemini")}
-                disabled={paymentMethod !== "default"}
-                className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
-                  paymentMethod === "default"
-                    ? "text-[#eee] bg-[#2C3B8D]"
-                    : "bg-[#eee] text-[#2C3B8D]"
-                }`}
+                onClick={() => { setOpenModalFor("Coinbase or Gemini"); setPaymentMethod("default"); }}
+                className={`w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]`}
               >
                 Sign in
               </button>
@@ -344,7 +340,7 @@ const StepFive = () => {
       {/* ---------------------- Second Section End ------------------------ */}
 
       {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
-      {paymentMethod === "default" && openModalFor && (
+      {openModalFor && (
         <>
           <ModalContainer>
             {

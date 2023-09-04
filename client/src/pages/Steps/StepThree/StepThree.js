@@ -12,8 +12,19 @@ const StepThree = ({ title, protocols }) => {
   const [sortOption, setSortOption] = useState("APR (lowest)");
   const [filterOptions, setFilterOptions] = useState([]);
 
+  const initialize = () => {
+    if (loanData?.protocol !== "") {
+      setSelectProtocol(loanData?.protocol);
+      setLoanData((prevLoanData) => {
+        return {
+          ...prevLoanData,
+          activeNextButton:true,
+        }
+      });
+    }
+  };
+
   const handleProtocol = (name) => {
-    console.log(name)
     setSelectProtocol(name);
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
@@ -34,8 +45,8 @@ const StepThree = ({ title, protocols }) => {
   };
 
   useEffect(() => {
-    console.log(loanData)
-  }, [])
+    initialize();
+  }, []);
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10 ">

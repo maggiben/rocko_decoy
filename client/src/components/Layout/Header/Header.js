@@ -30,6 +30,10 @@ const Header = () => {
   const OnLogout = async () => {
     await disconnect();
   };
+  
+  const handleClickOutside = (event) => {
+    setToggleDown(false);
+  };
 
   useEffect(() => {
     window.addEventListener("resize", (e) => {
@@ -37,6 +41,11 @@ const Header = () => {
         setToggle(false);
       }
     });
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
