@@ -34,9 +34,9 @@ const CompoundProtocol = ({
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / ethPrice;
             const liquidationPrice = borrowing / threshold / collateral;
-            const interestSixMonths = borrowing * currentAPR / 200;
-            const interestOneYear = borrowing * currentAPR / 100;
-            const interestTwoYears = borrowing * currentAPR / 50;
+            const interestSixMonths = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 200;
+            const interestOneYear = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 100;
+            const interestTwoYears = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 50;
 
             if (setLoanData) {
                 setLoanData((prevLoanData) => {
@@ -199,7 +199,7 @@ const CompoundProtocol = ({
                             <span className="">Current Rate</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            {financial(loanData?.rewardRate, 2)}%
+                            2.00%
                         </p>
                     </div>                
                     <div>
@@ -207,7 +207,7 @@ const CompoundProtocol = ({
                             <span className="">Trailing 365 average</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            2.00%
+                            2.73%
                         </p>
                     </div>                   
                     </div>

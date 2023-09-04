@@ -1,6 +1,7 @@
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
 import { financial } from "../../helper";
+import { IS_DEMO_MODE } from "../../constants/env";
 
 const LoanSummary = () => {
     const DEFAULT_PROTOCOL = "Compound Finance";
@@ -36,7 +37,7 @@ const LoanSummary = () => {
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.currentAPR && loanData?.protocol === DEFAULT_PROTOCOL && (
             <>
-                {financial(loanData?.currentAPR, 2)}
+                {IS_DEMO_MODE ? 3.94 : financial(loanData?.currentAPR, 2)}
                 <span className="text-base">%</span>
             </>
             )) ||
