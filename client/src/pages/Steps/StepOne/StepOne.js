@@ -132,6 +132,9 @@ const StepOne = ({ title, currency }) => {
                   {...register("numberInput", {
                     required: "Number is required",
                     validate: (value) => {
+                      if (IS_DEMO_MODE) {
+                        return true
+                      }
                       const num = parseFloat(value.replace(/,/g, ''))
                       if (isNaN(num)) {
                         return "Invalid number";
