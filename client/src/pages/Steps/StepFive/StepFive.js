@@ -8,6 +8,7 @@ import ModalContainer from "../../../components/ModalContainer/ModalContainer";
 import ModalContent from "../../../components/ModalContent/ModalContent";
 import ChooseWallet from "../../../components/ChooseWallet/ChooseWallet";
 import LoanFinalized from "../../../components/LoanFinalized/LoanFinalized";
+import { IS_DEMO_MODE } from "../../../constants/env";
 
 const terms = [
   {
@@ -57,7 +58,7 @@ const StepFive = () => {
     },
     {
       description: "Current APR",
-      details: `${financial(loanData?.currentAPR, 2)}%`,
+      details: IS_DEMO_MODE ? "3.84%" : `${financial(loanData?.currentAPR, 2)}%`,
     },
     {
       description: "Amount Required for Loan",
@@ -139,7 +140,7 @@ const StepFive = () => {
               <HoverTooltip text="this is tooltip" />
             </div>
           ),
-          details: `${financial(loanData?.rewardRate, 2)}%`,
+          details: IS_DEMO_MODE ? "2.00%" : `${financial(loanData?.rewardRate, 2)}%`,
         },
       ],
     },
