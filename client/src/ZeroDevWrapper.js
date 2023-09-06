@@ -5,10 +5,13 @@ import {
   createClient,
 } from "wagmi";
 import { publicProvider } from 'wagmi/providers/public'
-import { goerli } from 'wagmi/chains'
+import { goerli, mainnet } from 'wagmi/chains'
+import { IS_DEMO_MODE } from "./constants/env";
+
+const network = IS_DEMO_MODE ? goerli : mainnet;
 
 const { provider, webSocketProvider } = configureChains(
-  [goerli],
+  [network],
   [publicProvider()],
 )
 
