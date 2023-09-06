@@ -5,7 +5,7 @@ import {
     useNetwork,
 } from "wagmi";
 import { ethers } from 'ethers'
-import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, testNetworkChainId } from "../constants";
+import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
 import { usePrepareContractBatchWrite, useContractBatchWrite, useWaitForAATransaction } from "@zerodevapp/wagmi";
 import { parse } from 'url';
@@ -28,33 +28,33 @@ export const useGetLoan = () => {
     const { config } = usePrepareContractBatchWrite({
         calls: [
             {
-                address: WETHContract[testNetworkChainId],
+                address: WETHContract[networkChainId],
                 abi: WETHABI,
                 functionName: "deposit",
                 args: [],
                 value: ethers.utils.parseEther(collateral)
             },
             {
-                address: WETHContract[testNetworkChainId],
+                address: WETHContract[networkChainId],
                 abi: WETHABI,
                 functionName: "approve",
-                args: [CometContract[testNetworkChainId], uintMax],
+                args: [CometContract[networkChainId], uintMax],
             },
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "supply",
                 args: [
-                    WETHContract[testNetworkChainId],
+                    WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
             },
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "withdraw",
                 args: [
-                    USDCContract[testNetworkChainId],
+                    USDCContract[networkChainId],
                     parseBalance(loan.toString(), 6)
                 ]
             }
@@ -92,38 +92,38 @@ export const useRepay = () => {
     const { config } = usePrepareContractBatchWrite({
         calls: [
             {
-                address: USDCContract[testNetworkChainId],
+                address: USDCContract[networkChainId],
                 abi: USDCABI,
                 functionName: "approve",
                 args: [
-                    CometContract[testNetworkChainId],
+                    CometContract[networkChainId],
                     uintMax
                 ],
             },
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "supply",
                 args: [
-                    USDCContract[testNetworkChainId], 
+                    USDCContract[networkChainId], 
                     parseBalance(loan.toString(), 6)
                 ],
             },
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "withdraw",
                 args: [
-                    WETHContract[testNetworkChainId],
+                    WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
             },
             {
-                address: CometRewardContract[testNetworkChainId],
+                address: CometRewardContract[networkChainId],
                 abi: REWARDABI,
                 functionName: "claim",
                 args: [
-                    CometContract[testNetworkChainId],
+                    CometContract[networkChainId],
                     address,
                     true
                 ]
@@ -161,24 +161,24 @@ export const useAddCollateral = () => {
     const { config } = usePrepareContractBatchWrite({
         calls: [
             {
-                address: WETHContract[testNetworkChainId],
+                address: WETHContract[networkChainId],
                 abi: WETHABI,
                 functionName: "deposit",
                 args: [],
                 value: ethers.utils.parseEther(collateral)
             },
             {
-                address: WETHContract[testNetworkChainId],
+                address: WETHContract[networkChainId],
                 abi: WETHABI,
                 functionName: "approve",
-                args: [CometContract[testNetworkChainId], uintMax],
+                args: [CometContract[networkChainId], uintMax],
             },
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "supply",
                 args: [
-                    WETHContract[testNetworkChainId],
+                    WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
             }
@@ -212,16 +212,16 @@ export const useBorrowCollateral = () => {
     const { config } = usePrepareContractBatchWrite({
         calls: [
             {
-                address: CometContract[testNetworkChainId],
+                address: CometContract[networkChainId],
                 abi: COMETABI,
                 functionName: "withdraw",
                 args: [
-                    WETHContract[testNetworkChainId],
+                    WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
             },
             {
-                address: WETHContract[testNetworkChainId],
+                address: WETHContract[networkChainId],
                 abi: WETHABI,
                 functionName: "withdraw",
                 args: [
