@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useLoan } from "../../../contract/single";
 import { financial } from "../../../helper";
 import { IS_DEMO_MODE } from "../../../constants/env";
+import { trustWallet } from "@thirdweb-dev/react";
 
 const StepOne = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
@@ -85,12 +86,12 @@ const StepOne = ({ title, currency }) => {
       setLoanData((prevLoanData) => {
         return {
           ...prevLoanData,
-          activeNextButton: isValid,
+          activeNextButton: true,
+          nextValidation: errors.numberInput ? errors.numberInput.message : "",
         };
       });
     }
-    console.log({ isValid });
-  }, [isValid]);
+  }, [errors, isValid]);
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
@@ -132,9 +133,6 @@ const StepOne = ({ title, currency }) => {
                   {...register("numberInput", {
                     required: "Number is required",
                     validate: (value) => {
-                      if (IS_DEMO_MODE) {
-                        return true
-                      }
                       const num = parseFloat(value.replace(/,/g, ''))
                       if (isNaN(num)) {
                         return "Invalid number";
@@ -163,7 +161,7 @@ const StepOne = ({ title, currency }) => {
                 />
                 <label htmlFor="numberField">{selectedCoin}</label>
               </div>
-              {errors.numberInput && (
+              {!loanData?.activeNextButton && errors.numberInput && (
                 <div className="text-xs text-red-500">
                   {errors.numberInput.message}
                 </div>
