@@ -24,7 +24,8 @@ export const loneContext = createContext({
     coinIcon:'',
     cryptoIcon: '',
     cryptoName: '',
-    activeNextButton:false,
+    activeNextButton: false,
+    nextValidation: "",
   },
   loanSteps: [],
   currentStep: 0,
@@ -60,6 +61,7 @@ const LoneProvider = ({ children }) => {
     cryptoIcon: '',
     cryptoName: '',
     activeNextButton:false,
+    nextValidation: ""
   });
   const [currentStep, setCurrentStep] = useState(0);
   const loanSteps = [

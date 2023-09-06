@@ -25,6 +25,14 @@ export default function Home() {
     useLoanData();
 
   const nextStep = () => {
+    if (loanData?.nextValidation) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        activeNextButton: false,
+      }));
+      return;
+    }
+
     if (currentStep == loanSteps.length - 1)
       setIsFinalized(true);
 
