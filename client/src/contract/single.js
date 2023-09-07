@@ -2,9 +2,9 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { ethers } from 'ethers'
 import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, testNetworkChainId } from "../constants";
+import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
-
+import { NETWORK } from "../constants/env";
 const LOANABI = require('../constants/loan.json')
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
@@ -16,9 +16,9 @@ export const useLoan = () => {
   const signer = useSigner();
 
   const getETHPrice = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const price = await contract.call( "getETHPrice" )
 
     const formattedValue = ethers.utils.formatEther( price ) * 10 ** 10
@@ -26,9 +26,9 @@ export const useLoan = () => {
   }
 
   const getBorrowAPR = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const APR = await contract.call( "getAPR" )
 
     const formattedValue = ethers.utils.formatEther( APR )
@@ -36,9 +36,9 @@ export const useLoan = () => {
   }
 
   const getLTV = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const LTV = await contract.call( "getLoanToValue" )
 
     const formattedValue = ethers.utils.formatEther( LTV )
@@ -46,9 +46,9 @@ export const useLoan = () => {
   }
 
   const getThreshold = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const threshold = await contract.call( "getLiquidationThreshold" )
 
     const formattedValue = ethers.utils.formatEther( threshold )
@@ -56,9 +56,9 @@ export const useLoan = () => {
   }
 
   const getPenalty = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const penalty = await contract.call( "getLiquidationPenalty" )
 
     const formattedValue = 1 - ethers.utils.formatEther( penalty )
@@ -66,9 +66,9 @@ export const useLoan = () => {
   }
 
   const getCollateralBalanceOf = async () => {
-    const sdk = new ThirdwebSDK('goerli');
+    const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[testNetworkChainId], LOANABI)
+    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
     const value = await contract.call( 
       "collateralBalanceOf",
       [
@@ -80,8 +80,8 @@ export const useLoan = () => {
   }
 
   const getRewardRate = async() => {
-    const sdk = new ThirdwebSDK('goerli');
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const sdk = new ThirdwebSDK(NETWORK);
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "baseTrackingBorrowSpeed"
     )
@@ -93,8 +93,8 @@ export const useLoan = () => {
   const getRewardAmount = async() => {
     if (!address) return;
 
-    const sdk = new ThirdwebSDK('goerli');
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const sdk = new ThirdwebSDK(NETWORK);
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "userBasic",
       [
@@ -111,12 +111,12 @@ export const useLoan = () => {
     const uintMax =
       '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
-    const contract = await sdk.getContract(WETHContract[testNetworkChainId], WETHABI)
+    const contract = await sdk.getContract(WETHContract[networkChainId], WETHABI)
     try {
       const tx = await contract.call(
         "approve",
         [
-          CometContract[testNetworkChainId],
+          CometContract[networkChainId],
           uintMax
         ]
       )
@@ -131,12 +131,12 @@ export const useLoan = () => {
     const uintMax =
       '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
-    const contract = await sdk.getContract(USDCContract[testNetworkChainId], USDCABI)
+    const contract = await sdk.getContract(USDCContract[networkChainId], USDCABI)
     try {
       const tx = await contract.call(
         "approve",
         [
-          CometContract[testNetworkChainId],
+          CometContract[networkChainId],
           uintMax
         ]
       )
@@ -149,7 +149,7 @@ export const useLoan = () => {
 
   const deposit = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(WETHContract[testNetworkChainId], WETHABI)
+    const contract = await sdk.getContract(WETHContract[networkChainId], WETHABI)
 
     try {
       const tx = await contract.call(
@@ -168,7 +168,7 @@ export const useLoan = () => {
 
   const wethToETH = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(WETHContract[testNetworkChainId], WETHABI)
+    const contract = await sdk.getContract(WETHContract[networkChainId], WETHABI)
 
     try {
       const tx = await contract.call(
@@ -186,13 +186,13 @@ export const useLoan = () => {
 
   const addCollateral = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
 
     try {
       const tx = await contract.call(
         "supply",
         [
-          WETHContract[testNetworkChainId],
+          WETHContract[networkChainId],
           parseBalance(amount.toString())
         ]
       );
@@ -205,13 +205,13 @@ export const useLoan = () => {
 
   const addLoan = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
 
     try {
       const tx = await contract.call(
         "supply",
         [
-          USDCContract[testNetworkChainId],
+          USDCContract[networkChainId],
           parseBalance(amount.toString(), 6)
         ]
       );
@@ -224,13 +224,13 @@ export const useLoan = () => {
 
   const borrowLoan = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
 
     try {
       const tx = await contract.call(
         "withdraw",
         [
-          USDCContract[testNetworkChainId],
+          USDCContract[networkChainId],
           parseBalance(amount.toString(), 6)
         ]
       );
@@ -243,13 +243,13 @@ export const useLoan = () => {
 
   const borrowCollateral = async ( amount ) => {
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(CometContract[testNetworkChainId], COMETABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
 
     try {
       const tx = await contract.call(
         "withdraw",
         [
-          WETHContract[testNetworkChainId],
+          WETHContract[networkChainId],
           parseBalance(amount.toString())
         ]
       );
@@ -264,13 +264,13 @@ export const useLoan = () => {
     if (!address) return;
     
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const contract = await sdk.getContract(CometRewardContract[testNetworkChainId], REWARDABI)
+    const contract = await sdk.getContract(CometRewardContract[networkChainId], REWARDABI)
 
     try {
       const tx = await contract.call(
         "claim",
         [
-          CometContract[testNetworkChainId],
+          CometContract[networkChainId],
           address,
           true
         ]

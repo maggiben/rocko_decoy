@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import { NETWORK } from "./constants/env";
 import ZeroDevWrapper from "./ZeroDevWrapper";
 import {
   ThirdwebProvider,
@@ -22,7 +22,7 @@ root.render(
   <React.StrictMode>
     <ZeroDevWrapper>
       <BrowserRouter>
-        <ThirdwebProvider activeChain="goerli">
+        <ThirdwebProvider activeChain={NETWORK}>
           <LoneProvider>
             <App />
           </LoneProvider>

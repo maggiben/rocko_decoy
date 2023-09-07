@@ -5,7 +5,7 @@ import SwiperCore, { Navigation, Autoplay } from "swiper";
 import Modal from "react-modal";
 import axios from "axios";
 import { useAccount, useContractRead } from "wagmi";
-import { WETHContract, testNetworkChainId } from "../../../constants";
+import { WETHContract, networkChainId } from "../../../constants";
 import {
   useSigner,
   ConnectWallet,

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { goerli } from 'wagmi/chains';
+import * as chains from 'wagmi/chains'
 import { Auth0WalletConnector } from '@zerodevapp/wagmi';
 import { useUserInfo } from "../../../hooks/useZerodev";
-import { IS_DEMO_MODE } from "../../../constants/env";
+import { IS_DEMO_MODE, NETWORK } from "../../../constants/env";
+
+const net = chains[NETWORK];
 
 const Header = () => {
-  const { chains } = configureChains( [goerli], [publicProvider()] );
+  const { chains } = configureChains( [net], [publicProvider()] );
   const auth0Connector = new Auth0WalletConnector({chains, options: {
     projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID,
     shimDisconnect: false
