@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
@@ -15,6 +15,7 @@ const Header = () => {
     projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID,
     shimDisconnect: false
   }});
+  const loginRef = useRef();
 
   const [toggle, setToggle] = useState(false);
   const [toggleDown, setToggleDown] = useState(false);
@@ -34,7 +35,9 @@ const Header = () => {
   };
   
   const handleClickOutside = (event) => {
-    setToggleDown(false);
+    if (loginRef.current && !loginRef.current.contains(event.target)) {
+      setToggleDown(false);
+    }
   };
 
   useEffect(() => {
@@ -111,41 +114,32 @@ const Header = () => {
                   CONTACT
                 </Link>
               </div>
-              
+
               {isConnected ? (
-                <button className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
-                  onClick={OnLogout}>
-                  Logout
-                </button>
-              ) : (
-                <>
-                {IS_DEMO_MODE ? (
-                  <div className="relative inline-block text-left">
-                    <button 
-                      onClick={() => setToggleDown(!toggleDown)}
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
-                    >
-                      <img className="h-7" src="./assets/images/user.png" />
-                    </button>
-                    {
-                      toggleDown && 
-                      <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div className="" role="menu" aria-orientation="vertical">
-                          <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem">View Profile</button>
-                          <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</button>
-                        </div>
+                <div className="relative inline-block text-left" ref={loginRef}>
+                  <button
+                    onClick={() => setToggleDown(!toggleDown)}
+                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
+                  >
+                    <img className="h-7" src="./assets/images/user.png" />
+                  </button>
+                  {
+                    toggleDown && 
+                    <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="" role="menu" aria-orientation="vertical">
+                        <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem">View Profile</button>
+                        <button className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900" role="menuitem" onClick={OnLogout}>Logout</button>
                       </div>
-                    }
-                  </div>
-                  ) : (
-                    <button className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
-                      onClick={OnLogin}>
-                      Login
-                    </button>
-                  )
-                }
-                </>
-              )}
+                    </div>
+                  }
+                </div>
+                ) : (
+                  <button className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
+                    onClick={OnLogin}>
+                    Login
+                  </button>
+                )
+              }
             </div>
           </div>
         </div>

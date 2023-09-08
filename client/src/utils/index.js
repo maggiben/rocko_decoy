@@ -35,3 +35,11 @@ export const getInterest = (loan, apr, startLoan) => {
 
     return interest;
 }
+
+export const formatDate = (date) => {
+    // let date = new Date();
+    let options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+    console.log(new Intl.DateTimeFormat('en-US', options).format(date));
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+}
