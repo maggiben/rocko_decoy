@@ -19,7 +19,8 @@ const CompoundProtocol = ({
         getLTV,
         getPenalty,
         getThreshold,
-        getRewardRate
+        getRewardRate,
+        getRewardAmount
     } = useLoan();
 
     const updateLoanData = async () => {
@@ -31,6 +32,7 @@ const CompoundProtocol = ({
             const threshold = await getThreshold();
             const ethPrice = await getETHPrice();
             const rewardRate = await getRewardRate();
+            const rewardAmount = await getRewardAmount();
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / ethPrice;
             const liquidationPrice = borrowing / threshold / collateral;
@@ -53,6 +55,7 @@ const CompoundProtocol = ({
                         collateralNeeded: collateral,
                         liquidationPrice: liquidationPrice,
                         rewardRate: rewardRate,
+                        rewardAmount: rewardAmount,
                     }
                 })
             }
