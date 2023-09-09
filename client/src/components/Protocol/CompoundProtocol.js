@@ -4,6 +4,7 @@ import { useLoan } from "../../contract/single";
 import { financial } from "../../helper";
 import { useEffect } from "react";
 import { IS_DEMO_MODE } from "../../constants/env";
+const TOOLTIPS = require('../../locales/en_tooltips');
 
 const CompoundProtocol = ({
   interestRate,
@@ -123,7 +124,7 @@ const CompoundProtocol = ({
                     <p className="font-medium text-blackPrimary">
                     Trailing APRs
                     </p>
-                    <HoverTooltip text="tooltip information" />
+                    <HoverTooltip text={TOOLTIPS.TRAILING_APRS} />
                     </div>
                     {/* info */}
                     <div className="py-3 space-y-3">
@@ -163,7 +164,7 @@ const CompoundProtocol = ({
                     <div>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">Max Loan-to-Value</span>
-                            <HoverTooltip text="Max Loan-to-Value tooltip" />
+                            <HoverTooltip text={TOOLTIPS.MAX_LTV} />
                         </p>
                         <p className="font-semibold text-blackPrimary">
                             {loanData?.loanToValue * 100}%
@@ -172,7 +173,7 @@ const CompoundProtocol = ({
                     <div>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">Liquidation Threshold</span>
-                            <HoverTooltip text="Loan-to-value tooltip" />
+                            <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
                         </p>
                         <p className="font-semibold text-blackPrimary">
                             {loanData?.liquidationThreshold * 100}%
@@ -181,7 +182,7 @@ const CompoundProtocol = ({
                     <div>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">Liquidation Penalty</span>
-                            <HoverTooltip text="Loan-to-value tooltip" />
+                            <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
                         </p>
                         <p className="font-semibold text-blackPrimary">
                             {financial(loanData?.liquidationPenalty * 100)}%
@@ -193,7 +194,7 @@ const CompoundProtocol = ({
                     {/* info title */}
                     <div className="flex items-center gap-1">
                     <p className="font-medium text-blackPrimary">Rewards</p>
-                    <HoverTooltip text="tooltip information" />
+                    <HoverTooltip text={TOOLTIPS.PROTOCOL_REWARDS} />
                     </div>
                     {/* info */}
                     <div className="py-3 space-y-3">
