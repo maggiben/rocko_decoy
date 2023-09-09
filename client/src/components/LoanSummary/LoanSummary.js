@@ -2,6 +2,7 @@ import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "../../hooks/useLoanData";
 import { financial } from "../../helper";
 import { IS_DEMO_MODE } from "../../constants/env";
+const TOOLTIPS = require('../../locales/en_tooltips');
 
 const LoanSummary = () => {
     const DEFAULT_PROTOCOL = "Compound Finance";
@@ -32,7 +33,7 @@ const LoanSummary = () => {
         <div className="my-4 space-y-2">
         <div className="flex items-center gap-2 text-blackPrimary">
             Current APR
-            <HoverTooltip text="Current APR tooltip" />
+            <HoverTooltip text={TOOLTIPS.CURRENT_APR} />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.currentAPR && loanData?.protocol === DEFAULT_PROTOCOL && (
@@ -48,7 +49,7 @@ const LoanSummary = () => {
         <div className="my-4 space-y-2">
         <div className="flex items-center gap-2 text-blackPrimary">
             Projected Interest (in USD)
-            <HoverTooltip text="Projected Interest tooltip" />
+            <HoverTooltip text={TOOLTIPS.PROJECTED_INTEREST} />
         </div>
         <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">6 months</span>
@@ -85,7 +86,7 @@ const LoanSummary = () => {
         <div className="my-4 space-y-2">
         <div className="flex items-center gap-2 text-blackPrimary">
             Collateral Needed
-            <HoverTooltip text="Collateral Needed tooltip" />
+            <HoverTooltip text={TOOLTIPS.COLLATERAL_NEEDED} />
         </div>
         <div
             className="flex items-center
@@ -123,7 +124,7 @@ const LoanSummary = () => {
         <div className="my-4 space-y-2">
         <div className="flex items-center gap-2 text-blackPrimary">
             Liquidation Price {loanData?.cryptoName && `(${loanData?.cryptoName})`}
-            <HoverTooltip text="Liquidation Price tooltip" />
+            <HoverTooltip text={TOOLTIPS.LIQUIDATION_PRICE} />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.liquidationPrice && loanData?.protocol === DEFAULT_PROTOCOL &&

@@ -11,6 +11,7 @@ const eth = "./assets/coins/Ether (ETH).svg";
 const usdc = "./assets/coins/USD Coin (USDC).svg";
 const aave = "./assets/coins/Aave (AAVE) (1).svg";
 const allTimeHigh = 4872.19;
+const TOOLTIPS = require('../../locales/en_tooltips');
 
 const headings = [
   {
@@ -93,7 +94,7 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <div className="flex items-center gap-2 ">
                     <p className=""> Average APR</p>{" "}
-                    <HoverTooltip text="hover me" />
+                    <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
                   </div>
 
                   <div className="block text-xl  font-medium">
@@ -124,7 +125,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Loan-to-Value</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.MAX_LTV} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {loanData?.loanToValue * 100}
@@ -134,7 +135,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Liquidation Threshold</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {loanData?.liquidationThreshold * 100}
@@ -144,7 +145,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Liquidation Penalty</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {financial(loanData?.liquidationPenalty * 100)}
