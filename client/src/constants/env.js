@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 const demoMode = params.get('demo_mode');
-if (demoMode) {
+if (demoMode === 'true') {
   sessionStorage.setItem('IS_DEMO_MODE', 'true');
   console.log('DEMO MODE ENABLED');
 }

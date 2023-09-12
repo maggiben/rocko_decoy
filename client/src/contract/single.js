@@ -11,11 +11,14 @@ const USDCABI = require('../constants/usdc.json')
 const REWARDABI = require('../constants/reward.json')
 const ASSET_ID = 2
 
+const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
+
 export const useLoan = () => {
   const address = useAddress()
   const signer = useSigner();
 
   const getETHPrice = async () => {
+<<<<<<< HEAD
     const sdk = new ThirdwebSDK(NETWORK);
     const _chainlinkEthPriceFeed = "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"; // Chainlink Goerli ETH/USD price feed
   
@@ -28,10 +31,25 @@ export const useLoan = () => {
 
     const formattedValue = ethers.utils.formatEther( price ) * 10 ** 10
     return formattedValue
+=======
+    try {
+      const sdk = new ThirdwebSDK(ProviderNetwork);
+  
+      const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
+      const price = await contract.call( "getETHPrice" )
+  
+      const formattedValue = ethers.utils.formatEther( price ) * 10 ** 10
+      return formattedValue
+    } catch (e) {
+      console.log({e}, 'cant fetch eth price')
+      return null;
+    }
+    
+>>>>>>> 473890a6 (debug mainnet)
   }
 
   const getBorrowAPR = async () => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const utilization = await contract.call( "getUtilization" )
@@ -46,7 +64,7 @@ export const useLoan = () => {
   }
 
   const getLTV = async () => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -60,7 +78,7 @@ export const useLoan = () => {
   }
 
   const getThreshold = async () => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -74,7 +92,7 @@ export const useLoan = () => {
   }
 
   const getPenalty = async () => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -88,7 +106,7 @@ export const useLoan = () => {
   }
 
   const getCollateralBalanceOf = async () => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
@@ -103,7 +121,7 @@ export const useLoan = () => {
   }
 
   const getRewardRate = async() => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "baseTrackingBorrowSpeed"
@@ -116,7 +134,7 @@ export const useLoan = () => {
   const getRewardAmount = async() => {
     if (!address) return;
 
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "userBasic",

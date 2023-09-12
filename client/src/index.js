@@ -16,13 +16,16 @@ import {
 } from "@thirdweb-dev/react";
 import LoneProvider from "./context/loanContext/loanContext";
 
+const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
+const supportedChainIds = [1, 5];
+console.log({NETWORK})
 const root = ReactDOM.createRoot(document.getElementById("root"));
 console.log("LoneProvider", LoneProvider)
 root.render(
   <React.StrictMode>
     <ZeroDevWrapper>
       <BrowserRouter>
-        <ThirdwebProvider activeChain={NETWORK}>
+        <ThirdwebProvider supportedChainIds={supportedChainIds} activeChain={ProviderNetwork}>
           <LoneProvider>
             <App />
           </LoneProvider>
