@@ -1,4 +1,11 @@
-const IS_DEMO_MODE = process.env.REACT_APP_IS_DEMO_MODE === 'true';
+const params = new URLSearchParams(window.location.search);
+const demoMode = params.get('demo_mode');
+if (demoMode) {
+  sessionStorage.setItem('IS_DEMO_MODE', 'true');
+  console.log('DEMO MODE ENABLED');
+}
+
+const IS_DEMO_MODE = process.env.REACT_APP_IS_DEMO_MODE === 'true' || !!demoMode || !!sessionStorage.getItem('IS_DEMO_MODE') ;
 
 const GEMINI_CLIENT_ID = process.env.REACT_APP_GEMINI_CLIENT_ID;
 const COINBASE_CLIENT_ID = process.env.REACT_APP_COINBASE_CLIENT_ID;

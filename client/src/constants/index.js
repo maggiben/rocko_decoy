@@ -34,8 +34,3 @@ import { NETWORK } from "./env";
       "Already processing Metamask wallet connect. Please confirm metamask modal.",
   };
   
-  export const MoralisAPIKey =
-    "pT8v9ybSBYdDiwVF6uytzwEuHU5uyUMisiqMMTnu6mlS4LPjG2hgFUeNiSgXE7VN";
-  
-  export const CoinmarketcapAPIKey = 
-    "c1aa34f3-7b85-481f-9fe6-55b9454ef4c1";
