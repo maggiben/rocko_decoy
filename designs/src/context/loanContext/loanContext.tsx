@@ -33,10 +33,10 @@ export const loneContext = createContext<ContextValues>({
     subCollateralPrice: 0,
     liquidationPrice: 0,
     subLiquidationPrice: 0,
-    coinIcon:'',
-    cryptoIcon: '',
-    cryptoName: '',
-    activeNextButton:false,
+    coinIcon: "",
+    cryptoIcon: "",
+    cryptoName: "",
+    activeNextButton: false,
   },
   loanSteps: [],
   currentStep: 0,
@@ -53,6 +53,7 @@ interface LoneProviderProps {
 }
 
 const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
+  const [amount, setAmount] = useState<string>("");
   const [loanData, setLoanData] = useState<LoanData>({
     borrowing: 0,
     currentAPR: 0,
@@ -67,10 +68,10 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     subCollateralPrice: 0,
     liquidationPrice: 0,
     subLiquidationPrice: 0,
-    coinIcon:'',
-    cryptoIcon: '',
-    cryptoName: '',
-    activeNextButton:false,
+    coinIcon: "",
+    cryptoIcon: "",
+    cryptoName: "",
+    activeNextButton: false,
   });
   const [currentStep, setCurrentStep] = useState(0);
   const loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[] = [
@@ -173,7 +174,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           id: "protocol-1",
           name: "Compound Finance",
           symbol: "/icons/Compound (COMP).svg",
-          interestRate:3.88,
+          interestRate: 3.88,
           protocolInfos: [
             {
               id: "protocol-info-1",
@@ -182,12 +183,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: '4.01%', //value will percentage
+                  value: "4.01%", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: '3.76%', //value will percentage
+                  value: "3.76%", //value will percentage
                   subInfo: "",
                 },
               ],
@@ -200,17 +201,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: '83%', //value will percentage
+                  value: "83%", //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: '90%', //value will percentage
+                  value: "90%", //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: '5%', //value will percentage
+                  value: "5%", //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
@@ -227,7 +228,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
                 },
                 {
                   name: "Trailing 365 average",
-                  value: '2.83%', //value will percentage
+                  value: "2.83%", //value will percentage
                   subInfo: "",
                 },
               ],
@@ -238,7 +239,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           id: "protocol-2",
           name: "Aave",
           symbol: "/icons/Aave (AAVE).svg",
-          interestRate:4.02,
+          interestRate: 4.02,
 
           protocolInfos: [
             {
@@ -248,12 +249,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: '4.01%', //value will percentage
+                  value: "4.01%", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: '3.76%', //value will percentage
+                  value: "3.76%", //value will percentage
                   subInfo: "",
                 },
               ],
@@ -265,17 +266,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: '82.5%', //value will percentage
+                  value: "82.5%", //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: '86%', //value will percentage
+                  value: "86%", //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: '5%', //value will percentage
+                  value: "5%", //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
@@ -287,12 +288,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Current Rate",
-                  value: 'N/A', //value will percentage
+                  value: "N/A", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "Trailing 365 average",
-                  value: 'N/A', //value will percentage
+                  value: "N/A", //value will percentage
                   subInfo: "",
                 },
               ],
@@ -303,7 +304,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           id: "protocol-3",
           name: "Notional Finance",
           symbol: "/icons/image 18.png",
-          interestRate:5.64,
+          interestRate: 5.64,
           protocolInfos: [
             {
               id: "protocol-info-1",
@@ -312,12 +313,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "30 Day",
-                  value: '5.87%', //value will percentage
+                  value: "5.87%", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "365 Day",
-                  value: '6.2%', //value will percentage
+                  value: "6.2%", //value will percentage
                   subInfo: "",
                 },
               ],
@@ -329,17 +330,17 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Loan-to-value",
-                  value: '70%', //value will percentage
+                  value: "70%", //value will percentage
                   subInfo: "Loan-to-value tooltip",
                 },
                 {
                   name: "Liquidation Threshold",
-                  value: '82%', //value will percentage
+                  value: "82%", //value will percentage
                   subInfo: "Liquidation Threshold tooltip",
                 },
                 {
                   name: "Liquidation Penalty",
-                  value: '5%', //value will percentage
+                  value: "5%", //value will percentage
                   subInfo: "Liquidation Penalty",
                 },
               ],
@@ -351,12 +352,12 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
               options: [
                 {
                   name: "Current Rate",
-                  value: 'N/A', //value will percentage
+                  value: "N/A", //value will percentage
                   subInfo: "",
                 },
                 {
                   name: "Trailing 365 average",
-                  value: 'N/A', //value will percentage
+                  value: "N/A", //value will percentage
                   subInfo: "",
                 },
               ],

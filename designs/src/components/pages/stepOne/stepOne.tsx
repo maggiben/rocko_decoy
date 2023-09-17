@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Link from "next/link";
 import LoanSummary from "../home/loanSummary/loanSummary";
@@ -14,8 +15,8 @@ interface FormData {
 const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const [selectedCoin, setSelectedCoin] = useState("");
   const [activeInputField, setActiveInputField] = useState(false);
-  const [ inputNumber, setInputNumber] = useState('')
-  const [changeInputType, setChangeInputType] = useState<string>('number');
+  const [inputNumber, setInputNumber] = useState("");
+  const [changeInputType, setChangeInputType] = useState<string>("number");
   const {
     register,
     formState: { errors, isLoading, isValid, isValidating },
@@ -24,13 +25,12 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   } = useForm<FormData>();
   const { loanData, setLoanData, loanSteps, currentStep, setCurrentStep } =
     useLoanData();
-    
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    
+
     if (/^-?\d*\.?\d*$/.test(inputValue)) {
-      setInputNumber(inputValue)
+      setInputNumber(inputValue);
       setValue("numberInput", inputValue, { shouldValidate: true });
     }
     console.log(" inside on change", errors);
@@ -151,7 +151,10 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                     const isDecimalDigit = /^\d+$/.test(keyPressed);
                     const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
 
-                    if ((!isDecimalDigit && !(event.key==='Backspace')) || isAllowedHexChar) {
+                    if (
+                      (!isDecimalDigit && !(event.key === "Backspace")) ||
+                      isAllowedHexChar
+                    ) {
                       event.preventDefault();
                     }
                     if (event.key === "-") {
@@ -162,18 +165,22 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                   placeholder="10,000"
                   disabled={!activeInputField}
                   value={inputNumber}
-                  onFocus={()=>{
-                    const valueWithoutCommas = inputNumber.replace(/,/g, '');
-                    setInputNumber(valueWithoutCommas)
-                    setChangeInputType('number')
+                  onFocus={() => {
+                    const valueWithoutCommas = inputNumber.replace(/,/g, "");
+                    setInputNumber(valueWithoutCommas);
+                    setChangeInputType("number");
                   }}
-                  onBlur={
-                    (event) => {
-                      setChangeInputType('text')
-                      setInputNumber( new Intl.NumberFormat('en-US').format(parseFloat(getValues('numberInput'))))
-                      
+                  onBlur={(event) => {
+                    if (event.target.value.length < 1) {
+                      return event.preventDefault();
                     }
-                  }
+                    setChangeInputType("text");
+                    setInputNumber(
+                      new Intl.NumberFormat("en-US").format(
+                        parseFloat(getValues("numberInput"))
+                      )
+                    );
+                  }}
                   onChange={handleBorrowValueChange}
                 />
                 <label htmlFor="numberField">{selectedCoin}</label>

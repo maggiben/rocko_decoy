@@ -1,9 +1,15 @@
+"use client";
 import Image from "next/image";
 import compound from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import ToggleBTN from "@/components/pages/Dashboard/toggleBTN/toggleBTN";
 import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
+import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet";
+import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
+import { useState } from "react";
+import ModifyWallet from "./modifyWallet/modifyWallet";
 
 const headings = [
   {
@@ -49,6 +55,8 @@ const collaterals = [
 ];
 
 function SinglePage() {
+  const [openModalFor, setOpenModalFor] = useState("");
+  const [modalStep, setModalStep] = useState(0);
   return (
     <>
       <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
@@ -209,7 +217,10 @@ function SinglePage() {
                 </div>
               </div>
               <div className="pt-6 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
-                <button className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold">
+                <button
+                  onClick={() => setOpenModalFor("Modify Collateral")}
+                  className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold"
+                >
                   Modify Collateral
                 </button>
                 <p className="text-sm text-center md:text-left text-[#545454]">
@@ -253,6 +264,20 @@ function SinglePage() {
             </div>
           </aside>
         </section>
+        {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
+        {openModalFor && (
+          <>
+            <ModalContainer>
+              {modalStep === 0 && (
+                <ModifyWallet
+                  setModalStep={setModalStep}
+                  setOpenModalFor={setOpenModalFor}
+                />
+              )}
+            </ModalContainer>
+          </>
+        )}
+        {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}
       </main>
     </>
   );

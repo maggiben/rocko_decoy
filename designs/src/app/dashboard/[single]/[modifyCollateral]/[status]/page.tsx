@@ -3,19 +3,25 @@
 import LoanComplete from "@/components/pages/depositing-collateral/loanComplete/loanComplete";
 import CircleProgressBar from "@/components/shared/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/shared/modalContainer/modalContainer";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 interface DoneTracker {
   step: string;
 }
 
-const DepositingCollateral = () => {
-  const [counter, setCounter] = useState(15);
+const ModifyStatus = () => {
+  const { status } = useParams();
+  const [counter, setCounter] = useState(status === "add" ? 5 : 15);
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
   const [activeDone, setActiveDone] = useState(false);
   const [completeModal, setCompleteModal] = useState(false);
+  const [hide, setHide] = useState<boolean>(false);
+  // Use useMemo to memoize the 'status' value
+  /* const memoizedStatus = useMemo(() => status, []);
+  console.log(memoizedStatus); */
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,9 +33,9 @@ const DepositingCollateral = () => {
               return prevProgTra + 1;
             });
 
-            return 20;
+            return status === "add" ? 0 : 20;
           } else {
-            return prevProg + 20;
+            return status === "add" ? prevProg + 50 : prevProg + 20;
           }
         });
         console.log(progress);
@@ -50,25 +56,15 @@ const DepositingCollateral = () => {
       progressTracker === 1 &&
         progress === 100 &&
         setDoneTracker([...doneTracker, { step: "two" }]);
+      progressTracker === 1 && progress === 100 && setActiveDone(true);
     }
-    {
-      progressTracker === 2 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "three" }]);
-      progressTracker === 2 && progress === 100 && setActiveDone(true);
-    }
-    /* {
-      progressTracker === 3 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "four" }]);
-    } */
   }, [progress, progressTracker]);
 
   console.log(doneTracker);
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : "Depositing Collateral"}
+        Collateral Modification Status
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -85,7 +81,9 @@ const DepositingCollateral = () => {
                   : "text-gray-400"
               }`}
             >
-              Collateral Received
+              {status === "add"
+                ? "Collateral Received"
+                : "Collateral Withdrawn from Compound"}
             </p>
             {doneTracker[0]?.step === "one" && (
               <svg
@@ -124,7 +122,9 @@ const DepositingCollateral = () => {
                   : "text-gray-400"
               }`}
             >
-              Collateral Deposited in Lending Protocol
+              {status === "add"
+                ? "Collateral Deposited in Compound"
+                : "Collateral Deposited in your account or wallet"}
             </p>
             {doneTracker[1]?.step === "two" && (
               <svg
@@ -156,58 +156,27 @@ const DepositingCollateral = () => {
               />
             )}
           </div>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
-              className={`${
-                progressTracker === 2 || doneTracker[2]?.step === "three"
-                  ? "text-black"
-                  : "text-gray-400"
-              }`}
-            >
-              Loan Delivered to Your Account
-            </p>
-            {doneTracker[2]?.step === "three" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-                  fill="#05944F"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
-                  fill="white"
-                />
-              </svg>
-            )}
-            {progressTracker === 2 && !(doneTracker[2]?.step === "three") && (
-              <CircleProgressBar
-                circleWidth={18}
-                radius={7}
-                percentage={progress}
-                strokeWidth={2}
-              />
-            )}
-          </div>
         </div>
       </section>
-      {completeModal && (
+      {completeModal && !hide ? (
         <ModalContainer>
-          <LoanComplete
-            title={"Loan Complete"}
-            details={
-              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            }
-            id={1}
-          />
+          {status === "add" ? (
+            <LoanComplete
+              title={"Collateral Deposit Complete"}
+              details={"You have successfully increased your loan collateral"}
+              id={2}
+              setHide={setHide}
+            />
+          ) : (
+            <LoanComplete
+              title={"Collateral Withdrawal Complete"}
+              details={"You have successfully withdrawn collateral"}
+              id={3}
+              setHide={setHide}
+            />
+          )}
         </ModalContainer>
-      )}
+      ) : null}
 
       {/* footer */}
       <div className="h-20 w-full"></div>
@@ -239,7 +208,10 @@ const DepositingCollateral = () => {
                 {/* Back */}
               </button>
               <button
-                onClick={() => setCompleteModal(true)}
+                onClick={() => {
+                  setCompleteModal(true);
+                  setHide(false);
+                }}
                 className={`font-semibold  text-xs md:text-sm ${
                   activeDone ? "bg-blue" : "bg-blue/40"
                 } py-[10px]  px-6 rounded-full text-white `}
@@ -255,4 +227,4 @@ const DepositingCollateral = () => {
   );
 };
 
-export default DepositingCollateral;
+export default ModifyStatus;

@@ -59,13 +59,13 @@ export interface AssetStep {
 }
 
 // Interface for protocol step
-export interface ProtocolProps  {
+export interface ProtocolProps {
   id?: string;
   name?: string;
   symbol?: string;
   interestRate?: number;
   selectProtocol?: string;
-  handleProtocol?:Function;
+  handleProtocol?: Function;
   protocolInfos?: {
     id?: string;
     title?: string;
@@ -103,7 +103,7 @@ export interface LoanData {
   sixMonthInterest: number;
   twelveMonthInterest: number;
   twentyFourMonthInterest: number;
-  cryptoName:string;
+  cryptoName: string;
   cryptoIcon: string;
   loanToValue: number;
   liquidationThreshold: number;
@@ -112,7 +112,7 @@ export interface LoanData {
   subCollateralPrice: number;
   liquidationPrice: number;
   subLiquidationPrice: number;
-  activeNextButton?:boolean;
+  activeNextButton?: boolean;
 }
 // ContextValues interface using the above step interfaces
 export interface ContextValues {
