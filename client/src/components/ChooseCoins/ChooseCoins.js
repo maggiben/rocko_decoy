@@ -125,6 +125,7 @@ const ChooseCoins = ({ assets }) => {
             subCollateralPrice={coin.subCollateralPrice}
             liquidationPrice={coin.liquidationPrice}
             subLiquidationPrice={coin.subLiquidationPrice}
+            isComingSoon={coin.comingSoon}
           />
         );
       })}

@@ -12,12 +12,13 @@ const CoinCard = ({
   collateralPrice,
   subCollateralPrice,
   liquidationPrice,
-  subLiquidationPrice
+  subLiquidationPrice,
+  isComingSoon
 }) => {
 
   return (
     <div
-    style={coinShortName === "USD" ? {pointerEvents: "none"} : {}}
+    style={(coinShortName === "USDC" || coinShortName === "ETH") ? {} : {pointerEvents: "none"}}
       onClick={() =>
         handleSelect({
           coinIcon,
@@ -51,7 +52,7 @@ const CoinCard = ({
       </div>
       <div className="space-y-1">
         <p className="text-xl font-medium text-blackPrimary mt-8">
-          {coinShortName}
+          {isComingSoon ? "Coming soon" : coinShortName}
         </p>
         <p className="text-sm text-blackSecondary">{coinName}</p>
       </div>

@@ -1,3 +1,4 @@
+import { IS_DEMO_MODE } from "../../constants/env";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 
 const Protocol = ({
@@ -19,6 +20,7 @@ const Protocol = ({
           <div className="flex items-center justify-start gap-1">
             <img src={symbol || ""} alt={name || ""} width={20} height={20} />
             <h1 className="font-medium text-xl text-blackPrimary">{name}</h1>
+            <p className="font-medium text-xs bg-[#EEE] text-[#545454] rounded-md py-[2px] px-2">Coming Soon</p>
           </div>
 
           <div className="flex items-center justify-end gap-2 md:gap-8 ">
@@ -49,6 +51,7 @@ const Protocol = ({
                   ? "text-[#eee] bg-[#2C3B8D] "
                   : "bg-[#eee] text-[#2C3B8D]"
               }`}
+              disabled={IS_DEMO_MODE}
             >
               Select
             </button>

@@ -109,6 +109,7 @@ const LoneProvider = ({ children }) => {
           subCollateralPrice: 16548.6,
           liquidationPrice: 1902.48,
           subLiquidationPrice: 2264.82,
+          comingSoon: false,
         },
 
         {
@@ -124,6 +125,7 @@ const LoneProvider = ({ children }) => {
           subCollateralPrice: 13823.6,
           liquidationPrice: 1712.48,
           subLiquidationPrice: 1864.82,
+          comingSoon: true,
         },
 
         {
@@ -139,6 +141,7 @@ const LoneProvider = ({ children }) => {
           subCollateralPrice: 30823.6,
           liquidationPrice: 1212.48,
           subLiquidationPrice: 1264.82,
+          comingSoon: true,
         },
         {
           id: "assets-4",
@@ -153,6 +156,7 @@ const LoneProvider = ({ children }) => {
           subCollateralPrice: 62823.6,
           liquidationPrice: 1542.48,
           subLiquidationPrice: 3864.82,
+          comingSoon: true,
         },
       ],
     },
