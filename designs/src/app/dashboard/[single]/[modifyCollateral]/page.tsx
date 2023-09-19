@@ -8,12 +8,7 @@ import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet"
 import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface InnerInfo {
   description: string;
@@ -36,42 +31,26 @@ const terms: Term[] = [
   {
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        By finalizing your loan request, you will receive a Rocko wallet that
-        will help facilitate and manage your loan. Rocko will have no access or
-        control over funds inside your wallet
-      </li>
-    ),
-  },
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        You will be asked to authorize a transaction for the loan amount
-        required (shown above). If your Rocko wallet does not receive the loan
-        amount required, your loan may not be fulfilled.
-      </li>
-    ),
-  },
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        Rocko’s service fee will be taken out of the initial amount transferred
-        to your Rocko wallet. More info on Rocko’s service fee can be found{" "}
-        <a href="" className="underline">
-          here
-        </a>
-        .
+        You will need to authorize the transfer to your Rocko wallet for the
+        collateral amount above. If your Rocko wallet does not receive the
+        collateral amount, no additional collateral will be posted for your
+        loan.
       </li>
     ),
   },
 ];
 
 const ModifyCollateral: React.FC = () => {
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [openModalFor, setOpenModalFor] = useState("");
-  const [modalStep, setModalStep] = useState(0);
-  const [connect, setConnect] = useState<boolean>(true);
-  const router = useSearchParams();
-  const amount = router.get("try");
+  const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
+
+  const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
+
+  const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
+
+  const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
+
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const amount = router.get("try"); //! get the URL parameter value
 
   const invoice: Info[] = [
     {
@@ -170,7 +149,9 @@ const ModifyCollateral: React.FC = () => {
               ? "Choose your funding source"
               : "Where do you want to receive your collateral?"}
           </h3>
+          {/* radio btn - 1 Container*/}
           <div className="md:flex justify-between mb-7">
+            {/* radio btn - 1 */}
             <div className="flex md:items-center">
               <input
                 type="radio"
@@ -193,6 +174,7 @@ const ModifyCollateral: React.FC = () => {
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
+              {/* based on the connect value toggling the buttons */}
               {connect ? (
                 <button
                   onClick={() => setOpenModalFor("Coinbase or Gemini")}
@@ -213,14 +195,19 @@ const ModifyCollateral: React.FC = () => {
               )}
             </div>
           </div>
+          {/* radio btn - 2 Container*/}
           <div className="md:flex justify-between mb-7">
+            {/* radio btn - 2*/}
             <div className="flex items-center">
               <input
                 type="radio"
                 id="wallet2"
                 name="contact"
                 value="ethereum"
-                onChange={(e) => setPaymentMethod(e.target.value)}
+                onChange={(e) => {
+                  setPaymentMethod(e.target.value);
+                  setConnect(true);
+                }}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
@@ -240,6 +227,7 @@ const ModifyCollateral: React.FC = () => {
               </button>
             </div>
           </div>
+          {/* radio btn - 3*/}
           <div className="flex items-start mb-7">
             <input
               type="radio"
@@ -247,7 +235,10 @@ const ModifyCollateral: React.FC = () => {
               name="contact"
               value="other"
               className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => {
+                setPaymentMethod(e.target.value);
+                setConnect(true);
+              }}
             />
             <div className="pl-4">
               <label htmlFor="wallet3" className="">
@@ -256,7 +247,7 @@ const ModifyCollateral: React.FC = () => {
                 </p>
               </label>
 
-              {/* if select other address then it will be active  start*/}
+              {/* if select other address then it will be active -- start*/}
               {paymentMethod === "other" && (
                 <>
                   <div className="">
@@ -285,39 +276,33 @@ const ModifyCollateral: React.FC = () => {
                   </div>
                 </>
               )}
-              {/* if select other address then it will be active  end*/}
+              {/* if select other address then it will be active -- end*/}
             </div>
           </div>
-
-          <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
-            <ul className="list-disc">
-              {terms.map((term, i) => (
-                <React.Fragment key={i}>{term.rule}</React.Fragment>
-              ))}
-            </ul>
-          </div>
+          {amount === "add" && (
+            <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
+              <ul className="list-disc">
+                {terms.map((term, i) => (
+                  <React.Fragment key={i}>{term.rule}</React.Fragment>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
+      {/* ---------------------footer start------------------- */}
       <div className="h-20 w-full"></div>
       <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
         <div className="bg-[#F7F7F7] h-1 w-full relative">
           <div
-            /*  style={{
-              width: `${(100 / loanSteps.length) * (currentStep + 1)}%`,
-            }} */
-            className={`duration-500 bg-blue h-full absolute left-0 top-0 w-full`}
+            className={`duration-500 bg-blue h-full absolute left-0 top-0 w-8/12`}
           ></div>
         </div>
         <div className="container mx-auto">
-          <div className="p-4 flex items-center justify-between  ">
-            <p className="text-blackPrimary text-xs md:text-sm font-medium">
-              {/* //todo remove it later */}
-              {/* {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
-              
-            {loanData?.activeNextButton?.valueOf()} */}
-            </p>
+          <div className="p-4">
             <div className="flex items-center justify-end gap-3">
+              {/* //!after clicking back btn it'll redirect to previous page */}
               <Link href={`/dashboard/invoice`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
@@ -326,6 +311,7 @@ const ModifyCollateral: React.FC = () => {
                   Back
                 </button>
               </Link>
+              {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
                 href={`/dashboard/${"invoice"}/${"modify_collateral"}/${amount}`}
               >
@@ -342,7 +328,8 @@ const ModifyCollateral: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
+      {/* //!---------------------footer end------------------- */}
+      {/* //! If user select the first radio button and click "Sign in"  btn then chosseWallet popup/modal will show and passing modalStep,openModalFor&connet value to chooseWallet popup/modal [for mor details about the props look up where they're initialize] */}
       {paymentMethod === "default" && openModalFor && (
         <>
           <ModalContainer>
@@ -360,7 +347,6 @@ const ModifyCollateral: React.FC = () => {
           </ModalContainer>
         </>
       )}
-      {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}
     </main>
   );
 };

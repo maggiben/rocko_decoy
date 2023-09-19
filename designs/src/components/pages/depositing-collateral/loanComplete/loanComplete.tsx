@@ -7,12 +7,10 @@ const LoanComplete = ({
   title,
   details,
   id,
-  setHide = (value: boolean) => {},
 }: {
   title: string;
   details: string;
   id: number;
-  setHide?: (value: boolean) => void;
 }) => {
   return (
     <ModalContent>
@@ -33,18 +31,19 @@ const LoanComplete = ({
       {/* continue button */}
       <div className="my-6">
         {id === 1 ? (
-          <Link href={"/dashboard"}>
-            <button className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
-              okay
-            </button>
-          </Link>
-        ) : (
-          <button
-            onClick={() => setHide(true)}
+          <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
+            href={"/dashboard"}
           >
             okay
-          </button>
+          </Link>
+        ) : (
+          <Link
+            className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
+            href={"/dashboard/invoice"}
+          >
+            okay
+          </Link>
         )}
       </div>
     </ModalContent>

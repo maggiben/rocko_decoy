@@ -11,17 +11,19 @@ interface DoneTracker {
 }
 
 const ModifyStatus = () => {
-  const { status } = useParams();
-  const [counter, setCounter] = useState(status === "add" ? 5 : 15);
-  const [progress, setProgress] = useState(0);
-  const [progressTracker, setProgressTracker] = useState(0);
-  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
-  const [activeDone, setActiveDone] = useState(false);
-  const [completeModal, setCompleteModal] = useState(false);
-  const [hide, setHide] = useState<boolean>(false);
-  // Use useMemo to memoize the 'status' value
-  /* const memoizedStatus = useMemo(() => status, []);
-  console.log(memoizedStatus); */
+  const { status } = useParams(); //! by using this hook get the URL parameter
+
+  const [counter, setCounter] = useState(status === "add" ? 5 : 15); //! countdown
+
+  const [progress, setProgress] = useState(0); //! showing the loader progress
+
+  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
+
+  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
+
+  const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
+
+  const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -158,21 +160,19 @@ const ModifyStatus = () => {
           </div>
         </div>
       </section>
-      {completeModal && !hide ? (
+      {completeModal ? (
         <ModalContainer>
           {status === "add" ? (
             <LoanComplete
               title={"Collateral Deposit Complete"}
               details={"You have successfully increased your loan collateral"}
               id={2}
-              setHide={setHide}
             />
           ) : (
             <LoanComplete
               title={"Collateral Withdrawal Complete"}
               details={"You have successfully withdrawn collateral"}
               id={3}
-              setHide={setHide}
             />
           )}
         </ModalContainer>
@@ -190,27 +190,11 @@ const ModifyStatus = () => {
           ></div>
         </div>
         <div className="container mx-auto">
-          <div className="p-4 flex items-center justify-between  ">
-            <p className="text-blackPrimary text-xs md:text-sm font-medium">
-              {/* //todo remove it later */}
-              {/* {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
-              
-            {loanData?.activeNextButton?.valueOf()} */}
-            </p>
+          <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               <button
-              /*   onClick={prevStep}
-                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
-                  currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
-                }`}
-                disabled={currentStep === 0} */
-              >
-                {/* Back */}
-              </button>
-              <button
                 onClick={() => {
-                  setCompleteModal(true);
-                  setHide(false);
+                  setCompleteModal(true); //! after clicking done btn completeModal popup shows
                 }}
                 className={`font-semibold  text-xs md:text-sm ${
                   activeDone ? "bg-blue" : "bg-blue/40"

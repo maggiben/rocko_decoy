@@ -14,31 +14,33 @@ const ModifyWallet = ({
   setOpenModalFor: Function;
   setModalStep: Function;
 }) => {
-  const [activeInputField, setActiveInputField] = useState(false);
-  const [inputNumber, setInputNumber] = useState("");
-  const [changeInputType, setChangeInputType] = useState<string>("number");
-  const [amount, setAmount] = useState<string>("");
+  const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
+
+  const [inputNumber, setInputNumber] = useState<number | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
+
+  const [changeInputType, setChangeInputType] = useState<string>("number"); //! to show value with commas & without commas n inputfiled on onBlur handler
+
+  const [amount, setAmount] = useState<string>(""); //! amount could be "add" or "widthraw" based on user's intention & amount value is passed through URL query for the reaction of next page based on user's intention
+
   const {
     register,
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
     getValues,
   } = useForm<FormData>();
+
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const inputValue = event.target.value;
+    const inputValue = parseFloat(event.target.value);
 
-    if (/^-?\d*\.?\d*$/.test(inputValue)) {
-      setInputNumber(inputValue);
-      setValue("numberInput", inputValue, { shouldValidate: true });
-    }
+    setInputNumber(inputValue);
   };
   return (
     <ModalContent>
-      {/* instruction */}
       <div className="flex items-start justify-between gap-2 ">
         <h4 className="text-2xl font-semibold font-inter">Modify Collateral</h4>
+        {/* close button start */}
         <div>
           <button
             onClick={() => setOpenModalFor("")}
@@ -53,6 +55,7 @@ const ModifyWallet = ({
             />
           </button>
         </div>
+        {/* close button end */}
       </div>
       {/* select option */}
       <div className="space-y-3">
@@ -91,6 +94,7 @@ const ModifyWallet = ({
           </label>
         </div>
       </div>
+      {/* input field with react form hook */}
       <div>
         <p className="text-sm mb-2 font-bold"> Enter Collateral Amount</p>
         <input
@@ -101,22 +105,19 @@ const ModifyWallet = ({
               if (isNaN(num)) {
                 return "Invalid number";
               }
-              if (num < 1000) {
-                return "Number must be at least 1000";
-              }
               return true;
             },
           })}
-          type={changeInputType}
+          type="number" /* switch between "text" & "number" */
           id="numberField"
           min={1}
           onKeyDown={(event) => {
             const keyPressed = event.key;
-            const isDecimalDigit = /^\d+$/.test(keyPressed);
+            // const isDecimalDigit = /^\d+$/.test(keyPressed);
             const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
 
             if (
-              (!isDecimalDigit && !(event.key === "Backspace")) ||
+              /* not allowing any character without number */
               isAllowedHexChar
             ) {
               event.preventDefault();
@@ -127,23 +128,11 @@ const ModifyWallet = ({
           }}
           className="w-full p-4 focus:outline-none border-2 border-gray-200 rounded-lg bg-white number-input"
           placeholder="10,000"
-          disabled={!activeInputField}
+          disabled={!activeInputField} /* active on selecting radio button */
           value={inputNumber}
-          onFocus={() => {
-            const valueWithoutCommas = inputNumber.replace(/,/g, "");
-            setInputNumber(valueWithoutCommas);
-            setChangeInputType("number");
-          }}
           onBlur={(event) => {
-            if (event.target.value.length < 1) {
-              return event.preventDefault();
-            }
-            setChangeInputType("text");
-            setInputNumber(
-              new Intl.NumberFormat("en-US").format(
-                parseFloat(getValues("numberInput"))
-              )
-            );
+            /* on onBlur set the number */
+            setInputNumber(parseFloat(event.target.value || "0"));
           }}
           onChange={handleBorrowValueChange}
         />
@@ -152,11 +141,14 @@ const ModifyWallet = ({
             activeInputField ? "text-black" : "text-gray-400"
           }`}
         >
+          {" "}
+          {/* active text on selecting radion button */}
           ETH
         </p>
         <p className="text-gray-500 text-sm mt-5">
-          {inputNumber.length > 0 && "~$209.45"}
-        </p>
+          {inputNumber ? "~$209.45" : ""}
+        </p>{" "}
+        {/* after putting a value on inputfield the number will show */}
       </div>
       <div className="p-6 bg-gray-100 rounded-2xl">
         <p className="font-semibold mb-6">
@@ -164,14 +156,11 @@ const ModifyWallet = ({
         </p>
         <div className="grid grid-cols-2 space-y-2">
           <p className="text-sm text-gray-600">Total Collateral</p>
+          {/* after putting a value on inputfield the number(based on user's intention like "add" or "withdraw") will show */}
           <p className="font-semibold text-right">
-            {inputNumber.length > 0
-              ? amount === "add"
-                ? "1.96 ETH"
-                : "1.72 ETH"
-              : "--"}
+            {inputNumber ? (amount === "add" ? "1.96 ETH" : "1.72 ETH") : "--"}
             <span className="block text-gray-600 text-sm font-normal">
-              {inputNumber.length > 0
+              {inputNumber
                 ? amount === "add"
                   ? "~$2,918.82"
                   : "~$2,425.64"
@@ -180,15 +169,11 @@ const ModifyWallet = ({
           </p>
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
-            {inputNumber.length > 0
-              ? amount === "add"
-                ? "107%"
-                : "96%"
-              : "--"}
+            {inputNumber ? (amount === "add" ? "107%" : "96%") : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
           <p className="font-semibold text-right">
-            {inputNumber.length > 0
+            {inputNumber
               ? amount === "add"
                 ? "$1,221.74"
                 : "$1,412.94"
@@ -200,13 +185,15 @@ const ModifyWallet = ({
       <Link
         href={`/dashboard/${"invoice"}/${"modify_collateral"}?try=${amount}`}
       >
+        {" "}
+        {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button
           className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
-            inputNumber.length > 0
+            inputNumber
               ? "bg-[#2C3B8D] text-white"
               : "text-gray-100 bg-[#ABB1D1]"
           }`}
-          disabled={inputNumber.length > 0 ? false : true}
+          disabled={inputNumber ? false : true}
         >
           Continue
         </button>

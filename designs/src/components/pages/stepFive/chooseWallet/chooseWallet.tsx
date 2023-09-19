@@ -9,11 +9,11 @@ const ChooseWallet = ({
   setModalStep,
   setConnect,
 }: {
-  setOpenModalFor: Function;
-  setModalStep: Function;
-  setConnect?: (value: boolean) => void;
+  setOpenModalFor: Function; //! if openModalFor's value is empty string then popup modal is closed if it's not empty string
+  setModalStep: Function; //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
+  setConnect?: (value: boolean) => void; //! setConnect is only passed from modify-collateral page that's why it's optional
 }) => {
-  const [activeBtn, setActiveBtn] = useState<boolean>(false);
+  const [activeBtn, setActiveBtn] = useState<boolean>(false); //! on clicking any radio button the value will be true and continue btn will be activated
   const handleContinueBtn = () => {
     if (setConnect) {
       setConnect(false);
@@ -83,13 +83,13 @@ const ChooseWallet = ({
       </div>
 
       {/* continue button */}
-      <div className="">
+      <div>
         <button
           onClick={handleContinueBtn}
           className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
             activeBtn ? "bg-[#2C3B8D] text-white" : "text-gray-100 bg-[#ABB1D1]"
           }`}
-          disabled={!activeBtn}
+          disabled={!activeBtn} //! on clicking any radio button the value will be false and continue btn will be activated
         >
           Continue
         </button>
