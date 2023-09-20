@@ -2,14 +2,14 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { ethers } from 'ethers'
 import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
+import { USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
 import { NETWORK } from "../constants/env";
-const LOANABI = require('../constants/loan.json')
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
 const USDCABI = require('../constants/usdc.json')
 const REWARDABI = require('../constants/reward.json')
+const ASSET_ID = 2
 
 export const useLoan = () => {
   const address = useAddress()
@@ -17,9 +17,14 @@ export const useLoan = () => {
 
   const getETHPrice = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
+    const _chainlinkEthPriceFeed = "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"; // Chainlink Goerli ETH/USD price feed
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
-    const price = await contract.call( "getETHPrice" )
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const price = await contract.call( 
+      "getPrice",
+      [
+        _chainlinkEthPriceFeed
+      ] )
 
     const formattedValue = ethers.utils.formatEther( price ) * 10 ** 10
     return formattedValue
@@ -28,18 +33,27 @@ export const useLoan = () => {
   const getBorrowAPR = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
-    const APR = await contract.call( "getAPR" )
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const utilization = await contract.call( "getUtilization" )
+    const borrowRate = await contract.call( "getBorrowRate",
+    [
+      utilization
+    ] )
 
-    const formattedValue = ethers.utils.formatEther( APR )
-    return formattedValue
+    const formattedRate = ethers.utils.formatEther( borrowRate )
+    const borrowAPR = formattedRate * 60 * 60 * 24 * 365 * 100
+    return borrowAPR
   }
 
   const getLTV = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
-    const LTV = await contract.call( "getLoanToValue" )
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const assetInfo = await contract.call( "getAssetInfo",
+    [
+      ASSET_ID
+    ] )
+    const LTV = assetInfo.liquidationFactor
 
     const formattedValue = ethers.utils.formatEther( LTV )
     return formattedValue
@@ -48,8 +62,12 @@ export const useLoan = () => {
   const getThreshold = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
-    const threshold = await contract.call( "getLiquidationThreshold" )
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const assetInfo = await contract.call( "getAssetInfo",
+    [
+      ASSET_ID
+    ] )
+    const threshold = assetInfo.liquidateCollateralFactor
 
     const formattedValue = ethers.utils.formatEther( threshold )
     return formattedValue
@@ -58,8 +76,12 @@ export const useLoan = () => {
   const getPenalty = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
-    const penalty = await contract.call( "getLiquidationPenalty" )
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const assetInfo = await contract.call( "getAssetInfo",
+    [
+      ASSET_ID
+    ] )
+    const penalty = assetInfo.liquidationFactor
 
     const formattedValue = 1 - ethers.utils.formatEther( penalty )
     return formattedValue
@@ -68,11 +90,12 @@ export const useLoan = () => {
   const getCollateralBalanceOf = async () => {
     const sdk = new ThirdwebSDK(NETWORK);
   
-    const contract = await sdk.getContract(LoanContract[networkChainId], LOANABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "collateralBalanceOf",
       [
-        address
+        address,
+        WETHContract[networkChainId]
       ] )
 
     const formattedValue = ethers.utils.formatEther( value )

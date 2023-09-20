@@ -175,9 +175,11 @@ const Dashboard = () => {
             </div>
           ))}
           <div className="text-center md:text-left pb-2 md:pb-0">
-            <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
-              Create New Loan
-            </button>
+            <Link to="/">
+              <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
+                Create New Loan
+              </button>
+            </Link>
           </div>
         </div>
       </div>

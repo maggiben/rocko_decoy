@@ -78,7 +78,7 @@ const Header = () => {
                 ></div>
               </div>
             </button>
-            <Link href="/">
+            <Link to="/dashboard">
               <img className="w-[56px] lg:w-[97px] inline-block pb-2" src="./assets/logo.png" alt="logo" width={97} height={51.728} />
             </Link>
             <div className="flex items-center gap-12 justify-end">
