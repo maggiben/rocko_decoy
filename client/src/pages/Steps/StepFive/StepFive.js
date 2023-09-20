@@ -50,6 +50,7 @@ const StepFive = () => {
     {
       description: "Lending Protocol",
       details: <span className="underline">Compound Finance</span>,
+      symbol: "/icons/Compound (COMP).svg"
     },
     {
       description: "Loan Amount",
@@ -179,7 +180,12 @@ const StepFive = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p>{info?.details}</p>
+                    <div className="flex gap-1 justify-end md:justify-start">
+                      {info?.symbol && (
+                        <img src={info?.symbol || ""} alt={info?.details || ""} width={20} height={20} />
+                      )}
+                      <p>{info?.details}</p>
+                    </div>
                     {info?.subDetails && (
                       <p className="text-sm text-gray-500">
                         {info?.subDetails}
