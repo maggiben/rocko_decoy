@@ -16,6 +16,7 @@ const StepOne = ({ title, currency }) => {
     register,
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
+    getValues
     // TODO figure out why onBlur isnt working
   } = useForm({mode: "onBlur"});
 
@@ -82,12 +83,14 @@ const StepOne = ({ title, currency }) => {
   };
 
   useEffect(() => {
+    const borrowingValue = getValues("numberInput");
+
     if (setLoanData) {
       setLoanData((prevLoanData) => {
         return {
           ...prevLoanData,
           activeNextButton: true,
-          nextValidation: errors.numberInput ? errors.numberInput.message : "",
+          nextValidation: borrowingValue ? (errors.numberInput ? errors.numberInput.message : "") : "defaultError",
         };
       });
     }
