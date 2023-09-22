@@ -1,16 +1,15 @@
-import { useState, useCallback } from 'react';
+/* global BigInt */
+import { useCallback } from 'react';
 import {
     useAccount,
-    useContractRead,
     useNetwork,
+    useWaitForTransaction
 } from "wagmi";
 import { ethers } from 'ethers'
-import { LoanContract, USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
+import { USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
-import { usePrepareContractBatchWrite, useContractBatchWrite, useWaitForAATransaction } from "@zerodevapp/wagmi";
-import { parse } from 'url';
+import { usePrepareContractBatchWrite, useContractBatchWrite } from "@zerodev/wagmi";
 
-const LOANABI = require('../constants/loan.json')
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
 const USDCABI = require('../constants/usdc.json')
@@ -18,12 +17,9 @@ const REWARDABI = require('../constants/reward.json')
 const uintMax =
 '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
-export const useGetLoan = () => {
+export const useGetLoan = (collateral, loan) => {
     const { address, isConnected } = useAccount();
     const { chain, chains } = useNetwork();
-
-    const [collateral, setCollateral] = useState(0);
-    const [loan, setLoan] = useState(0);
 
     const { config } = usePrepareContractBatchWrite({
         calls: [
@@ -32,7 +28,7 @@ export const useGetLoan = () => {
                 abi: WETHABI,
                 functionName: "deposit",
                 args: [],
-                value: ethers.utils.parseEther(collateral)
+                value: BigInt(ethers.utils.parseEther(collateral.toString()))
             },
             {
                 address: WETHContract[networkChainId],
@@ -63,31 +59,25 @@ export const useGetLoan = () => {
         },
     )
 
-    const { write: batchGetLoan, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchGetLoan, data } = useContractBatchWrite(config);
 
-    useWaitForAATransaction({
-        wait: data?.wait,
+    useWaitForTransaction({
+        hash: data?.hash,
+        enabled: !!data,
         onSuccess() {
         console.log("Transaction was successful.")
         }
     });
-  
-    const executeBatchGetLoan = useCallback(
-        (newCollateral, newLoan) => {
-          setCollateral(newCollateral);
-          setLoan(newLoan);
-          batchGetLoan();
+
+    const executeBatchGetLoan = useCallback(() => {
+        batchGetLoan();
     }, [batchGetLoan]);
     
     return { executeBatchGetLoan };
 }
 
-export const useRepay = () => {
+export const useRepay = (collateral, loan) => {
     const { address, isConnected } = useAccount();
-    const { chain, chains } = useNetwork();
-
-    const [loan, setLoan] = useState(0);
-    const [collateral, setCollateral] = useState(0);
 
     const { config } = usePrepareContractBatchWrite({
         calls: [
@@ -133,30 +123,25 @@ export const useRepay = () => {
         },
     )
 
-    const { write: batchRepay, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchRepay, data } = useContractBatchWrite(config);
 
-    useWaitForAATransaction({
-        wait: data?.wait,
+    useWaitForTransaction({
+        hash: data?.hash,
+        enabled: !!data,
         onSuccess() {
         console.log("Transaction was successful.")
         }
     });
   
-    const executeBatchRepay = useCallback(
-        (newCollateral, newLoan) => {
-          setCollateral(newCollateral);
-          setLoan(newLoan);
+    const executeBatchRepay = useCallback(() => {
           batchRepay();
     }, [batchRepay]);
     
     return { executeBatchRepay };
 }
 
-export const useAddCollateral = () => {
+export const useAddCollateral = (collateral, loan) => {
     const { address, isConnected } = useAccount();
-
-    const [loan, setLoan] = useState(0);
-    const [collateral, setCollateral] = useState(0);
 
     const { config } = usePrepareContractBatchWrite({
         calls: [
@@ -165,7 +150,7 @@ export const useAddCollateral = () => {
                 abi: WETHABI,
                 functionName: "deposit",
                 args: [],
-                value: ethers.utils.parseEther(collateral)
+                value: BigInt(ethers.utils.parseEther(collateral.toString()))
             },
             {
                 address: WETHContract[networkChainId],
@@ -187,28 +172,24 @@ export const useAddCollateral = () => {
         },
     )
 
-    const { write: batchAddCollateral, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchAddCollateral, data } = useContractBatchWrite(config);
 
-    useWaitForAATransaction({
-        wait: data?.wait,
+    useWaitForTransaction({
+        hash: data?.hash,
+        enabled: !!data,
         onSuccess() {
         console.log("Transaction was successful.")
         }
     });
   
-    const executeBatchAddCollateral = useCallback(
-        (newCollateral, newLoan) => {
-          setCollateral(newCollateral);
-          setLoan(newLoan);
+    const executeBatchAddCollateral = useCallback(() => {
           batchAddCollateral();
     }, [batchAddCollateral]);
     
     return { executeBatchAddCollateral };
 }
 
-export const useBorrowCollateral = () => {
-    const [collateral, setCollateral] = useState(0);
-
+export const useBorrowCollateral = (collateral) => {
     const { config } = usePrepareContractBatchWrite({
         calls: [
             {
@@ -233,18 +214,17 @@ export const useBorrowCollateral = () => {
         },
     )
 
-    const { write: batchBorrowCollateral, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchBorrowCollateral, data } = useContractBatchWrite(config);
 
-    useWaitForAATransaction({
-        wait: data?.wait,
+    useWaitForTransaction({
+        hash: data?.hash,
+        enabled: !!data,
         onSuccess() {
         console.log("Transaction was successful.")
         }
     });
   
-    const executeBatchBorrowCollateral = useCallback(
-        ( newCollateral ) => {
-          setCollateral(newCollateral);
+    const executeBatchBorrowCollateral = useCallback(() => {
           batchBorrowCollateral();
     }, [batchBorrowCollateral]);
     

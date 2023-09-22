@@ -2,28 +2,28 @@ import React from "react";
 import {
   WagmiConfig,
   configureChains,
-  createClient,
+  createConfig,
 } from "wagmi";
-import { publicProvider } from 'wagmi/providers/public'
+import { infuraProvider } from 'wagmi/providers/infura'
 import * as chains from 'wagmi/chains'
 import { NETWORK } from "./constants/env";
 
 const net = chains[NETWORK];
 console.log({chains, net, NETWORK})
-const { provider, webSocketProvider } = configureChains(
+export const { publicClient, webSocketPublicClient } = configureChains(
   [net],
-  [publicProvider()],
+  [infuraProvider({apiKey: 'f36f7f706a58477884ce6fe89165666c'})]
 )
 
-const client = createClient({
+const config = createConfig({
   autoConnect: true,
-  provider,
-  webSocketProvider,
+  publicClient,
+  webSocketPublicClient
 })
 
 function ZeroDevWrapper({children}) {
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig config={config}>
         {children}
     </WagmiConfig>
   )
