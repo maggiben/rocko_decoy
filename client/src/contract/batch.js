@@ -2,13 +2,13 @@
 import { useCallback } from 'react';
 import {
     useAccount,
-    useNetwork,
     useWaitForTransaction
 } from "wagmi";
 import { ethers } from 'ethers'
 import { USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
 import { usePrepareContractBatchWrite, useContractBatchWrite } from "@zerodev/wagmi";
+import { useAddress } from "@thirdweb-dev/react";
 
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
@@ -18,8 +18,8 @@ const uintMax =
 '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
 export const useGetLoan = (collateral, loan) => {
-    const { address, isConnected } = useAccount();
-    const { chain, chains } = useNetwork();
+    const { address : wagmiAddress } = useAccount();
+    const address = useAddress();
 
     const { config } = usePrepareContractBatchWrite({
         calls: [
@@ -48,8 +48,9 @@ export const useGetLoan = (collateral, loan) => {
             {
                 address: CometContract[networkChainId],
                 abi: COMETABI,
-                functionName: "withdraw",
+                functionName: "withdrawTo",
                 args: [
+                    address ? address : wagmiAddress,
                     USDCContract[networkChainId],
                     parseBalance(loan.toString(), 6)
                 ]
