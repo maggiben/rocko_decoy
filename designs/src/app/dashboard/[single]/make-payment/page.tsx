@@ -9,17 +9,18 @@ import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinaliz
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import HoverTooltip from "@/components/shared/tooltip/tooltip";
 
 interface InnerInfo {
-  description: string;
+  description: string | JSX.Element;
   details: string;
-  subDetails?: string;
+  subDetails?: string | JSX.Element;
 }
 
 interface Info {
   description: string;
   details?: string | number | JSX.Element;
-  subDetails?: string;
+  subDetails?: string | JSX.Element;
   subDescription?: InnerInfo[];
 }
 
@@ -32,9 +33,38 @@ const terms: Term[] = [
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
         You will need to authorize the transfer to your Rocko wallet for the
-        collateral amount above. If your Rocko wallet does not receive the
-        collateral amount, no additional collateral will be posted for your
-        loan.
+        Payment Amount above. If your Rocko wallet does not receive the Payment
+        Amount, no payment will be made.
+      </li>
+    ),
+  },
+];
+
+const termsFull: Term[] = [
+  {
+    rule: (
+      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+        A 5.00 USDC Payment Buffer is added to your payment to ensure the loan
+        is fully repaid while accounting for interest that accrues each second.
+        Any excess amount will be returned to you along with your collateral.
+      </li>
+    ),
+  },
+  {
+    rule: (
+      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+        Any rewards you may have earned will be automatically claimed and
+        delivered to your wallet/account along with your collateral upon full
+        repayment of the loan.
+      </li>
+    ),
+  },
+  {
+    rule: (
+      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+        You will need to authorize the transfer to your Rocko wallet for the
+        Payment Amount above. If your Rocko wallet does not receive the Payment
+        Amount, no payment will be made.
       </li>
     ),
   },
@@ -60,6 +90,33 @@ const MakePayment: FC = () => {
     },
     {
       description: "Payment Amount",
+      subDescription: [
+        {
+          description:
+            payment === currentBalance ? (
+              <>
+                <p className="">Outstanding balance</p>
+              </>
+            ) : (
+              ""
+            ),
+          details: payment === currentBalance ? `${payment} USDC` : "",
+          subDetails: payment === currentBalance ? `~$${payment}` : "",
+        },
+        {
+          description:
+            payment === currentBalance ? (
+              <div className="flex items-center gap-2">
+                <p className="">Payment Buffer</p>
+                <HoverTooltip text="Payment Butter" />
+              </div>
+            ) : (
+              ""
+            ),
+          details: payment === currentBalance ? `5.00 USDC` : "",
+          subDetails: payment === currentBalance ? `~$5.00` : "",
+        },
+      ],
       details: `${payment} USDC`,
       subDetails: `~$${payment}`,
     },
@@ -68,8 +125,8 @@ const MakePayment: FC = () => {
       subDescription: [
         {
           description: "Outstanding balance",
-          details: `${currentBalance-payment} USDC`,
-          subDetails: `~$${currentBalance-payment}`,
+          details: `${currentBalance - payment} USDC`,
+          subDetails: `~$${currentBalance - payment}`,
         },
         {
           description: "Collateral Buffer",
@@ -117,7 +174,7 @@ const MakePayment: FC = () => {
                     info?.subDescription.map((innerInfo, i) => (
                       <React.Fragment key={i}>
                         <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
-                          {innerInfo?.description}
+                          {innerInfo?.description} {/* //! come here  */}
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
                           <p>
@@ -276,15 +333,18 @@ const MakePayment: FC = () => {
               {/* if select other address then it will be active -- end*/}
             </div>
           </div>
-          {amount === "add" && (
-            <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
-              <ul className="list-disc">
-                {terms.map((term, i) => (
-                  <React.Fragment key={i}>{term.rule}</React.Fragment>
-                ))}
-              </ul>
-            </div>
-          )}
+
+          <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
+            <ul className="list-disc">
+              {payment === currentBalance
+                ? termsFull.map((term, i) => (
+                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                  ))
+                : terms.map((term, i) => (
+                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                  ))}
+            </ul>
+          </div>
         </div>
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
