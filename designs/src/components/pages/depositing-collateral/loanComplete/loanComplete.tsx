@@ -35,14 +35,14 @@ const LoanComplete = ({
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
             href={"/dashboard"}
           >
-            okay
+            Okay
           </Link>
         ) : (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
             href={"/dashboard/invoice"}
           >
-            okay
+            Okay
           </Link>
         )}
       </div>

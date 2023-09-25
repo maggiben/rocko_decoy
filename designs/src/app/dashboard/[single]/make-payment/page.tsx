@@ -13,7 +13,7 @@ import HoverTooltip from "@/components/shared/tooltip/tooltip";
 
 interface InnerInfo {
   description: string | JSX.Element;
-  details: string;
+  details: string| JSX.Element;
   subDetails?: string | JSX.Element;
 }
 
@@ -31,7 +31,7 @@ interface Term {
 const terms: Term[] = [
   {
     rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+      <li className="mb-1 ml-3 text-slate-600 text-sm">
         You will need to authorize the transfer to your Rocko wallet for the
         Payment Amount above. If your Rocko wallet does not receive the Payment
         Amount, no payment will be made.
@@ -43,7 +43,7 @@ const terms: Term[] = [
 const termsFull: Term[] = [
   {
     rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+      <li className="mb-1 ml-3 text-slate-600 text-sm">
         A 5.00 USDC Payment Buffer is added to your payment to ensure the loan
         is fully repaid while accounting for interest that accrues each second.
         Any excess amount will be returned to you along with your collateral.
@@ -52,7 +52,7 @@ const termsFull: Term[] = [
   },
   {
     rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+      <li className="mb-1 ml-3 text-slate-600 text-sm">
         Any rewards you may have earned will be automatically claimed and
         delivered to your wallet/account along with your collateral upon full
         repayment of the loan.
@@ -61,7 +61,7 @@ const termsFull: Term[] = [
   },
   {
     rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+      <li className="mb-1 ml-3 text-slate-600 text-sm">
         You will need to authorize the transfer to your Rocko wallet for the
         Payment Amount above. If your Rocko wallet does not receive the Payment
         Amount, no payment will be made.
@@ -95,7 +95,7 @@ const MakePayment: FC = () => {
           description:
             payment === currentBalance ? (
               <>
-                <p className="">Outstanding balance</p>
+                <p className="text-sm">Outstanding balance</p>
               </>
             ) : (
               ""
@@ -107,7 +107,7 @@ const MakePayment: FC = () => {
           description:
             payment === currentBalance ? (
               <div className="flex items-center gap-2">
-                <p className="">Payment Buffer</p>
+                <p className="text-sm">Payment Buffer</p>
                 <HoverTooltip text="Payment Butter" />
               </div>
             ) : (
@@ -117,7 +117,7 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$5.00` : "",
         },
       ],
-      details: `${payment} USDC`,
+      details: <span className="font-semibold">{payment} USDC</span>,
       subDetails: `~$${payment}`,
     },
     {
@@ -125,16 +125,16 @@ const MakePayment: FC = () => {
       subDescription: [
         {
           description: "Outstanding balance",
-          details: `${currentBalance - payment} USDC`,
+          details: <span className="font-semibold text-sm">{currentBalance - payment} USDC</span>,
           subDetails: `~$${currentBalance - payment}`,
         },
         {
           description: "Collateral Buffer",
-          details: `107%`,
+          details: <span className="font-semibold text-sm">107%</span>,
         },
         {
           description: "Liquidation Price (ETH)",
-          details: `$1,221.74`,
+          details: <span className="font-semibold text-sm">$1,221.74</span>,
         },
       ],
     },
@@ -161,11 +161,11 @@ const MakePayment: FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p>
-                      <strong>{info?.details}</strong>
+                    <p className="text-base text-[#141414]">
+                      {info?.details}
                     </p>
                     {info?.subDetails && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[#545454]">
                         {info?.subDetails}
                       </p>
                     )}
@@ -173,15 +173,15 @@ const MakePayment: FC = () => {
                   {info?.subDescription &&
                     info?.subDescription.map((innerInfo, i) => (
                       <React.Fragment key={i}>
-                        <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
+                        <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6 text-sm">
                           {innerInfo?.description} {/* //! come here  */}
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
-                          <p>
-                            <strong>{innerInfo?.details}</strong>
+                          <p className="font-semibold text-xs text-[#141414]">
+                            {innerInfo?.details}
                           </p>
                           {innerInfo?.subDetails && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-xs text-gray-500">
                               {innerInfo?.subDetails}
                             </p>
                           )}
@@ -338,10 +338,13 @@ const MakePayment: FC = () => {
             <ul className="list-disc">
               {payment === currentBalance
                 ? termsFull.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                    <React.Fragment key={i}>
+                      {term.rule}
+                    </React.Fragment>
                   ))
                 : terms.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                    <React.Fragment key={i}>{term.rule}
+                    </React.Fragment>
                   ))}
             </ul>
           </div>

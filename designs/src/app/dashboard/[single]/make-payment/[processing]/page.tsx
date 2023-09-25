@@ -61,7 +61,10 @@ const Processing = () => {
       progressTracker === 1 &&
         progress === 100 &&
         setDoneTracker([...doneTracker, { step: "two" }]);
-        payment < currentBalance && progressTracker === 1 && progress === 100 && setActiveDone(true);
+      payment < currentBalance &&
+        progressTracker === 1 &&
+        progress === 100 &&
+        setActiveDone(true);
     }
     {
       progressTracker === 2 &&
@@ -85,15 +88,26 @@ const Processing = () => {
             {`${activeDone ? "Complete!" : `${counter} minutes`}`}{" "}
           </h1>
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
+            <div
               className={`${
                 progressTracker === 0 || doneTracker[0]?.step === "one"
                   ? "text-black"
                   : "text-gray-400"
-              }`}
+              } text-sm font-medium flex items-center gap-2`}
             >
-             Payment Received
-            </p>
+              {payment !== currentBalance && (
+                <div
+                  className={`w-5 h-5 rounded-full border ${
+                    progressTracker === 0 || doneTracker[0]?.step === "one"
+                      ? "border-black"
+                      : "border-gray-400"
+                  } flex items-center justify-center text-xs`}
+                >
+                  1
+                </div>
+              )}
+              <p className="">Payment Received</p>
+            </div>
             {doneTracker[0]?.step === "one" && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -124,15 +138,26 @@ const Processing = () => {
             )}
           </div>
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
+            <div
               className={`${
                 progressTracker === 1 || doneTracker[1]?.step === "two"
                   ? "text-black"
                   : "text-gray-400"
-              }`}
+              } text-sm font-medium flex items-center gap-2`}
             >
-            Payment Made to Lending Protocol
-            </p>
+              {payment !== currentBalance && (
+                <div
+                  className={`w-5 h-5 rounded-full border ${
+                    progressTracker === 1 || doneTracker[1]?.step === "two"
+                      ? "border-black"
+                      : "border-gray-400"
+                  } flex items-center justify-center text-xs`}
+                >
+                  2
+                </div>
+              )}
+              <p className="">Payment Made to Lending Protocol</p>
+            </div>
             {doneTracker[1]?.step === "two" && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -171,9 +196,9 @@ const Processing = () => {
                   progressTracker === 2 || doneTracker[2]?.step === "three"
                     ? "text-black"
                     : "text-gray-400"
-                }`}
+                }  text-sm font-medium`}
               >
-               Collateral withdrawn to your account
+                Collateral Withdrawn to Your Account
               </p>
               {doneTracker[2]?.step === "three" && (
                 <svg
@@ -213,7 +238,9 @@ const Processing = () => {
           {payment === currentBalance ? (
             <LoanComplete
               title={"Payment Complete"}
-              details={"You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "}
+              details={
+                "You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "
+              }
               id={2}
             />
           ) : (
