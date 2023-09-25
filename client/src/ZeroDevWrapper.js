@@ -12,7 +12,7 @@ const net = chains[NETWORK];
 console.log({chains, net, NETWORK})
 export const { publicClient, webSocketPublicClient } = configureChains(
   [net],
-  [infuraProvider({apiKey: 'f36f7f706a58477884ce6fe89165666c'})]
+  [infuraProvider({apiKey: process.env.REACT_APP_INFURA_APIKEY})]
 )
 
 const config = createConfig({

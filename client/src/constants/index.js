@@ -21,6 +21,11 @@ export const WETHContract = {
   [chains.goerli.id]: "0x42a71137C09AE83D8d05974960fd607d40033499",
 }
 
+export const ChainlinkEthPriceFeed = {
+  [chains.mainnet.id]: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
+  [chains.goerli.id]: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
+}
+
 export const networkChainId = chains[NETWORK]?.id;
 export const NetworkContextName = "NETWORK";
 

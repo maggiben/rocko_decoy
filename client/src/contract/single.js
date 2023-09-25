@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { ethers } from 'ethers'
 import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { USDCContract, CometContract, CometRewardContract, WETHContract, networkChainId } from "../constants";
+import { USDCContract, CometContract, CometRewardContract, WETHContract, ChainlinkEthPriceFeed, networkChainId } from "../constants";
 import { parseBalance } from '../utils';
 import { NETWORK } from "../constants/env";
 const WETHABI = require('../constants/weth.json')
@@ -20,13 +20,12 @@ export const useLoan = () => {
   const getETHPrice = async () => {
 <<<<<<< HEAD
     const sdk = new ThirdwebSDK(NETWORK);
-    const _chainlinkEthPriceFeed = "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"; // Chainlink Goerli ETH/USD price feed
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const price = await contract.call( 
       "getPrice",
       [
-        _chainlinkEthPriceFeed
+        ChainlinkEthPriceFeed[networkChainId]
       ] )
 
     const formattedValue = ethers.utils.formatEther( price ) * 10 ** 10
