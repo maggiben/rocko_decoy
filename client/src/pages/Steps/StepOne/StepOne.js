@@ -121,8 +121,8 @@ const StepOne = ({ title, currency }) => {
                   coinName={singleCurrency.fullName || ""}
                   selectedCoin={selectedCoin}
                   handleSelect={handleSelect}
-                  label={singleCurrency.label}
                   currentAPR={singleCurrency.currentAPR}
+                  isComingSoon={singleCurrency.comingSoon}
                 />
                 // </div>
               ))}

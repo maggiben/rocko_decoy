@@ -5,7 +5,6 @@ const CoinCard = ({
   selectedCoin,
   handleSelect,
   currentAPR,
-  label,
   loanToValue,
   liquidationThreshold,
   liquidationPenalty,
@@ -18,7 +17,7 @@ const CoinCard = ({
 
   return (
     <div
-    style={(coinShortName === "USDC" || coinShortName === "ETH") ? {} : {pointerEvents: "none"}}
+    style={isComingSoon ? {pointerEvents: "none"} : {}}
       onClick={() =>
         handleSelect({
           coinIcon,
@@ -26,7 +25,6 @@ const CoinCard = ({
           coinShortName,
           selectedCoin,
           currentAPR,
-          label,
           loanToValue,
           liquidationThreshold,
           liquidationPenalty,
@@ -42,17 +40,17 @@ const CoinCard = ({
           : "border-whiteSecondary bg-white "
       }`}
     >
-      <div className="flex items-center flex-col md:flex-row gap-4 justify-start">
+      <div className="flex items-center flex-col md:flex-row gap-2 justify-start">
         <img width={40} height={40} src={coinIcon} alt="Ether" className="" />
-        {label && (
+        {isComingSoon && (
           <div className="px-2 py-[2px] bg-[#EEE] rounded-[5px] text-[#545454] font-medium  text-[11px]">
-            {label || "Coming Soon"}
+            Coming Soon
           </div>
         )}
       </div>
       <div className="space-y-1">
         <p className="text-xl font-medium text-blackPrimary mt-8">
-          {isComingSoon ? "Coming soon" : coinShortName}
+          {coinShortName}
         </p>
         <p className="text-sm text-blackSecondary">{coinName}</p>
       </div>

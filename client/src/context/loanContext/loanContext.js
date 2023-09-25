@@ -77,16 +77,16 @@ const LoneProvider = ({ children }) => {
           name: "USDC",
           fullName: "USD Coin",
           symbol: "./assets/coins/USD Coin (USDC).svg",
-
           currentAPR: 0, // apr is  calculated in percentage
+          comingSoon: false,
         },
         {
           id: "currency-2",
           name: "USD",
           fullName: "US Dollar",
           symbol: "./assets/coins/USD.svg",
-          label: "Coming Soon",
           currentAPR: 2.56, // apr is calculated in percent
+          comingSoon: true,
         },
       ],
     },
