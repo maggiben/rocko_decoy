@@ -100,8 +100,12 @@ const MakePayment: FC = () => {
             ) : (
               ""
             ),
-          details: payment === currentBalance ? `${payment} USDC` : "",
-          subDetails: payment === currentBalance ? `~$${payment}` : "",
+          details: payment === currentBalance ? `${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC` : "",
+          subDetails: payment === currentBalance ? `~$${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}` : "",
         },
         {
           description:
@@ -117,16 +121,22 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$5.00` : "",
         },
       ],
-      details: <span className="font-semibold">{payment} USDC</span>,
-      subDetails: `~$${payment}`,
+      details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC</span>,
+      subDetails: `~$${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}`,
     },
     {
       description: "Projected values after payment",
       subDescription: [
         {
           description: "Outstanding balance",
-          details: <span className="font-semibold text-sm">{currentBalance - payment} USDC</span>,
-          subDetails: `~$${currentBalance - payment}`,
+          details: <span className="font-semibold text-sm">{(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC</span>,
+          subDetails: `~$${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat((currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')))}`,
         },
         {
           description: "Collateral Buffer",
@@ -216,9 +226,9 @@ const MakePayment: FC = () => {
                 onChange={(e) => setPaymentMethod(e.target.value)}
               />
               <label htmlFor="wallet1" className="pl-4">
-                <p className="font-semibold">
+                <p className="font-medium">
                   Coinbase or Gemini Account{" "}
-                  <span className="font-medium text-xs md:text-sm lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
+                  <span className=" text-xs lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
                     Recommended
                   </span>
                 </p>
@@ -233,7 +243,7 @@ const MakePayment: FC = () => {
                 <button
                   onClick={() => setOpenModalFor("Coinbase or Gemini")}
                   disabled={paymentMethod !== "default"}
-                  className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                  className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
                     paymentMethod === "default"
                       ? "text-[#eee] bg-[#2C3B8D]"
                       : "bg-[#eee] text-[#2C3B8D]"
@@ -265,13 +275,13 @@ const MakePayment: FC = () => {
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
-                <p className="font-semibold">Ethereum Wallet</p>
+                <p className="font-medium">Ethereum Wallet</p>
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
                 disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                className={`w-24 md:w-32 h-10 rounded-3xl  text-sm font-semibold ${
                   paymentMethod === "ethereum"
                     ? "text-[#eee] bg-[#2C3B8D]"
                     : "bg-[#eee] text-[#2C3B8D]"
@@ -296,7 +306,7 @@ const MakePayment: FC = () => {
             />
             <div className="pl-4">
               <label htmlFor="wallet3" className="">
-                <p className="font-semibold mb-6">
+                <p className="font-medium mb-6">
                   Other Exchange or Wallet Address
                 </p>
               </label>

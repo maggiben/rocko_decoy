@@ -97,7 +97,7 @@ const Processing = () => {
             >
               {payment !== currentBalance && (
                 <div
-                  className={`w-5 h-5 rounded-full border ${
+                  className={`w-5 h-5 rounded-full border p-0 m-0 leading-[0px] ${
                     progressTracker === 0 || doneTracker[0]?.step === "one"
                       ? "border-black"
                       : "border-gray-400"
@@ -147,7 +147,7 @@ const Processing = () => {
             >
               {payment !== currentBalance && (
                 <div
-                  className={`w-5 h-5 rounded-full border ${
+                  className={`w-5 h-5 rounded-full border p-0 m-0 leading-[0px] ${
                     progressTracker === 1 || doneTracker[1]?.step === "two"
                       ? "border-black"
                       : "border-gray-400"

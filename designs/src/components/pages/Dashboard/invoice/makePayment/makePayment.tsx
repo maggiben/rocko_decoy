@@ -22,15 +22,6 @@ const MakePaymentModal = ({
 
   const [changeInputType, setChangeInputType] = useState<string>("text"); //! to show value with commas & without commas n inputfiled on onBlur handler
 
-  const [amount, setAmount] = useState<string>(""); //! amount could be "add" or "widthraw" based on user's intention & amount value is passed through URL query for the reaction of next page based on user's intention
-
-  const {
-    register,
-    formState: { errors, isLoading, isValid, isValidating },
-    setValue,
-    getValues,
-  } = useForm<FormData>();
-
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -40,20 +31,18 @@ const MakePaymentModal = ({
       parseFloat(currentBalance.replace(/,/g, "") || "0")
     ) {
       setInputNumber(currentBalance.replace(/,/g, ""));
-      setValue("numberInput", currentBalance.replace(/,/g, ""));
+
       return;
     }
-   
 
     setInputNumber(inputValue);
-    setValue("numberInput", inputValue);
+
     setChangeInputType("number"); /* show number without commas */
     setActiveInputField(true);
   };
 
   const handleRepayBtn = () => {
     setInputNumber(currentBalance);
-    setValue("numberInput", currentBalance);
   };
 
   return (
@@ -87,9 +76,7 @@ const MakePaymentModal = ({
       <div>
         <p className="text-sm mb-2 font-bold"> Enter Payment Amount </p>
         <input
-          {...register("numberInput", {
-            required: "Number is required",
-          })}
+          name="numberInput"
           type={changeInputType} /* switch between "text" & "number" */
           id="numberField"
           min={0.000001}
@@ -120,15 +107,15 @@ const MakePaymentModal = ({
           onBlur={(event) => {
             /* on onBlur set the number */
             if (
-              parseFloat(getValues("numberInput")?.replace(/,/g, "") || "0") < 0.000001 &&
-              getValues("numberInput") !== ""
+              parseFloat(inputNumber?.replace(/,/g, "") || "0") < 0.000001 &&
+              inputNumber !== ""
             ) {
               setInputNumber("0.000001");
-              setValue("numberInput", "0.000001");
+
               return;
             }
             const valueWithoutCommas = parseFloat(
-              getValues("numberInput")?.replace(/,/g, "") || "0.000001"
+              inputNumber?.replace(/,/g, "") || "0.000001"
             );
             setInputNumber(
               new Intl.NumberFormat("en-US", {
@@ -164,7 +151,6 @@ const MakePaymentModal = ({
       <div className="p-6 bg-gray-100 rounded-2xl">
         <div className="mb-6">
           <p className="font-semibold ">Projected values after payment</p>
-         
         </div>
         <div className="grid grid-cols-2 space-y-2">
           <p className="text-sm text-gray-600">Outstanding Balance</p>

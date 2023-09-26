@@ -30,7 +30,7 @@ interface Term {
 const terms: Term[] = [
   {
     rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
+      <li className="mb-1 ml-3 text-slate-600 text-sm">
         You will need to authorize the transfer to your Rocko wallet for the
         collateral amount above. If your Rocko wallet does not receive the
         collateral amount, no additional collateral will be posted for your
@@ -55,7 +55,7 @@ const ModifyCollateral: React.FC = () => {
   const invoice: Info[] = [
     {
       description: "Lending Protocol",
-      details: <span className="underline">Compound Finance</span>,
+      details: <span className="underline font-normal">Compound Finance</span>,
     },
     {
       description: "Collateral Amount",
@@ -63,7 +63,7 @@ const ModifyCollateral: React.FC = () => {
       subDetails: `~$209.45`,
     },
     {
-      description: "Amount Required for Loan",
+      description: "Projected values after collateral modification",
       subDescription: [
         {
           description: "Total Collateral",
@@ -107,8 +107,8 @@ const ModifyCollateral: React.FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p>
-                      <strong>{info?.details}</strong>
+                    <p className="font-semibold">
+                      {info?.details}
                     </p>
                     {info?.subDetails && (
                       <p className="text-sm text-gray-500">
@@ -120,11 +120,11 @@ const ModifyCollateral: React.FC = () => {
                     info?.subDescription.map((innerInfo, i) => (
                       <React.Fragment key={i}>
                         <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
-                          {innerInfo?.description}
+                          <p className="text-sm">{innerInfo?.description}</p>
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
-                          <p>
-                            <strong>{innerInfo?.details}</strong>
+                          <p className="font-semibold text-sm">
+                           {innerInfo?.details}
                           </p>
                           {innerInfo?.subDetails && (
                             <p className="text-sm text-gray-500">
@@ -162,9 +162,9 @@ const ModifyCollateral: React.FC = () => {
                 onChange={(e) => setPaymentMethod(e.target.value)}
               />
               <label htmlFor="wallet1" className="pl-4">
-                <p className="font-semibold">
+                <p className="font-medium">
                   Coinbase or Gemini Account{" "}
-                  <span className="font-medium text-xs md:text-sm lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
+                  <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
                     Recommended
                   </span>
                 </p>
@@ -179,7 +179,7 @@ const ModifyCollateral: React.FC = () => {
                 <button
                   onClick={() => setOpenModalFor("Coinbase or Gemini")}
                   disabled={paymentMethod !== "default"}
-                  className={` w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                  className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
                     paymentMethod === "default"
                       ? "text-[#eee] bg-[#2C3B8D]"
                       : "bg-[#eee] text-[#2C3B8D]"
@@ -188,7 +188,7 @@ const ModifyCollateral: React.FC = () => {
                   Sign in
                 </button>
               ) : (
-                <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md">
+                <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium">
                   <Image src={correct} alt="Correct Image" />
                   <p>Connected</p>
                 </button>
@@ -211,13 +211,13 @@ const ModifyCollateral: React.FC = () => {
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
-                <p className="font-semibold">Ethereum Wallet</p>
+                <p className="font-medium">Ethereum Wallet</p>
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
                 disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base ${
+                className={`w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
                   paymentMethod === "ethereum"
                     ? "text-[#eee] bg-[#2C3B8D]"
                     : "bg-[#eee] text-[#2C3B8D]"
@@ -242,7 +242,7 @@ const ModifyCollateral: React.FC = () => {
             />
             <div className="pl-4">
               <label htmlFor="wallet3" className="">
-                <p className="font-semibold mb-6">
+                <p className="font-medium mb-6">
                   Other Exchange or Wallet Address
                 </p>
               </label>
