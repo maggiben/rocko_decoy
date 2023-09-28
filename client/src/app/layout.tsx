@@ -11,11 +11,6 @@ import { NETWORK } from "../constants/env";
 const inter = Inter({ subsets: ["latin"] });
 const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
 
-export const metadata: Metadata = {
-  title: "Rocko.co",
-  description: "Rocko - Crypto backed loans",
-};
-
 export default function RootLayout({
   children,
 }: {
