@@ -12,7 +12,7 @@ const HoverTooltip: React.FC<HoverTooltipProps> = ({ text }) => {
       <Image width={16} height={16} src={errorOutline} alt="" className="" />
 
       {/* tooltip text */}
-      <div className="bg-gray-800 text-white text-xs py-1 px-2 rounded absolute bottom-8 left-1/2 transform -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap z-10 group-hover:z-20">
+      <div className="whitespace-pre-wrap w-96 bg-gray-800 text-white text-xs py-2 px-2 rounded absolute bottom-8 left-1/2 transform -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 group-hover:z-20">
         {/* text here */}
         {text}
       </div>
