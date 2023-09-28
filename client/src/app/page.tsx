@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 import StepOne from "@/components/pages/Steps/StepOne/StepOne";
 import StepTwo from "@/components/pages/Steps/StepTwo/StepTwo";
@@ -69,6 +69,12 @@ export default function Home() {
 
     return loanData?.activeNextButton;
   }
+
+  // keep always scroll as top
+  useEffect(() => {
+    if (typeof window !== "undefined")
+      window.scrollTo(0, 0);
+  }, [currentStep]);
 
   return (
     <>
