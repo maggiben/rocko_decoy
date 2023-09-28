@@ -88,6 +88,12 @@ const Header = () => {
                 <div className="flex items-center gap-12 justify-end">
                   <div className="hidden  lg:flex items-center gap-8 justify-end">
                     <Link
+                      href="/dashboard"
+                      className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
+                    >
+                      DASHBOARD
+                    </Link>
+                    <Link
                       href="/"
                       className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                     >
@@ -153,6 +159,13 @@ const Header = () => {
               className={`responsive-navContainer fade-in absolute top-full left-0 `}
             >
               <div className="container mx-auto md:px-10 py-4  bg-white ">
+                <Link
+                  href="/dashboard"
+                  className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
+                >
+                  DASHBOARD
+                </Link>
+
                 <Link
                   href="/"
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
