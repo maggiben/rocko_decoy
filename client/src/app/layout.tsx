@@ -8,7 +8,7 @@ import Providers from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Rocko.co",
+  title: "Rocko",
   description: "Rocko - Crypto backed loans",
 };
 
