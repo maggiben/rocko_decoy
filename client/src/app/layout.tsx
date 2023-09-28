@@ -1,15 +1,16 @@
-"use client";
 import Header from "@/components/chips/Header/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LoneProvider from "@/context/loanContext/loanContext";
-import ZeroDevWrapper from "./ZerodevWrapper";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { NETWORK } from "../constants/env";
+import Providers from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
-const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
+
+export const metadata: Metadata = {
+  title: "Rocko.co",
+  description: "Rocko - Crypto backed loans",
+};
 
 export default function RootLayout({
   children,
@@ -19,12 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ZeroDevWrapper>
-          <ThirdwebProvider activeChain={ProviderNetwork}>
-            <Header />
-            <LoneProvider>{children}</LoneProvider>
-          </ThirdwebProvider>
-        </ZeroDevWrapper>
+        <Providers>
+          <Header />
+          <LoneProvider>{children}</LoneProvider>
+        </Providers>
       </body>
     </html>
   );
