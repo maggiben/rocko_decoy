@@ -3,7 +3,6 @@ import Image from "next/image";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
-import { IS_DEMO_MODE } from "@/constants/env";
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
 const LoanSummary = () => {
@@ -40,7 +39,7 @@ const LoanSummary = () => {
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.currentAPR && loanData?.protocol === DEFAULT_PROTOCOL && (
             <>
-                {IS_DEMO_MODE ? 3.94 : financial(loanData?.currentAPR, 2)}
+                {financial(loanData?.currentAPR, 2)}
                 <span className="text-base">%</span>
             </>
             )) ||

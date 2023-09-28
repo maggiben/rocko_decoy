@@ -6,7 +6,6 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
 import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
-import { IS_DEMO_MODE } from "@/constants/env";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
 interface InnerInfo {
@@ -75,7 +74,7 @@ const StepFive: React.FC = () => {
     },
     {
       description: "Current APR",
-      details: IS_DEMO_MODE ? "3.84%" : `${financial(loanData?.currentAPR, 2)}%`,
+      details: `${financial(loanData?.currentAPR, 2)}%`,
     },
     {
       description: "Amount Required for Loan",
@@ -157,7 +156,7 @@ const StepFive: React.FC = () => {
               <HoverTooltip text="this is tooltip" />
             </div>
           ),
-          details: IS_DEMO_MODE ? "2.00%" : `${financial(loanData?.rewardRate, 2)}%`,
+          details: `${financial(loanData?.rewardRate, 2)}%`,
         },
       ],
     },

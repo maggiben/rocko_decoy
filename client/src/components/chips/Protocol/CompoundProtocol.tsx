@@ -4,7 +4,6 @@ import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
 import { useLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
-import { IS_DEMO_MODE } from "@/constants/env";
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
 const CompoundProtocol: FC<ProtocolProps> = ({
@@ -38,9 +37,9 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / ethPrice;
             const liquidationPrice = borrowing / threshold / collateral;
-            const interestSixMonths = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 200;
-            const interestOneYear = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 100;
-            const interestTwoYears = borrowing * (IS_DEMO_MODE ? 3.94 : currentAPR) / 50;
+            const interestSixMonths = borrowing * currentAPR / 200;
+            const interestOneYear = borrowing * currentAPR / 100;
+            const interestTwoYears = borrowing * currentAPR / 50;
 
             if (setLoanData) {
                 setLoanData((prevLoanData) => {
@@ -83,15 +82,9 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             <div className="flex items-center justify-end gap-2 md:gap-8 ">
                 <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
                 <p className="text-xl font-bold text-[#141414]">
-                    {IS_DEMO_MODE ? (
-                        <>
-                            <span style={{ fontSize: "32px" }}>3.94</span><span className="text-base">% APR</span>
-                        </>
-                    ) : (
-                        <>
-                            <span style={{ fontSize: "32px" }}>{financial(loanData?.currentAPR, 2)}</span><span className="text-base">% APR</span>
-                        </>
-                    )}
+                    <>
+                        <span style={{ fontSize: "32px" }}>{financial(loanData?.currentAPR, 2)}</span><span className="text-base">% APR</span>
+                    </>
                 </p>
 
                 <p className="font-medium text-xs text-[#7356BF] bg-[#F4F1FA] rounded-md py-[2px] px-2">
@@ -133,15 +126,9 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">30 Day</span>
                         </p>
-                        {IS_DEMO_MODE ? (
-                            <p className="font-semibold text-blackPrimary">
-                                4.24%
-                            </p>
-                        ) : (
-                            <p className="font-semibold text-blackPrimary">
-                                {financial(loanData?.currentAPR * 30/365, 2)}%
-                            </p>
-                        )}
+                        <p className="font-semibold text-blackPrimary">
+                            {financial(loanData?.currentAPR * 30/365, 2)}%
+                        </p>
                     </div>                
                     <div className="" key={"30 Day"}>
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">

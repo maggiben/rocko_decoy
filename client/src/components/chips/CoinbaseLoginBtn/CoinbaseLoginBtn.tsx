@@ -1,7 +1,6 @@
 import {
     COINBASE_CLIENT_ID,
-    BACKEND_URL,
-    IS_DEMO_MODE
+    BACKEND_URL
 } from '@/constants/env';
 
 const COINBASE_REDIRECT_URI = `${BACKEND_URL}/cb-callback`;
@@ -13,7 +12,7 @@ const COINBASE_SCOPES = [
     // 'wallet:transactions:send:bypass-2fa'
 ].join(",");
 
-const CURRENCY_SELECT: string | string[] = IS_DEMO_MODE ? ['ETH'] : [
+const CURRENCY_SELECT: string | string[] = [
     'WBTC',
     'ETH',
     'UNI',

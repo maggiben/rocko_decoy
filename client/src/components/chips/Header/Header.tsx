@@ -8,7 +8,7 @@ import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import * as chains from 'wagmi/chains'
 import { Auth0WalletConnector } from '@zerodev/wagmi';
-import { IS_DEMO_MODE, NETWORK } from "@/constants/env";
+import { NETWORK } from "@/constants/env";
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
