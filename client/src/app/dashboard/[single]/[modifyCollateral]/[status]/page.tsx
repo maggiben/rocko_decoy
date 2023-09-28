@@ -1,20 +1,29 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
 import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 interface DoneTracker {
   step: string;
 }
 
-const DepositingCollateral = () => {
-  const [counter, setCounter] = useState(20);
-  const [progress, setProgress] = useState(0);
-  const [progressTracker, setProgressTracker] = useState(0);
-  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
-  const [activeDone, setActiveDone] = useState(false);
-  const [completeModal, setCompleteModal] = useState(false);
+const ModifyStatus = () => {
+  const { status } = useParams(); //! by using this hook get the URL parameter
+
+  const [counter, setCounter] = useState(status === "add" ? 5 : 15); //! countdown
+
+  const [progress, setProgress] = useState(0); //! showing the loader progress
+
+  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
+
+  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
+
+  const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
+
+  const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,11 +35,12 @@ const DepositingCollateral = () => {
               return prevProgTra + 1;
             });
 
-            return 20;
+            return status === "add" ? 0 : 20;
           } else {
-            return prevProg + 20;
+            return status === "add" ? prevProg + 50 : prevProg + 20;
           }
         });
+        console.log(progress);
       } else {
         clearInterval(interval);
       }
@@ -48,17 +58,7 @@ const DepositingCollateral = () => {
       progressTracker === 1 &&
         progress === 100 &&
         setDoneTracker([...doneTracker, { step: "two" }]);
-    }
-    {
-      progressTracker === 2 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "three" }]);
-      progressTracker === 2 && progress === 100 && setActiveDone(true);
-    }
-    {
-      progressTracker === 3 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "four" }]);
+      progressTracker === 1 && progress === 100 && setActiveDone(true);
     }
   }, [progress, progressTracker]);
 
@@ -66,7 +66,7 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : "Depositing Collateral"}
+        Collateral Modification Status
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -83,7 +83,9 @@ const DepositingCollateral = () => {
                   : "text-gray-400"
               }`}
             >
-              Collateral Received
+              {status === "add"
+                ? "Collateral Received"
+                : "Collateral Withdrawn from Compound"}
             </p>
             {doneTracker[0]?.step === "one" && (
               <svg
@@ -98,8 +100,8 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
@@ -122,7 +124,9 @@ const DepositingCollateral = () => {
                   : "text-gray-400"
               }`}
             >
-              Collateral Deposited in Lending Protocol
+              {status === "add"
+                ? "Collateral Deposited in Compound"
+                : "Collateral Deposited in your account or wallet"}
             </p>
             {doneTracker[1]?.step === "two" && (
               <svg
@@ -137,8 +141,8 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
@@ -154,59 +158,26 @@ const DepositingCollateral = () => {
               />
             )}
           </div>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
-              className={`${
-                progressTracker === 2 || doneTracker[2]?.step === "three"
-                  ? "text-black"
-                  : "text-gray-400"
-              }`}
-            >
-              Loan Delivered to Your Account
-            </p>
-            {doneTracker[2]?.step === "three" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-                  fill="#05944F"
-                />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
-                  fill="white"
-                />
-              </svg>
-            )}
-            {progressTracker === 2 && !(doneTracker[2]?.step === "three") && (
-              <CircleProgressBar
-                circleWidth={18}
-                radius={7}
-                percentage={progress}
-                strokeWidth={2}
-              />
-            )}
-          </div>
         </div>
       </section>
-      {completeModal && (
+      {completeModal ? (
         <ModalContainer>
-          <LoanComplete
-            title={"Loan Complete"}
-            details={
-              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            }
-            id={1}
-          />
+          {status === "add" ? (
+            <LoanComplete
+              title={"Collateral Deposit Complete"}
+              details={"You have successfully increased your loan collateral"}
+              id={2}
+            />
+          ) : (
+            <LoanComplete
+              title={"Collateral Withdrawal Complete"}
+              details={"You have successfully withdrawn collateral"}
+              id={3}
+            />
+          )}
         </ModalContainer>
-      )}
-      
+      ) : null}
+
       {/* footer */}
       <div className="h-20 w-full"></div>
       <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
@@ -219,25 +190,12 @@ const DepositingCollateral = () => {
           ></div>
         </div>
         <div className="container mx-auto">
-          <div className="p-4 flex items-center justify-between  ">
-            <p className="text-blackPrimary text-xs md:text-sm font-medium">
-              {/* //todo remove it later */}
-              {/* {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
-              
-            {loanData?.activeNextButton?.valueOf()} */}
-            </p>
+          <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               <button
-              /*   onClick={prevStep}
-                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
-                  currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
-                }`}
-                disabled={currentStep === 0} */
-              >
-                {/* Back */}
-              </button>
-              <button
-                onClick={() => setCompleteModal(true)}
+                onClick={() => {
+                  setCompleteModal(true); //! after clicking done btn completeModal popup shows
+                }}
                 className={`font-semibold  text-xs md:text-sm ${
                   activeDone ? "bg-blue" : "bg-blue/40"
                 } py-[10px]  px-6 rounded-full text-white `}
@@ -253,4 +211,4 @@ const DepositingCollateral = () => {
   );
 };
 
-export default DepositingCollateral;
+export default ModifyStatus;
