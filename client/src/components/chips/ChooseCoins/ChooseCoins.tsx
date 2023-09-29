@@ -6,6 +6,7 @@ import { useLoan } from "@/contract/single";
 const ChooseCoins = ({ assets }: any) => {
   const { loanData, setLoanData } = useLoanData();
   const {
+      getBorrowAPR,
       getETHPrice,
       getLTV,
       getPenalty,
@@ -29,6 +30,7 @@ const ChooseCoins = ({ assets }: any) => {
   };
 
   const updateLoanData = async (info: any) => {
+    const currentAPR = await getBorrowAPR();
     const loanToValue = await getLTV();
     const penalty = await getPenalty();
     const threshold = await getThreshold();
@@ -42,6 +44,7 @@ const ChooseCoins = ({ assets }: any) => {
       setLoanData((prevLoanData) => {
         return {
             ...prevLoanData,
+            currentAPR: currentAPR,
             cryptoName: info.coinShortName,
             cryptoIcon:info.coinIcon,
             loanToValue: loanToValue,
