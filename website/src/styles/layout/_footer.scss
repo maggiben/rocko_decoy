@@ -1,0 +1,80 @@
+.footer {
+  padding: 20px 0;
+  text-align: center;
+
+  @include media-breakpoint-up(md) {
+    font-size: 12px;
+    text-align: left;
+  }
+  @include media-breakpoint-up(lg) {
+    font-size: 14px;
+  }
+
+  @include media-breakpoint-up(xl) {
+    font-size: 13px;
+  }
+
+  @include media-breakpoint-up(wide) {
+    padding: 24px 0;
+    font-size: 14px;
+  }
+
+  &__right {
+    @include media-breakpoint-up(md) {
+      text-align: right;
+      margin-right: 0;
+      margin-left: auto;
+      max-width: 675px;
+    }
+  }
+
+  .copyright {
+    margin-bottom: 10px;
+
+    a {
+      color: $gray-2;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      margin-bottom: 0;
+    }
+  }
+
+  &__menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin: 0 -10px;
+
+    li {
+      display: inline-block;
+      padding: 0 10px;
+      position: relative;
+    }
+
+    a {
+      color: $gray;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    li + li:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      width: 1px;
+      height: calc(100% - 10px);
+      background: $gray;
+    }
+  }
+}
