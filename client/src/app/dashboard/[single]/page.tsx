@@ -6,8 +6,6 @@ import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import ToggleBtn from "@/components/chips/ToggleBtn/ToogleBtn";
 import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
-import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import { useState } from "react";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";

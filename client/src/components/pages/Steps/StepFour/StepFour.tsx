@@ -3,7 +3,7 @@ import { RiskStep } from "@/types/type";
 import Link from "next/link";
 import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
 import useLoanData from "@/hooks/useLoanData";
-import { useLoan } from "@/contract/single";
+import { useSingleLoan } from "@/contract/single";
 
 const StepFour: FC<RiskStep> = ({ title }) => {
   const [value, setValue] = useState(0);
@@ -14,7 +14,7 @@ const StepFour: FC<RiskStep> = ({ title }) => {
     getETHPrice,
     getLTV,
     getThreshold,
-  } = useLoan();
+  } = useSingleLoan();
   
   const valueDivRef = useRef<HTMLDivElement | null>(null);
 

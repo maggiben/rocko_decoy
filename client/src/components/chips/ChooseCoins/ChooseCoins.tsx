@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CoinCard from "../CoinCard/CoinCard";
 import useLoanData from "@/hooks/useLoanData";
-import { useLoan } from "@/contract/single";
+import { useSingleLoan } from "@/contract/single";
 
 const ChooseCoins = ({ assets }: any) => {
   const { loanData, setLoanData } = useLoanData();
@@ -12,7 +12,7 @@ const ChooseCoins = ({ assets }: any) => {
       getPenalty,
       getThreshold,
       getRewardRate
-  } = useLoan();
+  } = useSingleLoan();
   const [selectedCoin, setSelectedCoin] = useState("");
 
   const initialize = () => {

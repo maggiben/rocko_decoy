@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { ProtocolProps } from "@/types/type";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
-import { useLoan } from "@/contract/single";
+import { useSingleLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -22,7 +22,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
         getThreshold,
         getRewardRate,
         getRewardAmount
-    } = useLoan();
+    } = useSingleLoan();
 
     const updateLoanData = async () => {
         try {

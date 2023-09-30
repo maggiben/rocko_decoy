@@ -3,12 +3,18 @@ import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
 import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import { useAddress } from "@thirdweb-dev/react";
+import { useGetLoan } from "@/contract/batch";
+import { useSingleLoan } from "@/contract/single";
+import useLoanData from "@/hooks/useLoanData";
 
 interface DoneTracker {
   step: string;
 }
 
 const DepositingCollateral = () => {
+  const [start, setStart] = useState(false);
   const [counter, setCounter] = useState(20);
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
@@ -16,28 +22,51 @@ const DepositingCollateral = () => {
   const [activeDone, setActiveDone] = useState(false);
   const [completeModal, setCompleteModal] = useState(false);
 
+  const { loanData } = useLoanData();
+  const { address : wagmiAddress } = useAccount();
+  const address = useAddress();
+  const { depositZerodevAccount } = useSingleLoan();
+  const { executeBatchGetLoan } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+
+  const OnStart = async () => {
+    if (!wagmiAddress || !address || !loanData) return;
+    console.log("----loanData---", loanData);
+    console.log("---zerodevWallet----", wagmiAddress);
+    console.log("---EOA----", address);
+
+    setStart(true);
+
+    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded);
+    console.log(depositResult);
+    const batchResult = await executeBatchGetLoan();
+    console.log(batchResult);
+  }
+
+  // for progressbar interface
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (counter > 0) {
-        setCounter(counter - 1);
-        setProgress((prevProg) => {
-          if (prevProg === 100) {
-            setProgressTracker((prevProgTra) => {
-              return prevProgTra + 1;
-            });
-
-            return 20;
-          } else {
-            return prevProg + 20;
-          }
-        });
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [counter, progress, progressTracker]);
+    if (start) {
+      const interval = setInterval(() => {
+        if (counter > 0) {
+          setCounter(counter - 1);
+          setProgress((prevProg) => {
+            if (prevProg === 100) {
+              setProgressTracker((prevProgTra) => {
+                return prevProgTra + 1;
+              });
+  
+              return 20;
+            } else {
+              return prevProg + 20;
+            }
+          });
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }
+  }, [start, counter, progress, progressTracker]);
   useEffect(() => {
     {
       progressTracker === 0 &&
@@ -63,6 +92,8 @@ const DepositingCollateral = () => {
   }, [progress, progressTracker]);
 
   console.log(doneTracker);
+
+  //
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
@@ -227,24 +258,24 @@ const DepositingCollateral = () => {
             {loanData?.activeNextButton?.valueOf()} */}
             </p>
             <div className="flex items-center justify-end gap-3">
-              <button
-              /*   onClick={prevStep}
-                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
-                  currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
-                }`}
-                disabled={currentStep === 0} */
-              >
-                {/* Back */}
-              </button>
-              <button
-                onClick={() => setCompleteModal(true)}
-                className={`font-semibold  text-xs md:text-sm ${
-                  activeDone ? "bg-blue" : "bg-blue/40"
-                } py-[10px]  px-6 rounded-full text-white `}
-                disabled={!activeDone}
-              >
-                Done
-              </button>
+              {start ? (
+                <button
+                  onClick={() => setCompleteModal(true)}
+                  className={`font-semibold  text-xs md:text-sm ${
+                    activeDone ? "bg-blue" : "bg-blue/40"
+                  } py-[10px]  px-6 rounded-full text-white `}
+                  disabled={!activeDone}
+                >
+                  Done
+                </button>
+              ) : (
+                <button
+                  onClick={OnStart}
+                  className="font-semibold  text-xs md:text-sm bg-blue py-[10px]  px-6 rounded-full text-white"
+                >
+                  Continue
+                </button>
+              )}
             </div>
           </div>
         </div>
