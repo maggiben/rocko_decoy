@@ -1,0 +1,164 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Color system
+
+$white: #fff;
+$black: #000;
+
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold: 180;
+
+// Customize the light and dark text colors for use in our YIQ color contrast function.
+$yiq-text-dark: $black;
+$yiq-text-light: $white;
+
+$grid-columns: 12;
+$grid-gutter-width: 30px;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+  wide: 1440px,
+);
+
+$container-max-widths: (
+  sm: (1600 + ($grid-gutter-width * 2),
+  ),
+);
+
+// spacing
+//
+// control the default styling of most bootstrap elements by modifying these
+// variables. mostly focused on spacing.
+// you can add more entries to the $spacers map, should you need more variation.
+
+// stylelint-disable-next-line scss/dollar-variable-default
+// prettier-ignore-start
+
+$enable-dark-mode: false;
+$spacer: 10px;
+
+$spacers: (
+  0: 0,
+  5: ($spacer * 0.5,
+  ),
+  10: $spacer,
+  15: ($spacer * 1.5,
+  ),
+  20: ($spacer * 2,
+  ),
+  25: ($spacer * 2.5,
+  ),
+  30: ($spacer * 3,
+  ),
+  35: ($spacer * 3.5,
+  ),
+  40: ($spacer * 4,
+  ),
+  45: ($spacer * 4.5,
+  ),
+  50: ($spacer * 5,
+  ),
+);
+
+// body
+//
+// settings for the `<body>` element.
+
+$body-bg: $white;
+$body-color: $black;
+
+// border radius
+$rounded-circle: 50%;
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: 'Poppins', sans-serif;
+$font-family-sans-serif-secondary: $font-family-sans-serif;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$font-family-base: $font-family-sans-serif;
+$base-font-path: '../fonts';
+// stylelint-enable value-keyword-case
+
+$font-weight-thin: 100;
+$font-weight-ulight: 200;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-heavy: 800;
+$font-weight-black: 900;
+
+$font-size-xl: 2rem;
+$font-size-lg: 1.8rem;
+$font-size-base: 1.6rem;
+$font-size-md: 1.4rem;
+$font-size-sm: 1.2rem;
+
+$font-sizes: (
+  'xl': $font-size-xl,
+  'lg': $font-size-lg,
+  'base': $font-size-base,
+  'md': $font-size-md,
+  'sm': $font-size-sm,
+);
+
+$font-sizes-max: (
+  'xl': 3rem,
+  'lg': 2.2rem,
+  'base': 1.6rem,
+  'md': 1.4rem,
+  'sm': 1.2rem,
+);
+
+$headings-sizes: (
+  'h1': 65px,
+  'h2': 40px,
+  'h3': 32px,
+  'h4': 24px,
+  'h5': 20px,
+  'h6': 16px,
+);
+
+$headings-sizes-max: (
+  'h1': 65px,
+  'h2': 40px,
+  'h3': 32px,
+  'h4': 24px,
+  'h5': 20px,
+  'h6': 16px,
+);
+
+$fluid-min: 320px;
+$fluid-max: map-get($grid-breakpoints, 'wide');
+
+// Base transition function
+$transition-duration-base: 0.35s;
+$transition-easing-base: cubic-bezier(0.3, 0.86, 0.36, 0.95);
+
+$primary: #293992;
+$primary-hover: #91c9da;
+$blue-100: #edf5ff;
+$secondary: #ffe607;
+$info: #ffe607;
+$light: #fafafa;
+$heading: #1f1f1f;
+$black-2: #242424;
+
+$gray: #868686;
+$gray-2: #737373;
+$gray-3: #ebebeb;
+$gray-4: #b7abac;
+
+
+$btn-border-radius: 7px;

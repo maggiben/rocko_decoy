@@ -1,2 +1,4 @@
 .tool-versions
 designs/yarn.lock
+.vscode/extensions.json
+client/.env
