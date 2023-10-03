@@ -3,7 +3,7 @@ import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
 import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
@@ -14,59 +14,121 @@ interface DoneTracker {
 }
 
 const DepositingCollateral = () => {
-  const [start, setStart] = useState(false);
-  const [counter, setCounter] = useState(20);
+  const [activeDone, setActiveDone] = useState(false);
+  const [startA, setStartA] = useState(false);
+  const [startB, setStartB] = useState(false);
+
+  const [counter, setCounter] = useState(3);
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
-  const [activeDone, setActiveDone] = useState(false);
   const [completeModal, setCompleteModal] = useState(false);
 
   const { loanData } = useLoanData();
-  const { address : wagmiAddress } = useAccount();
+  // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
-  const { executeBatchGetLoan } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+  // Wagmi for ZeroDev Smart wallet
+  const { address : wagmiAddress } = useAccount();
+  const { data } = useBalance({ address: wagmiAddress });
+  const { executeBatchGetLoan, success, txHash } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
   const OnStart = async () => {
     if (!wagmiAddress || !address || !loanData) return;
-    console.log("----loanData---", loanData);
-    console.log("---zerodevWallet----", wagmiAddress);
-    console.log("---EOA----", address);
 
-    setStart(true);
+    setStartA(true);
+    const collateralReceived = await receiveCollateral();
+    if (collateralReceived) {
+      setADone();
 
-    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded);
-    console.log(depositResult);
-    const batchResult = await executeBatchGetLoan();
-    console.log(batchResult);
+      // batch transactions
+      executeBatchGetLoan();
+      setStartB(true);
+    } else {
+      setAError();
+    }
   }
 
-  // for progressbar interface
+  const receiveCollateral = async () => {
+    if (!wagmiAddress || !loanData) return null;
+
+    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded);
+    return depositResult;
+  }
+
+  const setADone = () => {
+    setStartA(false); 
+    setProgress(0);
+    setDoneTracker([...doneTracker, { step: "one" }]);
+  }
+
+  const setAError = () => {
+    setStartA(false);
+    setProgress(0);
+    setCounter(60);
+  }
+
+  const setAllDone = () => {
+    setDoneTracker([...doneTracker, { step: "two" }]);
+    setStartB(false);
+    setActiveDone(true);
+  }
+
   useEffect(() => {
-    if (start) {
+    if (success) {
+      console.log("---transactionHash of batchTransactions---", txHash);
+      
+      setAllDone();
+    }
+  }, [success])
+
+  // for timer
+  useEffect(() => {
+    if (startA || startB) {
       const interval = setInterval(() => {
-        if (counter > 0) {
-          setCounter(counter - 1);
-          setProgress((prevProg) => {
-            if (prevProg === 100) {
-              setProgressTracker((prevProgTra) => {
-                return prevProgTra + 1;
-              });
-  
-              return 20;
-            } else {
-              return prevProg + 20;
-            }
-          });
-        } else {
+        if (counter === 0) {
           clearInterval(interval);
+        } else {
+          setCounter(counter - 1);
         }
-      }, 1000);
-  
+      }, 60000);
+
       return () => clearInterval(interval);
     }
-  }, [start, counter, progress, progressTracker]);
+  }, [startA, startB, counter]);
+  // for progressbar interface
+  useEffect(() => {
+    if (startA) {
+      setProgressTracker(0);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => {
+            return prevProg + 20;
+          });
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+    if (startB) {
+      setProgressTracker(1);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => {
+            return prevProg + 20;
+          });
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+  }, [startA, startB, progress]);
   useEffect(() => {
     {
       progressTracker === 0 &&
@@ -91,8 +153,6 @@ const DepositingCollateral = () => {
     }
   }, [progress, progressTracker]);
 
-  console.log(doneTracker);
-
   //
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
@@ -104,7 +164,7 @@ const DepositingCollateral = () => {
           <p className="text-black">Estimated time remaining</p>
           <h1 className="text-2xl font-semibold mb-4">
             {" "}
-            {`${activeDone ? "Complete!" : `${counter} minutes`}`}{" "}
+            {`${activeDone ? "Complete!" : `${counter} miniutes`}`}{" "}
           </h1>
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
@@ -188,14 +248,16 @@ const DepositingCollateral = () => {
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
-                progressTracker === 2 || doneTracker[2]?.step === "three"
+                progressTracker === 1 || doneTracker[1]?.step === "two"
+                // progressTracker === 2 || doneTracker[2]?.step === "three"
                   ? "text-black"
                   : "text-gray-400"
               }`}
             >
               Loan Delivered to Your Account
             </p>
-            {doneTracker[2]?.step === "three" && (
+            {/* {doneTracker[2]?.step === "three" && ( */}
+            {doneTracker[1]?.step === "two" && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -215,7 +277,8 @@ const DepositingCollateral = () => {
                 />
               </svg>
             )}
-            {progressTracker === 2 && !(doneTracker[2]?.step === "three") && (
+            {/* {progressTracker === 2 && !(doneTracker[2]?.step === "three") && ( */}
+            {progressTracker === 1 && !(doneTracker[1]?.step === "two") && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -258,20 +321,20 @@ const DepositingCollateral = () => {
             {loanData?.activeNextButton?.valueOf()} */}
             </p>
             <div className="flex items-center justify-end gap-3">
-              {start ? (
+              {activeDone ? (
                 <button
                   onClick={() => setCompleteModal(true)}
-                  className={`font-semibold  text-xs md:text-sm ${
-                    activeDone ? "bg-blue" : "bg-blue/40"
-                  } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={!activeDone}
+                  className="font-semibold  text-xs md:text-sm bg-blue py-[10px]  px-6 rounded-full text-white"
                 >
                   Done
                 </button>
               ) : (
                 <button
                   onClick={OnStart}
-                  className="font-semibold  text-xs md:text-sm bg-blue py-[10px]  px-6 rounded-full text-white"
+                  className={`font-semibold  text-xs md:text-sm ${
+                    (startA || startB) ? "bg-blue/40" : "bg-blue"
+                  } py-[10px] px-6 rounded-full text-white`}
+                  disabled={startA || startB}
                 >
                   Continue
                 </button>

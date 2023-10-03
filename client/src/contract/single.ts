@@ -178,9 +178,13 @@ export const useSingleLoan = () => {
     if (!signer || !zerodevAccount || Number(amount) <= 0) return null;
 
     const sdk = ThirdwebSDK.fromSigner(signer);
-    const txResult = await sdk.wallet.transfer(zerodevAccount, amount);
-    // const txReceipt = await txResult.execute();
-    return txResult;
+    try {
+      const txResult = await sdk.wallet.transfer(zerodevAccount, amount);
+      return txResult;
+    } catch(e) {
+      console.log(e)
+      return null;
+    }
   }
 
   const deposit = async ( amount: number | string ) => {
