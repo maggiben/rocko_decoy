@@ -6,12 +6,12 @@ import {
 } from "wagmi";
 import { infuraProvider } from 'wagmi/providers/infura'
 import * as chains from 'wagmi/chains'
-import { NETWORK } from "../constants/env";
+import { NETWORK, INFURA_APIKEY } from "../constants/env";
 
 const net = (chains as { [key: string]: any })[NETWORK];
 export const { publicClient, webSocketPublicClient } = configureChains(
   [net],
-  [infuraProvider({apiKey: process.env.REACT_APP_INFURA_APIKEY || "fde85b66d55f44e0bb36be6c88c7f1c3"})]
+  [infuraProvider({apiKey: INFURA_APIKEY})]
 )
 
 const config = createConfig({
