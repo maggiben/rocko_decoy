@@ -2,3 +2,4 @@
 designs/yarn.lock
 .vscode/extensions.json
 client/.env
+.DS_Store

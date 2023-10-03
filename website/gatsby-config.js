@@ -9,7 +9,7 @@
  */
 module.exports = {
   siteMetadata: {
-    title: `Rocko DeFi Blog`,
+    title: `Rocko: Learn DeFi`,
     author: {
       name: `Rocko`,
       summary: `DeFi made simple`,
@@ -26,8 +26,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/blog`,
-        name: `blog`,
+        path: `${__dirname}/content/learn`,
+        name: `learn`,
       },
     },
     {
@@ -103,7 +103,7 @@ module.exports = {
               }
             }`,
             output: "/rss.xml",
-            title: "Rocko Blog RSS Feed",
+            title: "Rocko Learn DeFi RSS Feed",
           },
         ],
       },
