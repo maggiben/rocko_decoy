@@ -1,5 +1,5 @@
 /* global BigInt */
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import {
     useAccount,
     useWaitForTransaction
@@ -21,52 +21,63 @@ export const useGetLoan = (collateral: any, loan: any) => {
     const { address : wagmiAddress } = useAccount();
     const address = useAddress();
 
-    const { config } = usePrepareContractBatchWrite({
-        calls: [
-            {
-                address: WETHContract[networkChainId],
-                abi: WETHABI,
-                functionName: "deposit",
-                args: [],
-                value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
-            },
-            {
-                address: WETHContract[networkChainId],
-                abi: WETHABI,
-                functionName: "approve",
-                args: [CometContract[networkChainId], uintMax],
-            },
-            {
-                address: CometContract[networkChainId],
-                abi: COMETABI,
-                functionName: "supply",
-                args: [
-                    WETHContract[networkChainId],
-                    parseBalance(collateral.toString())
-                ]
-            },
-            {
-                address: CometContract[networkChainId],
-                abi: COMETABI,
-                functionName: "withdrawTo",
-                args: [
-                    address ? address : wagmiAddress,
-                    USDCContract[networkChainId],
-                    parseBalance(loan.toString(), 6)
-                ]
-            }
-        ],
-        enabled: true
+    const [txHash, setTxHash] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const { config } = usePrepareContractBatchWrite(
+        wagmiAddress ?
+        {
+            calls: [
+                {
+                    address: WETHContract[networkChainId],
+                    abi: WETHABI,
+                    functionName: "deposit",
+                    args: [],
+                    value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
+                },
+                {
+                    address: WETHContract[networkChainId],
+                    abi: WETHABI,
+                    functionName: "approve",
+                    args: [CometContract[networkChainId], uintMax],
+                },
+                {
+                    address: CometContract[networkChainId],
+                    abi: COMETABI,
+                    functionName: "supply",
+                    args: [
+                        WETHContract[networkChainId],
+                        parseBalance(collateral.toString())
+                    ]
+                },
+                {
+                    address: CometContract[networkChainId],
+                    abi: COMETABI,
+                    functionName: "withdrawTo",
+                    args: [
+                        address ? address : wagmiAddress,
+                        USDCContract[networkChainId],
+                        parseBalance(loan.toString(), 6)
+                    ]
+                }
+            ],
+            enabled: true
+        } : {
+            calls: [],
+            enabled: true
         },
     )
 
-    const { sendUserOperation: batchGetLoan, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchGetLoan, data, error } = useContractBatchWrite(config);
 
     useWaitForTransaction({
         hash: data?.hash,
         enabled: !!data,
         onSuccess() {
-        console.log("Transaction was successful.")
+            console.log("Transaction was successful.")
+            setSuccess(true);
+            if (data?.hash) 
+                setTxHash(data?.hash);
         }
     });
 
@@ -74,7 +85,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
         if (batchGetLoan) batchGetLoan();
     }, [batchGetLoan]);
     
-    return { executeBatchGetLoan };
+    return { executeBatchGetLoan, success, txHash, error };
 }
 
 export const useRepay = (collateral: any, loan: any) => {
