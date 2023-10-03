@@ -17,6 +17,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage, createRedirect  } = actions
 
   createRedirect({
+    fromPath: '/defi-learning-resources',
+    toPath: '/learn',
+    isPermanent: true,
+    force: true, // This forces the redirect even if there's a page at the old URL
+  },{
     fromPath: '/terms.html',
     toPath: '/terms',
     isPermanent: true,
