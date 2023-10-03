@@ -2,6 +2,10 @@
 title: How Are DeFi Lending APRs Determined?
 date: "2023-09-11T23:46:37.121Z"
 description: The Decentralized Finance (DeFi) ecosystem has revolutionized traditional financial systems by introducing services like lending and borrowing without the need for intermediaries.
+tags:
+  - DeFi Borrowing & Lending
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # How DeFi Lending Protocol APR Rates Are Determined

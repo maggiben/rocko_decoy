@@ -2,6 +2,11 @@
 title: Intro to DeFi
 date: "2023-09-13T22:40:32.169Z"
 description: When we think of traditional finance, we often imagine banks, credit unions, and other established financial institutions. However, a revolutionary movement has recently begun to reshape our understanding of finance. This movement, known as "DeFi", or "Decentralized Finance", is bringing about a financial transformation, powered predominantly by Ethereum.
+tags:
+  - Crypto & DeFi
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
+featured: true
 ---
 
 # Intro to DeFi

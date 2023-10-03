@@ -3,14 +3,9 @@ title: "Crypto Collateral: Borrowing Made Simple"
 date: "2023-09-27T18:45:32.169Z"
 description: Unlock the power of your cryptocurrency assets by leveraging them for borrowing. This guide explores how digital collateral is changing the borrowing landscape.
 tags:
-  - crypto collateral
-  - borrowing
-  - LTV
-  - defi
-  - MakerDAO
-  - Compound
-  - Aave
-coverUrl: http://image.com/cryptoborrow
+  - DeFi Borrowing & Lending
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # Crypto Collateral: Borrowing Made Simple

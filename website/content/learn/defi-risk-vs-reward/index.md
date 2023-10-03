@@ -2,6 +2,10 @@
 title: "DeFi: Risk vs Reward"
 date: "2023-09-14T22:40:32.169Z"
 description: Decentralized Finance, or "DeFi" for short, has been one of the most revolutionary concepts to emerge in the world of cryptocurrency. Particularly on the Ethereum platform, DeFi promises to democratize finance, creating a system where financial services from lending and borrowing to insurance and exchanges can be offered without traditional intermediaries like banks. But as with any budding industry, there are potential rewards and inherent risks.
+tags:
+  - Crypto & DeFi
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # DeFi: Risk vs Reward

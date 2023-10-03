@@ -3,11 +3,10 @@ title: "Compound Uncovered: Navigating the Future of DeFi Lending"
 date: "2023-09-28T13:35:32.169Z"
 description: Unravel the intricacies of Compound, one of the pioneers in the DeFi lending arena. Dive deep into its principles, features, and future potential.
 tags:
-  - Compound
-  - DeFi
-  - Lending
-  - Ethereum
-coverUrl: http://image.com/compound-defi
+  - DeFi Borrowing & Lending
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
+featured: true
 ---
 
 # Compound Uncovered: Navigating the Future of DeFi Lending

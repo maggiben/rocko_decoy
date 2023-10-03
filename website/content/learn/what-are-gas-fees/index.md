@@ -2,6 +2,10 @@
 title: Understanding Ethereum Gas Fees
 date: "2023-09-13T22:40:32.169Z"
 description: The Ethereum blockchain, often dubbed the 'world computer', offers a platform for decentralized applications (dApps) and smart contracts. As users interact with this platform, one consistent element they encounter is "gas" and its associated fees. For newcomers, these fees can be perplexing. Why do they exist? How do they benefit the Ethereum network? 
+tags:
+  - Crypto & DeFi
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # Understanding Ethereum Gas Fees

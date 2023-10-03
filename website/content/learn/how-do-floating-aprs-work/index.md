@@ -3,13 +3,9 @@ title: "Riding the Waves: Understanding Floating APR in DeFi Lending"
 date: "2023-09-28T10:55:32.169Z"
 description: Dive deep into the dynamic world of DeFi lending rates. Learn how Floating APR works, why it's vital in decentralized finance, and how to navigate its highs and lows.
 tags:
-  - DeFi
-  - APR
-  - Aave
-  - Compound
-  - MakerDAO
-  - Lending Rates
-coverUrl: http://image.com/floatingapr
+  - DeFi Borrowing & Lending
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # Riding the Waves: Understanding Floating APR in DeFi Lending

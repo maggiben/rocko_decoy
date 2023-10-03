@@ -3,12 +3,9 @@ title: "Bitcoin-Backed Borrowing: Harnessing Ethereum's DeFi Might"
 date: "2023-09-28T10:35:32.169Z"
 description: This guide takes you through the transformative process of using wrapped tokens and Ethereum's DeFi protocols to borrow against your Bitcoin. Dive in to maximize your crypto's potential!
 tags:
-  - Bitcoin
-  - Ethereum
-  - DeFi
-  - WBTC
-  - Wrapped Tokens
-coverUrl: http://image.com/bitcoin-defi
+  - DeFi Borrowing & Lending
+coverUrl: /learn/blogHeader.png
+author: Vince DePalma
 ---
 
 # Bitcoin-Backed Borrowing: Harnessing Ethereum's DeFi Might
