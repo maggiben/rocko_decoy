@@ -16,7 +16,6 @@ const CompoundProtocol: FC<ProtocolProps> = ({
     const { loanData, setLoanData } = useLoanData();
     const {
         getBorrowAPR,
-        getETHPrice,
         getLTV,
         getPenalty,
         getThreshold,
@@ -31,11 +30,10 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             const loanToValue = await getLTV();
             const penalty = await getPenalty();
             const threshold = await getThreshold();
-            const ethPrice = await getETHPrice();
             const rewardRate = await getRewardRate();
             const rewardAmount = await getRewardAmount();
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
-            const collateral = collateralInUSD / ethPrice;
+            const collateral = collateralInUSD / loanData?.collateralPrice;
             const liquidationPrice = borrowing / threshold / collateral;
             const interestSixMonths = borrowing * currentAPR / 200;
             const interestOneYear = borrowing * currentAPR / 100;
@@ -52,7 +50,6 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                         loanToValue: loanToValue,
                         liquidationPenalty: penalty,
                         liquidationThreshold: threshold,
-                        collateralPrice: ethPrice,
                         collateralNeeded: collateral,
                         liquidationPrice: liquidationPrice,
                         rewardRate: rewardRate,

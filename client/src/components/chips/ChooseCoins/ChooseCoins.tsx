@@ -5,14 +5,7 @@ import { useSingleLoan } from "@/contract/single";
 
 const ChooseCoins = ({ assets }: any) => {
   const { loanData, setLoanData } = useLoanData();
-  const {
-      getBorrowAPR,
-      getETHPrice,
-      getLTV,
-      getPenalty,
-      getThreshold,
-      getRewardRate
-  } = useSingleLoan();
+  const { getETHPrice } = useSingleLoan();
   const [selectedCoin, setSelectedCoin] = useState("");
 
   const initialize = () => {
@@ -30,30 +23,15 @@ const ChooseCoins = ({ assets }: any) => {
   };
 
   const updateLoanData = async (info: any) => {
-    const currentAPR = await getBorrowAPR();
-    const loanToValue = await getLTV();
-    const penalty = await getPenalty();
-    const threshold = await getThreshold();
     const ethPrice = await getETHPrice();
-    const rewardRate = await getRewardRate();
-    const collateralInUSD = loanData?.borrowing / loanToValue * (1 + loanData?.buffer / 100);
-    const collateral = collateralInUSD / ethPrice;
-    const liquidationPrice = loanData?.borrowing / threshold / collateral;
     
     if (setLoanData) {
       setLoanData((prevLoanData) => {
         return {
             ...prevLoanData,
-            currentAPR: currentAPR,
             cryptoName: info.coinShortName,
             cryptoIcon:info.coinIcon,
-            loanToValue: loanToValue,
-            liquidationPenalty: penalty,
-            liquidationThreshold: threshold,
             collateralPrice: ethPrice,
-            collateralNeeded: collateral,
-            liquidationPrice: liquidationPrice,
-            rewardRate: rewardRate,
             activeNextButton: true,
           }
       })

@@ -164,7 +164,7 @@ const DepositingCollateral = () => {
           <p className="text-black">Estimated time remaining</p>
           <h1 className="text-2xl font-semibold mb-4">
             {" "}
-            {`${activeDone ? "Complete!" : `${counter} miniutes`}`}{" "}
+            {`${activeDone ? "Complete!" : `${counter} minutes`}`}{" "}
           </h1>
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
