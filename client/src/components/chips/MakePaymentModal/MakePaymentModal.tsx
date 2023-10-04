@@ -180,7 +180,7 @@ const MakePaymentModal = ({
       </div>
       {/* continue button */}
       <Link
-        href={`/dashboard/${"invoice"}/${"make-payment"}?payment=${parseFloat(
+        href={`/loan-dashboard/${"1"}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
         )}&currentBalance=${parseFloat(
           currentBalance?.replace(/,/g, "") || "0"

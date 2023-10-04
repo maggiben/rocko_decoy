@@ -183,7 +183,7 @@ const ModifyWallet = ({
       </div>
       {/* continue button */}
       <Link
-        href={`/dashboard/${"invoice"}/${"modify_collateral"}?try=${amount}`}
+        href={`/loan-dashboard/${"1"}/${"modify_collateral"}?try=${amount}`}
       >
         {" "}
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

@@ -146,7 +146,8 @@ const Dashboard = () => {
                   </div>
                 ))}
                 <Link
-                  href={`/dashboard/${"invoice"}`}
+                  // href={`/loan-dashboard/${i+1}`}
+                  href={`/loan-dashboard/1`}
                   // href={"/manage"}
                   className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
                 >

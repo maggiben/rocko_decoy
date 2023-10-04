@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
@@ -9,18 +9,17 @@ import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 
 interface InnerInfo {
-  description: string | JSX.Element;
-  details: string| JSX.Element;
-  subDetails?: string | JSX.Element;
+  description: string;
+  details: string;
+  subDetails?: string;
 }
 
 interface Info {
   description: string;
   details?: string | number | JSX.Element;
-  subDetails?: string | JSX.Element;
+  subDetails?: string;
   subDescription?: InnerInfo[];
 }
 
@@ -33,44 +32,15 @@ const terms: Term[] = [
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm">
         You will need to authorize the transfer to your Rocko wallet for the
-        Payment Amount above. If your Rocko wallet does not receive the Payment
-        Amount, no payment will be made.
+        collateral amount above. If your Rocko wallet does not receive the
+        collateral amount, no additional collateral will be posted for your
+        loan.
       </li>
     ),
   },
 ];
 
-const termsFull: Term[] = [
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm">
-        A 5.00 USDC Payment Buffer is added to your payment to ensure the loan
-        is fully repaid while accounting for interest that accrues each second.
-        Any excess amount will be returned to you along with your collateral.
-      </li>
-    ),
-  },
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm">
-        Any rewards you may have earned will be automatically claimed and
-        delivered to your wallet/account along with your collateral upon full
-        repayment of the loan.
-      </li>
-    ),
-  },
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm">
-        You will need to authorize the transfer to your Rocko wallet for the
-        Payment Amount above. If your Rocko wallet does not receive the Payment
-        Amount, no payment will be made.
-      </li>
-    ),
-  },
-];
-
-const MakePayment: FC = () => {
+const ModifyCollateral: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
 
   const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
@@ -80,71 +50,33 @@ const MakePayment: FC = () => {
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const currentBalance = parseFloat(router.get("currentBalance") || "0"); //! get the URL parameter currentBalance value
-  const amount = "add"; //! get the URL parameter amount value
+  const amount = router.get("try"); //! get the URL parameter value
+
   const invoice: Info[] = [
     {
       description: "Lending Protocol",
-      details: <span className="underline">Compound Finance</span>,
+      details: <span className="underline font-normal">Compound Finance</span>,
     },
     {
-      description: "Payment Amount",
-      subDescription: [
-        {
-          description:
-            payment === currentBalance ? (
-              <>
-                <p className="text-sm">Outstanding balance</p>
-              </>
-            ) : (
-              ""
-            ),
-          details: payment === currentBalance ? `${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC` : "",
-          subDetails: payment === currentBalance ? `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}` : "",
-        },
-        {
-          description:
-            payment === currentBalance ? (
-              <div className="flex items-center gap-2">
-                <p className="text-sm">Payment Buffer</p>
-                <HoverTooltip text="Payment Butter" />
-              </div>
-            ) : (
-              ""
-            ),
-          details: payment === currentBalance ? `5.00 USDC` : "",
-          subDetails: payment === currentBalance ? `~$5.00` : "",
-        },
-      ],
-      details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC</span>,
-      subDetails: `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}`,
+      description: "Collateral Amount",
+      details: "0.12 ETH",
+      subDetails: `~$209.45`,
     },
     {
-      description: "Projected values after payment",
+      description: "Projected values after collateral modification",
       subDescription: [
         {
-          description: "Outstanding balance",
-          details: <span className="font-semibold text-sm">{(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC</span>,
-          subDetails: `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat((currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')))}`,
+          description: "Total Collateral",
+          details: `${amount === "add" ? "1.96 ETH" : "1.72 ETH"}`,
+          subDetails: `${amount === "add" ? "~$2,918.82" : "~$2,425.64"}`,
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">107%</span>,
+          details: `${amount === "add" ? "107%" : "96%"}`,
         },
         {
           description: "Liquidation Price (ETH)",
-          details: <span className="font-semibold text-sm">$1,221.74</span>,
+          details: `${amount === "add" ? "$1,221.74" : "$1,412.94"}`,
         },
       ],
     },
@@ -152,11 +84,15 @@ const MakePayment: FC = () => {
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
-      <h1 className="text-2xl lg:text-3xl font-semibold">Make a Payment</h1>
-      {payment === currentBalance ? (
-        <p>You’re repaying your loan in full</p>
+      <h1 className="text-2xl lg:text-3xl font-semibold">Modify Collateral</h1>
+      {amount === "add" ? (
+        <p>
+          You’re adding more <strong>ETH</strong> to your loan collateral
+        </p>
       ) : (
-        <p>You’re making a partial payment</p>
+        <p>
+          You’re withdrawing <strong>ETH</strong> from your loan collateral
+        </p>
       )}
 
       {/* ---------------------- First Section Start ------------------------ */}
@@ -171,11 +107,11 @@ const MakePayment: FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p className="text-base text-[#141414]">
+                    <p className="font-semibold">
                       {info?.details}
                     </p>
                     {info?.subDetails && (
-                      <p className="text-sm text-[#545454]">
+                      <p className="text-sm text-gray-500">
                         {info?.subDetails}
                       </p>
                     )}
@@ -183,15 +119,15 @@ const MakePayment: FC = () => {
                   {info?.subDescription &&
                     info?.subDescription.map((innerInfo, i) => (
                       <React.Fragment key={i}>
-                        <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6 text-sm">
-                          {innerInfo?.description} {/* //! come here  */}
+                        <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
+                          <p className="text-sm">{innerInfo?.description}</p>
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
-                          <p className="font-semibold text-xs text-[#141414]">
-                            {innerInfo?.details}
+                          <p className="font-semibold text-sm">
+                           {innerInfo?.details}
                           </p>
                           {innerInfo?.subDetails && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-sm text-gray-500">
                               {innerInfo?.subDetails}
                             </p>
                           )}
@@ -228,7 +164,7 @@ const MakePayment: FC = () => {
               <label htmlFor="wallet1" className="pl-4">
                 <p className="font-medium">
                   Coinbase or Gemini Account{" "}
-                  <span className=" text-xs lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
+                  <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
                     Recommended
                   </span>
                 </p>
@@ -252,7 +188,7 @@ const MakePayment: FC = () => {
                   Sign in
                 </button>
               ) : (
-                <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md">
+                <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium">
                   <Image src={correct} alt="Correct Image" />
                   <p>Connected</p>
                 </button>
@@ -281,7 +217,7 @@ const MakePayment: FC = () => {
             <div className="text-center md:text-left mt-1 lg:mt-0">
               <button
                 disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl  text-sm font-semibold ${
+                className={`w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
                   paymentMethod === "ethereum"
                     ? "text-[#eee] bg-[#2C3B8D]"
                     : "bg-[#eee] text-[#2C3B8D]"
@@ -343,21 +279,15 @@ const MakePayment: FC = () => {
               {/* if select other address then it will be active -- end*/}
             </div>
           </div>
-
-          <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
-            <ul className="list-disc">
-              {payment === currentBalance
-                ? termsFull.map((term, i) => (
-                    <React.Fragment key={i}>
-                      {term.rule}
-                    </React.Fragment>
-                  ))
-                : terms.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}
-                    </React.Fragment>
-                  ))}
-            </ul>
-          </div>
+          {amount === "add" && (
+            <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
+              <ul className="list-disc">
+                {terms.map((term, i) => (
+                  <React.Fragment key={i}>{term.rule}</React.Fragment>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
@@ -373,7 +303,7 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/dashboard/invoice`}>
+              <Link href={`/loan-dashboard/1`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -381,9 +311,9 @@ const MakePayment: FC = () => {
                   Back
                 </button>
               </Link>
-              {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
+              {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/dashboard/${"invoice"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
+                href={`/loan-dashboard/1/${"modify_collateral"}/${amount}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
@@ -421,4 +351,4 @@ const MakePayment: FC = () => {
   );
 };
 
-export default MakePayment;
+export default ModifyCollateral;

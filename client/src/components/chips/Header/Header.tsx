@@ -82,13 +82,13 @@ const Header = () => {
                     ></div>
                   </div>
                 </button>
-                <Link href="/dashboard">
+                <Link href="/loan-dashboard">
                   <Image className="w-[56px] lg:w-[97px] inline-block pb-2" src={logo} alt="logo" width={97} height={51.728} />
                 </Link>
                 <div className="flex items-center gap-12 justify-end">
                   <div className="hidden  lg:flex items-center gap-8 justify-end">
                     <Link
-                      href="/dashboard"
+                      href="/loan-dashboard"
                       className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                     >
                       DASHBOARD
@@ -160,7 +160,7 @@ const Header = () => {
             >
               <div className="container mx-auto md:px-10 py-4  bg-white ">
                 <Link
-                  href="/dashboard"
+                  href="/loan-dashboard"
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
                 >
                   DASHBOARD
