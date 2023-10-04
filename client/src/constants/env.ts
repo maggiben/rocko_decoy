@@ -4,11 +4,13 @@ export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const NETWORK = process.env.REACT_APP_NETWORK || "goerli";
 export const INFURA_APIKEY = process.env.REACT_APP_INFURA_APIKEY || "fde85b66d55f44e0bb36be6c88c7f1c3";
 
-const params = new URLSearchParams(window.location.search);
-const demoMode = params.get('demo_mode');
-if (demoMode) {
-  sessionStorage.setItem('IS_DEMO_MODE', 'true');
-  console.log('DEMO MODE ENABLED');
+let demoMode = false;
+if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    demoMode = !!params.get('demo_mode');
+    if (demoMode) {
+        sessionStorage.setItem('IS_DEMO_MODE', 'true');
+         console.log('DEMO MODE ENABLED');
+    }
 }
-
 export const IS_DEMO_MODE = process.env.REACT_APP_IS_DEMO_MODE === 'true' || !!demoMode || !!sessionStorage.getItem('IS_DEMO_MODE');
