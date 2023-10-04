@@ -2,6 +2,7 @@ import ModalContent from "../ModalContent/ModalContent"
 import Link from "next/link";
 import frameIcon from "@/assets/frame.svg";
 import Image from "next/image";
+import { IS_DEMO_MODE } from "@/constants/env";
 
 const LoanFinalized = ({setOpenModalFor}:{setOpenModalFor:Function}) => {
   return (
@@ -26,7 +27,7 @@ const LoanFinalized = ({setOpenModalFor}:{setOpenModalFor:Function}) => {
       
     {/* continue button */}
     <div className="my-6">
-      <Link href='/depositing-collateral' className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
+      <Link href={IS_DEMO_MODE ? '/deposit-collateral' : '/depositing-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
         Continue
       </Link>
     </div>
