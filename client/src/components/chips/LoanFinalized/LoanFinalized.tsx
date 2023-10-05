@@ -27,7 +27,8 @@ const LoanFinalized = ({setOpenModalFor}:{setOpenModalFor:Function}) => {
       
     {/* continue button */}
     <div className="my-6">
-      <Link href={IS_DEMO_MODE ? '/deposit-collateral' : '/depositing-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
+      {/* <Link href={IS_DEMO_MODE ? '/deposit-collateral' : '/depositing-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"> */}
+      <Link href={'/deposit-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
         Continue
       </Link>
     </div>
