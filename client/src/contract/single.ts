@@ -53,7 +53,7 @@ export const useSingleLoan = () => {
     [
       ASSET_ID
     ] )
-    const LTV = assetInfo.liquidationFactor
+    const LTV = assetInfo.borrowCollateralFactor
 
     const formattedValue = Number(ethers.utils.formatEther( LTV ))
     return formattedValue
