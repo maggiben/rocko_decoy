@@ -2,7 +2,6 @@ import { FC, useState, useEffect } from "react";
 import { ProtocolProps } from "@/types/type";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
-import { useSingleLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -14,24 +13,16 @@ const CompoundProtocol: FC<ProtocolProps> = ({
   handleProtocol,
 }) => {
     const { loanData, setLoanData } = useLoanData();
-    const {
-        getBorrowAPR,
-        getLTV,
-        getPenalty,
-        getThreshold,
-        getRewardRate,
-        getRewardAmount
-    } = useSingleLoan();
 
     const updateLoanData = async () => {
         try {
             const borrowing = loanData?.borrowing;
-            const currentAPR = await getBorrowAPR();
-            const loanToValue = await getLTV();
-            const penalty = await getPenalty();
-            const threshold = await getThreshold();
-            const rewardRate = await getRewardRate();
-            const rewardAmount = await getRewardAmount();
+            const currentAPR = loanData?.currentAPR;
+            const loanToValue = loanData?.loanToValue;
+            const penalty = loanData?.liquidationPenalty;
+            const threshold = loanData?.liquidationThreshold;
+            const rewardRate = loanData?.rewardRate;
+            const rewardAmount = loanData?.rewardAmount;
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / loanData?.collateralPrice;
             const liquidationPrice = borrowing / threshold / collateral;

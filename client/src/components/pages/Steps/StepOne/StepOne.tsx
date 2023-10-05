@@ -8,6 +8,7 @@ import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
 import { CurrencyStep } from "@/types/type";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
+import { useSingleLoan } from "@/contract/single";
 
 interface FormData {
   numberInput: string;
@@ -25,6 +26,15 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   } = useForm<FormData>({mode: "onBlur"});
 
   const { loanData, setLoanData } = useLoanData();
+  const {
+    getETHPrice,
+    getBorrowAPR,
+    getLTV,
+    getPenalty,
+    getThreshold,
+    getRewardRate,
+    getRewardAmount
+  } = useSingleLoan();
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -57,6 +67,39 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
       });
     }
   };
+
+  const updateLoanData = async () => {
+    try {
+        const currentPrice = await getETHPrice();
+        const currentAPR = await getBorrowAPR();
+        const loanToValue = await getLTV();
+        const penalty = await getPenalty();
+        const threshold = await getThreshold();
+        const rewardRate = await getRewardRate();
+        const rewardAmount = await getRewardAmount();
+
+        if (setLoanData) {
+            setLoanData((prevLoanData) => {
+                return {
+                    ...prevLoanData,
+                    collateralPrice: currentPrice,
+                    currentAPR: currentAPR,
+                    loanToValue: loanToValue,
+                    liquidationPenalty: penalty,
+                    liquidationThreshold: threshold,
+                    rewardRate: rewardRate,
+                    rewardAmount: rewardAmount,
+                }
+            })
+        }
+    } catch(e) {
+        console.log({e}, 'Cannot update loan data')
+    }
+  }
+
+  useEffect(() => {
+    updateLoanData();
+  }, []);
 
   useEffect(() => {
     const inputElement = document.getElementById("numberField");

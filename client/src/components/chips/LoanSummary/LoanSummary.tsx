@@ -132,7 +132,7 @@ const LoanSummary = () => {
             `$${financial(loanData?.liquidationPrice, 2)}`) ||
             "--"}
         </p>
-        {(loanData?.collateralPrice && (
+        {(loanData?.collateralPrice && loanData?.cryptoName && (
             <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">
                 Current Price of {loanData?.cryptoName}

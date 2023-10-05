@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import CoinCard from "../CoinCard/CoinCard";
 import useLoanData from "@/hooks/useLoanData";
-import { useSingleLoan } from "@/contract/single";
 
 const ChooseCoins = ({ assets }: any) => {
   const { loanData, setLoanData } = useLoanData();
-  const { getETHPrice } = useSingleLoan();
   const [selectedCoin, setSelectedCoin] = useState("");
 
   const initialize = () => {
@@ -23,7 +21,6 @@ const ChooseCoins = ({ assets }: any) => {
   };
 
   const updateLoanData = async (info: any) => {
-    const ethPrice = await getETHPrice();
     
     if (setLoanData) {
       setLoanData((prevLoanData) => {
@@ -31,7 +28,6 @@ const ChooseCoins = ({ assets }: any) => {
             ...prevLoanData,
             cryptoName: info.coinShortName,
             cryptoIcon:info.coinIcon,
-            collateralPrice: ethPrice,
             activeNextButton: true,
           }
       })
