@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LoneProvider from "@/context/loanContext/loanContext";
 import Providers from "./Providers";
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Header />
+          <Toaster position="top-right" reverseOrder={true} />
           <LoneProvider>{children}</LoneProvider>
         </Providers>
       </body>
