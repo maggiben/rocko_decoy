@@ -1,10 +1,4 @@
 /**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/
- */
-
-/**
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
@@ -21,8 +15,7 @@ module.exports = {
     },
   },
   plugins: [
-    `gatsby-plugin-image`,
-    `gatsby-plugin-sass`,
+    "gatsby-plugin-postcss",
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -36,6 +29,7 @@ module.exports = {
         name: `images`,
         path: `${__dirname}/src/images`,
       },
+
     },
     {
       resolve: `gatsby-transformer-remark`,
@@ -148,4 +142,4 @@ module.exports = {
       },
     },
   ],
-}
+};
