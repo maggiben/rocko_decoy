@@ -99,6 +99,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
 
   useEffect(() => {
     updateLoanData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -108,6 +109,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     };
 
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelect = (info: any) => {
@@ -140,6 +142,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         };
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors, isValid]);
 
   return (

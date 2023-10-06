@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import StatusWarning from "@/assets/StatusWarning.svg";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
@@ -8,6 +9,7 @@ import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
 import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
+
 interface InnerInfo {
   description: string | JSX.Element;
   details?: string | number | JSX.Element;
@@ -332,8 +334,8 @@ const StepFive: React.FC = () => {
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
-                      <img
-                        src="./assets/StatusWarning.svg"
+                      <Image
+                        src={StatusWarning}
                         width={24}
                         height={24}
                         alt="warning"

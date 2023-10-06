@@ -136,6 +136,7 @@ const StepFour: FC<RiskStep> = ({ title }) => {
 
   useEffect(() => {
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -80,7 +80,8 @@ const DepositingCollateral = () => {
       
       setAllDone();
     }
-  }, [success])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success, txHash]);
 
   // for timer
   useEffect(() => {
@@ -151,7 +152,7 @@ const DepositingCollateral = () => {
         progress === 100 &&
         setDoneTracker([...doneTracker, { step: "four" }]);
     }
-  }, [progress, progressTracker]);
+  }, [progress, progressTracker, doneTracker]);
 
   //
   return (

@@ -51,6 +51,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
 
   useEffect(() => {
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

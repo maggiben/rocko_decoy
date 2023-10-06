@@ -62,6 +62,7 @@ const ChooseCoins = ({ assets }: any) => {
 
   useEffect(() => {
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

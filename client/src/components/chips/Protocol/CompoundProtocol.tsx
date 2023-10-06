@@ -1,4 +1,5 @@
 import { FC, useState, useEffect } from "react";
+import Image from "next/image";
 import { ProtocolProps } from "@/types/type";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
@@ -55,6 +56,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
 
     useEffect(() => {
         updateLoanData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loanData])
 
     return (
@@ -63,7 +65,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             {/* protocol name */}
             <div className="flex items-center justify-between flex-col md:flex-row gap-2">
             <div className="flex items-center justify-start gap-1">
-                <img src={symbol || ""} alt={name || ""} width={20} height={20} />
+                <Image src={symbol || ""} alt={name || ""} width={20} height={20} />
                 <h1 className="font-medium text-xl text-blackPrimary">{name}</h1>
             </div>
 
