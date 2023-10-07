@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAddress } from "@thirdweb-dev/react";
+import { useAccount } from "wagmi";
 import StepOne from "@/components/pages/Steps/StepOne/StepOne";
 import StepTwo from "@/components/pages/Steps/StepTwo/StepTwo";
 import StepThree from "@/components/pages/Steps/StepThree/StepThree";
@@ -9,6 +10,7 @@ import StepFive from "@/components/pages/Steps/StepFive/StepFive";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import useLoanData from "@/hooks/useLoanData";
+import toast from "react-hot-toast";
 
 const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
 const stepsName = [
@@ -20,6 +22,7 @@ const stepsName = [
 ];
 
 export default function Home() {
+  const { address: zerodevAccount } = useAccount();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
   const [openModalFor, setOpenModalFor] = useState("");
@@ -27,6 +30,11 @@ export default function Home() {
     useLoanData();
 
   const nextStep = () => {
+    if (!zerodevAccount) {
+      toast.error("Login before NEXT!");
+      return;
+    }
+
     if (loanData?.nextValidation && setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,

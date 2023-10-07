@@ -81,11 +81,13 @@ export const useGetLoan = (collateral: any, loan: any) => {
         }
     });
 
-    const executeBatchGetLoan = useCallback(() => {
-        if (batchGetLoan) batchGetLoan();
-    }, [batchGetLoan]);
+    const executeBatchGetLoan = () => {
+        console.log(batchGetLoan)
+        if (batchGetLoan)
+            batchGetLoan();
+    }
     
-    return { executeBatchGetLoan, success, txHash, error };
+    return { executeBatchGetLoan, batchGetLoan, success, txHash, error };
 }
 
 export const useRepay = (collateral: any, loan: any) => {

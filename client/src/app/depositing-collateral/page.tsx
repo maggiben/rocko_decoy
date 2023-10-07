@@ -2,12 +2,17 @@
 import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
 import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import { useEffect, useState } from "react";
-import { useAccount, useBalance } from "wagmi";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import StatusSuccess from "@/assets/StatusSuccess.png";
+import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
 import useLoanData from "@/hooks/useLoanData";
+import toast from "react-hot-toast";
+import { NETWORK } from "@/constants/env";
 
 interface DoneTracker {
   step: string;
@@ -31,10 +36,19 @@ const DepositingCollateral = () => {
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
   const { data } = useBalance({ address: wagmiAddress });
-  const { executeBatchGetLoan, success, txHash } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+  const { chain } = useNetwork();
+  const { executeBatchGetLoan, batchGetLoan, success, txHash } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
-  const OnStart = async () => {
+  const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
+    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+      toast.error("Invalid Network!");
+      return;
+    }
+    if (Number(data?.formatted) < loanData?.collateralNeeded) {
+      toast.error("Insufficient Collateral Balance!");
+      return;
+    }
 
     setStartA(true);
     const collateralReceived = await receiveCollateral();
@@ -65,7 +79,7 @@ const DepositingCollateral = () => {
   const setAError = () => {
     setStartA(false);
     setProgress(0);
-    setCounter(60);
+    setCounter(3);
   }
 
   const setAllDone = () => {
@@ -75,9 +89,24 @@ const DepositingCollateral = () => {
   }
 
   useEffect(() => {
+    if (batchGetLoan != undefined) {
+      start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[batchGetLoan])
+
+  useEffect(() => {
     if (success) {
       console.log("---transactionHash of batchTransactions---", txHash);
-      
+      toast(() => (
+        <div className="flex items-center underline gap-2">
+          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+          <Link className="hover:text-green-700" href={`https://goerli.etherscan.io/tx/${txHash}`} target="_blank">
+            Successfully get loaned!
+          </Link>
+        </div>
+      ))
+  
       setAllDone();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -322,24 +351,15 @@ const DepositingCollateral = () => {
             {loanData?.activeNextButton?.valueOf()} */}
             </p>
             <div className="flex items-center justify-end gap-3">
-              {activeDone ? (
-                <button
-                  onClick={() => setCompleteModal(true)}
-                  className="font-semibold  text-xs md:text-sm bg-blue py-[10px]  px-6 rounded-full text-white"
-                >
-                  Done
-                </button>
-              ) : (
-                <button
-                  onClick={OnStart}
-                  className={`font-semibold  text-xs md:text-sm ${
-                    (startA || startB) ? "bg-blue/40" : "bg-blue"
-                  } py-[10px] px-6 rounded-full text-white`}
-                  disabled={startA || startB}
-                >
-                  Continue
-                </button>
-              )}
+              <button
+                onClick={() => setCompleteModal(true)}
+                className={`font-semibold  text-xs md:text-sm ${
+                  (startA || startB) ? "bg-blue/40" : "bg-blue"
+                } py-[10px] px-6 rounded-full text-white`}
+                disabled={startA || startB}
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>
