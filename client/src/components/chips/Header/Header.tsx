@@ -15,7 +15,7 @@ const net = (chains as { [key: string]: any })[NETWORK];
 const Header = () => {
     const { chains } = configureChains( [net], [publicProvider()] );
     const auth0Connector = new Auth0WalletConnector({chains, options: {
-      projectId: process.env.REACT_APP_ZERODEV_PROJECT_ID || "86d9c9d6-93cc-4301-a625-667f44c7410a",
+      projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || "86d9c9d6-93cc-4301-a625-667f44c7410a",
       shimDisconnect: true
     }});
     const loginRef: any = useRef();
