@@ -101,7 +101,10 @@ const DepositingCollateral = () => {
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-          <Link className="hover:text-green-700" href={`https://goerli.etherscan.io/tx/${txHash}`} target="_blank">
+          <Link className="hover:text-green-700" 
+            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
+            target="_blank"
+          >
             Successfully get loaned!
           </Link>
         </div>

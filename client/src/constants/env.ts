@@ -2,8 +2,8 @@ export const GEMINI_CLIENT_ID = process.env.NEXT_PUBLIC_GEMINI_CLIENT_ID;
 export const COINBASE_CLIENT_ID = process.env.NEXT_PUBLIC_COINBASE_CLIENT_ID;
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK || "goerli";
-export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || "fde85b66d55f44e0bb36be6c88c7f1c3";
-export const THIRDWEB_CLIENTID = process.env.NEXT_PUBLIC_THIRDWEB_CLIENTID || "6991bf24125bd5b2e125077dc1e8c208";
+export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || "";
+export const THIRDWEB_CLIENTID = process.env.NEXT_PUBLIC_THIRDWEB_CLIENTID || "";
 
 let demoMode = false;
 let sessionFlag = false;
