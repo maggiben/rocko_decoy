@@ -1,110 +1,137 @@
-
 import * as React from "react"
-import image1 from "../images/Image-1.png";
-import image2 from "../images/Image-2.png";
-import image3 from "../images/Image-3.png";
-import BlogsCategories from "../Components/BlogsCategories/BlogsCategories";
-import HeroBlog from "../Components/HeroBlog/HeroBlog";
-import Subscribe from "../Components/Subscribe/Subscribe";
-import BlogsContainer from "../Components/BlogsContainer/BlogsContainer";
-import CategoryBlogsContainer from "../Components/CategoryBlogsContainer/CategoryBlogsContainer";
-import Layout from "../Components/Layout/Layout";
+import rockoLogo from "../images/logo.svg"
+// import website styles
+// import "../styles/style.scss"
 
-
-const Index = () => {
-  //* useState Hooks
-  const [selectCategory, setSelectCategory] = React.useState("All");
-
-// *Create an array of blog post objects
-const blogDetails = [
-  {
-    image: image1,
-    category: "Category 1",
-    title: "A blog post title 1",
-    description: "A description of the article 1",
-    publishedDate: "Sept 24, 2023",
-  },
-  {
-    image: image2,
-    category: "Category 2",
-    title: "A blog post title 2",
-    description: "A description of the article 2",
-    publishedDate: "Sept 25, 2023",
-  },
-  {
-    image: image3,
-    category: "Category 3",
-    title: "A blog post title 3",
-    description: "A description of the article 3",
-    publishedDate: "Sept 26, 2023",
-  },
-];
+const Index = ({}) => {
   return (
-   <Layout>
-     <>
-      {/* //! ------BlogsCategories Container Start----- */}
-      <BlogsCategories
-        selectCategory={selectCategory}
-        setSelectCategory={setSelectCategory}
-      />
-      {/* //! ------BlogsCategories Container End----- */}
-      {/* //! ------Category name will show when user click any of the listed category----- */}
-      {selectCategory !== "All" && (
-        <h1 className="font-[500] text-[32px] mb-16 container ml-4 md:mx-auto">
-          {selectCategory}
-        </h1>
-      )}
-      {/* //! ------HeroBlog Start----- */}
-      <HeroBlog />
-      {/* //! ------HeroBlog End----- */}
-      {/* //! ------Subscribe Start----- */}
-      {selectCategory === "All" && <Subscribe />}{" "}
-      {/* //!Subscribe will show only when "All" category is selected */}
-      {/* //! ------Subscribe End----- */}
-      {selectCategory === "All" ? (
-        <>
-          {/* //! ------Latest-Post Container Start----- */}
-          <BlogsContainer
-            blogDetails={blogDetails}
-            blogsCategory="Latest Posts"
-          />
-          {/* //! ------Latest-Post Container End----- */}
-          {/* //! ------Top-Post Container Start----- */}
-          <BlogsContainer
-            blogDetails={blogDetails}
-            blogsCategory="Top Posts"
-            grayBG="bg-[#F9F9F9]"
-          />
-          {/* //! ------Top-Post Container End----- */}
-          {/* //! ------Category 1-Post Container Start----- */}
-          <BlogsContainer
-            blogDetails={blogDetails}
-            blogsCategory="Category 1 Posts"
-            viewButton="View All"
-          />
-          {/* //! ------Category 1-Post Container End----- */}
-          {/* //! ------Category 2-Post Container Start----- */}
-          <BlogsContainer
-            blogDetails={blogDetails}
-            blogsCategory="Category 2 Posts"
-            viewButton="View All"
-            grayBG="bg-[#F9F9F9]"
-          />
-          {/* //! ------Category 2-Post Container End----- */}
-        </>
-      ) : (
-        <>
-          <BlogsContainer
-            blogDetails={blogDetails}
-            blogsCategory="Title"
-            grayBG="bg-[#F9F9F9]"
-          />
-          <CategoryBlogsContainer />
-        </>
-      )}
-    </>
-   </Layout>
-  );
-};
+    <>
+      <a className="accessibility" href="#main">
+        Skip to Content
+      </a>
+      <noscript>
+        <div>Javascript must be enabled for the correct page display</div>
+      </noscript>
+      <div className="wrapper">
+        <header className="header">
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <div className="header__buttons d-flex justify-content-end">
+                  <a
+                    href="mailto:&#104;&#101;&#108;&#108;&#111;&#064;&#114;&#111;&#099;&#107;&#111;&#046;&#099;&#111;"
+                    className="btn btn-light"
+                  >
+                    <span className="rocko rocko-mail"></span>
+                    &#104;&#101;&#108;&#108;&#111;&#064;&#114;&#111;&#099;&#107;&#111;&#046;&#099;&#111;
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div className="page-holder">
+          <main className="main" id="main">
+            <section className="banner">
+              <div className="container">
+                <div className="row align-items-center justify-content-center">
+                  <div className="col-md-8 col-lg-6">
+                    <div className="banner__content text-center">
+                      <div className="banner__logo">
+                        <a href="#">
+                          <img src={rockoLogo} alt="rocko.co" />
+                        </a>
+                      </div>
+                      <h1>Launching Soon!</h1>
+                      <div className="banner__text">
+                        <p>
+                          Rocko enables crypto owners to easily borrow USDC or
+                          cash using their crypto as collateral. Access low-rate
+                          loans from trusted DeFi protocols in minutes! Sign up
+                          below to be notified as soon as we launch!
+                        </p>
+                      </div>
+                      <form
+                        className="form form--banner"
+                        action="https://rocko.us11.list-manage.com/subscribe/post?u=a55ca9db1b050104dac6c18a3&amp;id=d64d1776bc&amp;f_id=0036a0e0f0"
+                        method="post"
+                      >
+                        <div className="input-holder">
+                          <input
+                            name="EMAIL"
+                            id="EMAIL"
+                            type="email"
+                            className="form-control"
+                            placeholder="Type your email here"
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          className="btn btn-primary text-white"
+                        >
+                          NOTIFY ME
+                        </button>
 
-export default Index;
+                        <div
+                          aria-hidden="true"
+                          style={{ position: "absolute", left: "-5000px" }}
+                        >
+                          <input
+                            type="text"
+                            name="b_a55ca9db1b050104dac6c18a3_d64d1776bc"
+                            tabindex="-1"
+                            value=""
+                          />
+                        </div>
+                      </form>
+                      <div className="banner__social">
+                        <ul className="d-flex justify-content-center align-items-center">
+                          <li>
+                            <a
+                              href="https://twitter.com/rockodefi"
+                              className="d-flex align-items-center justify-content-center rounded-circle"
+                              target="_blank"
+                            >
+                              <span className="rocko rocko-twitter"></span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+
+        <footer className="footer">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-md-5">
+                <div className="copyright">
+                  <p>&copy; Copyright 2023. All Rights Reserved.</p>
+                </div>
+              </div>
+              <div className="col-md-7">
+                <div className="footer__right">
+                  <ul className="footer__menu">
+                    {/* <li><a href="/blog">Blog</a></li> */}
+                    <li>
+                      <a href="/terms">Terms of Service</a>
+                    </li>
+                    <li>
+                      <a href="/privacy">Privacy Policy</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </>
+  )
+}
+
+export default Index

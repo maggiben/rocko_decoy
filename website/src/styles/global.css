@@ -1,164 +1,130 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;400;500;600;700;800;900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* header style */
-.header-custom {
-  border-radius: 0;
-  border: none;
-  box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.04);
-  -moz-box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.04);
-  -webkit-box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.04);
-  -o-box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.04);
-  margin: 0;
+.test {
+  @apply !border-2 !border-red-400;
 }
 
-.responsive-navContainer {
-  background: rgb(255, 255, 255);
-  padding: 0 1rem;
-  width: 100%;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3);
-}
-
-.fade-in {
-  opacity: 0; /* Start with 0 opacity */
-  animation: fadeInAnimation 0.5s ease-in forwards; /* Apply animation */
-}
-
-@keyframes fadeInAnimation {
-  from {
-    opacity: 0; /* Start with 0 opacity */
+@media (min-width: 768px) {
+  /* !Tags Container Start */
+  .tags_container_parent {
+    padding-inline: 0px !important;
   }
-  to {
-    opacity: 1; /* Fade in to full opacity */
+  .tags_container {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: start !important;
+    row-gap: 0px !important;
+    column-gap: 1rem !important;
+  }
+  .tags_container_tags {
+    order: 1 !important;
+    justify-content: start !important;
+  }
+  .tags_container_search_input {
+    max-width: 280px !important;
+    order: 2 !important;
+  }
+  /* !Tags Container End */
+
+  .category_name {
+    /* !from blog.js */
+    margin-inline: auto !important;
+  }
+
+  /* !Hero Blog Container Start */
+  .hero_blog_container {
+    flex-direction: row !important;
+    padding-inline: 0px !important;
+    column-gap: 2.5rem !important;
+  }
+  .hero_blog_container_image {
+    margin-bottom: 0px !important;
+  }
+  /* !Hero Blog Container End */
+
+  /* !Subscribe Container Start */
+  .subscribe_container_parent {
+    padding-inline: 0px !important;
+  }
+  .subscribe_container {
+    flex-direction: row !important;
+    row-gap: 0px !important;
+    column-gap: 2.5rem !important;
+  }
+  .subscribe_container_info_input_container {
+    row-gap: 0px !important;
+    column-gap: 10px !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+  }
+  /* !Subscribe Container End */
+
+  /* !blogs Container Start */
+  .blogs_container {
+    padding-inline: 0px !important;
+  }
+  .blogs_container_details {
+    grid-template-columns: repeat(3, 1fr) !important;
+    row-gap: 0px !important;
+    column-gap: 2.5rem !important;
+  }
+  /* !blogs Container End */
+
+  /* !Category Blogs Container Start */
+  .category_blogs_container {
+    padding-inline: 0px !important;
+  }
+  .category_blogs_content {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    row-gap: 0px !important;
+  }
+  .category_blogs_content_image {
+    width: 349px !important;
+    order: 2 !important;
+  }
+  .category_blogs_content_details {
+    order: 1 !important;
+  }
+  /* !Category Blogs Container End */
+
+  /* !Single Blog Container Start */
+
+  /*?Share to Social-media Section -- Start */
+  .share_social_media_container {
+    padding-inline: 0px !important;
+  }
+  /* ?Share to Social-media Section -- End */
+
+  .single_blog_container {
+    padding-inline: 0px !important;
+  }
+  .single_blog_p,
+  .single_blog_h1 {
+    padding-inline: 0px !important;
+  }
+  /* !Single Blog Container End*/
+
+  /* !Article Tags Section Start */
+  .article_tags_container {
+    row-gap: 0px !important;
+    justify-content: flex-start !important;
+    padding-inline: 0px !important;
+  }
+  /* !Article Tags Section End */
+}
+
+@media (min-width: 1024px) {
+  .subscribe_container_info_input[data-singleblog="true"] {
+    width: 75% !important;
   }
 }
 
-.checkbox {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #323232;
-  border-radius: 4px;
-  transition: background-color 0.2s, border-color 0.2s;
-  cursor: pointer;
-}
-
-.checkbox:checked {
-  background-color: #323232;
-}
-
-.checkbox:checked::before {
-  content: "✔";
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  line-height: 16px;
-  color: white;
-}
-
-input[type='checkbox']:checked {
-  -webkit-appearance: none;
-}
-
-input[type='checkbox'] {
-    background-color: transparent;
-}
-
-/* Add your custom styles here */
-.radio {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: none;
-  transition: background-color 0.2s, border-color 0.2s;
-  cursor: pointer;
-  position: relative;
-}
-/* 
-.radio:checked {
-  background-color: #2C3B8D;
-  border-color: #2C3B8D;
-} */
-
-.radio:checked::after {
-  content: '✔';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 16px;
-  color: #2C3B8D;
-}
-
-
-
-/* Add your custom styles here */
-.range {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(to right, #2C3B8D 0%, #2C3B8D 0%, gray 0%, gray 100%);
-  outline: none;
-  transition: background 0.2s;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 28px;
-  height: 28px;
-  background: #2C3B8D;
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-}
-
-.range::-moz-range-thumb {
-  width: 28px;
-  height: 28px;
-  background: #2C3B8D;
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-  z-index: 5;
-}
-
-.range::-webkit-slider-thumb::before{
-  content:'';
-  position: absolute;
-  width: 6px;
-  height: 100px;
-  z-index: 10;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%); 
-  background: #f10404;
-}
-/* Hide the default number input arrows */
-.number-input::-webkit-inner-spin-button,
-.number-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0; /* Removes the margin on the inner spin button */
-}
-
-/* Hide the default number input arrows for Firefox */
-.number-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-/* loading */
-.circle-gradient {
-  fill: conic-gradient(from 0deg #276EF1 var(--fill-percentage, 0%), red var(--fill-percentage, 0%));
-}
-
-.frame {
-  clip-path: polygon(50% 30%, 0% 100%, 100% 100%);
+@media (min-width: 1280px) {
+  .subscribe_container_info_input_container[data-singleblog="true"] {
+    width: 80% !important;
+  }
 }

@@ -1,0 +1,30 @@
+.header {
+  padding: 20px 0 0 0;
+
+  &__logo {
+    width: 450px;
+    text-align: center;
+
+    @include media-breakpoint-up(md) {
+      width: 450px;
+    }
+
+    @include media-breakpoint-up(wide) {
+      width: 450px;
+      text-align: center;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+
+.logo {
+  width: 130px;
+
+  @include media-breakpoint-up(md) {
+    width: 180px;
+  }
+}
