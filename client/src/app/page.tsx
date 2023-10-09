@@ -29,6 +29,8 @@ export default function Home() {
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
+  console.log({zerodevAccount})
+
   const nextStep = () => {
     if (!zerodevAccount) {
       toast.error("Login before NEXT!");
