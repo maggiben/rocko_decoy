@@ -3,7 +3,7 @@
 # Required env variables
 # PROVIDER:      quicknode url
 # USDC_CONTRACT: USDC contract address for compound
-# NETWORK:       Netowrk (goerli/mainnet)
+# NETWORK:       Network (goerli/mainnet)
 # DATABASE_HOST: Database host
 # DATABASE_USER: Database user
 # DATABASE_PASS: Database password

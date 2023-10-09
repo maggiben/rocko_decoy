@@ -4,3 +4,4 @@ designs/yarn.lock
 client/.env
 .DS_Store
 .pyway.conf
+*.swp
