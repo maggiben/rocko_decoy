@@ -13,7 +13,7 @@ import { NETWORK } from "@/constants/env";
 const net = (chains as { [key: string]: any })[NETWORK];
 
 const Header = () => {
-  console.log("deploy test PR#75, Header.tsx")
+  console.log("deploy test PR#78, Header.tsx")
     const { chains } = configureChains( [net], [publicProvider()] );
     const auth0Connector = new Auth0WalletConnector({chains, options: {
       projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || "",

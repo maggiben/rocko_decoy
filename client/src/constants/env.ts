@@ -22,4 +22,4 @@ if (typeof window !== 'undefined') {
 }
 export const IS_DEMO_MODE = process.env.NEXT_PUBLIC_IS_DEMO_MODE === 'false' || demoMode || sessionFlag;
 
-console.log("deploy test PR#75, env.ts")
+console.log("deploy test PR#78, env.ts")
