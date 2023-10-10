@@ -1,11 +1,10 @@
+import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
 import BlogsContainer from "../BlogsContainer/BlogsContainer"
-import { graphql, useStaticQuery } from "gatsby"
-
-const CryptoDeFi = ({ category }) => {
+const TopPosts = () => {
   // !top post data
-  const cryptoDeFiData = useStaticQuery(graphql`
-    query PostsWithTag {
+  const topPostData = useStaticQuery(graphql`
+    query PostsWithCryptoDeFiTag {
       allMarkdownRemark(
         filter: { frontmatter: { tags: { in: "Crypto & DeFi" } } }
         limit: 3
@@ -30,17 +29,18 @@ const CryptoDeFi = ({ category }) => {
     }
   `)
 
-  const cryptoDeFi = cryptoDeFiData.allMarkdownRemark.edges
-  console.log(cryptoDeFi)
+  const topPost = topPostData?.allMarkdownRemark?.edges
+  // console.log(topPost)
+
   return (
     <>
       <BlogsContainer
-        blogDetails={cryptoDeFiData}
-        blogsCategory={"Crypto & DeFi"}
+        blogDetails={topPost}
+        blogsCategory="Crypto & DeFi"
         grayBG="bg-[#F9F9F9]"
       />
     </>
   )
 }
 
-export default CryptoDeFi
+export default TopPosts

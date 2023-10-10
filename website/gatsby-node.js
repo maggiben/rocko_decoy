@@ -6,6 +6,7 @@
 
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const slugify = require('slugify')
 
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
@@ -78,6 +79,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
+
+
 }
 
 /**

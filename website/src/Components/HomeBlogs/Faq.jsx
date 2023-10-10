@@ -4,9 +4,9 @@ import BlogsContainer from "../BlogsContainer/BlogsContainer"
 const TopPosts = () => {
   // !top post data
   const topPostData = useStaticQuery(graphql`
-    query PostsWithDeFiBorrowingLendingTag {
+    query PostsWithFaqsTag {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { in: "DeFi Borrowing & Lending" } } }
+        filter: { frontmatter: { tags: { in: "Rocko FAQs" } } }
         limit: 3
       ) {
         edges {
@@ -36,7 +36,7 @@ const TopPosts = () => {
     <>
       <BlogsContainer
         blogDetails={topPost}
-        blogsCategory="DeFi Borrowing & Lending"
+        blogsCategory="Rocko FAQs"
         grayBG="bg-[#F9F9F9]"
       />
     </>

@@ -10,7 +10,7 @@ const BlogPostTemplate = ({
   location,
 }) => {
   const siteTitle = site.siteMetadata?.title || `Title`
-
+  console.log({previous, next, site, post, location})
   return (
     <Layout location={location} title={siteTitle}>
       <article

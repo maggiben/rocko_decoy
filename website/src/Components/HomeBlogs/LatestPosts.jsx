@@ -3,8 +3,7 @@ import React from "react"
 import BlogsContainer from "../BlogsContainer/BlogsContainer"
 const LatestPosts = () => {
   // !latest post data
-  const latestPostData = useStaticQuery(graphql`
-    query PostsWithTag {
+  const latestPostData = useStaticQuery(graphql`{
       allMarkdownRemark(limit: 3, sort: { frontmatter: { date: ASC } }) {
         edges {
           node {

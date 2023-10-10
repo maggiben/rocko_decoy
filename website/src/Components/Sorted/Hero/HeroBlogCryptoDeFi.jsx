@@ -1,13 +1,20 @@
-import image2 from "../../images/placeHolderImage-2.png"
-import user from "../../images/blog-user.png"
+import image2 from "../../../images/placeHolderImage-2.png"
+import user from "../../../images/blog-user.png"
 import { graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
 
-const HeroBlog = () => {
+const HeroBlogCryptoDeFi = () => {
   const query = graphql`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { featured: { eq: true } } }
+        filter: {
+          frontmatter: {
+            featured: { eq: true }
+            coverUrl: {}
+            author: {}
+            tags: { in: "Crypto & DeFi" }
+          }
+        }
         limit: 1
       ) {
         edges {
@@ -18,8 +25,6 @@ const HeroBlog = () => {
               date(formatString: "MMMM DD, YYYY")
               featured
               tags
-              coverUrl
-              description
             }
             fields {
               slug
@@ -71,4 +76,4 @@ const HeroBlog = () => {
   )
 }
 
-export default HeroBlog
+export default HeroBlogCryptoDeFi

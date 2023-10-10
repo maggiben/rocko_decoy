@@ -4,17 +4,22 @@ import BlogsContainer from "../BlogsContainer/BlogsContainer"
 const TopPosts = () => {
   // !top post data
   const topPostData = useStaticQuery(graphql`
-    query PostsWithTagCustom {
-      allMarkdownRemark(limit: 3,skip: 1, sort: { frontmatter: { date: ASC } }) {
+    query FeaturedTopPosts {
+      allMarkdownRemark(
+        filter: { frontmatter: { featured: { eq: true } } }
+        limit: 3
+        skip: 1
+      ) {
         edges {
           node {
             id
             frontmatter {
               title
               date(formatString: "MMMM DD, YYYY")
+              featured
               tags
-              description
               coverUrl
+              description
             }
             fields {
               slug
@@ -26,8 +31,8 @@ const TopPosts = () => {
     }
   `)
 
-  const topPost = topPostData.allMarkdownRemark.edges
-  console.log(topPost)
+  const topPost = topPostData?.allMarkdownRemark?.edges
+  // console.log(topPost)
 
   return (
     <>

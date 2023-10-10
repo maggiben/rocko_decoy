@@ -10,11 +10,11 @@ import image2 from "../images/placeHolderImage-2.png"
 import image3 from "../images/placeHolderImage-3.png"
 import user from "../images/blog-user.png"
 
-import { Link } from "gatsby"
+import { graphql, Link } from "gatsby"
 
-import BlogsContainer from "../components/BlogsContainer/BlogsContainer"
 import Layout from "../Components/Layout/Layout"
 import Subscribe from "../components/Subscribe/Subscribe"
+import LatestPosts from "../components/HomeBlogs/LatestPosts"
 
 const socialIcons = [
   {
@@ -34,53 +34,9 @@ const socialIcons = [
   },
 ]
 
-const dummyText =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec dignissim magna. Aliquam volutpat fringilla leo sit amet dignissim. Fusce id dapibus orci. Integer a eros turpis. Praesent vitae laoreet lectus. Phasellus nulla lacus, mattis at mauris nec, commodo tincidunt dui. Aliquam mollis ex risus, non tincidunt eros tempus et. Donec dictum consectetur iaculis. Sed est arcu, hendrerit quis ultricies elementum, tincidunt viverra dolor. Vestibulum cursus ante ac turpis laoreet, ut varius leo porta. Duis mauris enim, venenatis in rhoncus non, ullamcorper sit amet ex. Praesent imperdiet, libero et dignissim iaculis, nunc turpis pharetra ligula, eu pulvinar nunc odio at orci."
-
-const tags = [
-  {
-    tag: "Article tag",
-  },
-  {
-    tag: "Article tag",
-  },
-  {
-    tag: "Article tag",
-  },
-  {
-    tag: "Article tag",
-  },
-  {
-    tag: "Article tag",
-  },
-]
-
-// *Create an array of blog post objects
-const blogDetails = [
-  {
-    image: image1,
-    category: "Category 1",
-    title: "A blog post title 1",
-    description: "A description of the article 1",
-    publishedDate: "Sept 24, 2023",
-  },
-  {
-    image: image2,
-    category: "Category 2",
-    title: "A blog post title 2",
-    description: "A description of the article 2",
-    publishedDate: "Sept 25, 2023",
-  },
-  {
-    image: image3,
-    category: "Category 3",
-    title: "A blog post title 3",
-    description: "A description of the article 3",
-    publishedDate: "Sept 26, 2023",
-  },
-]
-
-const SingleBlog = () => {
+const SingleBlog = ({data}) => {
+  const post = data.allMarkdownRemark.edges[0]?.node
+  console.log(post)
   return (
     <Layout>
       <>
@@ -109,15 +65,15 @@ const SingleBlog = () => {
         </section>
         {/* //!Share to social-media section -- end */}
         {/* //!Blog section -- start */}
-        <main className="!max-w-[660px] !w-full !mx-auto">
+        <main className="!max-w-[760px] !w-full !mx-auto">
           {/* //!Photo & Publication details section -- start */}
           <section className="!mb-16 !space-y-14 !px-4 single_blog_container">
             <article className="!space-y-2  h-max">
-              <p className="!text-[#2C3B8D] !text-sm">Category</p>
+              <p className="!text-[#2C3B8D] !text-sm">{post?.frontmatter?.tags}</p>
               <h2 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px]">
-                A blog post title will go here.
+                {post?.frontmatter?.title}
               </h2>
-              <p>A description of the article will go here</p>
+              <p className="blog-description">{post?.frontmatter?.description}</p>
               <p className="!text-xs !text-[#545454]">Sept 24, 2023</p>
               <div className="!flex !space-x-3 !items-center !pt-6">
                 <img
@@ -136,22 +92,22 @@ const SingleBlog = () => {
               </div>
             </article>
             <img
-              src={image2}
+              src={post?.frontmatter?.coverUrl}
               alt="blog2"
               style={{ width: "100%", height: "371px" }}
               className="!rounded-[20px] !object-cover"
             />
           </section>
           {/* //!Photo & Publication details section -- end */}
-          <p className="!px-4 single_blog_p">{dummyText}</p>
+          <p className="!px-4 single_blog_p">{post?.frontmatter?.description}</p>
           {/* //!singleBlog prop changes some style in subscriber component */}
           <Subscribe singleBlog={true} />
-          <p className="!px-4 single_blog_p">{dummyText}</p>
-          <h1 className="!my-6 !text-[28px] !px-4 single_blog_h1">Subhead</h1>
-          <p className="!px-4 single_blog_p">{dummyText}</p>
+          <div dangerouslySetInnerHTML={{__html: post?.html}}  className="blog-content">
+         
+          </div>
           {/* //!Article Tags Section Start */}
           <div className="!flex !flex-wrap !gap-x-2 !gap-y-3 !justify-center !mt-10 !mb-[75px] !px-4 article_tags_container">
-            {tags.map(({ tag }, i) => (
+            {post?.frontmatter?.tags.map((tag, i) => (
               <button
                 key={i}
                 className="!py-[10px] !px-6 !rounded-3xl !border-[1px] !border-[#E2E2E2] !font-[500] !text-sm !text-black !bg-[#EEE]"
@@ -164,15 +120,35 @@ const SingleBlog = () => {
         </main>
         {/* //!Blog section -- end */}
         {/* //! ------Latest-Post Container Start----- */}
-       {/*  <BlogsContainer
-          blogDetails={blogDetails}
-          blogsCategory="Latest Posts"
-          grayBG="bg-[#F9F9F9]"
-        /> */}
+        <LatestPosts />
         {/* //! ------Latest-Post Container End----- */}
       </>
     </Layout>
   )
 }
+
+export const pageQuery = graphql`
+  query PostsWithTag($id: String = "") {
+    allMarkdownRemark(filter: { id: { eq: $id } }) {
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            date(formatString: "MMMM DD, YYYY")
+            tags
+            description
+            coverUrl
+          }
+          fields {
+            slug
+          }
+          excerpt 
+          html
+        }
+      }
+    }
+  }
+`
 
 export default SingleBlog
