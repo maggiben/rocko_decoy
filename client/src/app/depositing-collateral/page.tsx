@@ -93,7 +93,7 @@ const DepositingCollateral = () => {
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[batchGetLoan])
+  },[batchGetLoan, wagmiAddress])
 
   useEffect(() => {
     if (success) {
