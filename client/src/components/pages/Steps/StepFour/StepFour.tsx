@@ -5,7 +5,7 @@ import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
 
-const StepFour: FC<RiskStep> = ({ title }) => {
+const StepFour: FC<RiskStep> = ({ title, description }) => {
   const [value, setValue] = useState<number>(0);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
@@ -255,11 +255,7 @@ const StepFour: FC<RiskStep> = ({ title }) => {
             {/* ${value >= 400 ? ' pt-6 ' : 'pt-12'} */}
 
             <p className={`text-sm text-blackSecondary`}>
-              Your loan requires your collateral to maintain a certain value at
-              all times, otherwise your collateral may be liquidated (i.e. sold)
-              by the lender. By posting more collateral than required, you can
-              reduce the projected liquidation price and the likelihood of this
-              occurring.{" "}
+              {description}{" "}
               <Link href={"/"} className="underline">
                 Learn more.
               </Link>

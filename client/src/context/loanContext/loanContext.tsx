@@ -326,7 +326,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
         maxRisk: 200,
       },
       description:
-        "Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. By posting more collateral than required, you can reduce the projected liquidation price and the likelihood of this occurring. Learn more. ",
+        "Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. A collateral buffer is the percentage of collateral you provide above what is required. A larger collateral buffer will reduce the asset price at which your collateral would be liquidated (i.e. liquidation price).",
     },
     {
       id: 5,
