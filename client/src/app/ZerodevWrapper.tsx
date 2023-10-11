@@ -14,16 +14,26 @@ export const { publicClient, webSocketPublicClient } = configureChains(
   [infuraProvider({apiKey: INFURA_APIKEY})]
 )
 
-const config = createConfig({
-  autoConnect: true,
-  publicClient,
-  webSocketPublicClient
-})
-
 function ZeroDevWrapper({children} : any) {
+  const [config] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        createConfig({
+          autoConnect: true,
+          publicClient,
+          webSocketPublicClient,
+        })
+      )
+    }
+  });
+
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+  if (typeof window === 'undefined') return null
+
   return (
-    <WagmiConfig config={config}>
-        {children}
+    <WagmiConfig config={config!}>
+        {mounted && children}
     </WagmiConfig>
   )
 }
