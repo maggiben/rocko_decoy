@@ -2789,7 +2789,7 @@
   dependencies:
     "@web3auth/base" "^7.0.1"
 
-"@web3auth/base-plugin@^7.0.0-beta.0", "@web3auth/base-plugin@^7.0.1":
+"@web3auth/base-plugin@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@web3auth/base-plugin/-/base-plugin-7.0.1.tgz#a59de3b9c42fea9ad31438a55986edd28104203b"
   integrity sha512-BAwqZcEoDClXGIStAjhWsf+lguzifZ8hYz/wvcwE0ZOfhkXVNls96wSr/C7Cx+s94Hir8kN1zM2OROBM8f7YNQ==
@@ -2807,17 +2807,6 @@
     "@web3auth/base" "^7.0.1"
     json-rpc-random-id "^1.0.1"
 
-"@web3auth/base-provider@^7.0.2-beta.0":
-  version "7.0.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3auth/base-provider/-/base-provider-7.0.2-beta.0.tgz#353d417e3eabdffcc0990d1cc04e88f3ed6d56bf"
-  integrity sha512-4CIysgZ3/SuOLDB5Z2itVioEO4iyMuI/UdKZhH/zq4OF6UGE+yCGTZcdBYgF5KxiY+zDwJBWW2Vl3oeGOaarIA==
-  dependencies:
-    "@metamask/rpc-errors" "^6.0.0"
-    "@toruslabs/base-controllers" "^4.0.1"
-    "@toruslabs/openlogin-jrpc" "^5.0.2"
-    "@web3auth/base" "^7.0.0-beta.0"
-    json-rpc-random-id "^1.0.1"
-
 "@web3auth/base-solana-adapter@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@web3auth/base-solana-adapter/-/base-solana-adapter-7.0.1.tgz#3632bcc53edb6407af327aeeec80828d3273055f"
@@ -2826,7 +2815,7 @@
     "@web3auth/base" "^7.0.1"
     bs58 "^5.0.0"
 
-"@web3auth/base@7.0.1", "@web3auth/base@^7.0.0-beta.0", "@web3auth/base@^7.0.1":
+"@web3auth/base@7.0.1", "@web3auth/base@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@web3auth/base/-/base-7.0.1.tgz#2116b5de8914ec4c6547a60bf1caf90428bca39f"
   integrity sha512-6ft4XAD37tobOxgkZhideiBMqoVJTpvAvYD0R99IDmpazpIrX8b4RBgwLQ/gIlNmGZhkU1UoTzub19xTWI9h6w==
@@ -2900,18 +2889,6 @@
     "@web3auth/base-plugin" "^7.0.1"
     "@web3auth/base-provider" "^7.0.1"
 
-"@web3auth/no-modal@7.0.2-beta.0":
-  version "7.0.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3auth/no-modal/-/no-modal-7.0.2-beta.0.tgz#ba4194018e3c18906a523fb197ea3ad70186497c"
-  integrity sha512-B3IAogYeo1B/uR1P6Wd8bkYRwC3dXRcUOLqb/HouI8ewNRQkuI4AEQBezWH9y5dovFHdud99bDgNwacnqx9Ibg==
-  dependencies:
-    "@toruslabs/openlogin" "^5.0.3"
-    "@toruslabs/openlogin-jrpc" "^5.0.2"
-    "@toruslabs/openlogin-utils" "^5.0.2"
-    "@web3auth/base" "^7.0.0-beta.0"
-    "@web3auth/base-plugin" "^7.0.0-beta.0"
-    "@web3auth/base-provider" "^7.0.2-beta.0"
-
 "@web3auth/openlogin-adapter@7.0.1", "@web3auth/openlogin-adapter@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@web3auth/openlogin-adapter/-/openlogin-adapter-7.0.1.tgz#8c47c91d1bf9650f64c1afb2de9dde58e5dda380"
@@ -2921,17 +2898,6 @@
     "@toruslabs/openlogin-utils" "^5.0.2"
     "@web3auth/base" "^7.0.1"
     "@web3auth/base-provider" "^7.0.1"
-    lodash.merge "^4.6.2"
-
-"@web3auth/openlogin-adapter@7.0.2-beta.0":
-  version "7.0.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3auth/openlogin-adapter/-/openlogin-adapter-7.0.2-beta.0.tgz#0bf58a8b3f0797ae369e83a9a51e07559f7e00d6"
-  integrity sha512-8uF3YPGvB0QooQw9DQq8DMi5XLgSm0+/iQhsB8cc3AgAFXNQpn4f7jGfuIQF9vqqaAlEIHD8umYkOFx15Ver6Q==
-  dependencies:
-    "@toruslabs/openlogin" "^5.0.3"
-    "@toruslabs/openlogin-utils" "^5.0.2"
-    "@web3auth/base" "^7.0.0-beta.0"
-    "@web3auth/base-provider" "^7.0.2-beta.0"
     lodash.merge "^4.6.2"
 
 "@web3auth/phantom-adapter@^7.0.2":
@@ -3021,10 +2987,10 @@
     merkletreejs "^0.3.10"
     viem "^1.5.3"
 
-"@zerodev/sdk@4.0.20":
-  version "4.0.20"
-  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.20.tgz#fb3c548f0635da038dfc4bde0a6b65d60149b6f1"
-  integrity sha512-LmaQOyeWu9aVAZTPq2bpU/TcirvZKbx9bJ+0j/ScmAg8KlA/SsNEvMK/TnRk7bXmfm2BQR93CMpzh1cSo2Dp/Q==
+"@zerodev/sdk@4.0.27":
+  version "4.0.27"
+  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.27.tgz#94277e2b6d21c5abc0284fc2ab4898ab8c240c13"
+  integrity sha512-KcxP2GCtfwUrFiUP/kU78Cc5eSkyiR98BzeaiuSkr/tEOxUf4USIbxRzCy/nV41BjLelLLJUAY+VbEj7jXMJBw==
   dependencies:
     "@alchemy/aa-core" "0.1.0-alpha.23"
     "@alchemy/aa-ethers" "0.1.0-alpha.23"
@@ -3032,10 +2998,10 @@
     merkletreejs "^0.3.10"
     viem "^1.5.3"
 
-"@zerodev/sdk@4.0.27":
-  version "4.0.27"
-  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.27.tgz#94277e2b6d21c5abc0284fc2ab4898ab8c240c13"
-  integrity sha512-KcxP2GCtfwUrFiUP/kU78Cc5eSkyiR98BzeaiuSkr/tEOxUf4USIbxRzCy/nV41BjLelLLJUAY+VbEj7jXMJBw==
+"@zerodev/sdk@4.0.29":
+  version "4.0.29"
+  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.29.tgz#2d64b3876d4d651a544000ff1886ba79812f5801"
+  integrity sha512-RZ6J91Dza87xc3/2iF5mlau8/fDZ/wPZ385F0dvB2TmN7PjvOz0+XtePkKnQDpCTJCdoFy0XBh6LGkmlemSNmw==
   dependencies:
     "@alchemy/aa-core" "0.1.0-alpha.23"
     "@alchemy/aa-ethers" "0.1.0-alpha.23"
@@ -3064,17 +3030,17 @@
     "@web3auth/openlogin-adapter" "7.0.1"
     "@zerodev/sdk" "4.0.27"
 
-"@zerodev/web3auth@^4.1.5":
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/@zerodev/web3auth/-/web3auth-4.1.7.tgz#cc450483aca23cabc679e4feab8cd469653e42ce"
-  integrity sha512-dYKg+04JNgGtJlOj0sc5q0STPDwFdJMmNpR8lz16lwGBZYwA72CqL3oZUf1Dx38RERA3TdU7Cpqggv8hgTtI/g==
+"@zerodev/web3auth@^4.1.15":
+  version "4.1.15"
+  resolved "https://registry.yarnpkg.com/@zerodev/web3auth/-/web3auth-4.1.15.tgz#d2c6bdc62a65d0190dd63272ed17952ae33a6824"
+  integrity sha512-Z3I4SqT0HU8/jHkCNlz3sYT0YfYNiRNYhp7C+IMYLKEODNslZt3+IQGBecJg6pyXu/s5eA1rU6h/AHYrK47/iQ==
   dependencies:
     "@web3auth/base" "7.0.1"
     "@web3auth/ethereum-provider" "7.0.2"
     "@web3auth/modal" "7.0.3"
-    "@web3auth/no-modal" "7.0.2-beta.0"
-    "@web3auth/openlogin-adapter" "7.0.2-beta.0"
-    "@zerodev/sdk" "4.0.20"
+    "@web3auth/no-modal" "7.0.1"
+    "@web3auth/openlogin-adapter" "7.0.1"
+    "@zerodev/sdk" "4.0.29"
 
 JSONStream@^1.3.5:
   version "1.3.5"
@@ -3387,7 +3353,7 @@ axios@^0.27.2:
     follow-redirects "^1.14.9"
     form-data "^4.0.0"
 
-axios@^1.4.0:
+axios@^1.4.0, axios@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.5.1.tgz#11fbaa11fc35f431193a9564109c88c1f27b585f"
   integrity sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==

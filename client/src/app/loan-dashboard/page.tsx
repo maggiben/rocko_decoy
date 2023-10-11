@@ -1,101 +1,39 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import comp from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
-import aave from "@/assets/coins/Aave (AAVE) (1).svg";
-
-const invoices = [
-  {
-    titles: [
-      {
-        title: "Compound -",
-        img: comp,
-      },
-      {
-        title: "USDC :",
-        img:usdc ,
-      },
-      {
-        title: "ETH ",
-        img: eth,
-      },
-    ],
-    balance: {
-      text: "Balance",
-      price: "$1,012.13",
-    },
-    apr: {
-      text: "Current APR",
-      rate: "3.84%",
-    },
-    date: {
-      text: "Date Opened",
-      date: "March 11, 2023",
-    },
-  },
-  {
-    titles: [
-      {
-        title: "Compound -",
-        img: comp,
-      },
-      {
-        title: "USDC :",
-        img:usdc ,
-      },
-      {
-        title: "COMP",
-        img: comp,
-      },
-    ],
-    balance: {
-      text: "Balance",
-      price: "$1,012.13",
-    },
-    apr: {
-      text: "Current APR",
-      rate: "3.84%",
-    },
-    date: {
-      text: "Date Opened",
-      date: "March 11, 2023",
-    },
-  },
-  {
-    titles: [
-      {
-        title: "Aave -",
-        img: aave,
-      },
-      {
-        title: "USDC :",
-        img: usdc,
-      },
-      {
-        title: "ETH ",
-        img: eth,
-      },
-    ],
-    balance: {
-      text: "Balance",
-      price: "$1,012.13",
-    },
-    apr: {
-      text: "Current APR",
-      rate: "3.84%",
-    },
-    date: {
-      text: "Date Opened",
-      date: "March 11, 2023",
-    },
-  },
-];
+import { useLoanDB } from "@/db/loanDb";
+import { useAccount } from "wagmi";
+import financial from "@/utility/currencyFormate";
+import { formatDate } from "@/utility/utils";
 
 const Dashboard = () => {
   const [active, setActive] = useState(true);
+
+  const { address: wagmiAddress } = useAccount();
+  const [activeLoans, setActiveLoans] = useState<any[]>();
+  const [closedLoans, setClosedLoans] = useState<any[]>();
+  const { getLoanData } = useLoanDB();
+
+  const initialize = async () => {
+    console.log(wagmiAddress)
+    if (wagmiAddress) {
+      const result = await getLoanData(wagmiAddress);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+        const closed_loans = result.filter((loan: any) => loan.loan_active === 0);
+        setActiveLoans(active_loans);
+        setClosedLoans(closed_loans);
+      }
+    }
+  }
+
+  useEffect(() => {
+    initialize()
+  }, [wagmiAddress])
 
   return (
     <main className="container mx-auto px-4 py-6  lg:py-10 ">
@@ -127,24 +65,34 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="divide-y-2 space-y-5">
-          {/* grandparent */}
-          {invoices.map((invoice, i) => (
+          {active && activeLoans?.map((loan: any, i: any) => (
             <div key={i} className="space-y-6 pt-4">
               {/* Parents */}
               <div className="flex gap-x-2 items-center mb-3 relative">
                 {/* title Container */}
-                {invoice.titles.map((title, i) => (
-                  <div key={i} className="flex items-center gap-x-1">
-                    <Image
-                      width={20}
-                      height={20}
-                      src={title.img}
-                      alt=""
-                      className="w-5 h-5"
-                    />
-                    <h1 className="md:text-xl font-medium">{title.title}</h1>
-                  </div>
-                ))}
+                <div key={i} className="flex items-center gap-x-1">
+                  <Image
+                    width={20}
+                    height={20}
+                    src={comp}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">{loan?.lending_protocol} - </h1>
+                  <Image
+                    width={20}
+                    height={20}
+                    src={usdc}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">USDC :</h1>
+                  <Image
+                    width={20}
+                    height={20}
+                    src={eth}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">ETH</h1>
+                </div>
                 <Link
                   // href={`/loan-dashboard/${i+1}`}
                   href={`/loan-dashboard/1`}
@@ -157,32 +105,32 @@ const Dashboard = () => {
               <div className="space-y-1 pb-11 md:pb-0">
                 {/* info Conatiner */}
                 <div className="flex">
-                  <p className="w-1/2">{invoice.balance.text}</p>
+                  <p className="w-1/2">Balance</p>
                   <p className="w-1/2 text-right md:text-left">
-                    {invoice.balance.price}
+                    ${financial(loan?.outstanding_balance)}
                   </p>
                 </div>
                 <div className="flex">
-                  <p className="w-1/2">{invoice.apr.text}</p>
+                  <p className="w-1/2">Current APR</p>
                   <p className="w-1/2 text-right md:text-left">
-                    {invoice.apr.rate}
+                    3.84%
                   </p>
                 </div>
                 <div className="flex">
-                  <p className="w-1/2">{invoice.date.text}</p>
+                  <p className="w-1/2">Date Opened</p>
                   <p className="w-1/2 text-right md:text-left">
-                    {invoice.date.date}
+                    {formatDate(new Date(loan?.create_time))}
                   </p>
                 </div>
               </div>
             </div>
           ))}
           <div className="text-center md:text-left pb-2 md:pb-0">
-            <Link href={"/"}>
+            <a href="/">
               <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
                 Create New Loan
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </div>

@@ -1,18 +1,19 @@
 "use client";
-import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
-import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
+import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
+import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import StatusSuccess from "@/assets/StatusSuccess.png";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
 import useLoanData from "@/hooks/useLoanData";
-import toast from "react-hot-toast";
 import { NETWORK } from "@/constants/env";
+import { useLoanDB } from "@/db/loanDb";
 
 interface DoneTracker {
   step: string;
@@ -30,6 +31,7 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
 
   const { loanData } = useLoanData();
+  const { finalizeLoan } = useLoanDB();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
@@ -82,7 +84,13 @@ const DepositingCollateral = () => {
     setCounter(3);
   }
 
-  const setAllDone = () => {
+  const setAllDone = async (txHash: string) => {
+    finalizeLoan(
+      wagmiAddress ? wagmiAddress : "",
+      txHash,
+      loanData?.protocol, true, loanData?.cryptoName, 
+      loanData?.borrowing, loanData?.collateralNeeded, loanData?.liquidationPrice, loanData?.buffer);
+
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
@@ -110,7 +118,7 @@ const DepositingCollateral = () => {
         </div>
       ))
   
-      setAllDone();
+      setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success, txHash]);
