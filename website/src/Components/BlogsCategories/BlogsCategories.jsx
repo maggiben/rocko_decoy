@@ -97,7 +97,9 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
                     }))
                   }
                 >
-                  {tag?.tag}
+                  {tag?.tag === "DeFi Borrowing & Lending"
+                    ? "Borrowing"
+                    : tag?.tag}
                 </button>
               )
             })}

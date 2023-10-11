@@ -38,7 +38,7 @@ const ThreeTitleDeFi = () => {
 
   return (
     <>
-      <BlogsContainer blogDetails={latestPost} blogsCategory="DeFi Borrowing & Lending" />
+      <BlogsContainer blogDetails={latestPost} />
     </>
   )
 }

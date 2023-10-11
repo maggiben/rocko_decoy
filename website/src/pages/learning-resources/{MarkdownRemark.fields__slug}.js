@@ -66,7 +66,7 @@ const SingleBlog = ({ data }) => {
             onClick={() => window.history.back()}
           >
             <BiChevronRight className="blog_home_button_icon" />{" "}
-            <span>Blog Home</span>
+            <span>Back</span>
           </button>
           <div className="!flex !space-x-2 !items-center">
             <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4 !text-black">

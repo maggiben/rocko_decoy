@@ -36,7 +36,7 @@ const TopPosts = () => {
     <>
       <BlogsContainer
         blogDetails={topPost}
-        blogsCategory="DeFi Borrowing & Lending"
+        blogsCategory="Borrowing"
         grayBG="bg-[#F9F9F9]"
       />
     </>

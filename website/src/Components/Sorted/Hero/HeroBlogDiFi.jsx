@@ -44,9 +44,6 @@ const HeroBlogDiFi = () => {
 
   return (
     <>
-    <h1 className="!font-[500] !text-[32px] !mb-16 !container !px-4 category_name">
-      {heroBlog?.frontmatter.tags[0]}
-    </h1>
     <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
     <section className="hero_blog_container">
       <div className="hero_blog_container_image_container">

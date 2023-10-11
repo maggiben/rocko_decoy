@@ -36,7 +36,7 @@ const ThreeTitleFAQ = () => {
 
   return (
     <>
-      <BlogsContainer blogDetails={latestPost} blogsCategory="Rocko FAQs" />
+      <BlogsContainer blogDetails={latestPost}/>
     </>
   )
 }

@@ -91,7 +91,7 @@ const SingleBlog = () => {
             className="!px-4 !py-2 !rounded-3xl !text-[#2C3B8D] !bg-[#EEE] !font-[500] !flex !items-center"
           >
             <BiChevronRight className="!text-3xl !inline-block !-rotate-180 !-mr-1" />{" "}
-            <span>Blog Home</span>
+            <span>Back</span>
           </Link>
           <div className="!flex !space-x-2 !items-center">
             <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4">

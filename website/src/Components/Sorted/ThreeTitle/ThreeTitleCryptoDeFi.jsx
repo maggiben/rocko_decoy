@@ -39,7 +39,7 @@ const ThreeTitleCryptoDeFi = () => {
 
   return (
     <>
-      <BlogsContainer blogDetails={latestPost} blogsCategory="Crypto & DeFi" />
+      <BlogsContainer blogDetails={latestPost} />
     </>
   )
 }
