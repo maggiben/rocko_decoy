@@ -1,16 +1,9 @@
 
 const config = {
-    host: "rocko-db01.ckac6ijfvxlv.us-east-1.rds.amazonaws.com",
-    user: "admin",
-    password: "4SQ4LI0ZZZqp3oMaoYmV",
-    database: "loan",
-  };
+    host: process.env.ROCKO_DB_HOST,
+    user: process.env.ROCKO_DB_USER,
+    password: process.env.ROCKO_DB_PASSWORD,
+    database: process.env.ROCKO_DB_DATABASE,
+};
 
-// const config = {
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "loan",
-//   };
-  
-  module.exports = config;
+module.exports = config;
