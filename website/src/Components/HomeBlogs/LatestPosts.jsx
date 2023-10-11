@@ -25,6 +25,7 @@ const LatestPosts = () => {
     }
   `)
   const latestPost = latestPostData.allMarkdownRemark.edges
+  console.log('latestPost testing now', latestPost)
 
   return (
     <>

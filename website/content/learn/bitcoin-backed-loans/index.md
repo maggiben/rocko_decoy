@@ -6,6 +6,8 @@ tags:
   - DeFi Borrowing & Lending
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorImg: /learn/author-1.jpg
+authorByline: Co-Founder
 ---
 
 # Bitcoin-Backed Borrowing: Harnessing Ethereum's DeFi Might
@@ -31,7 +33,7 @@ To dip into Ethereum's DeFi using Bitcoin, ensure you have:
 - BTC in your possession.
 - An Ethereum-compatible wallet.
 - Familiarize yourself with platforms like Aave, MakerDAO, and Compound.
-Each platform will have its unique LTV ratios and interest rates, so due diligence is key.
+  Each platform will have its unique LTV ratios and interest rates, so due diligence is key.
 
 **The Borrowing Process Explained**
 

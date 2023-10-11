@@ -6,6 +6,8 @@ tags:
   - DeFi Borrowing & Lending
 coverUrl: /learn/blogHeader.png
 author: Thomas Harrison
+authorImg: /learn/author-2.jpg
+authorByline: CEO (Chief Executive Officer)
 ---
 
 # Ultimate Guide on "How to Borrow from a DeFi Protocol"

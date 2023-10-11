@@ -1,15 +1,14 @@
-import Header from '../Header/Header'
+import Footer from "../../../../ui-lib/Footer/Footer"
+import Header from "../Header/Header"
 import * as React from "react"
 const Layout = ({ children }) => {
   return (
     <>
-      <Header/>
+      <Header />
       <main>{children}</main>
-      <footer>
-        © Copyright {new Date().getFullYear()}. All Rights Reserved.
-      </footer>
+      <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

@@ -6,6 +6,8 @@ tags:
   - Crypto & DeFi
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 ---
 
 # DeFi: Risk vs Reward
@@ -36,7 +38,6 @@ In traditional finance, banks and financial institutions act as intermediaries. 
 While the rewards of DeFi can be attractive, especially for those disillusioned with traditional financial systems, it’s crucial to approach with a balanced perspective. Here are a few tips:
 
 - **Educate Yourself:** Before investing in any DeFi platform, ensure you understand the ins and outs. Read about the project, the team behind it, and any reviews or reports about it.
-  
 - **Diversify:** Don’t put all your crypto assets in one place. Spread them across different platforms to mitigate potential losses.
 
 - **Stay Updated:** The world of DeFi is evolving rapidly. Keep an eye on news, updates, and any emerging risks or opportunities.

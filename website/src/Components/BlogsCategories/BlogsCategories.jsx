@@ -3,26 +3,6 @@ import { BiSearchAlt2 } from "react-icons/bi"
 import { useStaticQuery, graphql } from "gatsby"
 import slugify from "slugify"
 
-/* const blogCategories = [
-  {
-    category: "All",
-  },
-  {
-    category: "Category-1",
-  },
-  {
-    category: "Category-2",
-  },
-  {
-    category: "Category-3",
-  },
-  {
-    category: "Category-4",
-  },
-  {
-    category: "Category-5",
-  },
-] */
 
 const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
   // const [tags, setTags] = React.useState([])
@@ -41,11 +21,8 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
       }
     }
   `)
+  
   const tags = data?.allMarkdownRemark?.edges.map(tag => {
-    return tag.node
-  })
-
-  const tagTest = data?.allMarkdownRemark?.edges.map(tag => {
     return {
       id: tag.node.id,
       tag: tag.node.frontmatter?.tags[0],
@@ -54,7 +31,7 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
 
   const uniqueTagsMap = new Map()
 
-  tagTest.forEach(item => {
+  tags.forEach(item => {
     const { id, tag } = item
 
     uniqueTagsMap.set(tag, id)

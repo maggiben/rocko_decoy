@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import LoneProvider from "@/context/loanContext/loanContext";
 import Providers from "./Providers";
 import { Toaster } from 'react-hot-toast';
+import Footer from "../../../ui-lib/Footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <Toaster position="bottom-right" reverseOrder={true} />
           <LoneProvider>{children}</LoneProvider>
         </Providers>
+        <Footer/>
       </body>
     </html>
   );

@@ -6,6 +6,8 @@ tags:
   - Borrowing
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 featured: true
 ---
 
@@ -17,22 +19,22 @@ In the decentralized finance (DeFi) realm, lending protocols are central pillars
 
 **Compound's Foundations**
 
-*The Beginning*: Compound's journey began under the leadership of Robert Leshner and Geoff Hayes. It rapidly ascended the ranks, becoming a beacon in the DeFi lending domain.
+_The Beginning_: Compound's journey began under the leadership of Robert Leshner and Geoff Hayes. It rapidly ascended the ranks, becoming a beacon in the DeFi lending domain.
 
-*Guiding Principles*: Compound's primary mission is to create an open, decentralized, and frictionless money market on the Ethereum blockchain.
+_Guiding Principles_: Compound's primary mission is to create an open, decentralized, and frictionless money market on the Ethereum blockchain.
 
 **Understanding the Compound Protocol**
 
-*Basic Mechanics*: At its core, Compound lets users supply assets, earning interest in return, and borrow against their supplied collateral.
+_Basic Mechanics_: At its core, Compound lets users supply assets, earning interest in return, and borrow against their supplied collateral.
 
-*$COMP Token*: Beyond just a governance token, $COMP has quickly established its place as a significant DeFi asset, enabling token holders to influence the protocol's direction.
+_$COMP Token_: Beyond just a governance token, $COMP has quickly established its place as a significant DeFi asset, enabling token holders to influence the protocol's direction.
 
 **Supplying and Borrowing on Compound**
 
 1. **Supplying Assets**: Users can lock in their tokens and earn interest as lenders.
 2. **Borrowing**: Leveraging supplied assets as collateral, users can borrow other assets.
 
-*Collateral Factor and Health*: These metrics are vital for users, as they determine borrowing limits and, importantly, liquidation risks.
+_Collateral Factor and Health_: These metrics are vital for users, as they determine borrowing limits and, importantly, liquidation risks.
 
 **Interest Rates on Compound**
 

@@ -1,42 +1,61 @@
 import * as React from "react"
 import { BiChevronRight } from "react-icons/bi"
-import fb_icon from "../images/fb-icon.png"
-import x_icon from "../images/x-icon.png"
-import linkedin_icon from "../images/linkedin-icon.png"
-import at_icon from "../images/at-icon.png"
-import whatsapp_icon from "../images/whatsapp-icon.png"
-import image1 from "../images/placeHolderImage-1.png"
-import image2 from "../images/placeHolderImage-2.png"
-import image3 from "../images/placeHolderImage-3.png"
-import user from "../images/blog-user.png"
-
+import fb_icon from "../../images/fb-icon.png"
+import x_icon from "../../images/x-icon.png"
+import linkedin_icon from "../../images/linkedin-icon.png"
+import whatsapp_icon from "../../images/whatsapp-icon.png"
+import user from "../../images/blog-user.png"
 import { graphql, Link } from "gatsby"
 
-import Layout from "../Components/Layout/Layout"
-import Subscribe from "../components/Subscribe/Subscribe"
-import LatestPosts from "../components/HomeBlogs/LatestPosts"
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share"
+import LatestPosts from "../../components/HomeBlogs/LatestPosts"
+import Layout from "../../components/Layout/Layout"
+import Subscribe from "../../components/Subscribe/Subscribe"
 
-const socialIcons = [
-  {
-    icon: fb_icon,
-  },
-  {
-    icon: x_icon,
-  },
-  {
-    icon: linkedin_icon,
-  },
-  {
-    icon: at_icon,
-  },
-  {
-    icon: whatsapp_icon,
-  },
-]
+const SingleBlog = ({ data }) => {
+  console.log("SingleBlog", data)
+  const [shareUrl, setShareUrl] = React.useState("")
+  React.useEffect(() => {
+    setShareUrl(window.location.href)
+  }, [])
 
-const SingleBlog = ({data}) => {
   const post = data.allMarkdownRemark.edges[0]?.node
-  console.log(post)
+
+  const socialIcons = [
+    {
+      icon: (
+        <FacebookShareButton url={shareUrl}>
+          <img src={fb_icon} alt="social-icon" height={16} width={16} />
+        </FacebookShareButton>
+      ),
+    },
+    {
+      icon: (
+        <TwitterShareButton url={shareUrl}>
+          <img src={x_icon} alt="social-icon" height={16} width={16} />
+        </TwitterShareButton>
+      ),
+    },
+    {
+      icon: (
+        <LinkedinShareButton url={shareUrl}>
+          <img src={linkedin_icon} alt="social-icon" height={16} width={16} />
+        </LinkedinShareButton>
+      ),
+    },
+    {
+      icon: (
+        <WhatsappShareButton url={shareUrl}>
+          <img src={whatsapp_icon} alt="social-icon" height={16} width={16} />
+        </WhatsappShareButton>
+      ),
+    },
+  ]
   return (
     <Layout>
       <>
@@ -58,7 +77,7 @@ const SingleBlog = ({data}) => {
                 key={i}
                 className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center"
               >
-                <img src={icon} alt="social-icon" height={16} width={16} />
+                {icon}
               </div>
             ))}
           </div>
@@ -69,24 +88,33 @@ const SingleBlog = ({data}) => {
           {/* //!Photo & Publication details section -- start */}
           <section className="!mb-16 !space-y-14 !px-4 single_blog_container">
             <article className="!space-y-2  h-max">
-              <p className="!text-[#2C3B8D] !text-sm">{post?.frontmatter?.tags}</p>
+              <p className="!text-[#2C3B8D] !text-sm">
+                {post?.frontmatter?.tags}
+              </p>
               <h2 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px]">
                 {post?.frontmatter?.title}
               </h2>
-              <p className="blog-description">{post?.frontmatter?.description}</p>
+             
               <p className="!text-xs !text-[#545454]">Sept 24, 2023</p>
               <div className="!flex !space-x-3 !items-center !pt-6">
-                <img
-                  src={user}
-                  alt="user"
-                  height={40}
-                  width={40}
-                  className="!rounded-full !object-cover"
-                />
+              <div className="!w-10 !h-10 !rounded-full">
+            <img
+              src={post?.frontmatter.authorImg || user}
+              alt="user"
+              height={40}
+              width={40}
+              className="!rounded-full !object-cover !w-full !h-full"
+            />
+          </div>
                 <p className="!text-sm">
-                  Vince DePalma{" "}
+                 {
+                    post?.frontmatter?.author
+                 }
                   <span className="!text-xs !text-[#545454] !block">
-                    Co-Founder
+                   
+                   {
+                      post?.frontmatter?.authorByline
+                   }
                   </span>
                 </p>
               </div>
@@ -99,12 +127,15 @@ const SingleBlog = ({data}) => {
             />
           </section>
           {/* //!Photo & Publication details section -- end */}
-          <p className="!px-4 single_blog_p">{post?.frontmatter?.description}</p>
+          <p className="!px-4 single_blog_p">
+            {post?.frontmatter?.description}
+          </p>
           {/* //!singleBlog prop changes some style in subscriber component */}
           <Subscribe singleBlog={true} />
-          <div dangerouslySetInnerHTML={{__html: post?.html}}  className="blog-content">
-         
-          </div>
+          <div
+            dangerouslySetInnerHTML={{ __html: post?.html }}
+            className="blog-content"
+          ></div>
           {/* //!Article Tags Section Start */}
           <div className="!flex !flex-wrap !gap-x-2 !gap-y-3 !justify-center !mt-10 !mb-[75px] !px-4 article_tags_container">
             {post?.frontmatter?.tags.map((tag, i) => (
@@ -139,11 +170,14 @@ export const pageQuery = graphql`
             tags
             description
             coverUrl
+            author
+            authorImg
+            authorByline
           }
           fields {
             slug
           }
-          excerpt 
+          excerpt
           html
         }
       }

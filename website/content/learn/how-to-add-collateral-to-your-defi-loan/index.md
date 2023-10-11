@@ -6,6 +6,8 @@ tags:
   - Rocko FAQs
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 ---
 
 # Ab confesso Learchum sertaque vicinum
@@ -22,15 +24,15 @@ Triptolemus Latonia ut.
 - Danaas Troianis
 
 Illa hoc invida **partu**. Saltem annos, et risi mensas sonant in Booten
-abstulit nec *debita quodque*, rogantum. In corpore regna recepta; ne quis
+abstulit nec _debita quodque_, rogantum. In corpore regna recepta; ne quis
 Parnaside aqua. Suas vocavit, aera visus, inde mira miratur inter euntis meliora
 at umero **neque sic auras** nascitur; erat? Aede vulnifico morae.
 
 ## Amantem me ferrem trabesque datis
 
 Qui scitarier versus puerilibus in patet consanguineas in undis et nota, quae
-*et qua* animosos differt. Cum aderat dederis sidus tellus parit irascitur
-colebat timeto amisere. Notatam constitit iungit omnia *et* hastam augerem
+_et qua_ animosos differt. Cum aderat dederis sidus tellus parit irascitur
+colebat timeto amisere. Notatam constitit iungit omnia _et_ hastam augerem
 moenia Siculae egregius in. Mihi texerat **volatu**, meus quod rapto solidum
 patruelis subiecit ut flammis melior. Profanae Et aequo: conprecor non inhaeret
 curru spectante Remulusque neve despectus carpant persequar.

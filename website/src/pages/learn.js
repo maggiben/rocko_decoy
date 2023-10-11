@@ -1,94 +1,65 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import BlogsCategories from "../components/BlogsCategories/BlogsCategories"
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Subscribe from "../components/Subscribe/Subscribe"
+import Layout from "../Components/Layout/Layout"
+import LatestPosts from "../components/HomeBlogs/LatestPosts"
+import TopPosts from "../components/HomeBlogs/TopPosts"
+import Category from "../components/HomeBlogs/Category"
+import CryptoDeFi from "../components/HomeBlogs/CryptoDeFi"
+import Faq from "../components/HomeBlogs/Faq"
+import HeroBlog from "../components/HeroBlog/HeroBlog"
+import CategoryBlogsContainer from "../components/CategoryBlogsContainer/CategoryBlogsContainer"
+import SortedComponent from "../components/Sorted/SortedComponent"
 
-const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
-
-  if (posts.length === 0) {
-    return (
-      <Layout location={location} title={siteTitle}>
-        <Bio />
-        <p>
-          No blog posts found. Add markdown posts to "content/blog" (or the
-          directory you specified for the "gatsby-source-filesystem" plugin in
-          gatsby-config.js).
-        </p>
-      </Layout>
-    )
-  }
+const Index = () => {
+  //* useState Hooks
+  const [selectCategory, setSelectCategory] = React.useState({
+    id: "all",
+    name: "All",
+  })
 
   return (
-    <Layout location={location} title={siteTitle}>
-      <Bio />
-      <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
+    <Layout>
+      <>
+        {/* //! ------BlogsCategories Container Start----- */}
+        <BlogsCategories
+          selectCategory={selectCategory}
+          setSelectCategory={setSelectCategory}
+        />
+        {/* //! ------BlogsCategories Container End----- */}
+        {/* //! ------Category name will show when user click any of the listed category----- */}
+       
 
-          return (
-            <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
-                <header>
-                  <h2>
-                    <Link to={`/defi-learning-resources${post.fields.slug}`} itemProp="url">
-                      <span itemProp="headline">{title}</span>
-                    </Link>
-                  </h2>
-                  <small>{post.frontmatter.date}</small>
-                </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
-                    }}
-                    itemProp="description"
-                  />
-                </section>
-              </article>
-            </li>
-          )
-        })}
-      </ol>
+        {/* //! ------Subscribe End----- */}
+        {selectCategory.name === "All" ? (
+          <>
+            {/* //! hero start */}
+            <HeroBlog />
+            {/* //! hero end */}
+
+            {/* //! ------Subscribe Start----- */}
+            <Subscribe />
+            {/* //!Subscribe will show only when "All" category is selected */}
+
+            {/* //! ------Latest-Post Container Start----- */}
+            <LatestPosts />
+            {/* //! ------Latest-Post Container End----- */}
+            {/* //! ------Top-Post Container Start----- */}
+            <TopPosts />
+            {/* //! ------Top-Post Container End----- */}
+            {/* //! ------Category 1-Post Container Start----- */}
+            <Category />
+            <CryptoDeFi />
+            <Faq />
+            {/* //! ------Category 1-Post Container End----- */}
+          </>
+        ) : (
+          <SortedComponent selectCategory={selectCategory}/>
+        )}
+      </>
     </Layout>
   )
 }
 
-export default BlogIndex
-
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = () => <Seo title="All posts" />
-
-export const pageQuery = graphql`
-  {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
-      nodes {
-        excerpt
-        fields {
-          slug
-        }
-        frontmatter {
-          date(formatString: "MMMM DD, YYYY")
-          title
-          description
-        }
-      }
-    }
-  }
-`
+export default Index

@@ -6,6 +6,8 @@ tags:
   - DeFi Borrowing & Lending
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 ---
 
 # Riding the Waves: Understanding Floating APR in DeFi Lending

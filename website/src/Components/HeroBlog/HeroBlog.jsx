@@ -1,6 +1,6 @@
 import image2 from "../../images/placeHolderImage-2.png"
 import user from "../../images/blog-user.png"
-import { graphql, useStaticQuery } from "gatsby"
+import { Link, graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
 
 const HeroBlog = () => {
@@ -20,6 +20,9 @@ const HeroBlog = () => {
               tags
               coverUrl
               description
+              author
+              authorImg
+              authorByline
             }
             fields {
               slug
@@ -33,8 +36,10 @@ const HeroBlog = () => {
 
   const data = useStaticQuery(query)
   const heroBlog = data?.allMarkdownRemark?.edges[0].node
+  console.log('heroBlog', heroBlog)
 
   return (
+    <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
     <section className="!container !mx-auto !mb-16 !flex !flex-col !px-4 hero_blog_container">
       <div className="!basis-3/5 !mb-8 hero_blog_container_image">
         <img
@@ -54,20 +59,25 @@ const HeroBlog = () => {
         <p className="!text-[#141414] text-base">{heroBlog.excerpt}</p>
         <p className="!text-xs !text-[#545454]">{heroBlog?.frontmatter.date}</p>
         <div className="!flex !space-x-3 !items-center pt-2">
-          <img
-            src={user}
-            alt="user"
-            height={40}
-            width={40}
-            className="!rounded-full !object-cover"
-          />
+          <div className="!w-10 !h-10 !rounded-full">
+            <img
+              src={heroBlog?.frontmatter.authorImg || user}
+              alt="user"
+              height={40}
+              width={40}
+              className="!rounded-full !object-cover !w-full !h-full"
+            />
+          </div>
           <p className="!text-sm">
-            Vince DePalma{" "}
-            <span className="!text-xs !text-[#545454] !block">Co-Founder</span>
+            {heroBlog?.frontmatter.author}
+            <span className="!text-xs !text-[#545454] !block">
+              {heroBlog?.frontmatter.authorByline}
+            </span>
           </p>
         </div>
       </article>
     </section>
+    </Link>
   )
 }
 

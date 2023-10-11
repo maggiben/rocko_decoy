@@ -1,6 +1,7 @@
 import { Link } from "gatsby"
 import * as React from "react"
 import { BiChevronRight } from "react-icons/bi"
+import slugify from '@sindresorhus/slugify';
 
 const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
   console.log(blogDetails)
@@ -17,8 +18,10 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
           )}
         </div>
         <div className="!grid !grid-cols-1 !gap-y-12  blogs_container_details">
-          {blogDetails.map((details, i) => (
-            <Link to={`/${details.node.id}`} key={details.node.id}>
+          {blogDetails.map((details, i) =>{
+            // const slug = slugify(details.node.frontmatter.title)
+            return(
+            <Link to={`/learning-resources/${details.node.fields.slug}`} key={details.node.id}>
               <article>
                 <img
                   src={details.node.frontmatter.coverUrl}
@@ -47,7 +50,7 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
                 </div>
               </article>
             </Link>
-          ))}
+          )})}
         </div>
       </div>
     </section>

@@ -1,11 +1,13 @@
 ---
 title: Understanding Ethereum Gas Fees
 date: "2023-09-13T22:40:32.169Z"
-description: The Ethereum blockchain, often dubbed the 'world computer', offers a platform for decentralized applications (dApps) and smart contracts. As users interact with this platform, one consistent element they encounter is "gas" and its associated fees. For newcomers, these fees can be perplexing. Why do they exist? How do they benefit the Ethereum network? 
+description: The Ethereum blockchain, often dubbed the 'world computer', offers a platform for decentralized applications (dApps) and smart contracts. As users interact with this platform, one consistent element they encounter is "gas" and its associated fees. For newcomers, these fees can be perplexing. Why do they exist? How do they benefit the Ethereum network?
 tags:
   - Crypto & DeFi
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 ---
 
 # Understanding Ethereum Gas Fees
@@ -19,7 +21,6 @@ At the most basic level, gas fees are the transaction costs users pay to execute
 ### Components:
 
 - **Gas:** This refers to the computational effort required to execute operations, be it a transaction or a contract execution. It's a measure of how "heavy" or "light" an operation is.
-  
 - **Gas Price:** Denoted in Gwei (1 billionth of an Ether), this is the amount of Ether a user is willing to pay for every unit of gas. It's similar to how you pay a price per liter or gallon at a fuel station.
 
 - **Gas Fee:** The total fee is the product of gas and gas price. So, if an operation uses 100,000 gas, and the user sets the gas price at 20 Gwei, the total gas fee would be 0.002 Ether.

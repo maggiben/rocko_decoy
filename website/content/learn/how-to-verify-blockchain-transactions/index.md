@@ -6,6 +6,8 @@ tags:
   - Crypto & DeFi
 coverUrl: /learn/blogHeader.png
 author: Vince DePalma
+authorByline: Co-Founder
+authorImg: /learn/author-1.jpg
 ---
 
 # Using Etherscan: Your Guide to Blockchain Transparency and Verifiability
@@ -21,9 +23,7 @@ Etherscan is a search engine for the Ethereum blockchain. Much like how Google a
 The beauty of blockchain technology lies in its open, immutable ledger. Every transaction is recorded, timestamped, and available for anyone to inspect. Here's why this is revolutionary:
 
 - **Transparency:** Every transaction, no matter how small, is openly available for inspection. This prevents nefarious activities or hidden transactions.
-  
 - **Verifiability:** Don't just trust a statement – verify it for yourself. Did someone claim they sent you Ether? Verify it on Etherscan.
-  
 - **Accountability:** Companies or developers can't just make claims about their activities. With tools like Etherscan, they're held accountable to the very transactions they broadcast.
 
 ## Starting with Etherscan: The Basics
@@ -43,9 +43,7 @@ The beauty of blockchain technology lies in its open, immutable ledger. Every tr
 When you input and search for an Ethereum address, you'll see:
 
 - **Balance:** The amount of Ether this address holds.
-  
 - **Transaction Count:** The number of transactions associated with this address.
-  
 - **ERC-20 Token Txns:** A list of transactions for ERC-20 tokens (a common Ethereum token standard) that the address has interacted with.
 
 ## Verifying Transactions
@@ -61,7 +59,7 @@ Suppose someone claims they've sent you Ethereum or a specific ERC-20 token. How
 Ethereum is not just a cryptocurrency; it's a platform for decentralized apps, driven by smart contracts. Etherscan provides insights into these contracts.
 
 1. When viewing a smart contract address, Etherscan displays the contract's source code, allowing anyone to verify its operations and logic.
-  
+
 2. Developers often "verify" their contract's source code on Etherscan. This means they provide the original code, and Etherscan confirms it matches the code running on the blockchain. This fosters trust and transparency.
 
 ## The Power of "Don't Trust, Verify"
@@ -71,7 +69,6 @@ In traditional financial systems, trust is often placed in third parties or inte
 This level of transparency:
 
 - **Protects Against Fraud:** Scammers can't easily make false claims when their actions are laid bare on the blockchain.
-  
 - **Empowers Users:** You no longer need to rely solely on someone's word. With Etherscan, you can take control and verify information independently.
 
 - **Upholds Integrity:** Businesses and developers operating on the Ethereum platform know their actions are open for scrutiny. This promotes genuine, trustworthy operations and deters dubious activities.
