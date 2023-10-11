@@ -1,0 +1,25 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="40" height="40" fill="#F5F5F5"/>
+<g id="Article Template" clip-path="url(#clip0_0_1)">
+<rect width="1440" height="3290" transform="translate(-442 -1335)" fill="white"/>
+<g id="Content">
+<g id="Subscribe">
+<rect x="-51.5" y="-59.5" width="659" height="159" rx="19.5" fill="#F9F9F9"/>
+<g id="Frame 89">
+<rect x="-28" y="-28" width="96" height="96" rx="48" fill="#0E2A32"/>
+<g id="Frame 72">
+<path id="Rectangle 6" d="M0 16.75H20H40V37.75C40 38.8546 39.1046 39.75 38 39.75H2C0.895431 39.75 0 38.8546 0 37.75V16.75Z" fill="#F1ECE5"/>
+<path id="Rectangle 8" d="M0 16.75L20 0.25L40 16.75V17.75H0V16.75Z" fill="#BFB7AC"/>
+<path id="Rectangle 7" d="M3 12.5C3 11.3954 3.89543 10.5 5 10.5H35C36.1046 10.5 37 11.3954 37 12.5V21.3L20 28.5L3 22.8429V12.5Z" fill="#5F58FE"/>
+</g>
+</g>
+<rect x="-51.5" y="-59.5" width="659" height="159" rx="19.5" stroke="#E2E2E2"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect width="1440" height="3290" fill="white" transform="translate(-442 -1335)"/>
+</clipPath>
+</defs>
+</svg>

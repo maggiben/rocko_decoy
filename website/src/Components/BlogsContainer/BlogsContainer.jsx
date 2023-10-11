@@ -6,14 +6,18 @@ import slugify from '@sindresorhus/slugify';
 const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
   console.log(blogDetails)
   return (
-    <section className={`${grayBG && "!bg-[#F9F9F9]"} !py-16`}>
-      <div className="!container !mx-auto !px-4 blogs_container">
-        <div className="!flex !items-center !justify-between !mb-10">
-          <h1 className="!text-[32px]">{blogsCategory}</h1>
+    <section
+      className={`${
+        grayBG && "blogs_container_parent_bg_gray"
+      } blogs_container_parent`}
+    >
+      <div className="blogs_container">
+        <div className="blogs_container_title">
+          <h1 className="blogs_container_title_h1">{blogsCategory}</h1>
           {viewButton && (
-            <p className="!text-[#2C3B8D] !font-[500] !text-sm !inline-block">
+            <p className="blogs_container_title_p">
               {viewButton}{" "}
-              <BiChevronRight className="!text-3xl !inline-block !-ml-2" />
+              <BiChevronRight className="blogs_container_title_icon" />
             </p>
           )}
         </div>
@@ -28,23 +32,25 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
                   alt="blog3"
                   height={197}
                   style={{ width: "100%" }}
-                  className="!rounded-[20px] !mb-6 !object-cover"
+                  className="blogs_container_details_article_image"
                 />
 
-                <div className="!space-y-2">
+                <div className="blogs_container_details_article_info">
                   {/* category */}
-                  <p className="!text-[#545454] !text-sm">
+                  <p className="blogs_container_details_article_info_p_1">
                     {details.node.frontmatter.tags[0]}
                   </p>
                   {/* title */}
                   {/* here is title */}
-                  <h2 className="!text-[28px] tracking-[0px]">
+                  <h2 className="blogs_container_details_article_info_h2_1">
                     {details.node.frontmatter.title}
                   </h2>
                   {/* description */}
-                  <p>{details.node.excerpt}</p>
+                  <p className="blogs_container_details_article_info_p_2">
+                    {details.node.excerpt}
+                  </p>
                   {/* date */}
-                  <p className="!text-xs !text-[#545454]">
+                  <p className="blogs_container_details_article_info_p_3">
                     {details.node.frontmatter.date}
                   </p>
                 </div>

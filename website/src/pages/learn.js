@@ -29,8 +29,7 @@ const Index = () => {
         />
         {/* //! ------BlogsCategories Container End----- */}
         {/* //! ------Category name will show when user click any of the listed category----- */}
-       
-
+        
         {/* //! ------Subscribe End----- */}
         {selectCategory.name === "All" ? (
           <>

@@ -1,5 +1,6 @@
 import * as React from "react"
 import rockoLogo from "../images/logo.svg"
+import Footer from "../../../ui-lib/Footer/Footer"
 // import website styles
 // import "../styles/style.scss"
 
@@ -42,7 +43,7 @@ const Index = ({}) => {
                           <img src={rockoLogo} alt="rocko.co" />
                         </a>
                       </div>
-                      <h1>Launching Soon!</h1>
+                      <h1 className="launching-h1">Launching Soon!</h1>
                       <div className="banner__text">
                         <p>
                           Rocko enables crypto owners to easily borrow USDC or
@@ -67,7 +68,7 @@ const Index = ({}) => {
                         </div>
                         <button
                           type="submit"
-                          className="btn btn-primary text-white"
+                          className="btn btn-primary !text-white !bg-[#293991] notify_button"
                         >
                           NOTIFY ME
                         </button>
@@ -92,7 +93,7 @@ const Index = ({}) => {
                               className="d-flex align-items-center justify-content-center rounded-circle"
                               target="_blank"
                             >
-                              <span className="rocko rocko-twitter"></span>
+                              <span className="rocko rocko-twitter !text-[#293992]"></span>
                             </a>
                           </li>
                         </ul>
@@ -107,6 +108,7 @@ const Index = ({}) => {
 
      
       </div>
+      <Footer/>
     </>
   )
 }

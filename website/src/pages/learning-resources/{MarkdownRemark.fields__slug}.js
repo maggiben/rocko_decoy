@@ -1,9 +1,9 @@
 import * as React from "react"
 import { BiChevronRight } from "react-icons/bi"
-import fb_icon from "../../images/fb-icon.png"
-import x_icon from "../../images/x-icon.png"
-import linkedin_icon from "../../images/linkedin-icon.png"
-import whatsapp_icon from "../../images/whatsapp-icon.png"
+import fb_icon from "../../images/fb-icon.svg"
+import x_icon from "../../images/x-icon.svg"
+import linkedin_icon from "../../images/linkedin-icon.svg"
+import whatsapp_icon from "../../images/whatsapp-icon.svg"
 import user from "../../images/blog-user.png"
 import { graphql, Link } from "gatsby"
 
@@ -60,16 +60,16 @@ const SingleBlog = ({ data }) => {
     <Layout>
       <>
         {/* //!Share to social-media section -- start */}
-        <section className="!container !mx-auto !my-10 !flex !flex-wrap !items-center !justify-between !gap-3 !px-4 share_social_media_container">
-          <Link
-            to="/"
-            className="!px-4 !py-2 !rounded-3xl !text-[#2C3B8D] !bg-[#EEE] !font-[500] !flex !items-center"
+        <section className="share_social_media_container">
+          <button
+            className="blog_home_button"
+            onClick={() => window.history.back()}
           >
-            <BiChevronRight className="!text-3xl !inline-block !-rotate-180 !-mr-1" />{" "}
+            <BiChevronRight className="blog_home_button_icon" />{" "}
             <span>Blog Home</span>
-          </Link>
+          </button>
           <div className="!flex !space-x-2 !items-center">
-            <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4">
+            <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4 !text-black">
               Share
             </p>
             {socialIcons.map(({ icon }, i) => (
@@ -84,9 +84,9 @@ const SingleBlog = ({ data }) => {
         </section>
         {/* //!Share to social-media section -- end */}
         {/* //!Blog section -- start */}
-        <main className="!max-w-[760px] !w-full !mx-auto">
+        <main className="single_blog_container_parent">
           {/* //!Photo & Publication details section -- start */}
-          <section className="!mb-16 !space-y-14 !px-4 single_blog_container">
+          <section className="single_blog_container">
             <article className="!space-y-2  h-max">
               <p className="!text-[#2C3B8D] !text-sm">
                 {post?.frontmatter?.tags}
@@ -94,27 +94,22 @@ const SingleBlog = ({ data }) => {
               <h2 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px]">
                 {post?.frontmatter?.title}
               </h2>
-             
+
               <p className="!text-xs !text-[#545454]">Sept 24, 2023</p>
               <div className="!flex !space-x-3 !items-center !pt-6">
-              <div className="!w-10 !h-10 !rounded-full">
-            <img
-              src={post?.frontmatter.authorImg || user}
-              alt="user"
-              height={40}
-              width={40}
-              className="!rounded-full !object-cover !w-full !h-full"
-            />
-          </div>
+                <div className="!w-10 !h-10 !rounded-full">
+                  <img
+                    src={post?.frontmatter.authorImg || user}
+                    alt="user"
+                    height={40}
+                    width={40}
+                    className="!rounded-full !object-cover !w-full !h-full"
+                  />
+                </div>
                 <p className="!text-sm">
-                 {
-                    post?.frontmatter?.author
-                 }
+                  {post?.frontmatter?.author}
                   <span className="!text-xs !text-[#545454] !block">
-                   
-                   {
-                      post?.frontmatter?.authorByline
-                   }
+                    {post?.frontmatter?.authorByline}
                   </span>
                 </p>
               </div>
@@ -127,9 +122,7 @@ const SingleBlog = ({ data }) => {
             />
           </section>
           {/* //!Photo & Publication details section -- end */}
-          <p className="!px-4 single_blog_p">
-            {post?.frontmatter?.description}
-          </p>
+          <p className="single_blog_p">{post?.frontmatter?.description}</p>
           {/* //!singleBlog prop changes some style in subscriber component */}
           <Subscribe singleBlog={true} />
           <div
@@ -137,7 +130,7 @@ const SingleBlog = ({ data }) => {
             className="blog-content"
           ></div>
           {/* //!Article Tags Section Start */}
-          <div className="!flex !flex-wrap !gap-x-2 !gap-y-3 !justify-center !mt-10 !mb-[75px] !px-4 article_tags_container">
+          <div className="article_tags_container">
             {post?.frontmatter?.tags.map((tag, i) => (
               <button
                 key={i}

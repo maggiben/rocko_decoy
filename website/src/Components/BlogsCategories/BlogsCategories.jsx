@@ -3,7 +3,6 @@ import { BiSearchAlt2 } from "react-icons/bi"
 import { useStaticQuery, graphql } from "gatsby"
 import slugify from "slugify"
 
-
 const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
   // const [tags, setTags] = React.useState([])
 
@@ -21,7 +20,7 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
       }
     }
   `)
-  
+
   const tags = data?.allMarkdownRemark?.edges.map(tag => {
     return {
       id: tag.node.id,
@@ -43,16 +42,16 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
   }))
 
   return (
-    <section className="!pt-10 !pb-16 !container !mx-auto !px-4 tags_container_parent">
-      <div className="!flex !flex-col !items-center !justify-center  !gap-y-5 tags_container">
+    <section className="tags_container_parent">
+      <div className="tags_container">
         <div className="!space-x-2 !order-2 !flex !flex-wrap !justify-center !gap-y-3 tags_container_tags">
           <button
             // to={`/${mainPath}`}
             key={"all"}
-            className={`!py-[10px] !px-6 !rounded-3xl !border-[1px] !border-[#E2E2E2] !font-[500] !text-sm ${
+            className={`tags_container_tags_buttons ${
               selectCategory.id === "all"
-                ? "text-white bg-[#0E2A32]"
-                : "text-black bg-transparent"
+                ? "tags_container_tags_buttons_select"
+                : "tags_container_tags_buttons_unselect"
             }`}
             onClick={() =>
               setSelectCategory(prev => ({
@@ -85,10 +84,10 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
                 <button
                   // to={`/${mainPath}`}
                   key={tag?.id}
-                  className={`!py-[10px] !px-6 !rounded-3xl !border-[1px] !border-[#E2E2E2] !font-[500] !text-sm ${
+                  className={`tags_container_tags_buttons ${
                     selectCategory.id === tag?.id
-                      ? "text-white bg-[#0E2A32]"
-                      : "text-black bg-transparent"
+                      ? "tags_container_tags_buttons_select"
+                      : "tags_container_tags_buttons_unselect"
                   }`}
                   onClick={() =>
                     setSelectCategory(prev => ({
@@ -103,14 +102,14 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
               )
             })}
         </div>
-        <div className="!w-full !py-[10px] !px-4 !flex !items-center !gap-x-2 !border-[1px] !border-[#E2E2E2] !rounded-3xl !order-1 tags_container_search_input">
-          <BiSearchAlt2 className="!text-2xl" />
+        <div className="tags_container_search_input">
+          <BiSearchAlt2 className="tags_container_search_icon" />
           <input
             type="text"
             name="search"
             placeholder="Search..."
             id="search"
-            className="!w-full !text-sm !placeholder:text-[#545454] !p-0 !border-0"
+            className="tags_container_search_inputfield"
           />
         </div>
       </div>

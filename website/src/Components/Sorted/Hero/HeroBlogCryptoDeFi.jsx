@@ -43,45 +43,54 @@ const HeroBlogCryptoDeFi = () => {
   const heroBlog = data?.allMarkdownRemark?.edges[0].node
 
   return (
-    <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
-    <section className="!container !mx-auto !mb-16 !flex !flex-col !px-4 hero_blog_container">
-      <div className="!basis-3/5 !mb-8 hero_blog_container_image">
-        <img
-          src={image2}
-          alt="blog2"
-          // style={{ width: "100%", height: "371px" }}
-          className="!rounded-[20px] !object-cover !w-full"
-        />
-      </div>
-      <article className="!basis-2/5 !space-y-2  !self-center !h-max hero_blog_container_details">
-        <p className="!text-[#545454] !text-sm">
-          {heroBlog?.frontmatter.tags[0]}
-        </p>
-        <h2 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px] !text-[#141414]">
-          {heroBlog?.frontmatter.title}
-        </h2>
-        <p className="!text-[#141414] text-base">{heroBlog.excerpt}</p>
-        <p className="!text-xs !text-[#545454]">{heroBlog?.frontmatter.date}</p>
-        <div className="!flex !space-x-3 !items-center pt-2">
-          <div className="!w-10 !h-10 !rounded-full">
+    <>
+      <h1 className="!font-[500] !text-[32px] !mb-16 !container !px-4 category_name">
+        {heroBlog?.frontmatter.tags[0]}
+      </h1>
+      <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
+        <section className="hero_blog_container">
+          <div className="hero_blog_container_image_container">
             <img
-              src={heroBlog?.frontmatter.authorImg || user}
-              alt="user"
-              height={40}
-              width={40}
-              className="!rounded-full !object-cover !w-full !h-full"
+              src={image2}
+              alt="blog2"
+              // style={{ width: "100%", height: "371px" }}
+              className="hero_blog_container_image"
             />
           </div>
-          <p className="!text-sm">
-            {heroBlog?.frontmatter.author}
-            <span className="!text-xs !text-[#545454] !block">
-              {heroBlog?.frontmatter.authorByline}
-            </span>
-          </p>
-        </div>
-      </article>
-    </section>
-    </Link>
+          <article className="hero_blog_container_details">
+            <p className="hero_blog_container_details_p_1">
+              {heroBlog?.frontmatter.tags[0]}
+            </p>
+            <h2 className="hero_blog_container_details_h2_1">
+              {heroBlog?.frontmatter.title}
+            </h2>
+            <p className="hero_blog_container_details_p_2">
+              {heroBlog.excerpt}
+            </p>
+            <p className="hero_blog_container_details_p_3">
+              {heroBlog?.frontmatter.date}
+            </p>
+            <div className="hero_blog_container_details_userinfo">
+              <div className="!w-10 !h-10 !rounded-full">
+                <img
+                  src={heroBlog?.frontmatter.authorImg || user}
+                  alt="user"
+                  height={40}
+                  width={40}
+                  className="hero_blog_container_details_userinfo_image"
+                />
+              </div>
+              <p className="hero_blog_container_details_userinfo_p_1">
+                {heroBlog?.frontmatter.author}
+                <span className="hero_blog_container_details_userinfo_span_1">
+                  {heroBlog?.frontmatter.authorByline}
+                </span>
+              </p>
+            </div>
+          </article>
+        </section>
+      </Link>
+    </>
   )
 }
 
