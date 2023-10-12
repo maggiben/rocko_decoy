@@ -38,7 +38,7 @@ DB_CONFIG = {
     'database': os.environ.get('DATABASE_DB')
 }
 
-COMET_ABI = requests.get("https://docs.compound.finance/public/files/comet-interface-abi-98f438b.json").text
+COMET_ABI = open('comet-abi.json').read()
 
 def get_apr(rate, scale):
    return rate / scale * (60 * 60 * 24 * 365)

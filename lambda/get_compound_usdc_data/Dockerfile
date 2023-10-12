@@ -16,6 +16,7 @@ RUN yum -y install awscli
 RUN pip install -r /var/task/requirements.txt
 
 COPY *.py /var/task
+COPY *.json /var/task
 
 WORKDIR /var/task
 CMD [ "get_compound_usdc_data.lambda_handler" ]
