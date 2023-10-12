@@ -99,6 +99,10 @@ def handler_inner(event, context):
   utilization = comet_contract.functions.getUtilization().call()
   logger.debug(f"UTILIZATION: {utilization}")
 
+  # Get utilization percentage
+  utilization_percent = utilization / factor_scale
+  logger.debug(f"UTILIZATION PERCENT: {utilization_percent}")
+
   # Supply
   time.sleep(1)
   logger.debug("")
@@ -119,12 +123,12 @@ def handler_inner(event, context):
   supply_speed = comet_contract.functions.baseTrackingSupplySpeed().call()
   logger.debug(f"SUPPLY SPEED: {supply_speed}")
 
-  # Suppliers per day
-  suppliers_per_day = supply_speed / base_index_scale * 86400
-  logger.debug(f"SUPPLIERS PER DAY {suppliers_per_day}")
+  # COMP to suppliers per day
+  comp_to_suppliers_per_day = supply_speed / base_index_scale * 86400
+  logger.debug(f"SUPPLIERS PER DAY {comp_to_suppliers_per_day}")
 
   # Supply Comp Reward Rate
-  supply_reward_rate = (comp_price * suppliers_per_day / (supply_total  * usdc_price)) * 365
+  supply_reward_rate = (comp_price * comp_to_suppliers_per_day / (supply_total  * usdc_price)) * 365
   logger.debug(f"SUPPLY REWARD RATE {supply_reward_rate}")
 
   # Supply net rate
@@ -151,12 +155,12 @@ def handler_inner(event, context):
   borrow_speed = comet_contract.functions.baseTrackingBorrowSpeed().call()
   logger.debug(f"BORROW SPEED: {borrow_speed}")
 
-  # Borrowers per day
-  borrowers_per_day = borrow_speed / base_index_scale * 86400
-  logger.debug(f"BORROWERS PER DAY {borrowers_per_day}")
+  # COMP to borrowers per day
+  comp_to_borrowers_per_day = borrow_speed / base_index_scale * 86400
+  logger.debug(f"BORROWERS PER DAY {comp_to_borrowers_per_day}")
 
   # Borrow Comp Reward Rate
-  borrow_reward_rate = (comp_price * borrowers_per_day / (borrow_total  * usdc_price)) * 365
+  borrow_reward_rate = (comp_price * comp_to_borrowers_per_day / (borrow_total  * usdc_price)) * 365
   logger.debug(f"BORROW REWARD RATE {borrow_reward_rate}")
 
   # Supply net rate
@@ -185,8 +189,8 @@ def handler_inner(event, context):
   logger.debug("")
 
   # Put together SQL statement
-  sql = "INSERT INTO asset_data (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, available, supply_rate, supply_apr, supply_total, suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES ("
-  sql += f"'compound', '3', '{os.environ.get('NETWORK')}', 'USDC', {usdc_price}, {comp_price}, {utilization}, {total_available}, {supply_rate}, {supply_apr}, {supply_total}, {suppliers_per_day}, {supply_reward_rate}, {supply_net_rate}, {borrow_rate}, {borrow_apr}, {borrow_total}, {borrowers_per_day}, {borrow_reward_rate}, {borrow_net_rate}, {borrow_min}, {borrow_reward_min})"
+  sql = "INSERT INTO asset_data (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, utilization_percent, available, supply_rate, supply_apr, supply_total, comp_to_suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, comp_to_borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES ("
+  sql += f"'compound', '3', '{os.environ.get('NETWORK')}', 'USDC', {usdc_price}, {comp_price}, {utilization}, {utilization_percent}, {total_available}, {supply_rate}, {supply_apr}, {supply_total}, {comp_to_suppliers_per_day}, {supply_reward_rate}, {supply_net_rate}, {borrow_rate}, {borrow_apr}, {borrow_total}, {comp_to_borrowers_per_day}, {borrow_reward_rate}, {borrow_net_rate}, {borrow_min}, {borrow_reward_min})"
 
   logger.debug(sql)
 
