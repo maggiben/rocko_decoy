@@ -36,7 +36,7 @@ const HeroBlog = () => {
 
   const data = useStaticQuery(query)
   const heroBlog = data?.allMarkdownRemark?.edges[0].node
-  console.log('heroBlog', heroBlog)
+  // console.log('heroBlog', heroBlog)
 
   return (
     <Link to={`/learning-resources/${heroBlog.fields.slug}`}>

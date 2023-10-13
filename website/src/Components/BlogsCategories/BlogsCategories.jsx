@@ -1,7 +1,7 @@
 import * as React from "react"
-import { BiSearchAlt2 } from "react-icons/bi"
 import { useStaticQuery, graphql } from "gatsby"
 import slugify from "slugify"
+import SearchField from "../SearchField/SearchField"
 
 const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
   // const [tags, setTags] = React.useState([])
@@ -104,16 +104,7 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
               )
             })}
         </div>
-        <div className="tags_container_search_input">
-          <BiSearchAlt2 className="tags_container_search_icon" />
-          <input
-            type="text"
-            name="search"
-            placeholder="Search..."
-            id="search"
-            className="tags_container_search_inputfield"
-          />
-        </div>
+        <SearchField />
       </div>
     </section>
   )

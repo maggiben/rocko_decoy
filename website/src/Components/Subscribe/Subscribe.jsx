@@ -1,7 +1,57 @@
 import * as React from "react"
-import email from "../../images/email.svg"
+
+import emailImg from "../../images/email.svg"
+
+import emailjs from "@emailjs/browser"
 
 const Subscribe = ({ singleBlog }) => {
+  const [email, setEmail] = React.useState("")
+  const [error, setError] = React.useState("")
+  const [success, setSuccess] = React.useState("")
+  const form = React.useRef()
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    if (!email) {
+      setError("Email is required")
+      return
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Email is invalid")
+      setSuccess("")
+      return
+    }
+
+    emailjs
+      .sendForm(
+        "service_qywgfbg",
+        "template_2w59omf",
+        form.current,
+        "RHCvxVpyncplziaa6"
+      )
+      .then(
+        result => {
+          console.log(result.text)
+        },
+        error => {
+          console.log(error.text)
+        }
+      )
+
+    setError("")
+    setSuccess("Thank you for subscribing")
+    setEmail("")
+  }
+ 
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setError("")
+      setSuccess("")
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [error, success])
   return (
     <section
       className={`subscribe_container_parent ${
@@ -19,7 +69,7 @@ const Subscribe = ({ singleBlog }) => {
       >
         <div className="subscribe_container_image_container">
           <img
-            src={email}
+            src={emailImg}
             alt="blog2"
             height={40}
             width={40}
@@ -36,7 +86,9 @@ const Subscribe = ({ singleBlog }) => {
           >
             Get the latest from Rocko in your inbox.
           </h1>
-          <div
+          <form
+            ref={form}
+            onSubmit={handleSubmit}
             data-singleblog={!singleBlog ? true : false}
             className={`subscribe_container_info_input_container`}
           >
@@ -46,11 +98,32 @@ const Subscribe = ({ singleBlog }) => {
               placeholder="Enter Email Address"
               data-singleblog={!singleBlog ? true : false}
               className={`subscribe_container_info_input`}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
-            <button className="subscribe_container_info_button">
+            <button
+              onClick={handleSubmit}
+              className="subscribe_container_info_button"
+            >
               Subscribe
             </button>
-          </div>
+          </form>
+          {/* error  */}
+          {error && (
+            <p
+              className={`text-red-500 text-sm font-semibold`}
+            >
+              {error}
+            </p>
+          )}
+          {/* success */}
+          {success && (
+            <p
+              className={`text-green-500 text-sm font-semibold `}
+            >
+              {success}
+            </p>
+          )}
         </div>
       </div>
     </section>

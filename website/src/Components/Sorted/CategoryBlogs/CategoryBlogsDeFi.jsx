@@ -1,5 +1,5 @@
 import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
+import { Link, graphql, useStaticQuery } from "gatsby"
 
 const CategoryBlogsDeFi = () => {
   const query = graphql`
@@ -32,14 +32,14 @@ const CategoryBlogsDeFi = () => {
 
   const categoryBlogs = categoryBlogsData?.allMarkdownRemark?.edges
 
-  console.log(categoryBlogs, categoryBlogsData)
+  // console.log(categoryBlogs, categoryBlogsData)
 
   return (
     <section className="category_blogs_container_parent">
-      <div className="category_blogs_container">
+      <div className="category_blogs_container  space-y-5">
         {categoryBlogs &&
           categoryBlogs.map(({ node }) => (
-            <React.Fragment key={node.id}>
+            <Link to={`/learning-resources/${node.fields.slug}`} key={node.id} className="block">
               <article className="category_blogs_content">
                 <img
                   src={node.frontmatter.coverUrl}
@@ -62,7 +62,7 @@ const CategoryBlogsDeFi = () => {
                   </p>
                 </div>
               </article>
-            </React.Fragment>
+            </Link>
           ))}
       </div>
     </section>

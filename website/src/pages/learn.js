@@ -9,8 +9,9 @@ import Category from "../components/HomeBlogs/Category"
 import CryptoDeFi from "../components/HomeBlogs/CryptoDeFi"
 import Faq from "../components/HomeBlogs/Faq"
 import HeroBlog from "../components/HeroBlog/HeroBlog"
-import CategoryBlogsContainer from "../components/CategoryBlogsContainer/CategoryBlogsContainer"
 import SortedComponent from "../components/Sorted/SortedComponent"
+import { navigate } from "gatsby"
+import slugify from "@sindresorhus/slugify"
 
 const Index = () => {
   //* useState Hooks
@@ -18,6 +19,14 @@ const Index = () => {
     id: "all",
     name: "All",
   })
+
+  React.useEffect(() => {
+    if (selectCategory.name === "All") {
+      navigate("/learn")
+    } else {
+      navigate(`/learn/#${slugify(selectCategory.name)}`)
+    }
+  }, [selectCategory])
 
   return (
     <Layout>
@@ -29,7 +38,7 @@ const Index = () => {
         />
         {/* //! ------BlogsCategories Container End----- */}
         {/* //! ------Category name will show when user click any of the listed category----- */}
-        
+
         {/* //! ------Subscribe End----- */}
         {selectCategory.name === "All" ? (
           <>
@@ -54,7 +63,7 @@ const Index = () => {
             {/* //! ------Category 1-Post Container End----- */}
           </>
         ) : (
-          <SortedComponent selectCategory={selectCategory}/>
+          <SortedComponent selectCategory={selectCategory} />
         )}
       </>
     </Layout>

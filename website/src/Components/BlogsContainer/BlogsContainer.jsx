@@ -4,7 +4,7 @@ import { BiChevronRight } from "react-icons/bi"
 import slugify from '@sindresorhus/slugify';
 
 const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
-  console.log(blogDetails)
+  // console.log(blogDetails)
   return (
     <section
       className={`${
