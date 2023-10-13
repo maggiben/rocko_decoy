@@ -25,7 +25,7 @@ export const useETHPrice = () => {
 }
 
 export const useCompPrice = () => {
-    const [ compprice, setCompPrice ] = useState("")
+    const [ compPrice, setCompPrice ] = useState("")
 
     const getPrice = useCallback(async () => {
             const response = await axios.get('https://api.coinbase.com/v2/prices/COMP-USD/spot');
@@ -42,5 +42,5 @@ export const useCompPrice = () => {
         getPrice()
     })
 
-    return { compprice }
+    return { compPrice }
 }

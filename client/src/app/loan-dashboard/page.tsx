@@ -14,8 +14,8 @@ const Dashboard = () => {
   const [active, setActive] = useState(true);
 
   const { address: wagmiAddress } = useAccount();
-  const [activeLoans, setActiveLoans] = useState<any[]>();
-  const [closedLoans, setClosedLoans] = useState<any[]>();
+  const [activeLoans, setActiveLoans] = useState<any[]>([]);
+  const [closedLoans, setClosedLoans] = useState<any[]>([]);
   const { getLoanData } = useLoanDB();
 
   const initialize = async () => {
@@ -94,9 +94,10 @@ const Dashboard = () => {
                   <h1 className="md:text-xl font-medium">ETH</h1>
                 </div>
                 <Link
-                  // href={`/loan-dashboard/${i+1}`}
-                  href={`/loan-dashboard/1`}
-                  // href={"/manage"}
+                  href={{ 
+                    pathname: `/loan-dashboard/${i+1}`,
+                    query: { active: active }
+                   }}
                   className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
                 >
                   Manage Loan
