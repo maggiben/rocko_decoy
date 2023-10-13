@@ -14,9 +14,9 @@ const Dashboard = () => {
   const [active, setActive] = useState(true);
 
   const { address: wagmiAddress } = useAccount();
+  const { getLoanData } = useLoanDB();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
-  const { getLoanData } = useLoanDB();
 
   const initialize = async () => {
     console.log(wagmiAddress)

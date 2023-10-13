@@ -31,8 +31,8 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
-  const { loanData } = useLoanData();
   const { finalizeLoan, getLoanData } = useLoanDB();
+  const { loanData } = useLoanData();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
