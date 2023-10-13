@@ -29,9 +29,10 @@ const DepositingCollateral = () => {
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
   const [completeModal, setCompleteModal] = useState(false);
+  const [newLoanID, setNewLoanID] = useState<number>(0);
 
   const { loanData } = useLoanData();
-  const { finalizeLoan } = useLoanDB();
+  const { finalizeLoan, getLoanData } = useLoanDB();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
@@ -85,6 +86,7 @@ const DepositingCollateral = () => {
   }
 
   const setAllDone = async (txHash: string) => {
+    await setNavigationID();
     finalizeLoan(
       wagmiAddress ? wagmiAddress : "",
       txHash,
@@ -94,6 +96,18 @@ const DepositingCollateral = () => {
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
+  }
+
+  const setNavigationID = async () => {
+    if (wagmiAddress) {
+      const result = await getLoanData(wagmiAddress);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+        console.log(active_loans)
+        console.log(active_loans.length)
+        setNewLoanID(active_loans.length + 1);
+      }
+    }
   }
 
   useEffect(() => {
@@ -337,7 +351,7 @@ const DepositingCollateral = () => {
             details={
               "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
-            id={1}
+            id={newLoanID}
           />
         </ModalContainer>
       )}
