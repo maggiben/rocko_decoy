@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
@@ -10,6 +10,11 @@ import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
+import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
+import { useAccount } from "wagmi";
+import { useSingleLoan } from "@/contract/single";
+import { useLoanDB } from "@/db/loanDb";
+import financial from "@/utility/currencyFormate";
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -72,17 +77,24 @@ const termsFull: Term[] = [
 
 const MakePayment: FC = () => {
   const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
-
   const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
-
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
-
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const currentBalance = parseFloat(router.get("currentBalance") || "0"); //! get the URL parameter currentBalance value
+  const loanIndex = parseFloat(router.get("index") || "0"); //! get the URL parameter payment value
   const amount = "add"; //! get the URL parameter amount value
+
+  const { address : zerodevAccount } = useAccount();
+  const address = useAddress();
+  const { getLoanData } = useLoanDB();
+  const { getThreshold } = useSingleLoan();
+  const [ loanData, setLoanData ] = useState<any>();
+  const [ threshold, setThreshold ] = useState<any>();
+  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
+  const [ currentBalance, setCurrentBalance ] = useState<any>();
+
   const invoice: Info[] = [
     {
       description: "Lending Protocol",
@@ -140,15 +152,57 @@ const MakePayment: FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">107%</span>,
+          details: <span className="font-semibold text-sm">{loanData?.collateral_buffer}%</span>,
         },
         {
           description: "Liquidation Price (ETH)",
-          details: <span className="font-semibold text-sm">$1,221.74</span>,
+          details: <span className="font-semibold text-sm">{liquidationPrice == "N/A" ? "N/A" : `${liquidationPrice}`}</span>,
         },
       ],
     },
   ];
+
+  const getLiquidationPrice = (): string => {
+    if (!loanData)
+      return "N/A";
+    
+    const balanceFloat = loanData?.outstanding_balance;
+    const outstanding_balance = balanceFloat - payment;
+
+    if (outstanding_balance === 0) {
+      return "N/A";
+    } else {
+      const liquidation_price = outstanding_balance / Number(threshold) / Number(loanData?.collateral);
+      return financial(liquidation_price, 2);
+    }
+  };
+
+  const initialize = async () => {
+    console.log(zerodevAccount)
+    if (zerodevAccount) {
+      const result = await getLoanData(zerodevAccount);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
+        console.log(active_loans[loanIndex - 1]);
+        setLoanData(active_loans[loanIndex - 1]);
+        setCurrentBalance(active_loans[loanIndex - 1]?.outstanding_balance);
+      }
+    }
+  };
+
+  useEffect(() => {
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zerodevAccount]);
+
+  useEffect(() => {
+    getThreshold()
+    .then(_threshold => setThreshold(_threshold))
+    .catch(e => console.log(e));
+
+    setLiquidationPrice(getLiquidationPrice());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -279,16 +333,16 @@ const MakePayment: FC = () => {
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
-              <button
-                disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl  text-sm font-semibold ${
-                  paymentMethod === "ethereum"
-                    ? "text-[#eee] bg-[#2C3B8D]"
-                    : "bg-[#eee] text-[#2C3B8D]"
-                }`}
-              >
-                Connect
-              </button>
+              <ConnectWallet
+                btnTitle="Connect"
+                theme="light"
+                style={{
+                  background: paymentMethod === "ethereum" ? "#2C3B8D" : "#eee",
+                  color: paymentMethod === "ethereum" ? "#eee" : "#2C3B8D",
+                  borderRadius: "1.5rem",
+                  minWidth: "8rem",
+                }}
+              />
             </div>
           </div>
           {/* radio btn - 3*/}
@@ -373,7 +427,7 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/1`}>
+              <Link href={`/loan-dashboard/1?active=true`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -383,13 +437,13 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${"1"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
-                    !connect ? "bg-blue" : "bg-blue/40"
+                    (address || !connect) ? "bg-blue" : "bg-blue/40"
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={connect}
+                  disabled={!address}
                 >
                   Confirm
                 </button>

@@ -33,33 +33,6 @@ const headings = [
   },
 ];
 
-const collateralParameters = [
-  {
-    name: "Loan-to-Value Ratio ",
-    rate: "83",
-  },
-  {
-    name: "Liquidation Threshold",
-    rate: "90",
-  },
-  {
-    name: "Liquidation Penalty",
-    rate: "5",
-  },
-];
-
-const collaterals = [
-  {
-    name: "Collateral Posted",
-    amount: "1.841892113 ETH",
-    subAmount: "$2,791.49",
-  },
-  {
-    name: "Liquidation Price",
-    amount: "$1,301.55",
-  },
-];
-
 const currentBallanceInfo = {
   amount: "1,012.13",
   subAmount: "$1,012.13",
@@ -74,7 +47,7 @@ const allTimeHigh = 4872.19;
 function SinglePage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const loanIndex = Number(params.single) - 1;
+  const loanIndex = Number(params.single);
   const isActive = searchParams.get('active');
   const account = searchParams.get('account');
   const { address: zerodevAccount } = useAccount();
@@ -110,14 +83,15 @@ function SinglePage() {
       const result = await getLoanData(zerodevAccount);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
-        console.log(active_loans[loanIndex]);
-        setLoanData(active_loans[loanIndex]);
+        console.log(active_loans[loanIndex - 1]);
+        setLoanData(active_loans[loanIndex - 1]);
       }
     }
   }
 
   useEffect(() => {
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zerodevAccount]);
 
   useEffect(() => {
@@ -387,7 +361,11 @@ function SinglePage() {
                 <MakePaymentModal
                   setModalStep={setModalStep}
                   setOpenModalFor={setOpenModalFor}
-                  currentBalance={loanData?.outstanding_balance}
+                  loanIndex={loanIndex}
+                  currentBalance={financial(loanData?.outstanding_balance)}
+                  collateral={loanData?.collateral}
+                  threshold={threshold}
+                  buffer={loanData?.collateral_buffer}
                 />
               )}
             </ModalContainer>
