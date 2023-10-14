@@ -1,25 +1,34 @@
 import ModalContent from "../ModalContent/ModalContent";
 import closeIcon from "@/assets/Close.svg";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import financial from "@/utility/currencyFormate";
 interface FormData {
   numberInput: string;
 }
 const MakePaymentModal = ({
   setOpenModalFor,
   setModalStep,
+  loanIndex,
   currentBalance,
+  collateral,
+  buffer,
+  threshold
 }: {
   setOpenModalFor: Function;
   setModalStep: Function;
+  loanIndex: Number;
   currentBalance: string;
+  collateral: string;
+  buffer: string;
+  threshold: string;
 }) => {
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
-
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
-
   const [changeInputType, setChangeInputType] = useState<string>("text"); //! to show value with commas & without commas n inputfiled on onBlur handler
+
+  console.log(loanIndex)
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -27,9 +36,9 @@ const MakePaymentModal = ({
     const inputValue = event.target.value;
     if (
       parseFloat(inputValue?.replace(/,/g, "") || "0") >
-      parseFloat(currentBalance)
+      parseFloat(currentBalance.replace(/,/g, "") || "0")
     ) {
-      setInputNumber(currentBalance);
+      setInputNumber(currentBalance.replace(/,/g, ""));
 
       return;
     }
@@ -42,6 +51,19 @@ const MakePaymentModal = ({
 
   const handleRepayBtn = () => {
     setInputNumber(currentBalance);
+  };
+
+  const getLiquidationPrice = (): string => {
+    const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
+    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
+
+    const outstanding_balance = balanceFloat - inputFloat;
+    if (outstanding_balance === 0) {
+      return "N/A";
+    } else {
+      const liquidationPrice = outstanding_balance / Number(threshold) / Number(collateral);
+      return financial(liquidationPrice, 2);
+    }
   };
 
   return (
@@ -156,35 +178,34 @@ const MakePaymentModal = ({
           {/* after putting a value on inputfield the number(based on user's intention like "add" or "withdraw") will show */}
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? "0 USDC"
+              ? `${parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0")} USDC`
               : "--"}
             <span className="block text-gray-600 text-sm font-normal">
               {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-                ? "$0"
+                ? `$${parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0")}`
                 : "--"}
             </span>
           </p>
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? "N/A"
+              ? `${buffer}%`
               : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? "N/A"
+              ? getLiquidationPrice()
               : "--"}
           </p>
         </div>
       </div>
       {/* continue button */}
       <Link
-        href={`/loan-dashboard/${"1"}/${"make-payment"}?payment=${parseFloat(
+        href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&currentBalance=${parseFloat(
-          currentBalance
-        )}`}
+        )}&index=${loanIndex}
+        `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button

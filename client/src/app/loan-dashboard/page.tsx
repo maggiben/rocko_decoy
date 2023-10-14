@@ -32,7 +32,8 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    initialize()
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wagmiAddress])
 
   return (
