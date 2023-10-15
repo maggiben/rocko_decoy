@@ -39,6 +39,7 @@ DB_CONFIG = {
 }
 
 COMET_ABI = open('comet-abi.json').read()
+DRY_RUN = 0
 
 def get_apr(rate, scale):
    return rate / scale * (60 * 60 * 24 * 365)
@@ -177,7 +178,6 @@ def handler_inner(event, context):
   borrow_reward_min = comet_contract.functions.baseMinForRewards().call() / base_accrual_scale
   logger.debug(f"BORROW MIN REWARDS: {'{:.2f}'.format(borrow_reward_min)}")
 
-
   # Other
   # Calculate available to borrow
   logger.debug("")
@@ -194,14 +194,15 @@ def handler_inner(event, context):
 
   logger.debug(sql)
 
-  conn = mysql.connector.connect(**DB_CONFIG)
-  cursor = conn.cursor()
+  if not DRY_RUN:
+    conn = mysql.connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
 
-  cursor.execute(sql)
-  conn.commit()
+    cursor.execute(sql)
+    conn.commit()
 
-  cursor.close()
-  conn.close()
+    cursor.close()
+    conn.close()
 
   return True
 
