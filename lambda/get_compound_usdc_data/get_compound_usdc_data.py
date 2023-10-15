@@ -24,7 +24,7 @@ import web3
 
 logging.debug("magic")
 logger = logging.getLogger('log')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 for v in ['PROVIDER', 'PROVIDER_MAIN', 'COMET_CONTRACT', 'COMET_CONTRACT_MAIN', 'USDC_CONTRACT', 'COMP_CONTRACT', 'NETWORK', 'DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB']:
   if not os.environ.get(v):
