@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
 # Required env variables
-# PROVIDER:       quicknode url
-# PROVIDER_MAIN: quicknode url for pricing
-# COMET_CONTRACT: Comet contract for COMP
+# PROVIDER:            quicknode url
+# PROVIDER_MAIN:       quicknode url for pricing
+# COMET_CONTRACT:      Comet contract for COMP
 # COMET_CONTRACT_MAIN: Comet contract for pricing
-# USDC_CONTRACT:  USDC contract address for compound
-# COMP_CONTRACT:  COMP contract address
-# NETWORK:        Network (goerli/mainnet)
-# DATABASE_HOST:  Database host
-# DATABASE_USER:  Database user
-# DATABASE_PASS:  Database password
-# DATABASE_DB:    Database database
+# USDC_CONTRACT:       USDC contract address for compound
+# COMP_CONTRACT:       COMP contract address
+# NETWORK:             Network (goerli/mainnet)
+# DATABASE_HOST:       Database host
+# DATABASE_USER:       Database user
+# DATABASE_PASS:       Database password
+# DATABASE_DB:         Database database
 
 import logging
 import mysql.connector
