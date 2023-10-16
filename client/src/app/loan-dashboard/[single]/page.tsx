@@ -10,12 +10,12 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";
+import { useAccount } from "wagmi";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useCompPrice } from "@/hooks/usePrice";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
-import { useZeroDev } from "@/hooks/useZeroDev";
 
 const headings = [
   {
@@ -47,14 +47,15 @@ const allTimeHigh = 4872.19;
 function SinglePage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const loanIndex = Number(params.single);
+  const loanIndex = Number(params.single) - 1;
   const isActive = searchParams.get('active');
-  const { userInfo } = useZeroDev();
+  const account = searchParams.get('account');
+  const { address: zerodevAccount } = useAccount();
 
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
   
-  const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
+  const { getLoanData } = useLoanDB();
   const { compPrice } = useCompPrice();
 
   const [loanData, setLoanData] = useState<any>();
@@ -63,12 +64,8 @@ function SinglePage() {
   const [LTV, setLTV] = useState<any>();
   const [threshold, setThreshold] = useState<any>();
   const [penalty, setPenalty] = useState<any>();
-  const [interest, setInterest] = useState<any>();
   const [rewardAmount, setRewardAmount] = useState<any>();
   const [rewardRate, setRewardRate] = useState<any>();
-  const [liquidationPrice, setLiquidationPrice] = useState<any>();
-  const [buffer, setBuffer] = useState<any>();
-  const [averageAPR, setAverageAPR] = useState<any>(0);
 
   const {
     getETHPrice,
@@ -76,32 +73,28 @@ function SinglePage() {
     getLTV,
     getPenalty,
     getThreshold,
-    // getRewardAmount,
-    getInterestAccrued,
-    getLiquidationPrice,
-    getBuffer
+    getRewardRate,
+    getRewardAmount
   } = useSingleLoan();
 
   const initialize = async () => {
-    if (userInfo) {
-      const result = await getLoanData(userInfo?.email);
+    console.log(zerodevAccount)
+    if (zerodevAccount) {
+      const result = await getLoanData(zerodevAccount);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
-        if (active_loans.length > 0) setLoanData(active_loans[0]);
-        
-        const avg_val = await getAverageAPR(active_loans[0].create_time);
-        console.log(avg_val)
-        if (avg_val) setAverageAPR(avg_val);
+        console.log(active_loans[loanIndex]);
+        setLoanData(active_loans[loanIndex]);
       }
     }
   }
 
   useEffect(() => {
     initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  }, [zerodevAccount]);
 
   useEffect(() => {
+    console.log(compPrice)
     getETHPrice()
     .then(_price => setCollateralPrice(_price))
     .catch(e => console.log(e))
@@ -122,26 +115,14 @@ function SinglePage() {
     .then(_penalty => setPenalty(_penalty))
     .catch(e => console.log(e))
 
-    getInterestAccrued()
-    .then(_interest => setInterest(_interest))
+    getRewardAmount()
+    .then(_reward => setRewardAmount(_reward))
     .catch(e => console.log(e))
-
-    // getRewardAmount()
-    // .then(_reward => setRewardAmount(_reward))
-    // .catch(e => console.log(e))
 
     getRewardRate()
     .then(_rate => setRewardRate(_rate))
     .catch(e => console.log(e))
-
-    getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
-    .then(_price => setLiquidationPrice(_price))
-    .catch(e => console.log(e))
-
-    getBuffer(loanData?.outstanding_balance, loanData?.collateral)
-    .then(_buffer => setBuffer(_buffer))
-    .catch(e => console.log(e))
-  });
+  })
 
   return (
     <>
@@ -273,10 +254,10 @@ function SinglePage() {
             {/* --------------green bar-------------- */}
             <div className="pb-16 relative">
               {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[10%] md:left-[18%] lg:left-[20%] text-xs  md:text-sm text-[#545454]"> */}
-              <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"  style={{left: `${liquidationPrice / allTimeHigh * 100 - 6}%`}}>
+              <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"  style={{left: `${loanData?.liquidation_price / allTimeHigh * 100 - 6}%`}}>
                 Liquidation Price{" "}
                 <span className="block text-center text-[#141414]">
-                  {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
+                  ${financial(loanData?.liquidation_price, 2)}
                 </span>
               </p>
               {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[43%] md:left-[45%] text-xs   md:text-sm text-[#545454]"> */}
@@ -293,8 +274,8 @@ function SinglePage() {
                 </span>
               </p>
               <div className="h-2 bg-gradient-to-r from-[#03703C] to-[#06C167] relative rounded-full">
-                <div className="frame h-3 w-3 bg-[#03703C] rotate-180 absolute -top-2" style={{left: `${liquidationPrice / allTimeHigh * 100}%`}} ></div>
-                <div className="frame h-3 w-3 bg-[#03703C] absolute top-1" style={{left: `${liquidationPrice / allTimeHigh * 100}%`}}></div>
+                <div className="frame h-3 w-3 bg-[#03703C] rotate-180 absolute -top-2" style={{left: `${loanData?.liquidation_price / allTimeHigh * 100}%`}} ></div>
+                <div className="frame h-3 w-3 bg-[#03703C] absolute top-1" style={{left: `${loanData?.liquidation_price / allTimeHigh * 100}%`}}></div>
                 <div className="frame h-3 w-3 bg-[#428564] rotate-180 absolute -top-2" style={{left: `${collateralPrice / allTimeHigh * 100}%`}}></div>
                 <div className="frame h-3 w-3 bg-[#428564] absolute top-1" style={{left: `${collateralPrice / allTimeHigh * 100}%`}}></div>
               </div>
@@ -313,12 +294,12 @@ function SinglePage() {
               <div className="flex pt-3 gap-x-2">
                 <p className="w-1/2 font-medium">Liquidation Price</p>
                 <p>
-                  {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
+                  ${financial(loanData?.liquidation_price, 2)}
                 </p>
               </div>
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
-                <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
+                <p>{loanData?.collateral_buffer}%</p>
                 <div className="flex flex-col md:flex-row items-center gap-y-1 md:gap-2 absolute right-0">
                   <p className="text-center md:text-left text-sm md:text-base">
                     Alerts On
@@ -327,10 +308,7 @@ function SinglePage() {
                 </div>
               </div>
               <div className="pt-6 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
-              <button
-                  onClick={() => setOpenModalFor("Modify Collateral")}
-                  className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold"
-                >
+                <button className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold">
                   Modify Collateral
                 </button>
                 <p className="text-sm text-center md:text-left text-[#545454]">
@@ -347,9 +325,9 @@ function SinglePage() {
             <div className="divide-y-2 space-y-3">
               <div className="flex justify-between mt-1">
                 <p className="text-xl font-medium">
-                  {financial(interest, 6)} COMP{" "}
+                  {financial(rewardAmount, 6)} COMP{" "}
                   <span className="block text-sm text-[#545454] font-normal">
-                    ~${financial(Number(compPrice) * interest, 2)}
+                    ~${financial(Number(compPrice) * rewardAmount, 2)}
                   </span>
                 </p>
                 <Image
@@ -363,7 +341,7 @@ function SinglePage() {
               <div className="pt-3">
                 <p>Rewards Rate</p>
                 <h4 className="text-xl font-medium mt-1 md:mt-3">
-                  {financial(rewardRate * 100, 2)}<span className="text-base">%</span>
+                  {financial(rewardRate, 2)}<span className="text-base">%</span>
                 </h4>
                 <p className="p-6 bg-[#F9F9F9] rounded-2xl text-sm mt-12 lg:mt-[88px] text-[#545454]">
                   Compound protocol offers rewards in its Comp token for usage
@@ -381,8 +359,7 @@ function SinglePage() {
               {modalStep === 0 && (
                 <MakePaymentModal
                   setOpenModalFor={setOpenModalFor}
-                  currentBalance={financial(loanData?.outstanding_balance)}
-                  collateral={loanData?.collateral}
+                  currentBalance={loanData?.outstanding_balance}
                 />
               )}
             </ModalContainer>

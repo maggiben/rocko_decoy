@@ -11,10 +11,9 @@ import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
+import useLoanData from "@/hooks/useLoanData";
 import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
-import { LoanData } from "@/types/type";
-import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -40,10 +39,8 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
-  // get User info
-  const { userInfo } = useZeroDev();
-  // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
+  const { loanData } = useLoanData();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
@@ -106,12 +103,12 @@ const DepositingCollateral = () => {
   }
 
   const setAllDone = async (txHash: string) => {
+    await setNavigationID();
     finalizeLoan(
-      userInfo?.email,
+      wagmiAddress ? wagmiAddress : "",
       txHash,
-      loanData?.protocol, true, loanData?.cryptoName,
-      totalBorrowing, totalCollateral,
-      isExistLoan);
+      loanData?.protocol, true, loanData?.cryptoName, 
+      loanData?.borrowing, loanData?.collateralNeeded, loanData?.liquidationPrice, loanData?.buffer);
 
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
@@ -140,13 +137,25 @@ const DepositingCollateral = () => {
     }
   }
 
+  const setNavigationID = async () => {
+    if (wagmiAddress) {
+      const result = await getLoanData(wagmiAddress);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+        console.log(active_loans)
+        console.log(active_loans.length)
+        setNewLoanID(active_loans.length + 1);
+      }
+    }
+  }
+
   useEffect(() => {
     if (batchGetLoan != undefined && userInfo != undefined) {
       setInitialParams();
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[batchGetLoan, userInfo])
+  },[batchGetLoan, wagmiAddress])
 
   useEffect(() => {
     if (error)
@@ -393,7 +402,7 @@ const DepositingCollateral = () => {
               "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
             id={newLoanID}
-          />          
+          />
         </ModalContainer>
       )}
       

@@ -1,4 +1,3 @@
-import Header from "@/components/chips/Header/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -6,6 +5,7 @@ import LoneProvider from "@/context/loanContext/loanContext";
 import Providers from "./Providers";
 import { Toaster } from 'react-hot-toast';
 import Footer from "../../../ui-lib/Footer/Footer";
+import Header from "../../../ui-lib/Header/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 

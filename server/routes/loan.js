@@ -5,6 +5,7 @@ const {db} = require('../db')
 /////////////////// Get loans
 
 router.get('/loans', (req, res) => {
+    console.log("loan")
     let sql = `SELECT * FROM loans WHERE user = '${req.query.user}'`;
     db.query(sql, (err, results) => {
       if (err) throw err;
@@ -23,28 +24,18 @@ router.post(
       lending_protocol: req.body.lending_protocol,
       loan_active: req.body.loan_active,
       loan_asset: req.body.loan_asset,
-      principal_balance: req.body.outstanding_balance,
       outstanding_balance: req.body.outstanding_balance,
       collateral: req.body.collateral,
+      liquidation_price: req.body.liquidation_price,
+      collateral_buffer: req.body.collateral_buffer,
       create_time: new Date(),
       modified_time: new Date(),
     };
-
-    if (!req.body.exist) { // if new loan on current user
-      console.log(data);
-      let sql = "INSERT INTO loans SET ?";
-      db.query(sql, data, (err, results) => {
-        if (err) throw err;
-        res.send("Data successfully saved");
-      });
-    } else { // update loan (add borrowing and collateral)
-      let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user = ?";
-
-      db.query(sql, [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user], (err, results) => {
-        if (err) throw err;
-        res.send("Deposit Loan Status successfully updated");
-      });
-    }
+    let sql = "INSERT INTO loans SET ?";
+    db.query(sql, data, (err, results) => {
+      if (err) throw err;
+      res.send("Data successfully saved");
+    });
   }
 );
 

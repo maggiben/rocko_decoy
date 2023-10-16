@@ -40,9 +40,9 @@ const MakePaymentModal = ({
     const inputValue = event.target.value;
     if (
       parseFloat(inputValue?.replace(/,/g, "") || "0") >
-      parseFloat(currentBalance.replace(/,/g, "") || "0")
+      parseFloat(currentBalance)
     ) {
-      setInputNumber(handleDecimalsOnValue(currentBalance.replace(/,/g, "")));
+      setInputNumber(currentBalance);
 
       return;
     }
@@ -206,8 +206,9 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&balance=${balanceFloat}&collateral=${collateral}
-        `}
+        )}&currentBalance=${parseFloat(
+          currentBalance
+        )}`}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button

@@ -8,19 +8,21 @@ export const useLoanDB = () => {
         lending_protocol: string, 
         loan_active: boolean,
         loan_asset: string,
-        outstanding_balance: number,
-        collateral: number,
-        exist: boolean
+        outstanding_balance: Number,
+        collateral: Number,
+        liquidation_price: Number,
+        collateral_buffer: Number,
     ) => {
         const loanObject = {
-            user: user,
+            user: user, 
             transaction_hash: transaction_hash,
             lending_protocol: lending_protocol,
             loan_active: Number(loan_active),
             loan_asset: loan_asset,
             outstanding_balance: outstanding_balance,
             collateral: collateral,
-            exist: exist
+            liquidation_price: liquidation_price,
+            collateral_buffer: collateral_buffer,
         };
         console.log("loanObject", loanObject);
         axios.post(`${BACKEND_URL}/add`, loanObject).then((res) => {
@@ -29,26 +31,6 @@ export const useLoanDB = () => {
         });
     }
     
-    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number) => {
-        const updateObject = updateType === "repay" ?
-        {
-            updateType: updateType,
-            id: id, 
-            loan_active: Number(active),
-            outstanding_balance: loan,
-        } :
-        {
-            updateType: updateType,
-            id: id, 
-            collateral: collateral,
-        };
-        console.log("updateObject-----", updateObject);
-        axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {
-            console.log(res);
-            console.log(res.data);
-        });        
-    }
-
     const getLoanData = async ( user: string ) => {
         try {
             const response = await axios.get(`${BACKEND_URL}/loans?user=${user}`);
@@ -60,95 +42,9 @@ export const useLoanDB = () => {
         }
     }
 
-    const addUser = (auth0_id: string, email: string, wallet_address: string, active: boolean) => {
-        const userObject = {
-            auth0_id: auth0_id, 
-            email: email,
-            wallet_address: wallet_address,
-            active: Number(active),
-        };
-        console.log("userObject", userObject);
-        axios.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
-            console.log(res);
-            console.log(res.data);
-        });
-    }
-
-    const getUserData = async ( email: string ) => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/users?email=${email}`);
-            return response.data;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-
-    const getAverageAPR = async ( openDate: Date ) => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=${openDate}`);
-            return response.data.length > 0 ? response.data[0].average_apr : null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-
-    const getMonthAverageAPR = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=month`);
-            console.log(response.data)
-            return response.data.length > 0 ? response.data[0].average_apr : null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-
-    const getYearAverageAPR = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=year`);
-            console.log(response.data)
-            return response.data.length > 0 ? response.data[0].average_apr : null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-    
-    const getYearAvgRewardRate = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/average_reward_rate?openDate=year`);
-            console.log(response.data)
-            return response.data.length > 0 ? response.data[0].average_reward_rate : null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-    
-    const getRewardRate = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/reward_rate`);
-            console.log(response.data)
-            return response.data.length > 0 ? response.data[0].borrow_reward_rate : null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-   
     return {
         finalizeLoan,
-        updateLoan,
-        getLoanData,
-        addUser,
-        getUserData,
-        getAverageAPR,
-        getMonthAverageAPR,
-        getYearAverageAPR,
-        getYearAvgRewardRate,
-        getRewardRate
+        getLoanData
     }
 }
 

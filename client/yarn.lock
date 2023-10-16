@@ -2987,10 +2987,10 @@
     merkletreejs "^0.3.10"
     viem "^1.5.3"
 
-"@zerodev/sdk@^4.0.30":
-  version "4.0.30"
-  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.30.tgz#569807df6d8daaacdbeea45dc938138d73231324"
-  integrity sha512-5z0wvt6YaySTGR3LU2z2W3JrveY5y8VB7aSkuPBFIufiKsch3WWR8MbcM3cWjfNu6fJx9E53IfzNwWA2PcorVw==
+"@zerodev/sdk@4.0.27":
+  version "4.0.27"
+  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.27.tgz#94277e2b6d21c5abc0284fc2ab4898ab8c240c13"
+  integrity sha512-KcxP2GCtfwUrFiUP/kU78Cc5eSkyiR98BzeaiuSkr/tEOxUf4USIbxRzCy/nV41BjLelLLJUAY+VbEj7jXMJBw==
   dependencies:
     "@alchemy/aa-core" "0.1.0-alpha.23"
     "@alchemy/aa-ethers" "0.1.0-alpha.23"
@@ -2998,10 +2998,10 @@
     merkletreejs "^0.3.10"
     viem "^1.5.3"
 
-"@zerodev/wagmi@^4.1.19":
-  version "4.1.19"
-  resolved "https://registry.yarnpkg.com/@zerodev/wagmi/-/wagmi-4.1.19.tgz#85a70ac709882907056e70fde382f196d1b19b68"
-  integrity sha512-tbwvLbPAxg45jvP+YYdvd11bSbGOkuSe/1/9nkVGVstDssMRLVyuhvFPbT+wo4vS8RFoXZEcXfiZrpnLgishoA==
+"@zerodev/sdk@4.0.29":
+  version "4.0.29"
+  resolved "https://registry.yarnpkg.com/@zerodev/sdk/-/sdk-4.0.29.tgz#2d64b3876d4d651a544000ff1886ba79812f5801"
+  integrity sha512-RZ6J91Dza87xc3/2iF5mlau8/fDZ/wPZ385F0dvB2TmN7PjvOz0+XtePkKnQDpCTJCdoFy0XBh6LGkmlemSNmw==
   dependencies:
     "@zerodev/sdk" "4.0.29"
     "@zerodev/web3auth" "4.1.16"
@@ -3011,6 +3011,18 @@
   version "4.1.16"
   resolved "https://registry.yarnpkg.com/@zerodev/web3auth/-/web3auth-4.1.16.tgz#b66f72a2e2371c8db60c211772f38dc801c93e46"
   integrity sha512-zuitM0gb3qrb+eTCbdb0ZJbx2ao4QVaR3VoDyrS2ZLbPi82poR8Yn2JoaT9XNjrLv5T7ME9lUNKxdScJpEN8rQ==
+  dependencies:
+    "@web3auth/base" "7.0.1"
+    "@web3auth/ethereum-provider" "7.0.2"
+    "@web3auth/modal" "7.0.3"
+    "@web3auth/no-modal" "7.0.1"
+    "@web3auth/openlogin-adapter" "7.0.1"
+    "@zerodev/sdk" "4.0.27"
+
+"@zerodev/web3auth@^4.1.15":
+  version "4.1.15"
+  resolved "https://registry.yarnpkg.com/@zerodev/web3auth/-/web3auth-4.1.15.tgz#d2c6bdc62a65d0190dd63272ed17952ae33a6824"
+  integrity sha512-Z3I4SqT0HU8/jHkCNlz3sYT0YfYNiRNYhp7C+IMYLKEODNslZt3+IQGBecJg6pyXu/s5eA1rU6h/AHYrK47/iQ==
   dependencies:
     "@web3auth/base" "7.0.1"
     "@web3auth/ethereum-provider" "7.0.2"

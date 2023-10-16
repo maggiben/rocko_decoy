@@ -24,7 +24,8 @@ const Index = () => {
     if (selectCategory.name === "All") {
       navigate("/learn")
     } else {
-      navigate(`/learn/#${slugify(selectCategory.name)}`)
+      // navigate(`/learn#${slugify(selectCategory.name)}`)
+      window.location.hash = slugify(selectCategory.name)
     }
   }, [selectCategory])
 
