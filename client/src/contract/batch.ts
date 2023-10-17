@@ -90,10 +90,67 @@ export const useGetLoan = (collateral: any, loan: any) => {
     return { executeBatchGetLoan, batchGetLoan, success, txHash, error };
 }
 
-export const useRepay = (collateral: any, loan: any) => {
-    const { address, isConnected } = useAccount();
+export const useRepaySome = (loan: any) => {
+    const [txHash, setTxHash] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const { config } = usePrepareContractBatchWrite({
+        calls: [
+            {
+                address: USDCContract[networkChainId],
+                abi: USDCABI,
+                functionName: "approve",
+                args: [
+                    CometContract[networkChainId],
+                    uintMax
+                ],
+            },
+            {
+                address: CometContract[networkChainId],
+                abi: COMETABI,
+                functionName: "supply",
+                args: [
+                    USDCContract[networkChainId], 
+                    parseBalance(loan.toString(), 6)
+                ],
+            }
+        ],
+        enabled: true
+        },
+    )
+
+    const { sendUserOperation: batchRepaySome, data, error } = useContractBatchWrite(config);
+
+    useWaitForTransaction({
+        hash: data?.hash,
+        enabled: !!data,
+        onSuccess() {
+            console.log("Transaction was successful.")
+            setSuccess(true);
+            if (data?.hash)
+                setTxHash(data?.hash);
+        }
+    });
+
+    const executeBatchRepaySome = () => {
+        console.log(batchRepaySome)
+        if (batchRepaySome)
+            batchRepaySome();
+    };
+    
+    return { executeBatchRepaySome, batchRepaySome, success, txHash, error };
+}
+
+export const useRepayFull = (collateral: any, loan: any) => {
+    const { address : wagmiAddress } = useAccount();
+    const address = useAddress();
+
+    const [txHash, setTxHash] = useState("");
+    const [success, setSuccess] = useState(false);
+
+
+    const { config } = usePrepareContractBatchWrite(
+        wagmiAddress ? {
         calls: [
             {
                 address: USDCContract[networkChainId],
@@ -116,8 +173,9 @@ export const useRepay = (collateral: any, loan: any) => {
             {
                 address: CometContract[networkChainId],
                 abi: COMETABI,
-                functionName: "withdraw",
+                functionName: "withdrawTo",
                 args: [
+                    address ? address : wagmiAddress,
                     WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
@@ -125,33 +183,41 @@ export const useRepay = (collateral: any, loan: any) => {
             {
                 address: CometRewardContract[networkChainId],
                 abi: REWARDABI,
-                functionName: "claim",
+                functionName: "claimTo",
                 args: [
                     CometContract[networkChainId],
+                    wagmiAddress,
                     address,
                     true
                 ]
             }
         ],
         enabled: true
+        } : {
+            calls: [],
+            enabled: true
         },
     )
 
-    const { sendUserOperation: batchRepay, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchRepayFull, data, error } = useContractBatchWrite(config);
 
     useWaitForTransaction({
         hash: data?.hash,
         enabled: !!data,
         onSuccess() {
-        console.log("Transaction was successful.")
+            console.log("Transaction was successful.")
+            setSuccess(true);
+            if (data?.hash)
+                setTxHash(data?.hash);
         }
     });
-  
-    const executeBatchRepay = useCallback(() => {
-        if (batchRepay) batchRepay();
-    }, [batchRepay]);
+
+    const executeBatchRepayFull = () => {
+        console.log(batchRepayFull)
+        if (batchRepayFull) batchRepayFull();
+    };
     
-    return { executeBatchRepay };
+    return { executeBatchRepayFull, batchRepayFull, success, txHash, error };
 }
 
 export const useAddCollateral = (collateral: any, loan: any) => {
