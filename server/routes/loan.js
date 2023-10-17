@@ -24,6 +24,7 @@ router.post(
       lending_protocol: req.body.lending_protocol,
       loan_active: req.body.loan_active,
       loan_asset: req.body.loan_asset,
+      principal_balance: req.body.outstanding_balance,
       outstanding_balance: req.body.outstanding_balance,
       collateral: req.body.collateral,
       liquidation_price: req.body.liquidation_price,
@@ -45,12 +46,13 @@ router.post(
 router.post("/update", (req, res) => {
   console.log("update req.body", req.body);
   let data = {
-    amount: req.body.amount,
-    active: req.body.active,
+    outstanding_balance: req.body.outstanding_balance,
+    loan_active: req.body.loan_active,
     id: req.body.id,
+    modified_time: new Date()
   };
-  let sql = "UPDATE loan SET loan = ?, active = ? WHERE id = ?";
-  db.query(sql, [data.amount, data.active, data.id], (err, results) => {
+  let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ? WHERE id = ?";
+  db.query(sql, [data.outstanding_balance, data.loan_active, data.id], (err, results) => {
     if (err) throw err;
     res.send("Amount and Active Status successfully updated");
   });
