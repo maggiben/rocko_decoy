@@ -129,6 +129,15 @@ export const useSingleLoan = () => {
     return formattedValue
   }
 
+  const getLiquidationPrice = async (loan: string | number, collateral: string | number): Promise<number | string> => {
+    if (typeof loan === "undefined" || Number(loan) == 0 || Number(collateral) == 0) return "N/A";
+
+    const threshold = await getThreshold();
+    const value = Number(loan) / threshold / Number(collateral);
+
+    return value;
+  };
+
   const approveWETH = async () => {
     if (!signer) return;
 
@@ -174,13 +183,18 @@ export const useSingleLoan = () => {
     }
   }
 
-  const depositZerodevAccount = async (zerodevAccount: string, amount: number | string) => {
+  const depositZerodevAccount = async (zerodevAccount: string, amount: number | string, currency: string) => {
     if (!signer || !zerodevAccount || Number(amount) <= 0) return null;
 
     const sdk = ThirdwebSDK.fromSigner(signer);
     try {
-      const txResult = await sdk.wallet.transfer(zerodevAccount, amount);
-      return txResult;
+      if (currency == "ETH") {
+        const txResult = await sdk.wallet.transfer(zerodevAccount, amount);
+        return txResult;
+      } else {
+        const txResult = await sdk.wallet.transfer(zerodevAccount, amount, USDCContract[networkChainId]);
+        return txResult;
+      }
     } catch(e) {
       console.log(e)
       return null;
@@ -351,6 +365,7 @@ export const useSingleLoan = () => {
       getCollateralBalanceOf,
       getRewardAmount,
       getRewardRate,
+      getLiquidationPrice,
       claimReward,
       depositZerodevAccount
   }
