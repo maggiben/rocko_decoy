@@ -8,10 +8,10 @@ export const useLoanDB = () => {
         lending_protocol: string, 
         loan_active: boolean,
         loan_asset: string,
-        outstanding_balance: Number,
-        collateral: Number,
-        liquidation_price: Number,
-        collateral_buffer: Number,
+        outstanding_balance: number,
+        collateral: number,
+        liquidation_price: number,
+        collateral_buffer: number,
     ) => {
         const loanObject = {
             user: user, 
@@ -31,6 +31,19 @@ export const useLoanDB = () => {
         });
     }
     
+    const updateLoan = (id: number, amount: number, active: boolean) => {
+        const updateObject = {
+            id: id, 
+            loan_active: Number(active),
+            outstanding_balance: amount,
+        };
+        console.log("updateObject-----", updateObject);
+        axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {
+            console.log(res);
+            console.log(res.data);
+        });        
+    }
+
     const getLoanData = async ( user: string ) => {
         try {
             const response = await axios.get(`${BACKEND_URL}/loans?user=${user}`);
@@ -44,6 +57,7 @@ export const useLoanDB = () => {
 
     return {
         finalizeLoan,
+        updateLoan,
         getLoanData
     }
 }
