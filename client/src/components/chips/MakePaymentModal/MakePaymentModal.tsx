@@ -12,6 +12,7 @@ interface FormData {
 const MakePaymentModal = ({
   setOpenModalFor,
   setModalStep,
+  loanIndex,
   currentBalance,
   collateral,
   buffer,
@@ -19,6 +20,7 @@ const MakePaymentModal = ({
 }: {
   setOpenModalFor: Function;
   setModalStep: Function;
+  loanIndex: Number;
   currentBalance: string;
   collateral: string;
   buffer: string;
