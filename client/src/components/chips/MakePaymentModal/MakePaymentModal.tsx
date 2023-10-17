@@ -3,14 +3,15 @@ import closeIcon from "@/assets/Close.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import financial from "@/utility/currencyFormate";
+
 interface FormData {
   numberInput: string;
 }
 const MakePaymentModal = ({
   setOpenModalFor,
   setModalStep,
-  loanIndex,
   currentBalance,
   collateral,
   buffer,
@@ -18,12 +19,13 @@ const MakePaymentModal = ({
 }: {
   setOpenModalFor: Function;
   setModalStep: Function;
-  loanIndex: Number;
   currentBalance: string;
   collateral: string;
   buffer: string;
   threshold: string;
 }) => {
+  const basicRouter = useParams();
+  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>("text"); //! to show value with commas & without commas n inputfiled on onBlur handler
@@ -204,7 +206,7 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&index=${loanIndex}
+        )}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

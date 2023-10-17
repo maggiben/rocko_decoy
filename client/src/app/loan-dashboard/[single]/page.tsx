@@ -66,6 +66,7 @@ function SinglePage() {
   const [penalty, setPenalty] = useState<any>();
   const [rewardAmount, setRewardAmount] = useState<any>();
   const [rewardRate, setRewardRate] = useState<any>();
+  const [liquidationPrice, setLiquidationPrice] = useState<any>();
 
   const {
     getETHPrice,
@@ -74,7 +75,8 @@ function SinglePage() {
     getPenalty,
     getThreshold,
     getRewardRate,
-    getRewardAmount
+    getRewardAmount,
+    getLiquidationPrice
   } = useSingleLoan();
 
   const initialize = async () => {
@@ -123,7 +125,11 @@ function SinglePage() {
     getRewardRate()
     .then(_rate => setRewardRate(_rate))
     .catch(e => console.log(e))
-  })
+
+    getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e))
+  });
 
   return (
     <>
@@ -255,10 +261,10 @@ function SinglePage() {
             {/* --------------green bar-------------- */}
             <div className="pb-16 relative">
               {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[10%] md:left-[18%] lg:left-[20%] text-xs  md:text-sm text-[#545454]"> */}
-              <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"  style={{left: `${loanData?.liquidation_price / allTimeHigh * 100 - 6}%`}}>
+              <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"  style={{left: `${liquidationPrice / allTimeHigh * 100 - 6}%`}}>
                 Liquidation Price{" "}
                 <span className="block text-center text-[#141414]">
-                  ${financial(loanData?.liquidation_price, 2)}
+                  {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
                 </span>
               </p>
               {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[43%] md:left-[45%] text-xs   md:text-sm text-[#545454]"> */}
@@ -275,8 +281,8 @@ function SinglePage() {
                 </span>
               </p>
               <div className="h-2 bg-gradient-to-r from-[#03703C] to-[#06C167] relative rounded-full">
-                <div className="frame h-3 w-3 bg-[#03703C] rotate-180 absolute -top-2" style={{left: `${loanData?.liquidation_price / allTimeHigh * 100}%`}} ></div>
-                <div className="frame h-3 w-3 bg-[#03703C] absolute top-1" style={{left: `${loanData?.liquidation_price / allTimeHigh * 100}%`}}></div>
+                <div className="frame h-3 w-3 bg-[#03703C] rotate-180 absolute -top-2" style={{left: `${liquidationPrice / allTimeHigh * 100}%`}} ></div>
+                <div className="frame h-3 w-3 bg-[#03703C] absolute top-1" style={{left: `${liquidationPrice / allTimeHigh * 100}%`}}></div>
                 <div className="frame h-3 w-3 bg-[#428564] rotate-180 absolute -top-2" style={{left: `${collateralPrice / allTimeHigh * 100}%`}}></div>
                 <div className="frame h-3 w-3 bg-[#428564] absolute top-1" style={{left: `${collateralPrice / allTimeHigh * 100}%`}}></div>
               </div>
@@ -295,7 +301,7 @@ function SinglePage() {
               <div className="flex pt-3 gap-x-2">
                 <p className="w-1/2 font-medium">Liquidation Price</p>
                 <p>
-                  ${financial(loanData?.liquidation_price, 2)}
+                  {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
                 </p>
               </div>
               <div className="flex items-center gap-x-2 py-5 relative">
@@ -361,7 +367,6 @@ function SinglePage() {
                 <MakePaymentModal
                   setModalStep={setModalStep}
                   setOpenModalFor={setOpenModalFor}
-                  loanIndex={loanIndex}
                   currentBalance={financial(loanData?.outstanding_balance)}
                   collateral={loanData?.collateral}
                   threshold={threshold}

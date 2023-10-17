@@ -35,6 +35,7 @@ const DepositingCollateral = () => {
   const { loanData } = useLoanData();
   // Thirdweb for EOA
   const address = useAddress();
+  console.log(address)
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
@@ -69,7 +70,7 @@ const DepositingCollateral = () => {
   const receiveCollateral = async () => {
     if (!wagmiAddress || !loanData) return null;
 
-    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded);
+    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded, "ETH");
     return depositResult;
   }
 
@@ -90,7 +91,7 @@ const DepositingCollateral = () => {
     finalizeLoan(
       wagmiAddress ? wagmiAddress : "",
       txHash,
-      loanData?.protocol, true, loanData?.cryptoName, 
+      loanData?.protocol, true, loanData?.cryptoName,
       loanData?.borrowing, loanData?.collateralNeeded, loanData?.liquidationPrice, loanData?.buffer);
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -103,8 +104,6 @@ const DepositingCollateral = () => {
       const result = await getLoanData(wagmiAddress);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active === 1);
-        console.log(active_loans)
-        console.log(active_loans.length)
         setNewLoanID(active_loans.length + 1);
       }
     }
