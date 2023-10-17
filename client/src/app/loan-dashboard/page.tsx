@@ -127,6 +127,64 @@ const Dashboard = () => {
               </div>
             </div>
           ))}
+          {!active && closedLoans?.map((loan: any, i: any) => (
+            <div key={i} className="space-y-6 pt-4">
+              {/* Parents */}
+              <div className="flex gap-x-2 items-center mb-3 relative">
+                {/* title Container */}
+                <div key={i} className="flex items-center gap-x-1">
+                  <Image
+                    width={20}
+                    height={20}
+                    src={comp}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">{loan?.lending_protocol} - </h1>
+                  <Image
+                    width={20}
+                    height={20}
+                    src={usdc}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">USDC :</h1>
+                  <Image
+                    width={20}
+                    height={20}
+                    src={eth}
+                    alt=""
+                    className="w-5 h-5" />
+                  <h1 className="md:text-xl font-medium">ETH</h1>
+                </div>
+              </div>
+              <div className="space-y-1 pb-11 md:pb-0">
+                {/* info Conatiner */}
+                <div className="flex">
+                  <p className="w-1/2">Open Date</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    {formatDate(new Date(loan?.create_time))}
+                  </p>
+                </div>
+                <div className="flex">
+                  <p className="w-1/2">Close Date</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    {formatDate(new Date(loan?.modified_time))}
+                  </p>
+                </div>
+                <div className="flex">
+                  <p className="w-1/2">Amount Borrowed (Principal Only)</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    ${financial(loan?.principal_balance)}
+                  </p>
+                </div>
+                <div className="flex">
+                  <p className="w-1/2">Total Interest Accrued</p>
+                  <p className="w-1/2 text-right md:text-left">
+                    30 USDC
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
           <div className="text-center md:text-left pb-2 md:pb-0">
             <a href="/">
               <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
