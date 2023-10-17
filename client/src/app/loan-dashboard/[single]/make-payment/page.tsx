@@ -8,7 +8,7 @@ import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
 import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
 import { useAccount } from "wagmi";
@@ -81,17 +81,17 @@ const MakePayment: FC = () => {
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
+  const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const loanIndex = parseFloat(router.get("index") || "0"); //! get the URL parameter payment value
   const amount = "add"; //! get the URL parameter amount value
 
   const { address : zerodevAccount } = useAccount();
   const address = useAddress();
   const { getLoanData } = useLoanDB();
-  const { getThreshold } = useSingleLoan();
+  const { getLiquidationPrice } = useSingleLoan();
   const [ loanData, setLoanData ] = useState<any>();
-  const [ threshold, setThreshold ] = useState<any>();
   const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
   const [ currentBalance, setCurrentBalance ] = useState<any>();
 
@@ -156,26 +156,11 @@ const MakePayment: FC = () => {
         },
         {
           description: "Liquidation Price (ETH)",
-          details: <span className="font-semibold text-sm">{liquidationPrice == "N/A" ? "N/A" : `${liquidationPrice}`}</span>,
+          details: <span className="font-semibold text-sm">{liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}</span>,
         },
       ],
     },
   ];
-
-  const getLiquidationPrice = (): string => {
-    if (!loanData)
-      return "N/A";
-    
-    const balanceFloat = loanData?.outstanding_balance;
-    const outstanding_balance = balanceFloat - payment;
-
-    if (outstanding_balance === 0) {
-      return "N/A";
-    } else {
-      const liquidation_price = outstanding_balance / Number(threshold) / Number(loanData?.collateral);
-      return financial(liquidation_price, 2);
-    }
-  };
 
   const initialize = async () => {
     console.log(zerodevAccount)
@@ -196,12 +181,9 @@ const MakePayment: FC = () => {
   }, [zerodevAccount]);
 
   useEffect(() => {
-    getThreshold()
-    .then(_threshold => setThreshold(_threshold))
+    getLiquidationPrice(loanData?.outstanding_balance - payment, loanData?.collateral)
+    .then(_price => setLiquidationPrice(_price))
     .catch(e => console.log(e));
-
-    setLiquidationPrice(getLiquidationPrice());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
   return (
@@ -441,9 +423,9 @@ const MakePayment: FC = () => {
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
-                    (address || !connect) ? "bg-blue" : "bg-blue/40"
+                    address && zerodevAccount ? "bg-blue" : "bg-blue/40"
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={!address}
+                  disabled={!address || !zerodevAccount}
                 >
                   Confirm
                 </button>
