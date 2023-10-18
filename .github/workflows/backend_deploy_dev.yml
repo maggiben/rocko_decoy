@@ -19,6 +19,6 @@ jobs:
       run: |
        cd server
        ./docker_build.sh
-       ./docker_push.sh
+       ./docker_push.sh dev
 
 
