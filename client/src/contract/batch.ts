@@ -220,93 +220,116 @@ export const useRepayFull = (collateral: any, loan: any) => {
     return { executeBatchRepayFull, batchRepayFull, success, txHash, error };
 }
 
-export const useAddCollateral = (collateral: any, loan: any) => {
-    const { address, isConnected } = useAccount();
+export const useAddCollateral = (collateral: any) => {
+    const { address : wagmiAddress } = useAccount();
+    const [txHash, setTxHash] = useState("");
+    const [success, setSuccess] = useState(false);
 
-    const { config } = usePrepareContractBatchWrite({
-        calls: [
-            {
-                address: WETHContract[networkChainId],
-                abi: WETHABI,
-                functionName: "deposit",
-                args: [],
-                value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
-            },
-            {
-                address: WETHContract[networkChainId],
-                abi: WETHABI,
-                functionName: "approve",
-                args: [CometContract[networkChainId], uintMax],
-            },
-            {
-                address: CometContract[networkChainId],
-                abi: COMETABI,
-                functionName: "supply",
-                args: [
-                    WETHContract[networkChainId],
-                    parseBalance(collateral.toString())
-                ]
-            }
-        ],
-        enabled: true
-        },
-    )
+    const { config } = usePrepareContractBatchWrite(
+        wagmiAddress ? {
+            calls: [
+                {
+                    address: WETHContract[networkChainId],
+                    abi: WETHABI,
+                    functionName: "deposit",
+                    args: [],
+                    value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
+                },
+                {
+                    address: WETHContract[networkChainId],
+                    abi: WETHABI,
+                    functionName: "approve",
+                    args: [CometContract[networkChainId], uintMax],
+                },
+                {
+                    address: CometContract[networkChainId],
+                    abi: COMETABI,
+                    functionName: "supply",
+                    args: [
+                        WETHContract[networkChainId],
+                        parseBalance(collateral.toString())
+                    ]
+                }
+            ],
+            enabled: true
+        } : {
+            calls: [],
+            enabled: true
+        }
+    );
 
-    const { sendUserOperation: batchAddCollateral, data } = useContractBatchWrite(config);
+    const { sendUserOperation: batchAddCollateral, data, error } = useContractBatchWrite(config);
 
     useWaitForTransaction({
         hash: data?.hash,
         enabled: !!data,
         onSuccess() {
-        console.log("Transaction was successful.")
+            console.log("Transaction was successful.")
+            setSuccess(true);
+            if (data?.hash)
+                setTxHash(data?.hash);
         }
     });
-  
-    const executeBatchAddCollateral = useCallback(() => {
+
+    const executeBatchAddCollateral = () => {
+        console.log(batchAddCollateral)
         if (batchAddCollateral) batchAddCollateral();
-    }, [batchAddCollateral]);
-    
-    return { executeBatchAddCollateral };
+    };    
+ 
+    return { executeBatchAddCollateral, batchAddCollateral, success, txHash, error };
 }
 
 export const useBorrowCollateral = (collateral: any) => {
-    const { config } = usePrepareContractBatchWrite({
-        calls: [
-            {
-                address: CometContract[networkChainId],
-                abi: COMETABI,
-                functionName: "withdraw",
-                args: [
-                    WETHContract[networkChainId],
-                    parseBalance(collateral.toString())
-                ]
-            },
-            {
-                address: WETHContract[networkChainId],
-                abi: WETHABI,
-                functionName: "withdraw",
-                args: [
-                    ethers.utils.parseEther(collateral.toString())
-                ]
-            }
-        ],
-        enabled: true
-        },
-    )
+    const { address : wagmiAddress } = useAccount();
+    const address = useAddress();
+    const [txHash, setTxHash] = useState("");
+    const [success, setSuccess] = useState(false);
 
-    const { sendUserOperation: batchBorrowCollateral, data } = useContractBatchWrite(config);
+    const { config } = usePrepareContractBatchWrite(
+        wagmiAddress ? {
+            calls: [
+                {
+                    address: CometContract[networkChainId],
+                    abi: COMETABI,
+                    functionName: "withdrawTo",
+                    args: [
+                        address ? address : wagmiAddress,
+                        WETHContract[networkChainId],
+                        parseBalance(collateral.toString())
+                    ]
+                },
+                // {
+                //     address: WETHContract[networkChainId],
+                //     abi: WETHABI,
+                //     functionName: "withdraw",
+                //     args: [
+                //         ethers.utils.parseEther(collateral.toString())
+                //     ]
+                // }
+            ],
+            enabled: true
+        } : {
+            calls: [],
+            enabled: true
+        }
+    );
+    const { sendUserOperation: batchBorrowCollateral, data, error } = useContractBatchWrite(config);
 
     useWaitForTransaction({
         hash: data?.hash,
         enabled: !!data,
         onSuccess() {
-        console.log("Transaction was successful.")
+            console.log("Transaction was successful.")
+            setSuccess(true);
+            if (data?.hash)
+                setTxHash(data?.hash);
         }
     });
-  
-    const executeBatchBorrowCollateral = useCallback(() => {
+
+    const executeBatchBorrowCollateral = () => {
+        console.log(batchBorrowCollateral)
         if (batchBorrowCollateral) batchBorrowCollateral();
-    }, [batchBorrowCollateral]);
-    
-    return { executeBatchBorrowCollateral };
+    };    
+ 
+    return { executeBatchBorrowCollateral, batchBorrowCollateral, success, txHash, error };
 }
