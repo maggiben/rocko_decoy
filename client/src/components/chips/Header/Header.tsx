@@ -9,6 +9,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import * as chains from 'wagmi/chains'
 import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { NETWORK } from "@/constants/env";
+import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
@@ -27,6 +29,7 @@ const Header = () => {
     const { connect } = useConnect();
     const { disconnect } = useDisconnect();
     const { address, isConnected } = useAccount();
+    const { userInfo } = useZeroDev();
 
     const OnLogin = async () => {
         await connect({
@@ -83,9 +86,9 @@ const Header = () => {
                     ></div>
                   </div>
                 </button>
-                <Link href="/loan-dashboard">
+                <a href="/">
                   <Image className="w-[56px] lg:w-[97px] inline-block pb-2" src={logo} alt="logo" width={97} height={51.728} />
-                </Link>
+                </a>
                 <div className="flex items-center gap-12 justify-end">
                   <div className="hidden  lg:flex items-center gap-8 justify-end">
                     <Link
