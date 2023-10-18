@@ -114,9 +114,11 @@ const Processing = () => {
 
   const setAllDone = async (txHash: string) => {
     updateLoan(
+      "repay",
       loanData?.id,
       currentBalance - payment,
       currentBalance === payment ? false : true,
+      0, 0, 0
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);
