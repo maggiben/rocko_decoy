@@ -1,26 +1,44 @@
 import ModalContent from "@/components/chips/ModalContent/ModalContent";
 import closeIcon from "@/assets/Close.svg";
 import Image from "next/image";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import financial from "@/utility/currencyFormate";
+import { useSingleLoan } from "@/contract/single";
+
 interface FormData {
   numberInput: string;
 }
 const ModifyWallet = ({
   setOpenModalFor,
   setModalStep,
+  currentBalance,
+  collateral,
+  threshold,
+  buffer
 }: {
   setOpenModalFor: Function;
   setModalStep: Function;
+  currentBalance: string;
+  collateral: string;
+  buffer: string;
+  threshold: string;
 }) => {
+  const basicRouter = useParams();
+  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
-
   const [inputNumber, setInputNumber] = useState<number | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
-
   const [changeInputType, setChangeInputType] = useState<string>("number"); //! to show value with commas & without commas n inputfiled on onBlur handler
-
   const [amount, setAmount] = useState<string>(""); //! amount could be "add" or "widthraw" based on user's intention & amount value is passed through URL query for the reaction of next page based on user's intention
+  
+  const { getETHPrice } = useSingleLoan();
+  const [collateralPrice, setCollateralPrice] = useState<number>(0);
+
+  const new_collateral = amount === "add" ? 
+      Number(collateral) + (inputNumber || 0) : 
+      Number(collateral) - (inputNumber || 0);
 
   const {
     register,
@@ -36,6 +54,27 @@ const ModifyWallet = ({
 
     setInputNumber(inputValue);
   };
+
+  const getLiquidationPrice = () => {
+    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
+
+    const liquidationPrice = balanceFloat / Number(threshold) / new_collateral;
+    return liquidationPrice;
+  };
+
+  const getBuffer = () => {
+    const original_collateral = Number(collateral) / (1 + Number(buffer) / 100);
+
+    const new_buffer = (new_collateral / original_collateral - 1) * 100;
+    return new_buffer;
+  };
+
+  useEffect(() => {
+    getETHPrice()
+    .then(_price => setCollateralPrice(_price))
+    .catch(e => console.log(e))
+  })
+
   return (
     <ModalContent>
       <div className="flex items-start justify-between gap-2 ">
@@ -146,7 +185,7 @@ const ModifyWallet = ({
           ETH
         </p>
         <p className="text-gray-500 text-sm mt-5">
-          {inputNumber ? "~$209.45" : ""}
+          {inputNumber ? `~$${financial(collateralPrice * inputNumber, 2)}` : ""}
         </p>{" "}
         {/* after putting a value on inputfield the number will show */}
       </div>
@@ -158,32 +197,27 @@ const ModifyWallet = ({
           <p className="text-sm text-gray-600">Total Collateral</p>
           {/* after putting a value on inputfield the number(based on user's intention like "add" or "withdraw") will show */}
           <p className="font-semibold text-right">
-            {inputNumber ? (amount === "add" ? "1.96 ETH" : "1.72 ETH") : "--"}
+            {inputNumber ? `${financial(new_collateral, 2)} ETH` : "--"}
             <span className="block text-gray-600 text-sm font-normal">
               {inputNumber
-                ? amount === "add"
-                  ? "~$2,918.82"
-                  : "~$2,425.64"
+                ? `~$${financial(new_collateral * collateralPrice, 2)}`
                 : ""}
             </span>
           </p>
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
-            {inputNumber ? (amount === "add" ? "107%" : "96%") : "--"}
+            {inputNumber ? `${financial(getBuffer())}%` : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
           <p className="font-semibold text-right">
-            {inputNumber
-              ? amount === "add"
-                ? "$1,221.74"
-                : "$1,412.94"
-              : "--"}
+            {inputNumber ? `$${financial(getLiquidationPrice(), 2)}` : "--"}
           </p>
         </div>
       </div>
       {/* continue button */}
       <Link
-        href={`/loan-dashboard/${"1"}/${"modify_collateral"}?try=${amount}`}
+        href={`/loan-dashboard/${loanIndex}/${"modify_collateral"}?try=${amount}&payment=${inputNumber}&buffer=${getBuffer()}&collateral=${collateral}&liquidationPrice=${getLiquidationPrice()}
+        `}
       >
         {" "}
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

@@ -1,68 +1,245 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import toast from "react-hot-toast";
 import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
 import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import StatusSuccess from "@/assets/StatusSuccess.png";
+import { useAccount, useBalance, useNetwork } from "wagmi";
+import { useAddress } from "@thirdweb-dev/react";
+import { NETWORK } from "@/constants/env";
+import { useSingleLoan } from "@/contract/single";
+import { useLoanDB } from "@/db/loanDb";
+import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
 
 interface DoneTracker {
   step: string;
 }
 
 const ModifyStatus = () => {
-  const { status } = useParams(); //! by using this hook get the URL parameter
+  const { status, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
+  const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
+  const liquidationPrice = parseFloat(router.get("liquidationPrice") || "0"); //! get the URL parameter payment value
 
-  const [counter, setCounter] = useState(status === "add" ? 5 : 15); //! countdown
-
-  const [progress, setProgress] = useState(0); //! showing the loader progress
-
-  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
-
-  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
+  // DB for getting loanBalance and collateral
+  const { getLoanData, updateLoan } = useLoanDB();
+  const [ loanData, setLoanData ] = useState<any>();
+  const [ collateral, setCollateral ] = useState<number>(0);
+  // Thirdweb for EOA
+  const address = useAddress();
+  const { wethToETH, depositZerodevAccount } = useSingleLoan();
+  // Wagmi for ZeroDev Smart wallet
+  const { address : zerodevAccount } = useAccount();
+  const { chain } = useNetwork();
+  const { data } = useBalance({ address: zerodevAccount });
+  const { executeBatchAddCollateral, batchAddCollateral, success, txHash } = useAddCollateral(payment);
+  const { executeBatchBorrowCollateral, batchBorrowCollateral, success: borrowSuccess, txHash: borrowTxHash } = useBorrowCollateral(payment);
 
   const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
+  const [startA, setStartA] = useState(false); // true when depositLoan to zerodevAccount
+  const [startB, setStartB] = useState(false); // true when start batchTransactions
 
+  const [counter, setCounter] = useState(3); //! countdown
+  const [progress, setProgress] = useState(0); //! showing the loader progress
+  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
+  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
   const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (counter > 0) {
-        setCounter(counter - 1);
-        setProgress((prevProg) => {
-          if (prevProg === 100) {
-            setProgressTracker((prevProgTra) => {
-              return prevProgTra + 1;
-            });
-
-            return status === "add" ? 0 : 20;
-          } else {
-            return status === "add" ? prevProg + 50 : prevProg + 20;
-          }
-        });
-        console.log(progress);
-      } else {
-        clearInterval(interval);
+  const initialize = async () => {
+    if (zerodevAccount) {
+      const result = await getLoanData(zerodevAccount);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
+        console.log(active_loans[Number(loanIndex) - 1]);
+        setLoanData(active_loans[Number(loanIndex) - 1]);
+        setCollateral(active_loans[Number(loanIndex) - 1]?.collateral);
       }
-    }, 1000);
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [counter, progress, progressTracker]);
+  const start = async () => {
+    if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
+    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+      toast.error("Invalid Network!");
+      return;
+    }
+    if (Number(data?.formatted) < payment) {
+      toast.error("Insufficient Collateral Balance!");
+      return;
+    }
+
+    setStartA(true);
+    // if add collateral
+    if (status === "add") { 
+      const collateralReceived = await receiveCollateral();
+      if (collateralReceived) {
+        setADone();
+
+        // batch transactions
+        executeBatchAddCollateral();
+  
+        setStartB(true);
+      } else {
+        setError("A");
+      }
+    } else {
+      // if borrow collateral
+      executeBatchBorrowCollateral();
+    }
+  }
+
+  const receiveCollateral = async () => {
+    if (!zerodevAccount) return null;
+
+    const depositResult = await depositZerodevAccount(zerodevAccount, payment, "ETH");
+    return depositResult;
+  }
+
+  const startBorrowB = async () => {
+    setADone();
+    setStartB(true);
+
+    if (!address) return null;
+
+    const swapResult = await wethToETH(payment);
+    console.log(swapResult);
+    if (swapResult) {
+      const txHash = swapResult.receipt.transactionHash;
+      toast(() => (
+        <div className="flex items-center underline gap-2">
+          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+          <Link className="hover:text-green-700" 
+            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
+            target="_blank"
+          >
+            Successfully transaction is completed!
+          </Link>
+        </div>
+      ))
+
+      setAllDone();
+    } else {
+      setError("B");
+    }
+    return swapResult;
+  } 
+
+  const setADone = () => {
+    setStartA(false); 
+    setProgress(0);
+    setDoneTracker([...doneTracker, { step: "one" }]);
+  };
+
+  const setError = (step: string) => {
+    step === "A" ? setStartA(false) : setStartB(false);
+    setProgress(0);
+    setCounter(3);
+  };
+
+  const setAllDone = async () => {
+    updateLoan(
+      "modifyCollateral",
+      loanData?.id,
+      0, false,
+      buffer, 
+      status === "add" ? collateral + payment : collateral - payment, 
+      liquidationPrice
+    );
+
+    setDoneTracker([...doneTracker, { step: "two" }]);
+    setStartB(false);
+    setActiveDone(true);
+  };
+
   useEffect(() => {
-    {
-      progressTracker === 0 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "one" }]);
-    }
-    {
-      progressTracker === 1 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "two" }]);
-      progressTracker === 1 && progress === 100 && setActiveDone(true);
-    }
-  }, [progress, progressTracker]);
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zerodevAccount]);
 
-  console.log(doneTracker);
+  useEffect(() => {
+    if (loanData && batchAddCollateral != undefined && batchBorrowCollateral != undefined)
+      start();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[zerodevAccount, loanData, batchAddCollateral, batchBorrowCollateral]);
+
+  useEffect(() => {
+    if (borrowSuccess)
+      startBorrowB();
+
+    if (success) {
+      console.log("---transactionHash of batchTransactions---", txHash);
+      toast(() => (
+        <div className="flex items-center underline gap-2">
+          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+          <Link className="hover:text-green-700" 
+            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
+            target="_blank"
+          >
+            Successfully transaction is completed!
+          </Link>
+        </div>
+      ))
+  
+      setAllDone();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [borrowSuccess, success, borrowTxHash, txHash]);
+
+  // for timer
+  useEffect(() => {
+    if (startA || startB) {
+      const interval = setInterval(() => {
+        if (counter === 0) {
+          clearInterval(interval);
+        } else {
+          setCounter(counter - 1);
+        }
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }
+  }, [startA, startB, counter]);
+  // for progressbar interface
+  useEffect(() => {
+    if (startA) {
+      setProgressTracker(0);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => {
+            return prevProg + 20;
+          });
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+    if (startB) {
+      setProgressTracker(1);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => {
+            return prevProg + 20;
+          });
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+  }, [startA, startB, progress]);
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
