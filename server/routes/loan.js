@@ -45,17 +45,37 @@ router.post(
 
 router.post("/update", (req, res) => {
   console.log("update req.body", req.body);
-  let data = {
-    outstanding_balance: req.body.outstanding_balance,
-    loan_active: req.body.loan_active,
-    id: req.body.id,
-    modified_time: new Date()
-  };
-  let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ? WHERE id = ?";
-  db.query(sql, [data.outstanding_balance, data.loan_active, data.id], (err, results) => {
-    if (err) throw err;
-    res.send("Amount and Active Status successfully updated");
-  });
+  const updateType = req.body.updateType;
+
+  if (updateType === "repay") {
+    let data = {
+      id: req.body.id,
+      outstanding_balance: req.body.outstanding_balance,
+      loan_active: req.body.loan_active,
+      modified_time: new Date()
+    };
+    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ? WHERE id = ?";
+
+    db.query(sql, [data.outstanding_balance, data.loan_active, data.id], (err, results) => {
+      if (err) throw err;
+      res.send("Amount and Active Status successfully updated");
+    });
+  } else {
+    let data = {
+      id: req.body.id,
+      buffer: req.body.buffer,
+      collateral: req.body.collateral,
+      liquidation_price: req.body.liquidation_price,
+      modified_time: new Date()
+    };
+    let sql = "UPDATE loans SET collateral_buffer = ?, collateral = ?, liquidation_price = ? WHERE id = ?";
+
+    db.query(sql, [data.buffer, data.collateral, data.liquidation_price, data.id], (err, results) => {
+      if (err) throw err;
+      res.send("Buffer, Collateral and LiquidationPrice successfully updated");
+    });
+  }
+
 });
 module.exports = router;
 
