@@ -1,15 +1,10 @@
-.tool-versions
-designs/yarn.lock
-.vscode/extensions.json
-client/.env
-.DS_Store
-*.swp
 **/.terraform*
 .terraform.lock.hcl
 __pycache__
 **/package/*
 **/dist/*
 .env
+*.swp
 .venv
 logs
 .pyway.conf*
