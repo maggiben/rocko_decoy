@@ -18,6 +18,6 @@ jobs:
       #      working-directory: ./server
       run: |
        cd server
-       ./docker-build.sh
+       ./docker_build.sh
 
 
