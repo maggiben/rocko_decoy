@@ -80,7 +80,6 @@ function SinglePage() {
   } = useSingleLoan();
 
   const initialize = async () => {
-    console.log(zerodevAccount)
     if (zerodevAccount) {
       const result = await getLoanData(zerodevAccount);
       if (result) {

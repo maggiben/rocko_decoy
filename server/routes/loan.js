@@ -5,7 +5,6 @@ const {db} = require('../db')
 /////////////////// Get loans
 
 router.get('/loans', (req, res) => {
-    console.log("loan")
     let sql = `SELECT * FROM loans WHERE user = '${req.query.user}'`;
     db.query(sql, (err, results) => {
       if (err) throw err;
@@ -39,7 +38,6 @@ router.post(
     });
   }
 );
-
 
 //////////////////// Update loan
 
@@ -75,8 +73,39 @@ router.post("/update", (req, res) => {
       res.send("Buffer, Collateral and LiquidationPrice successfully updated");
     });
   }
-
 });
-module.exports = router;
 
-  
+/* users table */
+
+// Add users in users table
+
+router.post(
+  '/addUser', (req, res) => {
+    let data = {
+      auth0_id: req.body.auth0_id,
+      email: req.body.email,
+      wallet_address: req.body.wallet_address,
+      active: req.body.active,
+      create_time: new Date(),
+      modified_time: new Date(),
+    };
+    let sql = "INSERT INTO users SET ?";
+    db.query(sql, data, (err, results) => {
+      if (err) throw err;
+      res.send("Data successfully saved in users table!");
+    });
+  }
+);
+
+/////////////////// Get loans
+
+router.get('/users', (req, res) => {
+  let sql = `SELECT * FROM users WHERE email = '${req.query.email}'`;
+  db.query(sql, (err, results) => {
+    if (err) throw err;
+    res.status(200).json(results);
+  })
+})
+
+
+module.exports = router;

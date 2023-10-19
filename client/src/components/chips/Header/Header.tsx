@@ -9,8 +9,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import * as chains from 'wagmi/chains'
 import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { NETWORK } from "@/constants/env";
-import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
 import { useZeroDev } from "@/hooks/useZeroDev";
+import { useLoanDB } from "@/db/loanDb";
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
@@ -30,6 +30,7 @@ const Header = () => {
     const { disconnect } = useDisconnect();
     const { address, isConnected } = useAccount();
     const { userInfo } = useZeroDev();
+    const { getUserData, addUser } = useLoanDB();
 
     const OnLogin = async () => {
         await connect({
@@ -46,6 +47,20 @@ const Header = () => {
         setToggleDown(false);
       }
     };
+
+    /* search user in users table and add userInfo to table if nothing */
+    useEffect(() => {
+      if (userInfo) {
+        console.log(userInfo)
+        getUserData(userInfo.email).then(async (res) => {
+          console.log(res)
+          if (res.length === 0) {
+            addUser(userInfo.idToken, userInfo.email, address as `0x${string}`, false);
+          }
+        });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userInfo]);
 
     useEffect(() => {
       if (typeof window !== 'undefined') {

@@ -11,6 +11,11 @@ import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import useLoanData from "@/hooks/useLoanData";
 import toast from "react-hot-toast";
+import { configureChains, useConnect } from 'wagmi';
+import { Auth0WalletConnector } from '@zerodev/wagmi';
+import * as chains from 'wagmi/chains'
+import { publicProvider } from 'wagmi/providers/public';
+import { NETWORK } from "@/constants/env";
 
 const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
 const stepsName = [
@@ -21,6 +26,8 @@ const stepsName = [
   "Loan Summary",
 ];
 
+const net = (chains as { [key: string]: any })[NETWORK];
+
 export default function Home() {
   const { address: zerodevAccount } = useAccount();
   const address = useAddress();
@@ -28,12 +35,26 @@ export default function Home() {
   const [openModalFor, setOpenModalFor] = useState("");
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
+  
+  const { connect } = useConnect();
+  const { chains } = configureChains( [net], [publicProvider()] );
+  const auth0Connector = new Auth0WalletConnector({chains, options: {
+    projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || "",
+    shimDisconnect: true
+  }});
 
-  const nextStep = () => {
-    if (!zerodevAccount) {
-      toast.error("Login before NEXT!");
+  const loginZerodev = async () => {
+    await connect({
+      connector: auth0Connector
+    });
+  }
+
+  const nextStep = async () => {
+    if (!zerodevAccount && currentStep == 2) {
+      toast.error("Please log in to finalize your loan!");
+      await loginZerodev();
       return;
-    }
+    };
 
     if (loanData?.nextValidation && setLoanData) {
       setLoanData((prevLoanData) => ({
