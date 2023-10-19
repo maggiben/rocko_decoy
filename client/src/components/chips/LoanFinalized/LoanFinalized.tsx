@@ -2,9 +2,16 @@ import ModalContent from "../ModalContent/ModalContent"
 import Link from "next/link";
 import frameIcon from "@/assets/frame.svg";
 import Image from "next/image";
-import { IS_DEMO_MODE } from "@/constants/env";
+import useLoanData from "@/hooks/useLoanData";
 
 const LoanFinalized = ({setOpenModalFor}:{setOpenModalFor:Function}) => {
+  const { loanData } = useLoanData();
+
+  const onContinue = () => {
+    const sessionStorage = window.sessionStorage;
+    if (loanData) sessionStorage.setItem('loanData', JSON.stringify(loanData));
+  }
+
   return (
     <ModalContent>
         <div className="w-16 h-16 rounded-full bg-[#EFF3FE] p-4">
@@ -27,8 +34,7 @@ const LoanFinalized = ({setOpenModalFor}:{setOpenModalFor:Function}) => {
       
     {/* continue button */}
     <div className="my-6">
-      {/* <Link href={IS_DEMO_MODE ? '/deposit-collateral' : '/depositing-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"> */}
-      <Link href={'/depositing-collateral'} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
+      <Link href={"/depositing-collateral"} onClick={onContinue} className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white">
         Continue
       </Link>
     </div>

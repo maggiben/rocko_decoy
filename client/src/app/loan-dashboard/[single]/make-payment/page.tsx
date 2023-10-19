@@ -5,7 +5,6 @@ import React, { FC, useEffect, useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
-import LoanFinalized from "@/components/chips/LoanFinalized/LoanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
@@ -445,10 +444,6 @@ const MakePayment: FC = () => {
                 setOpenModalFor={setOpenModalFor}
                 setConnect={setConnect}
               />
-            )}
-
-            {modalStep === 1 && (
-              <LoanFinalized setOpenModalFor={setOpenModalFor} />
             )}
           </ModalContainer>
         </>
