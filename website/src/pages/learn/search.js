@@ -1,8 +1,8 @@
 // src/templates/search.js
 import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
-import Layout from "../../Components/Layout/Layout"
 import SearchField from "../../components/SearchField/SearchField"
+import Layout from "../../components/layout"
 
 const SearchPage = ({ data }) => {
   const posts = data.allMarkdownRemark.edges

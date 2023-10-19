@@ -78,7 +78,6 @@ function SinglePage() {
   } = useSingleLoan();
 
   const initialize = async () => {
-    console.log(zerodevAccount)
     if (zerodevAccount) {
       const result = await getLoanData(zerodevAccount);
       if (result) {
@@ -308,7 +307,10 @@ function SinglePage() {
                 </div>
               </div>
               <div className="pt-6 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
-                <button className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold">
+              <button
+                  onClick={() => setOpenModalFor("Modify Collateral")}
+                  className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold"
+                >
                   Modify Collateral
                 </button>
                 <p className="text-sm text-center md:text-left text-[#545454]">
@@ -374,6 +376,8 @@ function SinglePage() {
                   setOpenModalFor={setOpenModalFor}
                   currentBalance={financial(loanData?.outstanding_balance)}
                   collateral={loanData?.collateral}
+                  threshold={threshold}
+                  buffer={loanData?.collateral_buffer}
                 />
               )}
             </ModalContainer>

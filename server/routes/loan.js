@@ -5,7 +5,6 @@ const {db} = require('../db')
 /////////////////// Get loans
 
 router.get('/loans', (req, res) => {
-    console.log("loan")
     let sql = `SELECT * FROM loans WHERE user = '${req.query.user}'`;
     db.query(sql, (err, results) => {
       if (err) throw err;
@@ -52,21 +51,23 @@ router.post("/update", (req, res) => {
       loan_active: req.body.loan_active,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ? WHERE id = ?";
 
-    db.query(sql, [data.outstanding_balance, data.loan_active, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.outstanding_balance, data.loan_active, data.id], (err, results) => {
       if (err) throw err;
       res.send("Amount and Active Status successfully updated");
     });
   } else {
     let data = {
       id: req.body.id,
+      buffer: req.body.buffer,
       collateral: req.body.collateral,
+      liquidation_price: req.body.liquidation_price,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET collateral = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE loans SET collateral_buffer = ?, collateral = ?, liquidation_price = ? WHERE id = ?";
 
-    db.query(sql, [data.collateral, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.buffer, data.collateral, data.liquidation_price, data.id], (err, results) => {
       if (err) throw err;
       res.send("Buffer, Collateral and LiquidationPrice successfully updated");
     });
@@ -95,7 +96,7 @@ router.post(
   }
 );
 
-// Get all users
+/////////////////// Get loans
 
 router.get('/users', (req, res) => {
   let sql = `SELECT * FROM users WHERE email = '${req.query.email}'`;

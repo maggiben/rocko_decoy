@@ -121,7 +121,7 @@ const Processing = () => {
       loanData?.id,
       currentBalance - payment,
       currentBalance === payment ? false : true,
-      collateral
+      0, 0, 0
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);

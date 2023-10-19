@@ -2,7 +2,6 @@ import * as React from "react"
 import BlogsCategories from "../components/BlogsCategories/BlogsCategories"
 
 import Subscribe from "../components/Subscribe/Subscribe"
-import Layout from "../Components/Layout/Layout"
 import LatestPosts from "../components/HomeBlogs/LatestPosts"
 import TopPosts from "../components/HomeBlogs/TopPosts"
 import Category from "../components/HomeBlogs/Category"
@@ -12,6 +11,7 @@ import HeroBlog from "../components/HeroBlog/HeroBlog"
 import SortedComponent from "../components/Sorted/SortedComponent"
 import { navigate } from "gatsby"
 import slugify from "@sindresorhus/slugify"
+import Layout from "../components/layout"
 
 const Index = () => {
   //* useState Hooks

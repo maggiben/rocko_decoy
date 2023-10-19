@@ -14,8 +14,8 @@ import {
   WhatsappShareButton,
 } from "react-share"
 import LatestPosts from "../../components/HomeBlogs/LatestPosts"
-import Layout from "../../components/Layout/Layout"
 import Subscribe from "../../components/Subscribe/Subscribe"
+import Layout from "../../components/layout"
 
 const SingleBlog = ({ data }) => {
   console.log("SingleBlog", data)

@@ -11,9 +11,9 @@ import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
-import useLoanData from "@/hooks/useLoanData";
 import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
+import { LoanData } from "@/types/type";
 
 interface DoneTracker {
   step: string;
@@ -24,9 +24,7 @@ const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData : LoanData = JSON.parse(retrievedData || "");
 
-  const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
-  const [totalBorrowing, setTotalBorrowing] = useState<number>(loanData?.borrowing);
-  const [totalCollateral, setTotalCollateral] = useState<number>(loanData?.collateralNeeded);
+  console.log("---loanData from sessionStorage---", loanData);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -39,8 +37,8 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
+  // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
-  const { loanData } = useLoanData();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();

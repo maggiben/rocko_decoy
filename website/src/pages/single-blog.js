@@ -5,16 +5,13 @@ import x_icon from "../images/x-icon.png"
 import linkedin_icon from "../images/linkedin-icon.png"
 import at_icon from "../images/at-icon.png"
 import whatsapp_icon from "../images/whatsapp-icon.png"
-import image1 from "../images/placeHolderImage-1.png"
 import image2 from "../images/placeHolderImage-2.png"
-import image3 from "../images/placeHolderImage-3.png"
 import user from "../images/blog-user.png"
 
 import { Link } from "gatsby"
 
-import BlogsContainer from "../components/BlogsContainer/BlogsContainer"
-import Layout from "../Components/Layout/Layout"
 import Subscribe from "../components/Subscribe/Subscribe"
+import Layout from "../components/layout"
 
 const socialIcons = [
   {
@@ -52,31 +49,6 @@ const tags = [
   },
   {
     tag: "Article tag",
-  },
-]
-
-// *Create an array of blog post objects
-const blogDetails = [
-  {
-    image: image1,
-    category: "Category 1",
-    title: "A blog post title 1",
-    description: "A description of the article 1",
-    publishedDate: "Sept 24, 2023",
-  },
-  {
-    image: image2,
-    category: "Category 2",
-    title: "A blog post title 2",
-    description: "A description of the article 2",
-    publishedDate: "Sept 25, 2023",
-  },
-  {
-    image: image3,
-    category: "Category 3",
-    title: "A blog post title 3",
-    description: "A description of the article 3",
-    publishedDate: "Sept 26, 2023",
   },
 ]
 

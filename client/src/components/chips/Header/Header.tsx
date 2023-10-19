@@ -51,8 +51,10 @@ const Header = () => {
     /* search user in users table and add userInfo to table if nothing */
     useEffect(() => {
       if (userInfo) {
+        console.log(userInfo)
         getUserData(userInfo.email).then(async (res) => {
-          if (res && res.length === 0) {
+          console.log(res)
+          if (res.length === 0) {
             addUser(userInfo.idToken, userInfo.email, address as `0x${string}`, false);
           }
         });
