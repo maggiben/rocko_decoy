@@ -43,7 +43,7 @@ const DepositingCollateral = () => {
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
-  const { data } = useBalance({ address: wagmiAddress });
+  const { data } = useBalance({ address: address as `0x${string}` });
   const { chain } = useNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
