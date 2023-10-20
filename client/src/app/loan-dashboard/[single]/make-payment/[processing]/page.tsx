@@ -34,13 +34,13 @@ const Processing = () => {
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
+  const { data } = useBalance({ 
+    address: address as `0x${string}`, 
+    token: USDCContract[networkChainId] as `0x${string}`
+  });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
   const { chain } = useNetwork();
-  const { data } = useBalance({ 
-    address: zerodevAccount, 
-    token: USDCContract[networkChainId] as `0x${string}`
-  });
   const { executeBatchRepaySome, batchRepaySome, success, txHash } = useRepaySome(payment);
   const { executeBatchRepayFull, batchRepayFull, success: fullySuccess, txHash: fullyTxHash } = useRepayFull(collateral, payment);
 

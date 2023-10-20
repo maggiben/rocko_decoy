@@ -34,10 +34,10 @@ const ModifyStatus = () => {
   // Thirdweb for EOA
   const address = useAddress();
   const { wethToETH, depositZerodevAccount } = useSingleLoan();
+  const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
   const { chain } = useNetwork();
-  const { data } = useBalance({ address: zerodevAccount });
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } = useAddCollateral(payment);
   const { executeBatchBorrowCollateral, batchBorrowCollateral, success: borrowSuccess, txHash: borrowTxHash } = useBorrowCollateral(payment);
 
