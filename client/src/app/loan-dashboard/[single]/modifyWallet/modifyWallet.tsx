@@ -223,11 +223,11 @@ const ModifyWallet = ({
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button
           className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
-            inputNumber
-              ? "bg-[#2C3B8D] text-white"
-              : "text-gray-100 bg-[#ABB1D1]"
+            !inputNumber || getBuffer() < 0
+              ? "text-gray-100 bg-[#ABB1D1]"
+              : "bg-[#2C3B8D] text-white"
           }`}
-          disabled={inputNumber ? false : true}
+          disabled={!inputNumber || getBuffer() < 0 ? true : false}
         >
           Continue
         </button>

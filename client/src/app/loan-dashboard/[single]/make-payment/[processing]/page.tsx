@@ -124,6 +124,7 @@ const Processing = () => {
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
+    setCompleteModal(true);
   };
 
   useEffect(() => {

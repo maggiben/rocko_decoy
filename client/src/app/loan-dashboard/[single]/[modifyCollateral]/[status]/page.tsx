@@ -69,22 +69,22 @@ const ModifyStatus = () => {
       toast.error("Invalid Network!");
       return;
     }
-    if (Number(data?.formatted) < payment) {
-      toast.error("Insufficient Collateral Balance!");
-      return;
-    }
 
     setStartA(true);
     // if add collateral
     if (status === "add") { 
+      if (Number(data?.formatted) < payment) {
+        toast.error("Insufficient Collateral Balance!");
+        return;
+      }
+
       const collateralReceived = await receiveCollateral();
       if (collateralReceived) {
         setADone();
+        setStartB(true);
 
         // batch transactions
         executeBatchAddCollateral();
-  
-        setStartB(true);
       } else {
         setError("A");
       }
@@ -133,7 +133,7 @@ const ModifyStatus = () => {
   const setADone = () => {
     setStartA(false); 
     setProgress(0);
-    setDoneTracker([...doneTracker, { step: "one" }]);
+    setDoneTracker([{ step: "one" }]);
   };
 
   const setError = (step: string) => {
@@ -152,9 +152,10 @@ const ModifyStatus = () => {
       liquidationPrice
     );
 
-    setDoneTracker([...doneTracker, { step: "two" }]);
+    setDoneTracker([{step: "one"}, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
+    setCompleteModal(true);
   };
 
   useEffect(() => {

@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Header />
-          <Toaster position="top-right" reverseOrder={true} />
+          <Toaster position="bottom-right" reverseOrder={true} />
           <LoneProvider>{children}</LoneProvider>
         </Providers>
       </body>

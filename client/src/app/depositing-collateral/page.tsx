@@ -101,6 +101,7 @@ const DepositingCollateral = () => {
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
+    setCompleteModal(true);
   }
 
   const setNavigationID = async () => {
@@ -130,7 +131,7 @@ const DepositingCollateral = () => {
             href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
             target="_blank"
           >
-            Successfully get loaned!
+            Loan successfully fulfilled!
           </Link>
         </div>
       ))
@@ -215,7 +216,7 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : "Depositing Collateral"}
+        {activeDone ? "Fulfilling Loan" : startA ? "Depositing Collateral" : "Waiting for Collateral"}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -349,13 +350,20 @@ const DepositingCollateral = () => {
       </section>
       {completeModal && (
         <ModalContainer>
-          <LoanComplete
+          {/* <LoanComplete
             title={"Loan Complete"}
             details={
               "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
             id={newLoanID}
-          />
+          /> */}
+          <LoanComplete
+            title={"Collateral Deposit Complete"}
+            details={
+              "You have successfully increased your loan collateral."
+            }
+            id={newLoanID}
+          />          
         </ModalContainer>
       )}
       
