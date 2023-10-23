@@ -84,6 +84,7 @@ const MakePayment: FC = () => {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
+  const buffer = parseFloat(router.get("buffer") || "0");
   const amount = "add"; //! get the URL parameter amount value
 
   const { address : zerodevAccount } = useAccount();
@@ -151,7 +152,7 @@ const MakePayment: FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">{loanData?.collateral_buffer}%</span>,
+          details: <span className="font-semibold text-sm">{buffer}%</span>,
         },
         {
           description: "Liquidation Price (ETH)",
@@ -418,7 +419,7 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}&buffer=${buffer}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

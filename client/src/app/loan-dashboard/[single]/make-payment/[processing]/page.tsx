@@ -25,6 +25,8 @@ const Processing = () => {
   const { processing, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
+  const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
+  console.log(buffer)
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
@@ -118,7 +120,8 @@ const Processing = () => {
       loanData?.id,
       currentBalance - payment,
       currentBalance === payment ? false : true,
-      0, 0, 0
+      buffer,
+      0, 0
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);

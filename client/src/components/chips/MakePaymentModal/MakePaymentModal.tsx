@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useSingleLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
 
 interface FormData {
@@ -15,7 +16,8 @@ const MakePaymentModal = ({
   currentBalance,
   collateral,
   buffer,
-  threshold
+  threshold,
+  loanToValue
 }: {
   setOpenModalFor: Function;
   setModalStep: Function;
@@ -23,14 +25,15 @@ const MakePaymentModal = ({
   collateral: string;
   buffer: string;
   threshold: string;
+  loanToValue: number;
 }) => {
   const basicRouter = useParams();
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>("text"); //! to show value with commas & without commas n inputfiled on onBlur handler
-
-  console.log(loanIndex)
+  const [collateralPrice, setCollateralPrice] = useState<any>();
+  const { getETHPrice } = useSingleLoan();
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -67,6 +70,27 @@ const MakePaymentModal = ({
       return financial(liquidationPrice, 2);
     }
   };
+
+  const getBuffer = (): number => {
+    const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
+    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
+    
+    const outstanding_balance = balanceFloat - inputFloat;
+    const min_collateral = outstanding_balance / loanToValue / collateralPrice;
+
+    const new_buffer = (Number(collateral) - min_collateral) / min_collateral;
+    console.log("---new buffer---", new_buffer);
+
+    return new_buffer * 100;
+  }
+
+  useEffect(() => {
+    getETHPrice()
+    .then(_price => setCollateralPrice(_price))
+    .catch(e => console.log(e)) 
+
+    getBuffer()
+  })
 
   return (
     <ModalContent>
@@ -191,7 +215,7 @@ const MakePaymentModal = ({
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? `${buffer}%`
+              ? `${financial(getBuffer())}%`
               : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
@@ -206,7 +230,7 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}
+        )}&buffer=${financial(getBuffer())}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

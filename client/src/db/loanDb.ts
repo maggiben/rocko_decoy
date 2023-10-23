@@ -38,6 +38,7 @@ export const useLoanDB = () => {
             id: id, 
             loan_active: Number(active),
             outstanding_balance: loan,
+            buffer: buffer,
         } :
         {
             updateType: updateType,
