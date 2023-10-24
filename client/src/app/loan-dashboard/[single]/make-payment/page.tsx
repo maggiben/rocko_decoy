@@ -84,7 +84,7 @@ const MakePayment: FC = () => {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = parseFloat(router.get("buffer") || "0");
+  const buffer = router.get("buffer");
   const amount = "add"; //! get the URL parameter amount value
 
   const { address : zerodevAccount } = useAccount();
@@ -124,7 +124,7 @@ const MakePayment: FC = () => {
             payment === currentBalance ? (
               <div className="flex items-center gap-2">
                 <p className="text-sm">Payment Buffer</p>
-                <HoverTooltip text="Payment Butter" />
+                <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
               </div>
             ) : (
               ""
@@ -152,7 +152,7 @@ const MakePayment: FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">{buffer}%</span>,
+          details: <span className="font-semibold text-sm">{buffer === "N/A" ? "N/A" : `${buffer}%`}</span>,
         },
         {
           description: "Liquidation Price (ETH)",

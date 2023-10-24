@@ -16,6 +16,7 @@ const ModifyWallet = ({
   setModalStep,
   currentBalance,
   collateral,
+  loanToValue,
   threshold,
   buffer
 }: {
@@ -23,6 +24,7 @@ const ModifyWallet = ({
   setModalStep: Function;
   currentBalance: string;
   collateral: string;
+  loanToValue: number,
   buffer: string;
   threshold: string;
 }) => {
@@ -62,17 +64,23 @@ const ModifyWallet = ({
     return liquidationPrice;
   };
 
-  const getBuffer = () => {
-    const original_collateral = Number(collateral) / (1 + Number(buffer) / 100);
+  const getBuffer = (): number => {
+    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
+    
+    const min_collateral = balanceFloat / loanToValue / collateralPrice;
 
-    const new_buffer = (new_collateral / original_collateral - 1) * 100;
-    return new_buffer;
-  };
+    const new_buffer = (new_collateral - min_collateral) / min_collateral;
+    console.log("---new buffer---", new_buffer);
+
+    return new_buffer * 100;
+  }
 
   useEffect(() => {
     getETHPrice()
     .then(_price => setCollateralPrice(_price))
     .catch(e => console.log(e))
+
+    getBuffer()
   })
 
   return (

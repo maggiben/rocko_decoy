@@ -71,25 +71,25 @@ const MakePaymentModal = ({
     }
   };
 
-  const getBuffer = (): number => {
+  const getBuffer = (): string => {
     const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
     const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
     
     const outstanding_balance = balanceFloat - inputFloat;
+    if (outstanding_balance === 0) return "N/A";
+
     const min_collateral = outstanding_balance / loanToValue / collateralPrice;
 
     const new_buffer = (Number(collateral) - min_collateral) / min_collateral;
     console.log("---new buffer---", new_buffer);
 
-    return new_buffer * 100;
+    return financial(new_buffer * 100);
   }
 
   useEffect(() => {
     getETHPrice()
     .then(_price => setCollateralPrice(_price))
     .catch(e => console.log(e)) 
-
-    getBuffer()
   })
 
   return (
@@ -215,7 +215,7 @@ const MakePaymentModal = ({
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? `${financial(getBuffer())}%`
+              ? getBuffer() === "N/A" ? "N/A" : `${getBuffer()}%`
               : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
@@ -230,7 +230,7 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&buffer=${financial(getBuffer())}
+        )}&buffer=${getBuffer()}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

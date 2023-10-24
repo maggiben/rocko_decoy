@@ -26,7 +26,6 @@ const Processing = () => {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
   const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
-  console.log(buffer)
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
@@ -210,28 +209,6 @@ const Processing = () => {
       return () => clearInterval(interval);
     }
   }, [startA, startB, progress]);
-  useEffect(() => {
-    {
-      progressTracker === 0 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "one" }]);
-    }
-    {
-      progressTracker === 1 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "two" }]);
-      payment < currentBalance &&
-        progressTracker === 1 &&
-        progress === 100 &&
-        setActiveDone(true);
-    }
-    {
-      progressTracker === 2 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "three" }]);
-      progressTracker === 2 && progress === 100 && setActiveDone(true);
-    }
-  }, [progress, progressTracker]);
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
