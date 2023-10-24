@@ -173,7 +173,7 @@ const ModifyWallet = ({
             /* on onBlur set the number */
             setInputNumber(parseFloat(event.target.value || "0"));
           }}
-          onChange={handleBorrowValueChange}
+          onInput={handleBorrowValueChange}
         />
         <p
           className={`text-right mr-5 -mt-10 ${
