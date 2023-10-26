@@ -7,33 +7,28 @@ import { useParams } from "next/navigation";
 import { useSingleLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
 
-interface FormData {
-  numberInput: string;
-}
 const MakePaymentModal = ({
   setOpenModalFor,
-  setModalStep,
   currentBalance,
   collateral,
-  buffer,
-  threshold,
-  loanToValue
 }: {
   setOpenModalFor: Function;
-  setModalStep: Function;
   currentBalance: string;
   collateral: string;
-  buffer: string;
-  threshold: string;
-  loanToValue: number;
 }) => {
   const basicRouter = useParams();
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>("text"); //! to show value with commas & without commas n inputfiled on onBlur handler
-  const [collateralPrice, setCollateralPrice] = useState<any>();
-  const { getETHPrice } = useSingleLoan();
+  const { getBuffer, getLiquidationPrice } = useSingleLoan();
+  const [buffer, setBuffer] = useState<any>();
+  const [liquidationPrice, setLiquidationPrice] = useState<any>();
+
+  const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
+  const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
+  const outstanding_balance = balanceFloat - inputFloat;
+
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -58,38 +53,14 @@ const MakePaymentModal = ({
     setInputNumber(currentBalance);
   };
 
-  const getLiquidationPrice = (): string => {
-    const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
-    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
-
-    const outstanding_balance = balanceFloat - inputFloat;
-    if (outstanding_balance === 0) {
-      return "N/A";
-    } else {
-      const liquidationPrice = outstanding_balance / Number(threshold) / Number(collateral);
-      return financial(liquidationPrice, 2);
-    }
-  };
-
-  const getBuffer = (): string => {
-    const inputFloat = parseFloat(inputNumber?.replace(/,/g, "") || "0");
-    const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
-    
-    const outstanding_balance = balanceFloat - inputFloat;
-    if (outstanding_balance === 0) return "N/A";
-
-    const min_collateral = outstanding_balance / loanToValue / collateralPrice;
-
-    const new_buffer = (Number(collateral) - min_collateral) / min_collateral;
-    console.log("---new buffer---", new_buffer);
-
-    return financial(new_buffer * 100);
-  }
-
   useEffect(() => {
-    getETHPrice()
-    .then(_price => setCollateralPrice(_price))
-    .catch(e => console.log(e)) 
+    getLiquidationPrice(outstanding_balance, Number(collateral))
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e))
+
+    getBuffer(outstanding_balance, Number(collateral))
+    .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e))
   })
 
   return (
@@ -125,6 +96,7 @@ const MakePaymentModal = ({
         <input
           name="numberInput"
           type={changeInputType} /* switch between "text" & "number" */
+          autoComplete="off"
           id="numberField"
           min={0.000001}
           max={currentBalance}
@@ -215,13 +187,13 @@ const MakePaymentModal = ({
           <p className="text-sm text-gray-600">Collateral Buffer</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? getBuffer() === "N/A" ? "N/A" : `${getBuffer()}%`
+              ? buffer === "N/A" ? "N/A" : `${financial(buffer * 100)}%`
               : "--"}
           </p>
           <p className="text-sm text-gray-600">Liquidation Price (ETH)</p>
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? getLiquidationPrice()
+              ? liquidationPrice === "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`
               : "--"}
           </p>
         </div>
@@ -230,7 +202,7 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&buffer=${getBuffer()}
+        )}&buffer=${buffer}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

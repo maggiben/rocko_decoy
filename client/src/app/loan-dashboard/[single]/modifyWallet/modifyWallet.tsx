@@ -182,6 +182,7 @@ const ModifyWallet = ({
             setInputNumber(parseFloat(event.target.value || "0"));
           }}
           onInput={handleBorrowValueChange}
+          autoComplete="off"
         />
         <p
           className={`text-right mr-5 -mt-10 ${
