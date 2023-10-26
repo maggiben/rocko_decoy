@@ -12,8 +12,8 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
 import { useAccount } from "wagmi";
 import { useSingleLoan } from "@/contract/single";
-import { useLoanDB } from "@/db/loanDb";
 import financial from "@/utility/currencyFormate";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -84,16 +84,15 @@ const MakePayment: FC = () => {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = router.get("buffer");
+  const currentBalance = parseFloat(router.get("balance") || "0");
+  const collateral = parseFloat(router.get("collateral") || "0");
   const amount = "add"; //! get the URL parameter amount value
 
   const { address : zerodevAccount } = useAccount();
   const address = useAddress();
-  const { getLoanData } = useLoanDB();
-  const { getLiquidationPrice } = useSingleLoan();
-  const [ loanData, setLoanData ] = useState<any>();
+  const { getLiquidationPrice, getBuffer } = useSingleLoan();
   const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
-  const [ currentBalance, setCurrentBalance ] = useState<any>();
+  const [ buffer, setBuffer ] = useState<any>();
 
   const invoice: Info[] = [
     {
@@ -152,7 +151,7 @@ const MakePayment: FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">{buffer === "N/A" ? "N/A" : `${buffer}%`}</span>,
+          details: <span className="font-semibold text-sm">{buffer === "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</span>,
         },
         {
           description: "Liquidation Price (ETH)",
@@ -162,27 +161,13 @@ const MakePayment: FC = () => {
     },
   ];
 
-  const initialize = async () => {
-    console.log(zerodevAccount)
-    if (zerodevAccount) {
-      const result = await getLoanData(zerodevAccount);
-      if (result) {
-        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
-        console.log(active_loans[loanIndex - 1]);
-        setLoanData(active_loans[loanIndex - 1]);
-        setCurrentBalance(active_loans[loanIndex - 1]?.outstanding_balance);
-      }
-    }
-  };
-
   useEffect(() => {
-    initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount]);
-
-  useEffect(() => {
-    getLiquidationPrice(loanData?.outstanding_balance - payment, loanData?.collateral)
+    getLiquidationPrice(currentBalance - payment, collateral)
     .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e));
+
+    getBuffer(currentBalance - payment, collateral)
+    .then(_buffer => setBuffer(_buffer))
     .catch(e => console.log(e));
   });
 
@@ -419,7 +404,7 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}&buffer=${buffer}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

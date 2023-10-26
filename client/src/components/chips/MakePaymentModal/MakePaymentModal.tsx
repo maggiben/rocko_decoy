@@ -202,7 +202,7 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&buffer=${buffer}
+        )}&balance=${balanceFloat}&collateral=${collateral}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

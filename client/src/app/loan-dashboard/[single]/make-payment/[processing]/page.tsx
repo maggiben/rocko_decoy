@@ -16,6 +16,7 @@ import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useRepayFull, useRepaySome } from "@/contract/batch";
 import { USDCContract, networkChainId } from "@/constants";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -25,7 +26,6 @@ const Processing = () => {
   const { processing, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
@@ -41,6 +41,7 @@ const Processing = () => {
   });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
+  const { userInfo } = useZeroDev();
   const { chain } = useNetwork();
   const { executeBatchRepaySome, batchRepaySome, success, txHash } = useRepaySome(payment);
   const { executeBatchRepayFull, batchRepayFull, success: fullySuccess, txHash: fullyTxHash } = useRepayFull(collateral, payment);
@@ -56,14 +57,15 @@ const Processing = () => {
   const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
   const initialize = async () => {
-    if (zerodevAccount) {
-      const result = await getLoanData(zerodevAccount);
+    if (userInfo) {
+      const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == 1);
-        console.log(active_loans[Number(loanIndex) - 1]);
-        setLoanData(active_loans[Number(loanIndex) - 1]);
-        setCurrentBalance(active_loans[Number(loanIndex) - 1]?.outstanding_balance);
-        setCollateral(active_loans[Number(loanIndex) - 1]?.collateral);
+        if (active_loans.length > 0) {
+          setLoanData(active_loans[0]);
+          setCurrentBalance(active_loans[0]?.outstanding_balance);
+          setCollateral(active_loans[0]?.collateral);
+        }
       }
     }
   };
@@ -119,8 +121,7 @@ const Processing = () => {
       loanData?.id,
       currentBalance - payment,
       currentBalance === payment ? false : true,
-      buffer,
-      0, 0
+      collateral
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -132,7 +133,7 @@ const Processing = () => {
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount]);
+  }, [userInfo]);
 
   useEffect(() => {
     if (loanData && batchRepayFull != undefined && batchRepaySome != undefined)

@@ -86,8 +86,7 @@ function SinglePage() {
       const result = await getLoanData(userInfo?.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
-        console.log(active_loans[loanIndex - 1]);
-        setLoanData(active_loans[loanIndex - 1]);
+        if (active_loans.length > 0) setLoanData(active_loans[0]);
       }
     }
   }
