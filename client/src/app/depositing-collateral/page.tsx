@@ -25,8 +25,8 @@ const DepositingCollateral = () => {
   const loanData : LoanData = JSON.parse(retrievedData || "");
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
-  const [borrowing, setBorrowing] = useState<number>(0);
-  const [collateral, setCollateral] = useState<number>(0);
+  const [totalBorrowing, setTotalBorrowing] = useState<number>(loanData?.borrowing);
+  const [totalCollateral, setTotalCollateral] = useState<number>(loanData?.collateralNeeded);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -100,7 +100,7 @@ const DepositingCollateral = () => {
       userInfo?.email,
       txHash,
       loanData?.protocol, true, loanData?.cryptoName,
-      borrowing, collateral,
+      totalBorrowing, totalCollateral,
       isExistLoan);
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -118,8 +118,8 @@ const DepositingCollateral = () => {
           console.log(match_loan)
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
-            setBorrowing(loanData?.borrowing + match_loan[0].outstanding_balance);
-            setCollateral(loanData?.collateralNeeded + match_loan[0].collateral);
+            setTotalBorrowing(loanData?.borrowing + match_loan[0].outstanding_balance);
+            setTotalCollateral(loanData?.collateralNeeded + match_loan[0].collateral);
           }
 
           // set navigation id

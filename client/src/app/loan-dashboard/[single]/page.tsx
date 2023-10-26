@@ -388,9 +388,6 @@ function SinglePage() {
                   setOpenModalFor={setOpenModalFor}
                   currentBalance={financial(loanData?.outstanding_balance)}
                   collateral={loanData?.collateral}
-                  loanToValue={LTV}
-                  threshold={threshold}
-                  buffer={loanData?.collateral_buffer}
                 />
               )}
             </ModalContainer>

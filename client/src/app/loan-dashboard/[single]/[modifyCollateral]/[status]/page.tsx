@@ -15,6 +15,7 @@ import { NETWORK } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -24,8 +25,6 @@ const ModifyStatus = () => {
   const { status, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
-  const liquidationPrice = parseFloat(router.get("liquidationPrice") || "0"); //! get the URL parameter payment value
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
@@ -37,6 +36,7 @@ const ModifyStatus = () => {
   const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
+  const { userInfo } = useZeroDev();
   const { chain } = useNetwork();
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } = useAddCollateral(payment);
   const { executeBatchBorrowCollateral, batchBorrowCollateral, success: borrowSuccess, txHash: borrowTxHash } = useBorrowCollateral(payment);
@@ -50,18 +50,6 @@ const ModifyStatus = () => {
   const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
   const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
-
-  const initialize = async () => {
-    if (zerodevAccount) {
-      const result = await getLoanData(zerodevAccount);
-      if (result) {
-        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
-        console.log(active_loans[Number(loanIndex) - 1]);
-        setLoanData(active_loans[Number(loanIndex) - 1]);
-        setCollateral(active_loans[Number(loanIndex) - 1]?.collateral);
-      }
-    }
-  };
 
   const start = async () => {
     if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
@@ -156,10 +144,23 @@ const ModifyStatus = () => {
     setCompleteModal(true);
   };
 
+  const initialize = async () => {
+    if (userInfo) {
+      const result = await getLoanData(userInfo.email);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
+        if (active_loans.length > 0) {
+          setLoanData(active_loans[0]);
+          setCollateral(active_loans[0]?.collateral);
+        }        
+      }
+    }
+  };
+
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount]);
+  }, [userInfo]);
 
   useEffect(() => {
     if (loanData && batchAddCollateral != undefined && batchBorrowCollateral != undefined)
@@ -342,13 +343,13 @@ const ModifyStatus = () => {
             <LoanComplete
               title={"Collateral Deposit Complete"}
               details={"You have successfully increased your loan collateral"}
-              id={2}
+              id={Number(loanIndex)}
             />
           ) : (
             <LoanComplete
               title={"Collateral Withdrawal Complete"}
               details={"You have successfully withdrawn collateral"}
-              id={3}
+              id={Number(loanIndex)}
             />
           )}
         </ModalContainer>

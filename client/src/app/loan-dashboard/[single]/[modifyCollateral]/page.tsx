@@ -55,9 +55,8 @@ const ModifyCollateral: React.FC = () => {
   const amount = router.get("try"); //! get the URL parameter value
   const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = parseFloat(router.get("buffer") || "0");
   const basicCollateral = parseFloat(router.get("collateral") || "0");
-  const liquidationPrice = parseFloat(router.get("liquidationPrice") || "0");
+  const currentBalance = parseFloat(router.get("balance") || "0");
 
   const new_collateral = amount === "add" ? 
                 basicCollateral + payment : 
@@ -65,7 +64,9 @@ const ModifyCollateral: React.FC = () => {
 
   const { address : zerodevAccount } = useAccount();
   const address = useAddress();
-  const { getETHPrice } = useSingleLoan();
+  const { getETHPrice, getLiquidationPrice, getBuffer } = useSingleLoan();
+  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
+  const [ buffer, setBuffer ] = useState<any>();
 
   const invoice: Info[] = [
     {
@@ -87,7 +88,7 @@ const ModifyCollateral: React.FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: `${financial(buffer)}%`,
+          details: `${financial(buffer * 100)}%`,
         },
         {
           description: "Liquidation Price (ETH)",
@@ -100,7 +101,15 @@ const ModifyCollateral: React.FC = () => {
   useEffect(() => {
     getETHPrice()
     .then(_price => setCollateralPrice(_price))
-    .catch(e => console.log(e))
+    .catch(e => console.log(e));
+
+    getLiquidationPrice(currentBalance, new_collateral)
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e));
+
+    getBuffer(currentBalance, new_collateral)
+    .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e));    
   });
 
   return (
@@ -334,7 +343,7 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"modify_collateral"}/${amount}?payment=${payment}&buffer=${buffer}&liquidationPrice=${liquidationPrice}`}
+                href={`/loan-dashboard/${loanIndex}/${"modify_collateral"}/${amount}?payment=${payment}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
