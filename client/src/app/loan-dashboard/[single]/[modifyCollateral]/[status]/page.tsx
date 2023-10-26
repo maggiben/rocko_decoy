@@ -243,7 +243,8 @@ const ModifyStatus = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        Collateral Modification Status
+        {status === "add" ? (startA || (!startA && !startB) ? "Waiting for Collateral" : "Depositing Collateral") 
+                          : "Withdrawing Collateral"}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">

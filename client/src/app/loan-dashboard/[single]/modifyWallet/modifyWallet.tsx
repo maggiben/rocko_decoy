@@ -179,6 +179,9 @@ const ModifyWallet = ({
         <p className="text-gray-500 text-sm mt-5">
           {inputNumber ? `~$${financial(collateralPrice * inputFloat, 2)}` : ""}
         </p>{" "}
+        <p className="text-red-500 text-sm mt-2 p-0.5">
+          {buffer < 0 && "You cannot withdraw this collateral amount as it would reduce your collateral value below the required threshold."}
+        </p>{" "}
         {/* after putting a value on inputfield the number will show */}
       </div>
       <div className="p-6 bg-gray-100 rounded-2xl">
