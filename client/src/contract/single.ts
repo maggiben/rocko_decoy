@@ -138,6 +138,17 @@ export const useSingleLoan = () => {
     return value;
   };
 
+  const getBuffer = async (loan: string | number, collateral: string | number) : Promise<number | string> => {
+    if (typeof loan === "undefined" || Number(loan) == 0 || Number(collateral) == 0) return "N/A";
+
+    const loanToValue = await getLTV();
+    const collateralPrice = await getETHPrice();
+    const min_collateral = Number(loan) / loanToValue / collateralPrice;
+    const new_buffer = (Number(collateral) - min_collateral) / min_collateral;
+
+    return new_buffer;
+  };
+
   const approveWETH = async () => {
     if (!signer) return;
 
@@ -366,6 +377,7 @@ export const useSingleLoan = () => {
       getRewardAmount,
       getRewardRate,
       getLiquidationPrice,
+      getBuffer,
       claimReward,
       depositZerodevAccount
   }

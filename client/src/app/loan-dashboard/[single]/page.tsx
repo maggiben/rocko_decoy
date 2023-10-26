@@ -16,6 +16,7 @@ import { useLoanDB } from "@/db/loanDb";
 import { useCompPrice } from "@/hooks/usePrice";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 const headings = [
   {
@@ -49,8 +50,7 @@ function SinglePage() {
   const searchParams = useSearchParams();
   const loanIndex = Number(params.single);
   const isActive = searchParams.get('active');
-  const account = searchParams.get('account');
-  const { address: zerodevAccount } = useAccount();
+  const { userInfo } = useZeroDev();
 
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
@@ -67,6 +67,7 @@ function SinglePage() {
   const [rewardAmount, setRewardAmount] = useState<any>();
   const [rewardRate, setRewardRate] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
+  const [buffer, setBuffer] = useState<any>();
 
   const {
     getETHPrice,
@@ -76,12 +77,13 @@ function SinglePage() {
     getThreshold,
     getRewardRate,
     getRewardAmount,
-    getLiquidationPrice
+    getLiquidationPrice,
+    getBuffer
   } = useSingleLoan();
 
   const initialize = async () => {
-    if (zerodevAccount) {
-      const result = await getLoanData(zerodevAccount);
+    if (userInfo) {
+      const result = await getLoanData(userInfo?.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
         console.log(active_loans[loanIndex - 1]);
@@ -93,10 +95,9 @@ function SinglePage() {
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount]);
+  }, [userInfo]);
 
   useEffect(() => {
-    console.log(compPrice)
     getETHPrice()
     .then(_price => setCollateralPrice(_price))
     .catch(e => console.log(e))
@@ -127,6 +128,10 @@ function SinglePage() {
 
     getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
     .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e))
+
+    getBuffer(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_buffer => setBuffer(_buffer))
     .catch(e => console.log(e))
   });
 
@@ -305,7 +310,7 @@ function SinglePage() {
               </div>
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
-                <p>{loanData?.collateral_buffer}%</p>
+                <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
                 <div className="flex flex-col md:flex-row items-center gap-y-1 md:gap-2 absolute right-0">
                   <p className="text-center md:text-left text-sm md:text-base">
                     Alerts On
@@ -367,13 +372,9 @@ function SinglePage() {
             <ModalContainer>
               {modalStep === 0 && (
                 <MakePaymentModal
-                  setModalStep={setModalStep}
                   setOpenModalFor={setOpenModalFor}
                   currentBalance={financial(loanData?.outstanding_balance)}
                   collateral={loanData?.collateral}
-                  buffer={loanData?.collateral_buffer}
-                  threshold={threshold}
-                  loanToValue={LTV}
                 />
               )}
             </ModalContainer>
