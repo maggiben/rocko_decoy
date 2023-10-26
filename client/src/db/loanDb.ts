@@ -10,19 +10,17 @@ export const useLoanDB = () => {
         loan_asset: string,
         outstanding_balance: number,
         collateral: number,
-        liquidation_price: number,
-        collateral_buffer: number,
+        exist: boolean
     ) => {
         const loanObject = {
-            user: user, 
+            user: user,
             transaction_hash: transaction_hash,
             lending_protocol: lending_protocol,
             loan_active: Number(loan_active),
             loan_asset: loan_asset,
             outstanding_balance: outstanding_balance,
             collateral: collateral,
-            liquidation_price: liquidation_price,
-            collateral_buffer: collateral_buffer,
+            exist: exist
         };
         console.log("loanObject", loanObject);
         axios.post(`${BACKEND_URL}/add`, loanObject).then((res) => {
