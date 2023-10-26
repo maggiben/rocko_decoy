@@ -14,6 +14,7 @@ import { useSingleLoan } from "@/contract/single";
 import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
 import { LoanData } from "@/types/type";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -23,7 +24,9 @@ const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData : LoanData = JSON.parse(retrievedData || "");
 
-  console.log("---loanData from sessionStorage---", loanData);
+  const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
+  const [borrowing, setBorrowing] = useState<number>(0);
+  const [collateral, setCollateral] = useState<number>(0);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -36,6 +39,8 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
+  // get User info
+  const { userInfo } = useZeroDev();
   // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
   // Thirdweb for EOA
@@ -91,12 +96,12 @@ const DepositingCollateral = () => {
   }
 
   const setAllDone = async (txHash: string) => {
-    await setNavigationID();
     finalizeLoan(
-      wagmiAddress ? wagmiAddress : "",
+      userInfo?.email,
       txHash,
       loanData?.protocol, true, loanData?.cryptoName,
-      loanData?.borrowing, loanData?.collateralNeeded, loanData?.liquidationPrice, loanData?.buffer);
+      borrowing, collateral,
+      isExistLoan);
 
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
@@ -104,22 +109,36 @@ const DepositingCollateral = () => {
     setCompleteModal(true);
   }
 
-  const setNavigationID = async () => {
-    if (wagmiAddress) {
-      const result = await getLoanData(wagmiAddress);
-      if (result) {
-        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
-        setNewLoanID(active_loans.length + 1);
-      }
+  const setInitialParams = () => {
+    if (userInfo) {
+      getLoanData(userInfo?.email).then(result => {
+        if (result && result.length > 0) {
+          // set isExistLoan
+          const match_loan = result.filter((loan: any) => loan.loan_active === 1);
+          console.log(match_loan)
+          if (match_loan && match_loan.length > 0) {
+            setIsExistLoan(true);
+            setBorrowing(loanData?.borrowing + match_loan[0].outstanding_balance);
+            setCollateral(loanData?.collateralNeeded + match_loan[0].collateral);
+          }
+
+          // set navigation id
+          const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+          setNewLoanID(active_loans.length + 1);
+        }
+      });
     }
   }
 
   useEffect(() => {
+    if (userInfo)
+      setInitialParams();
+
     if (batchGetLoan != undefined) {
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[batchGetLoan, wagmiAddress])
+  },[batchGetLoan, userInfo])
 
   useEffect(() => {
     if (success) {
