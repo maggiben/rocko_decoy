@@ -29,10 +29,6 @@ const MakePaymentModal = ({
   const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
   const outstanding_balance = balanceFloat - inputFloat;
 
-  const handleDecimalsOnValue = (value: any) => {
-    const regex = /([0-9]*[\.]{0,1}[0-9]{0,6})/s;
-    return value.match(regex)[0];
-  };
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -206,9 +202,8 @@ const MakePaymentModal = ({
       <Link
         href={`/loan-dashboard/${loanIndex}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
-        )}&currentBalance=${parseFloat(
-          currentBalance
-        )}`}
+        )}&balance=${balanceFloat}&collateral=${collateral}
+        `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button

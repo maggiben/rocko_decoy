@@ -6,22 +6,21 @@ import comp from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import { useLoanDB } from "@/db/loanDb";
-import { useAccount } from "wagmi";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 const Dashboard = () => {
   const [active, setActive] = useState(true);
 
-  const { address: wagmiAddress } = useAccount();
   const { getLoanData } = useLoanDB();
+  const { userInfo } = useZeroDev();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
 
   const initialize = async () => {
-    console.log(wagmiAddress)
-    if (wagmiAddress) {
-      const result = await getLoanData(wagmiAddress);
+    if (userInfo) {
+      const result = await getLoanData(userInfo?.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active === 1);
         const closed_loans = result.filter((loan: any) => loan.loan_active === 0);
@@ -32,8 +31,9 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    initialize()
-  }, [wagmiAddress])
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo])
 
   return (
     <main className="container mx-auto px-4 py-6  lg:py-10 ">

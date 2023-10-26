@@ -54,7 +54,7 @@ const Header = () => {
         console.log(userInfo)
         getUserData(userInfo.email).then(async (res) => {
           console.log(res)
-          if (res.length === 0) {
+          if (res && res.length === 0) {
             addUser(userInfo.idToken, userInfo.email, address as `0x${string}`, false);
           }
         });

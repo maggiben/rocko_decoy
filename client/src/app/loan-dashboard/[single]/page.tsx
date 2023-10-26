@@ -3,13 +3,21 @@ import Image from "next/image";
 import compound from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
-import { useState } from "react";
+import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
+import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
+import { useAccount } from "wagmi";
+import { useSingleLoan } from "@/contract/single";
+import { useLoanDB } from "@/db/loanDb";
+import { useCompPrice } from "@/hooks/usePrice";
+import financial from "@/utility/currencyFormate";
+import { formatDate } from "@/utility/utils";
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/pages/Dashboard/invoice/makePayment/makePayment";
 import Alert from "@/components/pages/Dashboard/Alert/Alert";
-import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import RangeSlider from "@/components/rangeSlider/rangeSlider";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 const headings = [
   {
@@ -66,8 +74,93 @@ const currentBallanceInfo = {
 };
 
 function SinglePage() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const loanIndex = Number(params.single);
+  const isActive = searchParams.get('active');
+  const { userInfo } = useZeroDev();
+
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
+   
+  const { getLoanData } = useLoanDB();
+  const { compPrice } = useCompPrice();
+
+  const [loanData, setLoanData] = useState<any>();
+  const [collateralPrice, setCollateralPrice] = useState<any>();
+  const [apr, setAPR] = useState<any>();
+  const [LTV, setLTV] = useState<any>();
+  const [threshold, setThreshold] = useState<any>();
+  const [penalty, setPenalty] = useState<any>();
+  const [rewardAmount, setRewardAmount] = useState<any>();
+  const [rewardRate, setRewardRate] = useState<any>();
+  const [liquidationPrice, setLiquidationPrice] = useState<any>();
+  const [buffer, setBuffer] = useState<any>();
+
+  const {
+    getETHPrice,
+    getBorrowAPR,
+    getLTV,
+    getPenalty,
+    getThreshold,
+    getRewardRate,
+    getRewardAmount,
+    getLiquidationPrice,
+    getBuffer
+  } = useSingleLoan();
+
+  const initialize = async () => {
+    if (userInfo) {
+      const result = await getLoanData(userInfo?.email);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
+        if (active_loans.length > 0) setLoanData(active_loans[0]);
+      }
+    }
+  }
+
+  useEffect(() => {
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo]);
+
+  useEffect(() => {
+    getETHPrice()
+    .then(_price => setCollateralPrice(_price))
+    .catch(e => console.log(e))
+
+    getBorrowAPR()
+    .then(_apr => setAPR(_apr))
+    .catch(e => console.log(e))
+
+    getLTV()
+    .then(_ltv => setLTV(_ltv))
+    .catch(e => console.log(e))
+
+    getThreshold()
+    .then(_threshold => setThreshold(_threshold))
+    .catch(e => console.log(e))
+
+    getPenalty()
+    .then(_penalty => setPenalty(_penalty))
+    .catch(e => console.log(e))
+
+    getRewardAmount()
+    .then(_reward => setRewardAmount(_reward))
+    .catch(e => console.log(e))
+
+    getRewardRate()
+    .then(_rate => setRewardRate(_rate))
+    .catch(e => console.log(e))
+    getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e))
+
+    getBuffer(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e))
+  });
+
   return (
     <>
       <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
@@ -196,7 +289,7 @@ or drops. "
           <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6">
             <h1 className="text-xl mb-4  font-medium">Collateral</h1>
             {/* --------------green bar-------------- */}
-            <RangeSlider />
+            <RangeSlider collateralBufferCurrentPercentage={101} />
             {/*
              <div className="pb-16 relative">
               <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[10%] md:left-[18%] lg:left-[20%] text-xs  md:text-sm text-[#545454]">
@@ -228,28 +321,29 @@ or drops. "
             {/* green bar end */}
             <div className="divide-y-2 space-y-3">
               <div></div>
-              {collaterals.map((collateral, i) => (
-                <div key={i} className="flex pt-3 gap-x-2">
-                  <div className="w-1/2">
-                    <p className=" font-medium">{collateral?.name}</p>
-                    <p className="block text-sm text-[#545454]">
-                      {collateral?.subName}
-                    </p>
-                  </div>
-                  <p>
-                    {collateral.amount}
-                    {collateral.subAmount && (
-                      <span className="block text-sm text-[#545454]">
-                        {collateral.subAmount}
-                      </span>
-                    )}
+              <div className="flex pt-3 gap-x-2">
+                <p className="w-1/2 font-medium">Collateral Posted</p>
+                <p>
+                  {financial(loanData?.collateral, 2)} ETH
+                  <span className="block text-sm text-[#545454]">
+                    ${financial(collateralPrice * loanData?.collateral, 2)}
+                  </span>
+                </p>
+              </div>
+              <div className="flex pt-3 gap-x-2">
+                <p className="w-1/2 font-medium">Liquidation Price</p>
+                <p>
+                  {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
+                </p>
+              </div>
+              <div className="flex items-center gap-x-2 py-5 relative">
+                <p className="w-1/2 font-medium">Collateral Buffer</p>
+                <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
+                <div className="flex flex-col md:flex-row items-center gap-y-1 md:gap-2 absolute right-0">
+                  <p className="text-center md:text-left text-sm md:text-base">
+                    Alerts On
                   </p>
-                </div>
-              ))}
-              <div className="">
-                <div className="flex items-center gap-x-2 py-5 relative">
-                  <p className="w-1/2 font-medium">Collateral Buffer</p>
-                  <p>101%</p>
+                  <ToggleBtn />
                 </div>
                 {/* //!alert start */}
                 <Alert
@@ -257,7 +351,7 @@ or drops. "
                   alertFor="collateralBuffer"
                   description="Set up alerts to be notified when your collateral buffer is 
 getting too low. Alerts are automatically sent at 5% as
-liquidation can occur once it becomes negative. "
+liquidation can occur once it becomes negative."
                 />
                 {/* //!alert end */}
               </div>
@@ -316,7 +410,8 @@ liquidation can occur once it becomes negative. "
               {modalStep === 0 && (
                 <MakePaymentModal
                   setOpenModalFor={setOpenModalFor}
-                  currentBalance={currentBallanceInfo.amount}
+                  currentBalance={financial(loanData?.outstanding_balance)}
+                  collateral={loanData?.collateral}
                 />
               )}
             </ModalContainer>
@@ -329,7 +424,8 @@ liquidation can occur once it becomes negative. "
                 <ModifyWallet
                   setModalStep={setModalStep}
                   setOpenModalFor={setOpenModalFor}
-                  
+                  currentBalance={financial(loanData?.outstanding_balance)}
+                  collateral={loanData?.collateral}
                 />
               )}
             </ModalContainer>

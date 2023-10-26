@@ -25,16 +25,25 @@ router.post(
       loan_asset: req.body.loan_asset,
       outstanding_balance: req.body.outstanding_balance,
       collateral: req.body.collateral,
-      liquidation_price: req.body.liquidation_price,
-      collateral_buffer: req.body.collateral_buffer,
       create_time: new Date(),
       modified_time: new Date(),
     };
-    let sql = "INSERT INTO loans SET ?";
-    db.query(sql, data, (err, results) => {
-      if (err) throw err;
-      res.send("Data successfully saved");
-    });
+
+    if (!req.body.exist) { // if new loan on current user
+      console.log(data);
+      let sql = "INSERT INTO loans SET ?";
+      db.query(sql, data, (err, results) => {
+        if (err) throw err;
+        res.send("Data successfully saved");
+      });
+    } else { // update loan (add borrowing and collateral)
+      let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user = ?";
+
+      db.query(sql, [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user], (err, results) => {
+        if (err) throw err;
+        res.send("Deposit Loan Status successfully updated");
+      });
+    }
   }
 );
 
@@ -51,23 +60,21 @@ router.post("/update", (req, res) => {
       loan_active: req.body.loan_active,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ? WHERE id = ?";
+    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.outstanding_balance, data.loan_active, data.id], (err, results) => {
+    db.query(sql, [data.outstanding_balance, data.loan_active, data.modified_time, data.id], (err, results) => {
       if (err) throw err;
       res.send("Amount and Active Status successfully updated");
     });
   } else {
     let data = {
       id: req.body.id,
-      buffer: req.body.buffer,
       collateral: req.body.collateral,
-      liquidation_price: req.body.liquidation_price,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET collateral_buffer = ?, collateral = ?, liquidation_price = ? WHERE id = ?";
+    let sql = "UPDATE loans SET collateral = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.buffer, data.collateral, data.liquidation_price, data.id], (err, results) => {
+    db.query(sql, [data.collateral, data.modified_time, data.id], (err, results) => {
       if (err) throw err;
       res.send("Buffer, Collateral and LiquidationPrice successfully updated");
     });
@@ -96,7 +103,7 @@ router.post(
   }
 );
 
-/////////////////// Get loans
+// Get all users
 
 router.get('/users', (req, res) => {
   let sql = `SELECT * FROM users WHERE email = '${req.query.email}'`;

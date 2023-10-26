@@ -14,6 +14,7 @@ import { useSingleLoan } from "@/contract/single";
 import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
 import { LoanData } from "@/types/type";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -24,7 +25,9 @@ const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData : LoanData = JSON.parse(retrievedData || "");
 
-  console.log("---loanData from sessionStorage---", loanData);
+  const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
+  const [totalBorrowing, setTotalBorrowing] = useState<number>(loanData?.borrowing);
+  const [totalCollateral, setTotalCollateral] = useState<number>(loanData?.collateralNeeded);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -37,6 +40,8 @@ const DepositingCollateral = () => {
   const [completeModal, setCompleteModal] = useState(false);
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
+  // get User info
+  const { userInfo } = useZeroDev();
   // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
   // Thirdweb for EOA
@@ -45,7 +50,6 @@ const DepositingCollateral = () => {
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
   const { data } = useBalance({ address: address as `0x${string}` });
-  const { data: wagmiData } = useBalance({ address: wagmiAddress as `0x${string}` });
   const { chain } = useNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
@@ -101,12 +105,12 @@ const DepositingCollateral = () => {
   }
 
   const setAllDone = async (txHash: string) => {
-    await setNavigationID();
     finalizeLoan(
-      wagmiAddress ? wagmiAddress : "",
+      userInfo?.email,
       txHash,
-      loanData?.protocol, true, loanData?.cryptoName, 
-      loanData?.borrowing, loanData?.collateralNeeded, loanData?.liquidationPrice, loanData?.buffer);
+      loanData?.protocol, true, loanData?.cryptoName,
+      totalBorrowing, totalCollateral,
+      isExistLoan);
 
     setDoneTracker([...doneTracker, { step: "two" }]);
     setStartB(false);
@@ -135,25 +139,15 @@ const DepositingCollateral = () => {
     }
   }
 
-  const setNavigationID = async () => {
-    if (wagmiAddress) {
-      const result = await getLoanData(wagmiAddress);
-      if (result) {
-        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
-        console.log(active_loans)
-        console.log(active_loans.length)
-        setNewLoanID(active_loans.length + 1);
-      }
-    }
-  }
-
   useEffect(() => {
-    if (batchGetLoan != undefined && userInfo != undefined) {
+    if (userInfo)
       setInitialParams();
+
+    if (batchGetLoan != undefined) {
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[batchGetLoan, wagmiAddress])
+  },[batchGetLoan, userInfo])
 
   useEffect(() => {
     if (error)
@@ -253,7 +247,7 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : startA ? "Waiting for Collateral" : "Depositing Collateral"}
+        {activeDone ? "Fulfilling Loan" : startA ? "Depositing Collateral" : "Waiting for Collateral"}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -395,12 +389,12 @@ const DepositingCollateral = () => {
             id={newLoanID}
           /> */}
           <LoanComplete
-            title={"Loan Complete"}
+            title={"Collateral Deposit Complete"}
             details={
-              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
+              "You have successfully increased your loan collateral."
             }
             id={newLoanID}
-          />
+          />          
         </ModalContainer>
       )}
       

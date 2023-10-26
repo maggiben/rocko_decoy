@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import { Dispatch, FC, useState } from "react";
 import ToggleBTN from "../toggleBTN/toggleBTN";
 import ModalContainer from "@/components/shared/modalContainer/modalContainer";
 import CollateralBufferAlerts from "./collateralBufferAlerts/collateralBufferAlerts";
+import { useAlert } from "@/context/alertContext/alertContext";
 
 interface Props {
   title: string;
@@ -10,13 +11,23 @@ interface Props {
 }
 
 const Alert: FC<Props> = ({ title, description, alertFor }) => {
-  const [toggleAlert, setToggleAlert] = useState(true);
+  const { aprAlertState, bufferAlertState } = useAlert();
+
+  const [toggleAlert, setToggleAlert] = useState<boolean | undefined>(
+    alertFor === "APR" && aprAlertState.length > 0
+      ? true
+      : alertFor === "collateralBuffer" && bufferAlertState.length > 0
+      ? true
+      : undefined
+  );
   const [openModalFor, setOpenModalFor] = useState("");
+
+  console.log(openModalFor);
 
   return (
     <>
-      <div className=" flex items-center justify-between gap-4 bg-[#F9F9F9] rounded-2xl p-4">
-        <div className="flex flex-col md:flex-row items-center gap-y-1 md:gap-2 ">
+      <div className=" flex items-center justify-between gap-4 bg-[#F9F9F9] rounded-2xl p-4 my-4">
+        <div className="flex flex-col md:flex-row items-center gap-2 ">
           <div className="w-10 h-10 rounded-full bg-[#EEEEEE] flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +54,9 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
         </div>
         <div className="flex  items-center gap-8">
           <button
-            onClick={() => setOpenModalFor(title)}
+            onClick={() => {
+              setOpenModalFor(`manage-${title}`);
+            }}
             type="button"
             className="text-[#2C3B8D] text-xs font-semibold py-2 px-3 bg-[#EEE] rounded-full"
           >
@@ -54,13 +67,17 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
               Alerts {toggleAlert ? "On" : "Off"}
             </p>
             <ToggleBTN
-              setToggleAlert={setToggleAlert}
+              setToggleAlert={
+                setToggleAlert 
+              }
               toggleAlert={toggleAlert}
+              setOpenModalFor={setOpenModalFor}
               title={
                 alertFor === "collateralBuffer"
                   ? "Turn off Collateral Buffer Alerts"
                   : "Turn off APR Alerts"
               }
+              alertFor={alertFor}
               description={
                 alertFor === "collateralBuffer"
                   ? "Are you sure you want to turn off Collateral Buffer alerts? This will delete any existing Collateral Buffer alerts."
@@ -79,6 +96,8 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
               title={title}
               description={description}
               alertFor={alertFor}
+              toggleAlert={!openModalFor.startsWith("manage")}
+              setToggleAlert={setToggleAlert }
             />
           </ModalContainer>
         </>

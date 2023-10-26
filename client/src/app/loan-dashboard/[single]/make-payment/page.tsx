@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
+import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet";
+import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
@@ -76,13 +77,14 @@ const termsFull: Term[] = [
 
 const MakePayment: FC = () => {
   const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
+
   const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
+
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
+
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
-  const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
   const currentBalance = parseFloat(router.get("balance") || "0");
   const collateral = parseFloat(router.get("collateral") || "0");
@@ -155,7 +157,7 @@ const MakePayment: FC = () => {
         },
         {
           description: "Liquidation Price (ETH)",
-          details: <span className="font-semibold text-sm">{liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}</span>,
+          details: <span className="font-semibold text-sm">$1,221.74</span>,
         },
       ],
     },
@@ -300,16 +302,16 @@ const MakePayment: FC = () => {
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
-              <ConnectWallet
-                btnTitle="Connect"
-                theme="light"
-                style={{
-                  background: paymentMethod === "ethereum" ? "#2C3B8D" : "#eee",
-                  color: paymentMethod === "ethereum" ? "#eee" : "#2C3B8D",
-                  borderRadius: "1.5rem",
-                  minWidth: "8rem",
-                }}
-              />
+              <button
+                disabled={paymentMethod !== "ethereum"}
+                className={`w-24 md:w-32 h-10 rounded-3xl  text-sm font-semibold ${
+                  paymentMethod === "ethereum"
+                    ? "text-[#eee] bg-[#2C3B8D]"
+                    : "bg-[#eee] text-[#2C3B8D]"
+                }`}
+              >
+                Connect
+              </button>
             </div>
           </div>
           {/* radio btn - 3*/}
@@ -403,13 +405,13 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
+                href={`/dashboard/${"invoice"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
-                    address && zerodevAccount ? "bg-blue" : "bg-blue/40"
+                    !connect ? "bg-blue" : "bg-blue/40"
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={!address || !zerodevAccount}
+                  disabled={connect}
                 >
                   Confirm
                 </button>
@@ -429,6 +431,10 @@ const MakePayment: FC = () => {
                 setOpenModalFor={setOpenModalFor}
                 setConnect={setConnect}
               />
+            )}
+
+            {modalStep === 1 && (
+              <LoanFinalized setOpenModalFor={setOpenModalFor} />
             )}
           </ModalContainer>
         </>

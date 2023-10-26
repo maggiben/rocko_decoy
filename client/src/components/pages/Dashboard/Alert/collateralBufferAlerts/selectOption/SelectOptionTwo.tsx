@@ -4,17 +4,23 @@ import { FiChevronDown } from "react-icons/fi";
 import { BsCheckLg } from "react-icons/bs";
 import { BufferAlertType } from "@/types/type";
 
-const people = [{ name: "Minute(s)" }, { name: "Hour(s)" }, { name: "Day(s)" }];
+const interval = [
+  { name: "Minute(s)" },
+  { name: "Hour(s)" },
+  { name: "Day(s)" },
+];
 
 export default function SelectOptionTwo({
   setCollateralBufferAlert,
+  scrollDown,
+  userSelected,
 }: {
-  setCollateralBufferAlert?: Dispatch<
-    SetStateAction<BufferAlertType>
-  >;
+  setCollateralBufferAlert?: Dispatch<SetStateAction<BufferAlertType>>;
+  scrollDown: () => void;
+  userSelected: string | undefined;
 }) {
-  const [selected, setSelected] = useState(people[1]);
-  const [click, setClick] = useState(false);
+  const [selected, setSelected] = useState(interval[1]);
+  const [click, setClick] = useState(userSelected ? true : false);
 
   useEffect(() => {
     if (click && setCollateralBufferAlert) {
@@ -31,11 +37,17 @@ export default function SelectOptionTwo({
   }, [setCollateralBufferAlert, click, selected]);
   return (
     <div className="w-full rounded-xl">
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox
+        value={userSelected ? userSelected : selected}
+        onChange={setSelected}
+      >
         <div className="relative">
           <Listbox.Button
             className="relative w-full cursor-default rounded-lg bg-white text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-300 sm:text-sm p-4 form-border"
-            onClick={() => setClick(true)}
+            onClick={() => {
+              scrollDown();
+              setClick(true);
+            }}
           >
             <span
               className={`block truncate ${
@@ -58,7 +70,7 @@ export default function SelectOptionTwo({
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50">
-              {people.map((person, personIdx) => (
+              {interval.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>

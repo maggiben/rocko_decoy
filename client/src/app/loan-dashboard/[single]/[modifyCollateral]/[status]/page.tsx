@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,6 +15,7 @@ import { NETWORK } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface DoneTracker {
   step: string;
@@ -24,8 +25,6 @@ const ModifyStatus = () => {
   const { status, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const buffer = parseFloat(router.get("buffer") || "0"); //! get the URL parameter payment value
-  const liquidationPrice = parseFloat(router.get("liquidationPrice") || "0"); //! get the URL parameter payment value
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
@@ -34,10 +33,11 @@ const ModifyStatus = () => {
   // Thirdweb for EOA
   const address = useAddress();
   const { wethToETH, depositZerodevAccount } = useSingleLoan();
+  const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
+  const { userInfo } = useZeroDev();
   const { chain } = useNetwork();
-  const { data } = useBalance({ address: zerodevAccount });
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } = useAddCollateral(payment);
   const { executeBatchBorrowCollateral, batchBorrowCollateral, success: borrowSuccess, txHash: borrowTxHash } = useBorrowCollateral(payment);
 
@@ -47,21 +47,14 @@ const ModifyStatus = () => {
 
   const [counter, setCounter] = useState(3); //! countdown
   const [progress, setProgress] = useState(0); //! showing the loader progress
-  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
-  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
-  const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
-  const initialize = async () => {
-    if (zerodevAccount) {
-      const result = await getLoanData(zerodevAccount);
-      if (result) {
-        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
-        console.log(active_loans[Number(loanIndex) - 1]);
-        setLoanData(active_loans[Number(loanIndex) - 1]);
-        setCollateral(active_loans[Number(loanIndex) - 1]?.collateral);
-      }
-    }
-  };
+  const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
+
+  const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
+
+  const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
+
+  const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
   const start = async () => {
     if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
@@ -69,22 +62,22 @@ const ModifyStatus = () => {
       toast.error("Invalid Network!");
       return;
     }
-    if (Number(data?.formatted) < payment) {
-      toast.error("Insufficient Collateral Balance!");
-      return;
-    }
 
     setStartA(true);
     // if add collateral
     if (status === "add") { 
+      if (Number(data?.formatted) < payment) {
+        toast.error("Insufficient Collateral Balance!");
+        return;
+      }
+
       const collateralReceived = await receiveCollateral();
       if (collateralReceived) {
         setADone();
+        setStartB(true);
 
         // batch transactions
         executeBatchAddCollateral();
-  
-        setStartB(true);
       } else {
         setError("A");
       }
@@ -133,7 +126,7 @@ const ModifyStatus = () => {
   const setADone = () => {
     setStartA(false); 
     setProgress(0);
-    setDoneTracker([...doneTracker, { step: "one" }]);
+    setDoneTracker([{ step: "one" }]);
   };
 
   const setError = (step: string) => {
@@ -147,20 +140,32 @@ const ModifyStatus = () => {
       "modifyCollateral",
       loanData?.id,
       0, false,
-      buffer, 
       status === "add" ? collateral + payment : collateral - payment, 
-      liquidationPrice
     );
 
-    setDoneTracker([...doneTracker, { step: "two" }]);
+    setDoneTracker([{step: "one"}, { step: "two" }]);
     setStartB(false);
     setActiveDone(true);
+    setCompleteModal(true);
+  };
+
+  const initialize = async () => {
+    if (userInfo) {
+      const result = await getLoanData(userInfo.email);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == 1);
+        if (active_loans.length > 0) {
+          setLoanData(active_loans[0]);
+          setCollateral(active_loans[0]?.collateral);
+        }        
+      }
+    }
   };
 
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount]);
+  }, [userInfo]);
 
   useEffect(() => {
     if (loanData && batchAddCollateral != undefined && batchBorrowCollateral != undefined)
@@ -203,43 +208,23 @@ const ModifyStatus = () => {
         }
       }, 60000);
 
-      return () => clearInterval(interval);
-    }
-  }, [startA, startB, counter]);
-  // for progressbar interface
+    return () => clearInterval(interval);
+  }, [counter, progress, progressTracker]);
   useEffect(() => {
-    if (startA) {
-      setProgressTracker(0);
-
-      const interval = setInterval(() => {
-        if (progress === 80) {
-          clearInterval(interval);
-        } else {
-          setProgress((prevProg) => {
-            return prevProg + 20;
-          });
-        }
-      }, 7000);
-
-      return () => clearInterval(interval);
+    {
+      progressTracker === 0 &&
+        progress === 100 &&
+        setDoneTracker([...doneTracker, { step: "one" }]);
     }
-    if (startB) {
-      setProgressTracker(1);
-
-      const interval = setInterval(() => {
-        if (progress === 80) {
-          clearInterval(interval);
-        } else {
-          setProgress((prevProg) => {
-            return prevProg + 20;
-          });
-        }
-      }, 7000);
-
-      return () => clearInterval(interval);
+    {
+      progressTracker === 1 &&
+        progress === 100 &&
+        setDoneTracker([...doneTracker, { step: "two" }]);
+      progressTracker === 1 && progress === 100 && setActiveDone(true);
     }
-  }, [startA, startB, progress]);
+  }, [progress, progressTracker]);
 
+  console.log(doneTracker);
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">

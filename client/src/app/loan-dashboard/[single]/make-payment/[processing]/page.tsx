@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useEffect, useState } from "react";
+import LoanComplete from "@/components/pages/depositing-collateral/loanComplete/loanComplete";
+import CircleProgressBar from "@/components/shared/CircleProgressBar/CircleProgressBar";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,7 +25,7 @@ interface DoneTracker {
 }
 
 const Processing = () => {
-  const { processing, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
+  const { processing } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
 
@@ -52,8 +54,13 @@ const Processing = () => {
 
   const [counter, setCounter] = useState(3); //! countdown
   const [progress, setProgress] = useState(0); //! showing the loader progress
+
   const [progressTracker, setProgressTracker] = useState(0); //! when progress will hit 100 then progressTracker is incremented by 1
+
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]); //! when progress will hit 100 and progressTracker is incremented by 1 then doneTracker is incremented by 1
+
+  const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
+
   const [completeModal, setCompleteModal] = useState(false); //! after clicking done btn completeModal popup shows
 
   const initialize = async () => {
@@ -121,7 +128,7 @@ const Processing = () => {
       loanData?.id,
       currentBalance - payment,
       currentBalance === payment ? false : true,
-      0, 0, 0
+      collateral
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -164,6 +171,28 @@ const Processing = () => {
   }, [fullySuccess, success, fullyTxHash, txHash]);
 
   // for timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (counter > 0) {
+        setCounter(counter - 1);
+        setProgress((prevProg) => {
+          if (prevProg === 100) {
+            setProgressTracker((prevProgTra) => {
+              return prevProgTra + 1;
+            });
+
+            return processing === "processing" ? 0 : 20;
+          } else {
+            return processing === "processing" ? prevProg + 50 : prevProg + 20;
+          }
+        });
+        console.log(progress);
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+      // for timer
   useEffect(() => {
     if (startA || startB) {
       const interval = setInterval(() => {
@@ -210,6 +239,7 @@ const Processing = () => {
       return () => clearInterval(interval);
     }
   }, [startA, startB, progress]);
+
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
@@ -329,14 +359,14 @@ const Processing = () => {
             <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
               <p
                 className={`${
-                  progressTracker === 1 || doneTracker[1]?.step === "two"
+                  progressTracker === 2 || doneTracker[2]?.step === "three"
                     ? "text-black"
                     : "text-gray-400"
                 }  text-sm font-medium`}
               >
                 Collateral Withdrawn to Your Account
               </p>
-              {doneTracker[1]?.step === "two" && (
+              {doneTracker[2]?.step === "three" && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -357,7 +387,7 @@ const Processing = () => {
                 </svg>
               )}
 
-              {progressTracker === 1 && !(doneTracker[1]?.step === "two") && (
+              {progressTracker === 2 && !(doneTracker[2]?.step === "three") && (
                 <CircleProgressBar
                   circleWidth={18}
                   radius={7}
@@ -377,13 +407,13 @@ const Processing = () => {
               details={
                 "You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "
               }
-              id={0}
+              id={2}
             />
           ) : (
             <LoanComplete
               title={"Payment Complete"}
               details={"You have successfully made a payment"}
-              id={Number(loanIndex)}
+              id={3}
             />
           )}
         </ModalContainer>

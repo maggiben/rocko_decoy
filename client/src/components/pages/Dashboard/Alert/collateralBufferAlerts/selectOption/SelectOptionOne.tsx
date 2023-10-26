@@ -3,15 +3,21 @@ import { Listbox, Transition } from "@headlessui/react";
 import { FiChevronDown } from "react-icons/fi";
 import { BsCheckLg } from "react-icons/bs";
 import { BufferAlertType } from "@/types/type";
-const people = [{ name: "Below" }, { name: "Above" }];
+const repeat = [{ name: "Below" }, { name: "Above" }];
 
 export default function SelectOptionOne({
   setCollateralBufferAlert,
+  alertFor,
+  userSelected,
 }: {
   setCollateralBufferAlert?: Dispatch<SetStateAction<BufferAlertType>>;
+  alertFor: "collateralBuffer" | "APR";
+  userSelected: string | undefined;
 }) {
-  const [selected, setSelected] = useState(people[0]);
-  const [click, setClick] = useState(false);
+  const [selected, setSelected] = useState(
+    repeat[alertFor === "collateralBuffer" ? 0 : 1]
+  );
+  const [click, setClick] = useState(userSelected ? true : false);
 
   useEffect(() => {
     if (click && setCollateralBufferAlert) {
@@ -25,11 +31,14 @@ export default function SelectOptionOne({
         };
       });
     }
-  }, [setCollateralBufferAlert, click, selected]);
+  }, [setCollateralBufferAlert, click, selected, userSelected]);
 
   return (
     <div className="w-full rounded-xl">
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox
+        value={userSelected ? userSelected : selected}
+        onChange={setSelected}
+      >
         <div className="relative">
           <Listbox.Button
             className="p-4 relative w-full cursor-default rounded-lg bg-white text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-300 sm:text-sm form-border"
@@ -56,7 +65,7 @@ export default function SelectOptionOne({
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute mt-1 ml-1 max-h-60 w-[98%] overflow-auto rounded-md bg-white text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50">
-              {people.map((person, personIdx) => (
+              {repeat.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>

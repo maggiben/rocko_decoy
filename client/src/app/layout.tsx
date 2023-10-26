@@ -5,7 +5,8 @@ import LoneProvider from "@/context/loanContext/loanContext";
 import Providers from "./Providers";
 import { Toaster } from 'react-hot-toast';
 import Footer from "../../../ui-lib/Footer/Footer";
-import Header from "../../../ui-lib/Header/Header";
+import Header from "@/components/chips/Header/Header";
+
 
 const inter = Inter({ subsets: ["latin"] });
 

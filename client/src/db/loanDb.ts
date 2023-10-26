@@ -8,21 +8,19 @@ export const useLoanDB = () => {
         lending_protocol: string, 
         loan_active: boolean,
         loan_asset: string,
-        outstanding_balance: Number,
-        collateral: Number,
-        liquidation_price: Number,
-        collateral_buffer: Number,
+        outstanding_balance: number,
+        collateral: number,
+        exist: boolean
     ) => {
         const loanObject = {
-            user: user, 
+            user: user,
             transaction_hash: transaction_hash,
             lending_protocol: lending_protocol,
             loan_active: Number(loan_active),
             loan_asset: loan_asset,
             outstanding_balance: outstanding_balance,
             collateral: collateral,
-            liquidation_price: liquidation_price,
-            collateral_buffer: collateral_buffer,
+            exist: exist
         };
         console.log("loanObject", loanObject);
         axios.post(`${BACKEND_URL}/add`, loanObject).then((res) => {
@@ -31,7 +29,7 @@ export const useLoanDB = () => {
         });
     }
     
-    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, buffer: number, collateral: number, liquidation_price: number) => {
+    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number) => {
         const updateObject = updateType === "repay" ?
         {
             updateType: updateType,
@@ -42,9 +40,7 @@ export const useLoanDB = () => {
         {
             updateType: updateType,
             id: id, 
-            buffer: buffer,
             collateral: collateral,
-            liquidation_price: liquidation_price,
         };
         console.log("updateObject-----", updateObject);
         axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {

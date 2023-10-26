@@ -9,12 +9,16 @@ import { IoMdCall } from "react-icons/io";
 import notification from "@/assets/notifications_active.svg";
 import remove from "@/assets/delete.svg";
 import { useAlert } from "@/context/alertContext/alertContext";
+import { DELETE_ALERT } from "@/constant/constant";
+import { AprAlertType, BufferAlertType } from "@/types/type";
 
 interface Props {
   setOpenModalFor: Function;
   title: string;
   description: string;
   alertFor: "collateralBuffer" | "APR";
+  toggleAlert?: boolean;
+  setToggleAlert: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
 const CollateralBufferAlerts: FC<Props> = ({
@@ -22,9 +26,51 @@ const CollateralBufferAlerts: FC<Props> = ({
   title,
   description,
   alertFor,
+  toggleAlert,
+  setToggleAlert,
 }) => {
-  const [next, setNext] = useState(false);
-  const { aprAlertState,bufferAlertState } = useAlert();
+  const [next, setNext] = useState(toggleAlert || false);
+  const {
+    aprAlertState,
+    bufferAlertState,
+    aprAlertDispatch,
+    bufferAlertDispatch,
+  } = useAlert();
+
+  const handleCloseButton = () => {
+    setToggleAlert(
+      alertFor === "APR" && aprAlertState.length > 0
+        ? true
+        : alertFor === "collateralBuffer" && bufferAlertState.length > 0
+        ? true
+        : undefined
+    );
+    setOpenModalFor("");
+  };
+
+  const handleDelete = (index: number) => {
+    console.log(index, alertFor);
+    if (alertFor === "APR") {
+      aprAlertDispatch({ type: DELETE_ALERT, index: index });
+    } else {
+      bufferAlertDispatch({ type: DELETE_ALERT, index: index });
+    }
+  };
+
+  const [forUpdate, setForUpdate] = useState<
+    BufferAlertType | AprAlertType | undefined
+  >();
+
+  const handleForUpdate = (
+    index: number,
+    alertType: BufferAlertType | AprAlertType
+  ) => {
+    setForUpdate(alertType);
+    setNext(true);
+  };
+
+  console.log(forUpdate)
+
   return (
     <ModalContent>
       {!next ? (
@@ -33,7 +79,7 @@ const CollateralBufferAlerts: FC<Props> = ({
             <h4 className="text-2xl font-semibold font-inter">{title}</h4>
             <div>
               <button
-                onClick={() => setOpenModalFor("")}
+                onClick={handleCloseButton}
                 className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
               >
                 <Image
@@ -61,15 +107,19 @@ const CollateralBufferAlerts: FC<Props> = ({
           {/* //!----------------------------------------------------------------- */}
           {/* //!----------------------------------------------------------------- */}
           <div className="p-4 form-border rounded-2xl mb-6 h-full ">
-            <div className="overflow-auto max-h-[45vh]">
-              {alertFor==='APR'&& aprAlertState.length > 0 &&
+            <div className="overflow-auto max-h-[45vh] alert-container">
+              {alertFor === "APR" &&
+                aprAlertState.length > 0 &&
                 aprAlertState.map((aprAlert, index) => (
                   <Fragment key={index}>
-                    {/* //!Call&Sms-alert-start */}
+                    {/* //!both Call&Sms-alert-start */}
                     {aprAlert.alertMethods.email &&
                     aprAlert.alertMethods.sms ? (
                       <>
-                        <div className="flex items-center gap-x-3">
+                        <div
+                          onClick={() => handleForUpdate(index, aprAlert)}
+                          className="flex items-center gap-x-3 cursor-pointer"
+                        >
                           <div className="flex">
                             <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
                               <AiOutlineMail className="h-5 w-5 text-[#323232]" />
@@ -94,17 +144,19 @@ const CollateralBufferAlerts: FC<Props> = ({
                               className="w-full"
                             />
                             <p className="text-xs font-[500] whitespace-nowrap">
-                              &quot;
                               {aprAlert.currentInterestRate.position ===
                               "Above" ? (
                                 <>&gt;</>
                               ) : (
                                 <>&lt;</>
                               )}
-                              &quot;{aprAlert.currentInterestRate.percentage}
+                              {aprAlert.currentInterestRate.percentage}
                             </p>
                           </div>
-                          <div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(index)}
+                          >
                             <Image
                               src={remove}
                               alt="delete"
@@ -118,9 +170,13 @@ const CollateralBufferAlerts: FC<Props> = ({
                         <hr className="my-4" />
                       </>
                     ) : (
+                      // email or sms alert
                       <>
                         {/* //!email-alert-start */}
-                        <div className="flex items-center gap-x-3">
+                        <div
+                          onClick={() => handleForUpdate(index, aprAlert)}
+                          className="flex items-center gap-x-3 cursor-pointer"
+                        >
                           <div className="rounded-full bg-[#EEE] p-2 w-max">
                             {aprAlert.alertMethods.email ? (
                               <AiOutlineMail className="h-5 w-5 text-[#323232]" />
@@ -157,7 +213,10 @@ const CollateralBufferAlerts: FC<Props> = ({
                               {aprAlert.currentInterestRate.percentage}
                             </p>
                           </div>
-                          <div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(index)}
+                          >
                             <Image
                               src={remove}
                               alt="delete"
@@ -176,14 +235,18 @@ const CollateralBufferAlerts: FC<Props> = ({
                     <hr className="my-4" />
                   </Fragment>
                 ))}
-              { alertFor==='collateralBuffer' && bufferAlertState.length > 0 &&
+              {alertFor === "collateralBuffer" &&
+                bufferAlertState.length > 0 &&
                 bufferAlertState.map((bufferAlert, index) => (
                   <Fragment key={index}>
                     {/* //!Call&Sms-alert-start */}
                     {bufferAlert.alertMethods.email &&
                     bufferAlert.alertMethods.sms ? (
                       <>
-                        <div className="flex items-center gap-x-3">
+                        <div
+                          onClick={() => handleForUpdate(index, bufferAlert)}
+                          className="flex items-center gap-x-3 cursor-pointer"
+                        >
                           <div className="flex">
                             <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
                               <AiOutlineMail className="h-5 w-5 text-[#323232]" />
@@ -208,17 +271,19 @@ const CollateralBufferAlerts: FC<Props> = ({
                               className="w-full"
                             />
                             <p className="text-xs font-[500] whitespace-nowrap">
-                              &quot;
                               {bufferAlert.currentCollateralBuffer.position ===
                               "Above" ? (
                                 <>&gt;</>
                               ) : (
                                 <>&lt;</>
-                              )}
-                              &quot;{bufferAlert.currentCollateralBuffer.percentage}
+                              )}{" "}
+                              {bufferAlert.currentCollateralBuffer.percentage}
                             </p>
                           </div>
-                          <div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(index)}
+                          >
                             <Image
                               src={remove}
                               alt="delete"
@@ -234,7 +299,10 @@ const CollateralBufferAlerts: FC<Props> = ({
                     ) : (
                       <>
                         {/* //!email-alert-start */}
-                        <div className="flex items-center gap-x-3">
+                        <div
+                          onClick={() => handleForUpdate(index, bufferAlert)}
+                          className="flex items-center gap-x-3 cursor-pointer"
+                        >
                           <div className="rounded-full bg-[#EEE] p-2 w-max">
                             {bufferAlert.alertMethods.email ? (
                               <AiOutlineMail className="h-5 w-5 text-[#323232]" />
@@ -271,7 +339,10 @@ const CollateralBufferAlerts: FC<Props> = ({
                               {bufferAlert.currentCollateralBuffer.percentage}
                             </p>
                           </div>
-                          <div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(index)}
+                          >
                             <Image
                               src={remove}
                               alt="delete"
@@ -291,7 +362,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                   </Fragment>
                 ))}
             </div>
-            <hr className="my-4" />
+
             {/* //!Create-alert-start */}
             <div
               onClick={() => setNext(true)}
@@ -303,9 +374,19 @@ const CollateralBufferAlerts: FC<Props> = ({
               <p className="grow">Create new alert</p>
               <AiOutlineRight className="h-5 w-5 text-[#999A9B]" />
             </div>
-            {/* //!Create-alert-start */}
+
+            {/* //!Create-alert-end */}
             {/* //!----------------------------------------------------------------- */}
             {/* //!----------------------------------------------------------------- */}
+          </div>
+          <div className="">
+            <button
+              // type="submit"
+              onClick={handleCloseButton}
+              className={`py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]`}
+            >
+              Done
+            </button>
           </div>
         </>
       ) : (
@@ -315,6 +396,8 @@ const CollateralBufferAlerts: FC<Props> = ({
           title={title}
           setNext={setNext}
           alertFor={alertFor}
+          setToggleAlert={setToggleAlert}
+          forUpdate={forUpdate}
         />
       )}
     </ModalContent>

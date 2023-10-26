@@ -2,17 +2,17 @@ import React from "react"
 
 const Footer = () => {
   return (
-    <footer class="footer">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-5">
-            <div class="copyright">
+    <footer className="footer">
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col-md-5">
+            <div className="copyright">
               <p>&copy; Copyright 2023. All Rights Reserved.</p>
             </div>
           </div>
-          <div class="col-md-7">
-            <div class="footer__right">
-              <ul class="footer__menu">
+          <div className="col-md-7">
+            <div className="footer__right">
+              <ul className="footer__menu">
                 {/* <li><a href="/blog">Blog</a></li> */}
                 <li>
                   <a href="/terms">Terms of Service</a>
