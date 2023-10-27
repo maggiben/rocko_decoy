@@ -29,6 +29,10 @@ const MakePaymentModal = ({
   const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
   const outstanding_balance = balanceFloat - inputFloat;
 
+  const handleDecimalsOnValue = (value: any) => {
+    const regex = /([0-9]*[\.]{0,1}[0-9]{0,6})/s;
+    return value.match(regex)[0];
+  };
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -38,12 +42,12 @@ const MakePaymentModal = ({
       parseFloat(inputValue?.replace(/,/g, "") || "0") >
       parseFloat(currentBalance.replace(/,/g, "") || "0")
     ) {
-      setInputNumber(currentBalance.replace(/,/g, ""));
+      setInputNumber(handleDecimalsOnValue(currentBalance.replace(/,/g, "")));
 
       return;
     }
 
-    setInputNumber(inputValue);
+    setInputNumber(handleDecimalsOnValue(inputValue));
 
     setChangeInputType("number"); /* show number without commas */
     setActiveInputField(true);
@@ -176,11 +180,11 @@ const MakePaymentModal = ({
           {/* after putting a value on inputfield the number(based on user's intention like "add" or "withdraw") will show */}
           <p className="font-semibold text-right">
             {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-              ? `${parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0")} USDC`
+              ? `${financial(parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0"), 6)} USDC`
               : "--"}
             <span className="block text-gray-600 text-sm font-normal">
               {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-                ? `$${parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0")}`
+                ? `$${financial(parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0"), 6)}`
                 : "--"}
             </span>
           </p>

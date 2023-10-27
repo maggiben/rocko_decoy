@@ -37,11 +37,16 @@ const ModifyWallet = ({
       Number(collateral) + (inputFloat || 0) : 
       Number(collateral) - (inputFloat || 0);
 
+  const handleDecimalsOnValue = (value: any) => {
+    const regex = /([0-9]*[\.]{0,1}[0-9]{0,18})/s;
+    return value.match(regex)[0];
+  };
+
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const inputValue = event.target.value;
-    setInputNumber(inputValue);
+    setInputNumber(handleDecimalsOnValue(inputValue));
 
     setChangeInputType("number"); /* show number without commas */
     setActiveInputField(true);
@@ -154,16 +159,16 @@ const ModifyWallet = ({
           }}
           onBlur={(event) => {
             /* on onBlur set the number */
-            const valueWithoutCommas = parseFloat(
-              inputNumber?.replace(/,/g, "") || "0"
-            );
-            setInputNumber(
-              new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(valueWithoutCommas)
-            );
+            // const valueWithoutCommas = parseFloat(
+            //   inputNumber?.replace(/,/g, "") || "0"
+            // );
+            // setInputNumber(
+            //   new Intl.NumberFormat("en-US", {
+            //     maximumFractionDigits: 100,
+            //   }).format(valueWithoutCommas)
+            // );
 
-            setChangeInputType("text");
+            // setChangeInputType("text");
           }}
           onChange={handleBorrowValueChange}
         />

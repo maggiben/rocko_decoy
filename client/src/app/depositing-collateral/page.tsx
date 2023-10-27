@@ -235,7 +235,7 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : startA ? "Depositing Collateral" : "Waiting for Collateral"}
+        {activeDone ? "Fulfilling Loan" : startA ? "Waiting for Collateral" : "Depositing Collateral"}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -377,9 +377,9 @@ const DepositingCollateral = () => {
             id={newLoanID}
           /> */}
           <LoanComplete
-            title={"Collateral Deposit Complete"}
+            title={"Loan Complete"}
             details={
-              "You have successfully increased your loan collateral."
+              "You loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
             id={newLoanID}
           />          
