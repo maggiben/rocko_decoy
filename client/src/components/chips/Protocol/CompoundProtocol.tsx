@@ -57,7 +57,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
     useEffect(() => {
         updateLoanData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loanData])
+    }, [])
 
     return (
     <div className={selectProtocol === name ? "py-8 rounded-t-lg bg-zinc-50" : "py-8"}>
@@ -102,7 +102,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             {/* protocol info */}
             <div className="py-4 px-6 w-full mt-4">
             <div className="flex items-start justify-between gap-4 w-full flex-wrap">
-                <div className="flex-1 min-w-[205px]" key="protocol-info-1">
+                <div className="flex-1 min-w-[205px]">
                     {/* info title */}
                     <div className="flex items-center gap-1">
                     <p className="font-medium text-blackPrimary">
@@ -112,7 +112,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                     </div>
                     {/* info */}
                     <div className="py-3 space-y-3">
-                    <div className="" key={"30 Day"}>
+                    <div className="">
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">30 Day</span>
                         </p>
@@ -120,7 +120,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             {financial(loanData?.currentAPR * 30/365, 2)}%
                         </p>
                     </div>                
-                    <div className="" key={"30 Day"}>
+                    <div className="">
                         <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                             <span className="">365 Day</span>
                         </p>
@@ -130,7 +130,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                     </div>                   
                     </div>
                 </div>            
-                <div className="flex-1 min-w-[205px]" key="protocol-info-1">
+                <div className="flex-1 min-w-[205px]">
                     {/* info title */}
                     <div className="flex items-center gap-1">
                     <p className="font-medium text-blackPrimary">
@@ -168,7 +168,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                     </div>                   
                     </div>
                 </div>
-                <div className="flex-1 min-w-[205px]" key="protocol-info-1">
+                <div className="flex-1 min-w-[205px]">
                     {/* info title */}
                     <div className="flex items-center gap-1">
                     <p className="font-medium text-blackPrimary">Rewards</p>

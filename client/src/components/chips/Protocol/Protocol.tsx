@@ -64,7 +64,7 @@ const Protocol: FC<ProtocolProps> = ({
         <div className="py-4 px-6 w-full mt-4">
           <div className="flex items-start justify-between gap-4 w-full flex-wrap">
             {protocolInfos?.map((protocolInfo) => (
-              <div className="flex-1 min-w-[205px]" key={id}>
+              <div className="flex-1 min-w-[205px]" key={protocolInfo.id}>
                 {/* info title */}
                 <div className="flex items-center gap-1">
                   <p className="font-medium text-blackPrimary">

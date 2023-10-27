@@ -19,6 +19,7 @@ import { useZeroDev } from "@/hooks/useZeroDev";
 interface DoneTracker {
   step: string;
 }
+const gasFee = 0.0001;
 
 const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
@@ -49,8 +50,9 @@ const DepositingCollateral = () => {
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
   const { data } = useBalance({ address: address as `0x${string}` });
+  const { data: wagmiData } = useBalance({ address: wagmiAddress as `0x${string}` });
   const { chain } = useNetwork();
-  const { executeBatchGetLoan, batchGetLoan, success, txHash } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(Number(loanData?.collateralNeeded), loanData?.borrowing);
 
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
@@ -76,7 +78,7 @@ const DepositingCollateral = () => {
     }
   }
 
-  const receiveCollateral = async () => {
+  const receiveCollateral = async (): Promise<any> => {
     if (!wagmiAddress || !loanData) return null;
 
     const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded, "ETH");
@@ -141,6 +143,9 @@ const DepositingCollateral = () => {
   },[batchGetLoan, userInfo])
 
   useEffect(() => {
+    if (error)
+      console.log(error)
+
     if (success) {
       console.log("---transactionHash of batchTransactions---", txHash);
       toast(() => (
@@ -158,7 +163,7 @@ const DepositingCollateral = () => {
       setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success, txHash]);
+  }, [success, txHash, error]);
 
   // for timer
   useEffect(() => {
