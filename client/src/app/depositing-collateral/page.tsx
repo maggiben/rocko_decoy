@@ -379,7 +379,7 @@ const DepositingCollateral = () => {
           <LoanComplete
             title={"Loan Complete"}
             details={
-              "You loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
+              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
             id={newLoanID}
           />          
