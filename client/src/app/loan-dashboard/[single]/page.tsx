@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import compund from "@/assets/coins/Compound (COMP).svg";
+import compound from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import ToggleBtn from "@/components/chips/ToggleBtn/ToogleBtn";
@@ -10,7 +10,6 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";
-import { useAccount } from "wagmi";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useCompPrice } from "@/hooks/usePrice";
@@ -20,8 +19,8 @@ import { useZeroDev } from "@/hooks/useZeroDev";
 
 const headings = [
   {
-    img: compund,
-    text: "Compund -",
+    img: compound,
+    text: "Compound -",
   },
 
   {
@@ -346,7 +345,7 @@ function SinglePage() {
                 <Image
                   width={24}
                   height={24}
-                  src={compund}
+                  src={compound}
                   alt=""
                   className="w-6 h-6"
                 />
