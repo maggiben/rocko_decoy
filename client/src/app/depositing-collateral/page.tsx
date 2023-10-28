@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -15,11 +16,10 @@ import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
 import { LoanData } from "@/types/type";
 import { useZeroDev } from "@/hooks/useZeroDev";
-
 interface DoneTracker {
   step: string;
 }
-const gasFee = 0.001;
+const gasFee = 0.0001;
 
 const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
@@ -37,7 +37,7 @@ const DepositingCollateral = () => {
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
-  const [completeModal, setCompleteModal] = useState(false);
+  const [completeModal, setCompleteModal] = useState(false);  
   const [newLoanID, setNewLoanID] = useState<number>(0);
 
   // get User info
@@ -50,8 +50,9 @@ const DepositingCollateral = () => {
   // Wagmi for ZeroDev Smart wallet
   const { address : wagmiAddress } = useAccount();
   const { data } = useBalance({ address: address as `0x${string}` });
+  const { data: wagmiData } = useBalance({ address: wagmiAddress as `0x${string}` });
   const { chain } = useNetwork();
-  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(Number(loanData?.collateralNeeded), loanData?.borrowing);
 
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
@@ -243,11 +244,10 @@ const DepositingCollateral = () => {
     }
   }, [progress, progressTracker, doneTracker]);
 
-  //
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : startA ? "Depositing Collateral" : "Waiting for Collateral"}
+        {activeDone ? "Fulfilling Loan" : startA ? "Waiting for Collateral" : "Depositing Collateral"}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -279,8 +279,8 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
@@ -318,8 +318,8 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
@@ -338,16 +338,14 @@ const DepositingCollateral = () => {
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
-                progressTracker === 1 || doneTracker[1]?.step === "two"
-                // progressTracker === 2 || doneTracker[2]?.step === "three"
+                progressTracker === 2 || doneTracker[2]?.step === "three"
                   ? "text-black"
                   : "text-gray-400"
               }`}
             >
               Loan Delivered to Your Account
             </p>
-            {/* {doneTracker[2]?.step === "three" && ( */}
-            {doneTracker[1]?.step === "two" && (
+            {doneTracker[2]?.step === "three" && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -360,15 +358,14 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
               </svg>
             )}
-            {/* {progressTracker === 2 && !(doneTracker[2]?.step === "three") && ( */}
-            {progressTracker === 1 && !(doneTracker[1]?.step === "two") && (
+            {progressTracker === 2 && !(doneTracker[2]?.step === "three") && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -381,7 +378,7 @@ const DepositingCollateral = () => {
       </section>
       {completeModal && (
         <ModalContainer>
-          {/* <LoanComplete
+          <LoanComplete
             title={"Loan Complete"}
             details={
               "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
@@ -389,15 +386,15 @@ const DepositingCollateral = () => {
             id={newLoanID}
           /> */}
           <LoanComplete
-            title={"Collateral Deposit Complete"}
+            title={"Loan Complete"}
             details={
-              "You have successfully increased your loan collateral."
+              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             }
             id={newLoanID}
-          />          
+          />      
         </ModalContainer>
       )}
-      
+
       {/* footer */}
       <div className="h-20 w-full"></div>
       <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
@@ -419,11 +416,20 @@ const DepositingCollateral = () => {
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
+              /*   onClick={prevStep}
+                className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
+                  currentStep === 0 ? "bg-grayPrimary" : "bg-gray-200"
+                }`}
+                disabled={currentStep === 0} */
+              >
+                {/* Back */}
+              </button>
+              <button
                 onClick={() => setCompleteModal(true)}
                 className={`font-semibold  text-xs md:text-sm ${
-                  (startA || startB) ? "bg-blue/40" : "bg-blue"
-                } py-[10px] px-6 rounded-full text-white`}
-                disabled={startA || startB}
+                  activeDone ? "bg-blue" : "bg-blue/40"
+                } py-[10px]  px-6 rounded-full text-white `}
+                disabled={!activeDone}
               >
                 Done
               </button>

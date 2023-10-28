@@ -1,19 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
+import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet";
 import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useParams, useSearchParams } from "next/navigation";
-import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
-import { useAccount } from "wagmi";
-import { useSingleLoan } from "@/contract/single";
-import financial from "@/utility/currencyFormate";
 
 interface InnerInfo {
   description: string;
@@ -53,24 +48,9 @@ const ModifyCollateral: React.FC = () => {
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
 
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
-  const [collateralPrice, setCollateralPrice] = useState<number>(0);
-  const basicRouter = useParams();
+
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const amount = router.get("try"); //! get the URL parameter value
-  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
-  const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const basicCollateral = parseFloat(router.get("collateral") || "0");
-  const currentBalance = parseFloat(router.get("balance") || "0");
-
-  const new_collateral = amount === "add" ? 
-                basicCollateral + payment : 
-                basicCollateral - payment;
-
-  const { address : zerodevAccount } = useAccount();
-  const address = useAddress();
-  const { getETHPrice, getLiquidationPrice, getBuffer } = useSingleLoan();
-  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
-  const [ buffer, setBuffer ] = useState<any>();
 
   const invoice: Info[] = [
     {
@@ -79,42 +59,28 @@ const ModifyCollateral: React.FC = () => {
     },
     {
       description: "Collateral Amount",
-      details: `${financial(payment, 2)} ETH`,
-      subDetails: `~$${financial(payment * collateralPrice, 2)}`,
+      details: "0.12 ETH",
+      subDetails: `~$209.45`,
     },
     {
       description: "Projected values after collateral modification",
       subDescription: [
         {
           description: "Total Collateral",
-          details: `${financial(new_collateral, 2)} ETH`,
-          subDetails: `~$${financial(new_collateral * collateralPrice, 2)}`,
+          details: `${amount === "add" ? "1.96 ETH" : "1.72 ETH"}`,
+          subDetails: `${amount === "add" ? "~$2,918.82" : "~$2,425.64"}`,
         },
         {
           description: "Collateral Buffer",
-          details: `${financial(buffer * 100)}%`,
+          details: `${amount === "add" ? "107%" : "96%"}`,
         },
         {
           description: "Liquidation Price (ETH)",
-          details: `$${financial(liquidationPrice, 2)}`,
+          details: `${amount === "add" ? "$1,221.74" : "$1,412.94"}`,
         },
       ],
     },
   ];
-
-  useEffect(() => {
-    getETHPrice()
-    .then(_price => setCollateralPrice(_price))
-    .catch(e => console.log(e));
-
-    getLiquidationPrice(currentBalance, new_collateral)
-    .then(_price => setLiquidationPrice(_price))
-    .catch(e => console.log(e));
-
-    getBuffer(currentBalance, new_collateral)
-    .then(_buffer => setBuffer(_buffer))
-    .catch(e => console.log(e));    
-  });
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -336,7 +302,7 @@ const ModifyCollateral: React.FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/${loanIndex}?active=true`}>
+              <Link href={`/dashboard/invoice`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -346,7 +312,7 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"modify_collateral"}/${amount}?payment=${payment}`}
+                href={`/dashboard/${"invoice"}/${"modify_collateral"}/${amount}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

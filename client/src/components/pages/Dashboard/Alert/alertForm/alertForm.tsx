@@ -1,5 +1,5 @@
 import closeIcon from "@/assets/Close.svg";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import SelectOptionOne from "../collateralBufferAlerts/selectOption/SelectOptionOne";
 import { IoIosCheckbox, IoMdCall } from "react-icons/io";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
@@ -10,6 +10,7 @@ import { AlertFormProps, AprAlertType, BufferAlertType } from "@/types/type";
 import SelectOptionTwo from "../collateralBufferAlerts/selectOption/SelectOptionTwo";
 import { useAlert } from "@/context/alertContext/alertContext";
 import Link from "next/link";
+import { UPDATE_ALERT } from "@/constant/constant";
 
 interface Checked {
   email: boolean;
@@ -24,6 +25,7 @@ const AlertForm: FC<AlertFormProps> = ({
   alertFor,
   setToggleAlert,
   forUpdate,
+  updateIndex,
 }) => {
   const {
     aprAlertDispatch,
@@ -158,6 +160,52 @@ const AlertForm: FC<AlertFormProps> = ({
 
   const handleCollateralForm = () => {
     console.log(collateralBufferAlert);
+    if (forUpdate && alertFor === "APR") {
+      aprAlertDispatch({
+        type: UPDATE_ALERT,
+        index: updateIndex as number,
+        alert: {
+          alertMethods: {
+            email: collateralBufferAlert?.alertMethods?.email,
+            sms: collateralBufferAlert?.alertMethods?.sms,
+          },
+          currentInterestRate: {
+            percentage:
+              collateralBufferAlert?.currentCollateralBuffer?.percentage,
+            position: collateralBufferAlert?.currentCollateralBuffer?.position,
+          },
+          frequency: {
+            interval: collateralBufferAlert?.frequency?.interval,
+            repeat: collateralBufferAlert?.frequency?.repeat,
+          },
+        },
+      });
+      setNext(false);
+      return;
+    } else if (forUpdate && alertFor === "collateralBuffer") {
+      bufferAlertDispatch({
+        type: UPDATE_ALERT,
+        index: updateIndex as number,
+        alert: {
+          alertMethods: {
+            email: collateralBufferAlert?.alertMethods?.email,
+            sms: collateralBufferAlert?.alertMethods?.sms,
+          },
+          currentCollateralBuffer: {
+            percentage:
+              collateralBufferAlert?.currentCollateralBuffer?.percentage,
+            position: collateralBufferAlert?.currentCollateralBuffer?.position,
+          },
+          frequency: {
+            interval: collateralBufferAlert?.frequency?.interval,
+            repeat: collateralBufferAlert?.frequency?.repeat,
+          },
+        },
+      });
+      setNext(false);
+      return;
+    }
+
     if (alertFor === "APR") {
       aprAlertDispatch({
         type: "ADD_ALERT",
@@ -200,15 +248,25 @@ const AlertForm: FC<AlertFormProps> = ({
     setNext(false);
   };
 
-  // ! toggle alert and silent
+  // ! toggle alert and Sent!
   const handleToggleEmailAlertType = () => {
     setCollateralBufferAlert((prev) => {
       return {
         ...prev,
         emailAlertType:
-          prev.emailAlertType === "Test Alert" ? "Silent" : "Test Alert",
+          prev.emailAlertType === "Test Alert" ? "Sent!" : "Test Alert",
       };
     });
+
+    // This should say, “Sent!”. Also, please have it change back to “Test Alert” after two seconds
+    setTimeout(() => {
+      setCollateralBufferAlert((prev) => {
+        return {
+          ...prev,
+          emailAlertType:"Test Alert",
+        };
+      });
+    }, 2000);
   };
   // ! toggle alert and silent
   const handleToggleCallAlertType = () => {
@@ -216,9 +274,18 @@ const AlertForm: FC<AlertFormProps> = ({
       return {
         ...prev,
         callAlertType:
-          prev.callAlertType === "Test Alert" ? "Silent" : "Test Alert",
+          prev.callAlertType === "Test Alert" ? "Sent!" : "Test Alert",
       };
     });
+    // This should say, “Sent!”. Also, please have it change back to “Test Alert” after two seconds
+    setTimeout(() => {
+      setCollateralBufferAlert((prev) => {
+        return {
+          ...prev,
+          callAlertType: "Test Alert",
+        };
+      });
+    }, 2000);
   };
 
   //! close the modal
@@ -233,11 +300,6 @@ const AlertForm: FC<AlertFormProps> = ({
 
     setOpenModalFor("");
   };
-
-  useEffect(() => {
-    // console.log(forUpdate);
-    console.log(collateralBufferAlert);
-  }, [forUpdate, collateralBufferAlert]);
 
   return (
     <>
@@ -268,7 +330,7 @@ const AlertForm: FC<AlertFormProps> = ({
 
       <div
         ref={modalContentRef}
-        className="max-h-[50vh] overflow-auto mb-6 alert-container"
+        className="max-h-[50vh] overflow-auto mb-1 alert-container"
       >
         <p className="font-semibold mb-4">Select alert method(s)</p>
         <div className="p-4 form-border rounded-2xl mb-6">
@@ -283,12 +345,12 @@ const AlertForm: FC<AlertFormProps> = ({
               required
               ref={collateralEmailRef}
               readOnly
-              className="grow"
+              className="grow focus:outline-none cursor-default"
             />
             {collateralBufferAlert.alertMethods.email && (
               <button
                 onClick={handleToggleEmailAlertType}
-                className="bg-[#EEE] text-[#2C3B8D] rounded-3xl px-3 py-2 font-semibold text-xs"
+                className=" bg-[#EEE] text-[#2C3B8D] rounded-full border border-[#2C3B8D] px-3 py-2 font-semibold text-xs"
               >
                 {collateralBufferAlert.emailAlertType}
               </button>
@@ -338,12 +400,13 @@ const AlertForm: FC<AlertFormProps> = ({
               required
               defaultValue={"555.555.5555"}
               ref={collateralCallRef}
-              className="grow"
+              readOnly
+              className="grow focus:outline-none cursor-default"
             />
             {collateralBufferAlert.alertMethods.sms && (
               <button
                 onClick={handleToggleCallAlertType}
-                className="bg-[#EEE] text-[#2C3B8D] rounded-3xl px-3 py-2 font-semibold text-xs"
+                className=" bg-[#EEE] text-[#2C3B8D] rounded-full border border-[#2C3B8D] px-3 py-2 font-semibold text-xs"
               >
                 {collateralBufferAlert.callAlertType}
               </button>
@@ -419,7 +482,14 @@ const AlertForm: FC<AlertFormProps> = ({
                 className="w-full p-4 form-border rounded-lg number-input text-sm"
                 onInput={handleCollateralPercent}
               />
-              <span className={`text-gray-400 absolute right-4 text-lg top-4`}>
+              <span
+                className={`absolute right-4 text-lg top-4 ${
+                  collateralBufferAlert?.currentCollateralBuffer?.percentage !==
+                  undefined
+                    ? "text-black"
+                    : "text-gray-400"
+                }`}
+              >
                 %
               </span>
             </div>
@@ -471,7 +541,7 @@ const AlertForm: FC<AlertFormProps> = ({
             />
           </div>
         </div>
-        <div className="bg-[#F9F9F9] rounded-2xl p-4">
+        <div className="bg-[#F9F9F9] rounded-2xl p-4 mb-[6px]">
           <p className="text-sm">
             {/* //todo: For now it doesn’t need to link anywhere */}
             Your email and phone number can be updated via your{" "}
@@ -488,8 +558,9 @@ const AlertForm: FC<AlertFormProps> = ({
           // type="submit"
           onClick={handleCollateralForm}
           disabled={
-            collateralBufferAlert?.currentCollateralBuffer?.percentage !== 0 &&
-            collateralBufferAlert?.frequency?.repeat !== 0 &&
+            collateralBufferAlert?.currentCollateralBuffer?.percentage !==
+              undefined &&
+            collateralBufferAlert?.frequency?.repeat !== "" &&
             (collateralBufferAlert?.alertMethods?.email ||
               collateralBufferAlert?.alertMethods?.sms) &&
             collateralBufferAlert?.currentCollateralBuffer?.position !== "" &&
@@ -498,8 +569,9 @@ const AlertForm: FC<AlertFormProps> = ({
               : true
           }
           className={`py-[10px] px-6 rounded-3xl text-white font-semibold ${
-            collateralBufferAlert?.currentCollateralBuffer?.percentage !== 0 &&
-            collateralBufferAlert?.frequency?.repeat !== 0 &&
+            collateralBufferAlert?.currentCollateralBuffer?.percentage !==
+              undefined &&
+            collateralBufferAlert?.frequency?.repeat !== "" &&
             (collateralBufferAlert?.alertMethods?.email ||
               collateralBufferAlert?.alertMethods?.sms) &&
             collateralBufferAlert?.currentCollateralBuffer?.position !== "" &&

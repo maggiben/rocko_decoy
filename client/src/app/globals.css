@@ -8,6 +8,25 @@
   :root {
     font-family: "Inter var", sans-serif !important;
   }
+
+
+/* Common-style */
+.test {
+  @apply border-2 border-red-400;
+}
+
+/* Sign-in/up style */
+.auth {
+  min-height: calc(100vh - 62px);
+}
+.form-border {
+  @apply border-[1px] border-[#E2E2E2];
+}
+.form-focus {
+  @apply focus:outline-[#2C3B8D];
+}
+.eye-icon {
+  @apply h-5 w-5 ml-auto mr-4 -mt-8 cursor-pointer;
 }
 
 /* header style */
@@ -66,12 +85,12 @@
   color: white;
 }
 
-input[type='checkbox']:checked {
+input[type="checkbox"]:checked {
   -webkit-appearance: none;
 }
 
-input[type='checkbox'] {
-    background-color: transparent;
+input[type="checkbox"] {
+  background-color: transparent;
 }
 
 /* Add your custom styles here */
@@ -91,16 +110,14 @@ input[type='checkbox'] {
 } */
 
 .radio:checked::after {
-  content: '✔';
+  content: "✔";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 16px;
-  color: #2C3B8D;
+  color: #2c3b8d;
 }
-
-
 
 /* Add your custom styles here */
 .range {
@@ -108,12 +125,19 @@ input[type='checkbox'] {
   appearance: none;
   width: 100%;
   height: 6px;
-  background: linear-gradient(to right, #2C3B8D 0%, #2C3B8D 0%, gray 0%, gray 100%);
+  background: linear-gradient(
+    to right,
+    #2c3b8d 0%,
+    #2c3b8d 0%,
+    gray 0%,
+    gray 100%
+  );
   outline: none;
   transition: background 0.2s;
   border-radius: 5px;
   margin-top: 10px;
   cursor: pointer;
+  position: relative;
 }
 
 .range::-webkit-slider-thumb {
@@ -121,7 +145,7 @@ input[type='checkbox'] {
   appearance: none;
   width: 28px;
   height: 28px;
-  background: #2C3B8D;
+  background: #2c3b8d;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
@@ -130,24 +154,44 @@ input[type='checkbox'] {
 .range::-moz-range-thumb {
   width: 28px;
   height: 28px;
-  background: #2C3B8D;
+  background: #2c3b8d;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   z-index: 5;
 }
 
-.range::-webkit-slider-thumb::before{
-  content:'';
+.range::-webkit-slider-thumb::before {
+  content: "";
   position: absolute;
   width: 6px;
   height: 100px;
   z-index: 10;
   top: 30px;
   left: 50%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   background: #f10404;
 }
+
+.range::after {
+  content: "";
+  position: absolute;
+  width: 2.5rem;
+  height: 100%;
+  z-index: 10;
+  top: 50%;
+  right: calc(100% - 5px);
+  transform: translateY(-50%);
+  border-radius: 50px;
+  background: #2C3B8D;
+}
+
+@media (min-width: 768px) {
+  .range::after {
+    width: 5rem;
+  }
+}
+
 /* Hide the default number input arrows */
 .number-input::-webkit-inner-spin-button,
 .number-input::-webkit-outer-spin-button {
@@ -162,9 +206,29 @@ input[type='checkbox'] {
 
 /* loading */
 .circle-gradient {
-  fill: conic-gradient(from 0deg #276EF1 var(--fill-percentage, 0%), red var(--fill-percentage, 0%));
+  fill: conic-gradient(
+    from 0deg #276ef1 var(--fill-percentage, 0%),
+    red var(--fill-percentage, 0%)
+  );
 }
 
 .frame {
   clip-path: polygon(50% 30%, 0% 100%, 100% 100%);
+}
+
+/* !Alert-modal's Scrollbar */
+/* For WebKit browsers (e.g., Chrome, Safari) */
+.alert-container::-webkit-scrollbar {
+  width: 0px;
+}
+
+.alert-container::-webkit-scrollbar-thumb {
+  background-color: #bdbcbc;
+  border-radius: 5px;
+}
+
+/* For Firefox */
+.alert-container {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
 }

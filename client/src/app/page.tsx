@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 import { useAccount } from "wagmi";
@@ -26,51 +27,15 @@ const stepsName = [
   "Loan Summary",
 ];
 
-const net = (chains as { [key: string]: any })[NETWORK];
-
 export default function Home() {
-  const { address: zerodevAccount } = useAccount();
-  const address = useAddress();
-  const [isFinalized, setIsFinalized] = useState(false);
-  const [openModalFor, setOpenModalFor] = useState("");
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
-  
-  const { connect } = useConnect();
-  const { chains } = configureChains( [net], [publicProvider()] );
-  const auth0Connector = new Auth0WalletConnector({chains, options: {
-    projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || "",
-    shimDisconnect: true
-  }});
 
-  const loginZerodev = async () => {
-    await connect({
-      connector: auth0Connector
-    });
-  }
-
-  const nextStep = async () => {
-    if (!zerodevAccount && currentStep == 2) {
-      toast.error("Please log in to finalize your loan!");
-      await loginZerodev();
-      return;
-    };
-
-    if (loanData?.nextValidation && setLoanData) {
-      setLoanData((prevLoanData) => ({
-        ...prevLoanData,
-        activeNextButton: false,
-      }));
-      return;
-    }
-
-    if (currentStep == loanSteps.length - 1)
-      setIsFinalized(true);
-
+  const nextStep = () => {
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
-      
+     
       setCurrentStep(currentStep + 1);
-        if (setLoanData) {
+       if (setLoanData) {
         setLoanData((prevLoanData) => ({
           ...prevLoanData,
           activeNextButton: false,
@@ -87,24 +52,8 @@ export default function Home() {
   const CurrentStepComponent = Steps[currentStep];
   const currentData = loanSteps[currentStep];
 
-  const isValidateNextButton = () => {
-    if (currentStep == loanSteps.length - 1) {
-      const isValidate = loanData?.paymentMethod === "ethereum" ? 
-          address != null :
-          loanData?.paymentMethod != "";
-
-      return isValidate;
-    }
-
-    return loanData?.activeNextButton;
-  }
-
-  // keep always scroll as top
-  useEffect(() => {
-    if (typeof window !== "undefined")
-      window.scrollTo(0, 0);
-  }, [currentStep]);
-
+  // console.log(currentStep, loanSteps.length);
+  // console.log(loanData?.activeNextButton)
   return (
     <>
       {<CurrentStepComponent {...currentData} />}
@@ -123,7 +72,7 @@ export default function Home() {
         <div className="container mx-auto">
           <div className="p-4 flex items-center justify-between  ">
             <p className="text-blackPrimary text-xs md:text-sm font-medium">
-              {stepsName[currentStep]}: {currentStep + 1}/{loanSteps.length} 
+              {stepsName[currentStep]}: {currentStep + 1}/ {loanSteps.length} 
               {/* //todo remove it later */}
             {loanData?.activeNextButton?.valueOf()}
             </p>
@@ -140,9 +89,9 @@ export default function Home() {
               <button
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
-                  isValidateNextButton() ? "bg-blue" : "bg-blue/40"
-                } py-[10px]  px-6 rounded-full text-white`}
-                disabled={!isValidateNextButton()}
+                  loanData?.activeNextButton ? "bg-blue" : "bg-blue/40"
+                } py-[10px]  px-6 rounded-full text-white `}
+                disabled={!loanData?.activeNextButton}
               >
                 {currentStep === loanSteps.length - 1
                   ? "Finalize Loan"
@@ -152,12 +101,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {isFinalized && (
-        <ModalContainer>
-          <LoanFinalized setOpenModalFor={setOpenModalFor} />
-        </ModalContainer>
-      )}
     </>
   );
 }

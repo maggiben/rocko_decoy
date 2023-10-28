@@ -8,13 +8,8 @@ import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet"
 import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
-import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
-import { useAccount } from "wagmi";
-import { useSingleLoan } from "@/contract/single";
-import financial from "@/utility/currencyFormate";
-import { useZeroDev } from "@/hooks/useZeroDev";
+import { useSearchParams } from "next/navigation";
+import HoverTooltip from "@/components/shared/tooltip/tooltip";
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -86,16 +81,8 @@ const MakePayment: FC = () => {
 
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const currentBalance = parseFloat(router.get("balance") || "0");
-  const collateral = parseFloat(router.get("collateral") || "0");
+  const currentBalance = parseFloat(router.get("currentBalance") || "0"); //! get the URL parameter currentBalance value
   const amount = "add"; //! get the URL parameter amount value
-
-  const { address : zerodevAccount } = useAccount();
-  const address = useAddress();
-  const { getLiquidationPrice, getBuffer } = useSingleLoan();
-  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
-  const [ buffer, setBuffer ] = useState<any>();
-
   const invoice: Info[] = [
     {
       description: "Lending Protocol",
@@ -125,7 +112,7 @@ const MakePayment: FC = () => {
             payment === currentBalance ? (
               <div className="flex items-center gap-2">
                 <p className="text-sm">Payment Buffer</p>
-                <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
+                <HoverTooltip text="Payment Butter" />
               </div>
             ) : (
               ""
@@ -153,7 +140,7 @@ const MakePayment: FC = () => {
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">{buffer === "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</span>,
+          details: <span className="font-semibold text-sm">107%</span>,
         },
         {
           description: "Liquidation Price (ETH)",
@@ -162,16 +149,6 @@ const MakePayment: FC = () => {
       ],
     },
   ];
-
-  useEffect(() => {
-    getLiquidationPrice(currentBalance - payment, collateral)
-    .then(_price => setLiquidationPrice(_price))
-    .catch(e => console.log(e));
-
-    getBuffer(currentBalance - payment, collateral)
-    .then(_buffer => setBuffer(_buffer))
-    .catch(e => console.log(e));
-  });
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -395,7 +372,7 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/${loanIndex}?active=true`}>
+              <Link href={`/dashboard/invoice`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}

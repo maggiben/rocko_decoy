@@ -58,7 +58,7 @@ export default function SelectOptionTwo({
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <FiChevronDown
-                className="h-5 w-5 text-gray-400"
+                className={`h-5 w-5 ${click ? "text-black" : "text-gray-400"} `}
                 aria-hidden="true"
               />
             </span>
@@ -69,7 +69,7 @@ export default function SelectOptionTwo({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50">
+            <Listbox.Options className="absolute mt-1 max-h-60 w-[98%] overflow-auto rounded-md bg-white text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50">
               {interval.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}

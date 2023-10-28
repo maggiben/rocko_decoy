@@ -198,4 +198,5 @@ export interface AlertFormProps {
   alertFor: "collateralBuffer" | "APR";
   setToggleAlert: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   forUpdate?: BufferAlertType | AprAlertType;
+  updateIndex?: number | string;
 }

@@ -25,12 +25,4 @@ function formatCurrency(number: number): string {
     return formattedNumber;
 }
 
-export const shortenAddress = ( address : string, count = 7 ) => {
-    return address.slice( 0, count ) + '...' + address.slice( -count )
-}
-
-export function financial(x : any, decimal = 0): string {
-    return formatCurrency(Number(parseFloat(x).toFixed(decimal)));
-}
-
-export default financial
+export default formatCurrency

@@ -5,32 +5,53 @@ import ModalContainer from "@/components/shared/modalContainer/modalContainer";
 import ModalContent from "@/components/shared/modalContainer/modalContent/modalContent";
 import Image from "next/image";
 import closeIcon from "@/assets/Close.svg";
+import { useAlert } from "@/context/alertContext/alertContext";
+import { ALERT_OFF } from "@/constant/constant";
 
 interface Props {
-  toggleAlert: boolean;
-  setToggleAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleAlert: boolean | undefined;
+  setToggleAlert: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   title: string;
   description: string;
+  setOpenModalFor: React.Dispatch<React.SetStateAction<string>>;
+  alertFor: "collateralBuffer" | "APR";
 }
 const ToggleBTN: FC<Props> = ({
   toggleAlert,
   setToggleAlert,
   description,
   title,
+  setOpenModalFor,
+  alertFor,
 }) => {
-  const [openModalFor, setOpenModalFor] = useState("");
+  const [closeModalFor, setCloseModalFor] = useState("");
+  const { aprAlertDispatch, bufferAlertDispatch } = useAlert();
 
   useEffect(() => {
-    if (!toggleAlert) {
-      setOpenModalFor(title);
+    if (!toggleAlert && toggleAlert !== undefined) {
+      setCloseModalFor(title);
     }
   }, [toggleAlert, title]);
+
+  const handleAlertOff = () => {
+    if (alertFor === "APR") {
+      aprAlertDispatch({ type: ALERT_OFF });
+    } else {
+      bufferAlertDispatch({ type: ALERT_OFF });
+    }
+    setCloseModalFor("");
+    setToggleAlert(undefined);
+  };
 
   return (
     <div className="md:mt-1">
       <Switch
-        checked={toggleAlert}
+        checked={toggleAlert ? true : false}
         onChange={setToggleAlert}
+        onClick={() => {
+          console.log(toggleAlert, title);
+          setOpenModalFor(!toggleAlert ? title : "");
+        }}
         className={`${toggleAlert ? "bg-black" : "bg-gray-300"}
           relative inline-flex h-[24px] w-[44px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
       >
@@ -41,7 +62,7 @@ const ToggleBTN: FC<Props> = ({
         />
       </Switch>
 
-      {openModalFor && (
+      {closeModalFor && (
         <>
           <ModalContainer>
             <ModalContent>
@@ -49,15 +70,15 @@ const ToggleBTN: FC<Props> = ({
                 {/* title and close button */}
                 <div className="flex items-start justify-between gap-2 ">
                   <h4 className="text-2xl font-semibold font-inter">
-                    {openModalFor}
+                    {closeModalFor}
                   </h4>
                   {/* close button start */}
                   <div>
                     <button
-                      onClick={() =>{
-                        // console.log(openModalFor)
-                        setToggleAlert(!!openModalFor)
-                        setOpenModalFor("")
+                      onClick={() => {
+                        // console.log(closeModalFor)
+                        setToggleAlert(closeModalFor ? true : undefined);
+                        setCloseModalFor("");
                       }}
                       className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
                     >
@@ -78,10 +99,7 @@ const ToggleBTN: FC<Props> = ({
                 {/* buttons */}
                 <div className="flex items-center mt-12 gap-3">
                   <button
-                    onClick={() => {
-                      setOpenModalFor("");
-                      setToggleAlert(false);
-                    }}
+                    onClick={handleAlertOff}
                     className={`py-[10px] px-6  rounded-full text-sm font-semibold bg-[#2C3B8D] text-white
           `}
                   >
@@ -89,7 +107,7 @@ const ToggleBTN: FC<Props> = ({
                   </button>
                   <button
                     onClick={() => {
-                      setOpenModalFor("");
+                      setCloseModalFor("");
                       setToggleAlert(true);
                     }}
                     className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3  font-semibold"

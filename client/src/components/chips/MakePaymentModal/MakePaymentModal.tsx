@@ -29,6 +29,10 @@ const MakePaymentModal = ({
   const balanceFloat = parseFloat(currentBalance?.replace(/,/g, "") || "0");
   const outstanding_balance = balanceFloat - inputFloat;
 
+  const handleDecimalsOnValue = (value: any) => {
+    const regex = /([0-9]*[\.]{0,1}[0-9]{0,6})/s;
+    return value.match(regex)[0];
+  };
 
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -38,8 +42,7 @@ const MakePaymentModal = ({
       parseFloat(inputValue?.replace(/,/g, "") || "0") >
       parseFloat(currentBalance)
     ) {
-      setInputNumber(currentBalance);
-
+      setInputNumber(handleDecimalsOnValue(currentBalance.replace(/,/g, "")));
       return;
     }
 

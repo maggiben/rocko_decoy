@@ -1,10 +1,9 @@
 "use client";
 import {
   ADD_ALERT,
-  UPDATE_ALERT_METHOD,
-  UPDATE_ALERT_TYPE,
-  UPDATE_FREQUENCY,
-  UPDATE_INTEREST_RATE,
+  ALERT_OFF,
+  DELETE_ALERT,
+  UPDATE_ALERT,
 } from "@/constant/constant";
 import {
   AlertContextValues,
@@ -27,85 +26,31 @@ function aprAlertReducer(
       // Clone the state to ensure immutability and push the new alert
       return [...state, action.alert];
 
-    case UPDATE_ALERT_METHOD:
-      // Find the index of the item to update
-      const indexToUpdateMethod = state.findIndex(
-        (item) => item.alertMethods[action.method]
-      );
-      if (indexToUpdateMethod !== -1) {
-        // Clone the state to ensure immutability
-        const newState = [...state];
-        newState[indexToUpdateMethod] = {
-          ...newState[indexToUpdateMethod],
-          alertMethods: {
-            ...newState[indexToUpdateMethod].alertMethods,
-            [action.method]: action.value,
-          },
-        };
-        return newState;
-      }
-      return state;
-
-    case UPDATE_ALERT_TYPE:
-      // Find the index of the item to update
-      const indexToUpdateType = state.findIndex(
-        (item) => item.alertType === action.value
-      );
-      if (indexToUpdateType !== -1) {
-        // Clone the state to ensure immutability
-        const newState = [...state];
-        newState[indexToUpdateType] = {
-          ...newState[indexToUpdateType],
-          alertType: action.value,
-        };
-        return newState;
-      }
-      return state;
-
-    case UPDATE_INTEREST_RATE:
-      // Find the index of the item to update
-      const indexToUpdateRate = state.findIndex((item) => {
-        return (
-          item.currentInterestRate.position === action.position ||
-          item.currentInterestRate.percentage === action.percentage
-        );
+    case UPDATE_ALERT: {
+      // Clone the state to ensure immutability
+      const newState = [...state];
+      const updatedState = newState.map((alert, index) => {
+        if (index === action.index) {
+          return action.alert;
+        }
+        return alert;
       });
-      if (indexToUpdateRate !== -1) {
-        // Clone the state to ensure immutability
-        const newState = [...state];
-        newState[indexToUpdateRate] = {
-          ...newState[indexToUpdateRate],
-          currentInterestRate: {
-            ...newState[indexToUpdateRate].currentInterestRate,
-            ...action,
-          },
-        };
-        return newState;
-      }
-      return state;
+      console.log(updatedState);
+      return updatedState;
+    }
 
-    case UPDATE_FREQUENCY:
-      // Find the index of the item to update
-      const indexToUpdateFrequency = state.findIndex((item) => {
-        return (
-          item.frequency.repeat === action.repeat ||
-          item.frequency.interval === action.interval
-        );
+    case DELETE_ALERT: {
+      // Clone the state to ensure immutability
+      const newState = [...state];
+      const newStateDelete = newState.filter((alert, index) => {
+        return index !== action.index;
       });
-      if (indexToUpdateFrequency !== -1) {
-        // Clone the state to ensure immutability
-        const newState = [...state];
-        newState[indexToUpdateFrequency] = {
-          ...newState[indexToUpdateFrequency],
-          frequency: {
-            ...newState[indexToUpdateFrequency].frequency,
-            ...action,
-          },
-        };
-        return newState;
-      }
-      return state;
 
+      return newStateDelete;
+    }
+
+    case ALERT_OFF:
+      return [];
     default:
       return state;
   }
@@ -120,6 +65,32 @@ function bufferAlertReducer(
       // Clone the state to ensure immutability and push the new alert
       return [...state, action.alert];
 
+    case UPDATE_ALERT: {
+      // Clone the state to ensure immutability
+      const newState = [...state];
+
+      const updatedState = newState.map((alert, index) => {
+        if (index === action.index) {
+          return action.alert;
+        }
+        return alert;
+      });
+
+      return updatedState;
+    }
+    case DELETE_ALERT: {
+      // Clone the state to ensure immutability
+      const newState = [...state];
+
+      const newStateDelete = newState.filter(
+        (alert, index) => index !== action.index
+      );
+
+      return newStateDelete;
+    }
+
+    case ALERT_OFF:
+      return [];
     default:
       return state;
   }

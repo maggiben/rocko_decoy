@@ -60,16 +60,21 @@ const CollateralBufferAlerts: FC<Props> = ({
   const [forUpdate, setForUpdate] = useState<
     BufferAlertType | AprAlertType | undefined
   >();
-
+  const [forUpdateIndex, setForUpdateIndex] = useState<number>();
   const handleForUpdate = (
     index: number,
     alertType: BufferAlertType | AprAlertType
   ) => {
     setForUpdate(alertType);
+    setForUpdateIndex(index);
     setNext(true);
   };
 
-  console.log(forUpdate)
+  const handleCreateNew = () => {
+    setForUpdate(undefined);
+    setForUpdateIndex(undefined);
+    setNext(true);
+  };
 
   return (
     <ModalContent>
@@ -116,119 +121,131 @@ const CollateralBufferAlerts: FC<Props> = ({
                     {aprAlert.alertMethods.email &&
                     aprAlert.alertMethods.sms ? (
                       <>
-                        <div
-                          onClick={() => handleForUpdate(index, aprAlert)}
-                          className="flex items-center gap-x-3 cursor-pointer"
-                        >
-                          <div className="flex">
-                            <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
-                              <AiOutlineMail className="h-5 w-5 text-[#323232]" />
-                            </div>
-                            <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white -ml-4">
-                              <IoMdCall className="h-5 w-5 text-[#323232]" />
-                            </div>
-                          </div>
-                          <div className="grow">
-                            <p>Email & SMS alert</p>
-                            <p className="text-[#545454] text-sm">
-                              {aprAlert.alertMethods.email},
-                              {aprAlert.alertMethods.sms}
-                            </p>
-                          </div>
-                          <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
-                            <Image
-                              src={notification}
-                              alt="notify-bell"
-                              width={16}
-                              height={16}
-                              className="w-full"
-                            />
-                            <p className="text-xs font-[500] whitespace-nowrap">
-                              {aprAlert.currentInterestRate.position ===
-                              "Above" ? (
-                                <>&gt;</>
-                              ) : (
-                                <>&lt;</>
-                              )}
-                              {aprAlert.currentInterestRate.percentage}
-                            </p>
-                          </div>
+                        <div className="flex items-center gap-x-3 justify-between">
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleDelete(index)}
+                            onClick={() => handleForUpdate(index, aprAlert)}
+                            className="flex items-center gap-x-3 cursor-pointer"
                           >
-                            <Image
-                              src={remove}
-                              alt="delete"
-                              width={20}
-                              height={20}
-                              className="w-full"
-                            />
+                            <div className="flex">
+                              <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
+                                <AiOutlineMail className="h-5 w-5 text-[#323232]" />
+                              </div>
+                              <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white -ml-4">
+                                <IoMdCall className="h-5 w-5 text-[#323232]" />
+                              </div>
+                            </div>
+                            <div className="grow">
+                              <p>Email & SMS alert</p>
+                              <p className="text-[#545454] text-sm">
+                                {aprAlert.alertMethods.email},
+                                {aprAlert.alertMethods.sms}
+                              </p>
+                            </div>
                           </div>
+                          {/* alert&delete btns start */}
+                          <div className="flex items-center gap-2">
+                            <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
+                              <Image
+                                src={notification}
+                                alt="notify-bell"
+                                width={16}
+                                height={16}
+                                className="w-full"
+                              />
+                              <p className="text-xs font-[500] whitespace-nowrap">
+                                {aprAlert.currentInterestRate.position ===
+                                "Above" ? (
+                                  <>&gt;</>
+                                ) : (
+                                  <>&lt;</>
+                                )}
+                                {aprAlert.currentInterestRate.percentage}
+                              </p>
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <Image
+                                src={remove}
+                                alt="delete"
+                                width={20}
+                                height={20}
+                                className="w-full"
+                              />
+                            </div>
+                          </div>
+                          {/* alert&delete btns end */}
                         </div>
 
-                        <hr className="my-4" />
+                        {/* <hr className="my-4" /> */}
                       </>
                     ) : (
                       // email or sms alert
                       <>
                         {/* //!email-alert-start */}
-                        <div
-                          onClick={() => handleForUpdate(index, aprAlert)}
-                          className="flex items-center gap-x-3 cursor-pointer"
-                        >
-                          <div className="rounded-full bg-[#EEE] p-2 w-max">
-                            {aprAlert.alertMethods.email ? (
-                              <AiOutlineMail className="h-5 w-5 text-[#323232]" />
-                            ) : (
-                              <IoMdCall className="h-5 w-5 text-[#323232]" />
-                            )}
-                          </div>
-                          <div className="grow">
-                            {aprAlert.alertMethods.email ? (
-                              <p>Email alert</p>
-                            ) : (
-                              <p>SMS alert</p>
-                            )}
-                            <p className="text-[#545454] text-sm">
-                              {aprAlert.alertMethods.email ||
-                                aprAlert.alertMethods.sms}
-                            </p>
-                          </div>
-                          <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
-                            <Image
-                              src={notification}
-                              alt="notify-bell"
-                              width={16}
-                              height={16}
-                              className="w-full"
-                            />
-                            <p className="text-xs font-[500]  whitespace-nowrap">
-                              {aprAlert.currentInterestRate.position ===
-                              "Above" ? (
-                                <>&gt;</>
-                              ) : (
-                                <>&lt;</>
-                              )}
-                              {aprAlert.currentInterestRate.percentage}
-                            </p>
-                          </div>
+                        <div className="flex items-center gap-x-3 justify-between">
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleDelete(index)}
+                            onClick={() => handleForUpdate(index, aprAlert)}
+                            className="flex items-center gap-x-3 cursor-pointer"
                           >
-                            <Image
-                              src={remove}
-                              alt="delete"
-                              width={20}
-                              height={20}
-                              className="w-full"
-                            />
+                            <div className="rounded-full bg-[#EEE] p-2 w-max">
+                              {aprAlert.alertMethods.email ? (
+                                <AiOutlineMail className="h-5 w-5 text-[#323232]" />
+                              ) : (
+                                <IoMdCall className="h-5 w-5 text-[#323232]" />
+                              )}
+                            </div>
+                            <div className="grow">
+                              {aprAlert.alertMethods.email ? (
+                                <p>Email alert</p>
+                              ) : (
+                                <p>SMS alert</p>
+                              )}
+                              <p className="text-[#545454] text-sm">
+                                {aprAlert.alertMethods.email ||
+                                  aprAlert.alertMethods.sms}
+                              </p>
+                            </div>
                           </div>
+                          {/* alert&delete btns start */}
+                          <div className="flex items-center gap-2">
+                            <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
+                              <Image
+                                src={notification}
+                                alt="notify-bell"
+                                width={16}
+                                height={16}
+                                className="w-full"
+                              />
+                              <p className="text-xs font-[500]  whitespace-nowrap">
+                                {aprAlert.currentInterestRate.position ===
+                                "Above" ? (
+                                  <>&gt;</>
+                                ) : (
+                                  <>&lt;</>
+                                )}
+                                {aprAlert.currentInterestRate.percentage}
+                              </p>
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <Image
+                                src={remove}
+                                alt="delete"
+                                width={20}
+                                height={20}
+                                className="w-full"
+                              />
+                            </div>
+                          </div>
+                          {/* alert&delete btns end */}
                         </div>
                         {/* //!email-alert-end */}
 
-                        <hr className="my-4" />
+                        {/* <hr className="my-4" /> */}
                       </>
                     )}
 
@@ -243,118 +260,130 @@ const CollateralBufferAlerts: FC<Props> = ({
                     {bufferAlert.alertMethods.email &&
                     bufferAlert.alertMethods.sms ? (
                       <>
-                        <div
-                          onClick={() => handleForUpdate(index, bufferAlert)}
-                          className="flex items-center gap-x-3 cursor-pointer"
-                        >
-                          <div className="flex">
-                            <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
-                              <AiOutlineMail className="h-5 w-5 text-[#323232]" />
-                            </div>
-                            <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white -ml-4">
-                              <IoMdCall className="h-5 w-5 text-[#323232]" />
-                            </div>
-                          </div>
-                          <div className="grow">
-                            <p>Email & SMS alert</p>
-                            <p className="text-[#545454] text-sm">
-                              {bufferAlert.alertMethods.email},
-                              {bufferAlert.alertMethods.sms}
-                            </p>
-                          </div>
-                          <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
-                            <Image
-                              src={notification}
-                              alt="notify-bell"
-                              width={16}
-                              height={16}
-                              className="w-full"
-                            />
-                            <p className="text-xs font-[500] whitespace-nowrap">
-                              {bufferAlert.currentCollateralBuffer.position ===
-                              "Above" ? (
-                                <>&gt;</>
-                              ) : (
-                                <>&lt;</>
-                              )}{" "}
-                              {bufferAlert.currentCollateralBuffer.percentage}
-                            </p>
-                          </div>
+                        <div className="flex items-center gap-x-3 justify-between">
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleDelete(index)}
+                            onClick={() => handleForUpdate(index, bufferAlert)}
+                            className="flex items-center gap-x-3 cursor-pointer"
                           >
-                            <Image
-                              src={remove}
-                              alt="delete"
-                              width={20}
-                              height={20}
-                              className="w-full"
-                            />
+                            <div className="flex">
+                              <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white">
+                                <AiOutlineMail className="h-5 w-5 text-[#323232]" />
+                              </div>
+                              <div className="rounded-full bg-[#EEE] p-2 w-max border-2 border-white -ml-4">
+                                <IoMdCall className="h-5 w-5 text-[#323232]" />
+                              </div>
+                            </div>
+                            <div className="grow">
+                              <p>Email & SMS alert</p>
+                              <p className="text-[#545454] text-sm">
+                                {bufferAlert.alertMethods.email},
+                                {bufferAlert.alertMethods.sms}
+                              </p>
+                            </div>
                           </div>
+                          {/* alert&delete btns start */}
+                          <div className="flex items-center gap-2">
+                            <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
+                              <Image
+                                src={notification}
+                                alt="notify-bell"
+                                width={16}
+                                height={16}
+                                className="w-full"
+                              />
+                              <p className="text-xs font-[500] whitespace-nowrap">
+                                {bufferAlert.currentCollateralBuffer
+                                  .position === "Above" ? (
+                                  <>&gt;</>
+                                ) : (
+                                  <>&lt;</>
+                                )}{" "}
+                                {bufferAlert.currentCollateralBuffer.percentage}
+                              </p>
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <Image
+                                src={remove}
+                                alt="delete"
+                                width={20}
+                                height={20}
+                                className="w-full"
+                              />
+                            </div>
+                          </div>
+                          {/* alert&delete btns end */}
                         </div>
 
-                        <hr className="my-4" />
+                        {/* <hr className="my-4" /> */}
                       </>
                     ) : (
                       <>
                         {/* //!email-alert-start */}
-                        <div
-                          onClick={() => handleForUpdate(index, bufferAlert)}
-                          className="flex items-center gap-x-3 cursor-pointer"
-                        >
-                          <div className="rounded-full bg-[#EEE] p-2 w-max">
-                            {bufferAlert.alertMethods.email ? (
-                              <AiOutlineMail className="h-5 w-5 text-[#323232]" />
-                            ) : (
-                              <IoMdCall className="h-5 w-5 text-[#323232]" />
-                            )}
-                          </div>
-                          <div className="grow">
-                            {bufferAlert.alertMethods.email ? (
-                              <p>Email alert</p>
-                            ) : (
-                              <p>SMS alert</p>
-                            )}
-                            <p className="text-[#545454] text-sm">
-                              {bufferAlert.alertMethods.email ||
-                                bufferAlert.alertMethods.sms}
-                            </p>
-                          </div>
-                          <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
-                            <Image
-                              src={notification}
-                              alt="notify-bell"
-                              width={16}
-                              height={16}
-                              className="w-full"
-                            />
-                            <p className="text-xs font-[500]  whitespace-nowrap">
-                              {bufferAlert.currentCollateralBuffer.position ===
-                              "Above" ? (
-                                <>&gt;</>
-                              ) : (
-                                <>&lt;</>
-                              )}
-                              {bufferAlert.currentCollateralBuffer.percentage}
-                            </p>
-                          </div>
+                        <div className="flex items-center gap-x-3 justify-between">
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleDelete(index)}
+                            onClick={() => handleForUpdate(index, bufferAlert)}
+                            className="flex items-center gap-x-3 cursor-pointer"
                           >
-                            <Image
-                              src={remove}
-                              alt="delete"
-                              width={20}
-                              height={20}
-                              className="w-full"
-                            />
+                            <div className="rounded-full bg-[#EEE] p-2 w-max">
+                              {bufferAlert.alertMethods.email ? (
+                                <AiOutlineMail className="h-5 w-5 text-[#323232]" />
+                              ) : (
+                                <IoMdCall className="h-5 w-5 text-[#323232]" />
+                              )}
+                            </div>
+                            <div className="grow">
+                              {bufferAlert.alertMethods.email ? (
+                                <p>Email alert</p>
+                              ) : (
+                                <p>SMS alert</p>
+                              )}
+                              <p className="text-[#545454] text-sm">
+                                {bufferAlert.alertMethods.email ||
+                                  bufferAlert.alertMethods.sms}
+                              </p>
+                            </div>
                           </div>
+                          {/* alert&delete btns start */}
+                          <div className="flex items-center gap-2">
+                            <div className="py-[2px] px-2 rounded-[5px] bg-[#EFF3FE] text-[#276EF1] flex items-center gap-x-1">
+                              <Image
+                                src={notification}
+                                alt="notify-bell"
+                                width={16}
+                                height={16}
+                                className="w-full"
+                              />
+                              <p className="text-xs font-[500]  whitespace-nowrap">
+                                {bufferAlert.currentCollateralBuffer
+                                  .position === "Above" ? (
+                                  <>&gt;</>
+                                ) : (
+                                  <>&lt;</>
+                                )}
+                                {bufferAlert.currentCollateralBuffer.percentage}
+                              </p>
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <Image
+                                src={remove}
+                                alt="delete"
+                                width={20}
+                                height={20}
+                                className="w-full"
+                              />
+                            </div>
+                          </div>
+                          {/* alert&delete btns end */}
                         </div>
                         {/* //!email-alert-end */}
 
-                        <hr className="my-4" />
+                        {/* <hr className="my-4" /> */}
                       </>
                     )}
 
@@ -365,7 +394,7 @@ const CollateralBufferAlerts: FC<Props> = ({
 
             {/* //!Create-alert-start */}
             <div
-              onClick={() => setNext(true)}
+              onClick={handleCreateNew}
               className="flex items-center cursor-pointer gap-x-3"
             >
               <div className="rounded-full bg-[#EEE] p-2 w-max">
@@ -398,6 +427,7 @@ const CollateralBufferAlerts: FC<Props> = ({
           alertFor={alertFor}
           setToggleAlert={setToggleAlert}
           forUpdate={forUpdate}
+          updateIndex={forUpdateIndex}
         />
       )}
     </ModalContent>
