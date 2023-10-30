@@ -54,7 +54,7 @@ function SinglePage() {
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
   
-  const { getLoanData, getAverageAPR } = useLoanDB();
+  const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
   const { compPrice } = useCompPrice();
 
   const [loanData, setLoanData] = useState<any>();
@@ -76,7 +76,6 @@ function SinglePage() {
     getLTV,
     getPenalty,
     getThreshold,
-    getRewardRate,
     // getRewardAmount,
     getInterestAccrued,
     getLiquidationPrice,
@@ -197,7 +196,7 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <p className=""> Current APR</p>{" "}
                   <div className="block text-xl  font-medium">
-                   {financial(apr, 6)}<span className="text-base">%</span>
+                   {financial(apr, 2)}<span className="text-base">%</span>
                   </div>
                 </div>
 
@@ -208,7 +207,7 @@ function SinglePage() {
                   </div>
 
                   <div className="block text-xl  font-medium">
-                    {financial(averageAPR * 100, 6)}<span className="text-base">%</span>
+                    {financial(averageAPR * 100, 2)}<span className="text-base">%</span>
                   </div>
                 </div>
               </div>
@@ -364,7 +363,7 @@ function SinglePage() {
               <div className="pt-3">
                 <p>Rewards Rate</p>
                 <h4 className="text-xl font-medium mt-1 md:mt-3">
-                  {financial(rewardRate, 2)}<span className="text-base">%</span>
+                  {financial(rewardRate * 100, 2)}<span className="text-base">%</span>
                 </h4>
                 <p className="p-6 bg-[#F9F9F9] rounded-2xl text-sm mt-12 lg:mt-[88px] text-[#545454]">
                   Compound protocol offers rewards in its Comp token for usage

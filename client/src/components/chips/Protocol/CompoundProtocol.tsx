@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ProtocolProps } from "@/types/type";
 import HoverTooltip from "../HoverTooltip/HoverTooltip";
 import useLoanData from "@/hooks/useLoanData";
+import { useLoanDB } from "@/db/loanDb";
 import financial from "@/utility/currencyFormate";
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -14,6 +15,11 @@ const CompoundProtocol: FC<ProtocolProps> = ({
   handleProtocol,
 }) => {
     const { loanData, setLoanData } = useLoanData();
+    const [monthAvgAPR, setMonthAvgAPR] = useState<any>(0);
+    const [yearAvgAPR, setYearAvgAPR] = useState<any>(0);
+    const [rewardRate, setRewardRate] = useState<any>(0);
+    const [avgRewardRate, setAvgRewardRate] = useState<any>(0);
+    const { getMonthAverageAPR, getYearAverageAPR, getYearAvgRewardRate, getRewardRate } = useLoanDB();
 
     const updateLoanData = async () => {
         try {
@@ -56,6 +62,23 @@ const CompoundProtocol: FC<ProtocolProps> = ({
 
     useEffect(() => {
         updateLoanData();
+        
+        getMonthAverageAPR()
+        .then(_apr => setMonthAvgAPR(_apr))
+        .catch(_err => console.log(_err));
+
+        getYearAverageAPR()
+        .then(_apr => setYearAvgAPR(_apr))
+        .catch(_err => console.log(_err));
+
+        getRewardRate()
+        .then(_rate => setRewardRate(_rate))
+        .catch(_err => console.log(_err));
+
+        getYearAvgRewardRate()
+        .then(_rate => setAvgRewardRate(_rate))
+        .catch(_err => console.log(_err));
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -117,7 +140,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             <span className="">30 Day</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            {financial(loanData?.currentAPR * 30/365, 2)}%
+                            {financial(monthAvgAPR * 100, 2)}%
                         </p>
                     </div>                
                     <div className="">
@@ -125,7 +148,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             <span className="">365 Day</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            {financial(loanData?.currentAPR, 2)}%
+                            {financial(yearAvgAPR * 100, 2)}%
                         </p>
                     </div>                   
                     </div>
@@ -181,7 +204,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             <span className="">Current Rate</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            2.00%
+                            {financial(rewardRate * 100, 2)}%
                         </p>
                     </div>                
                     <div>
@@ -189,7 +212,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             <span className="">Trailing 365 average</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            2.73%
+                            {financial(avgRewardRate * 100, 2)}%
                         </p>
                     </div>                   
                     </div>

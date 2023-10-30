@@ -111,6 +111,9 @@ export const useSingleLoan = () => {
       "baseTrackingBorrowSpeed"
     )
 
+      console.log(value)
+      console.log(Number(ethers.utils.formatEther( value )))
+
     const formattedValue = Number(ethers.utils.formatEther( value )) * 365 * 60 * 60 * 24;
     return formattedValue
   }

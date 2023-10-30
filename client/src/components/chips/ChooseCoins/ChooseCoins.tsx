@@ -35,7 +35,6 @@ const ChooseCoins = ({ assets }: any) => {
   }
 
   const handleSelect = async (info: any) => {
-    console.log(info)
     setSelectedCoin(info.coinShortName);
     if (info.coinShortName == "ETH") {
       await updateLoanData(info);
