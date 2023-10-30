@@ -85,12 +85,23 @@ export const useLoanDB = () => {
         }
     }
 
+    const getAverageAPR = async ( openDate: Date ) => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=${openDate}`);
+            return response.data.length > 0 ? response.data[0].average_apr : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     return {
         finalizeLoan,
         updateLoan,
         getLoanData,
         addUser,
-        getUserData
+        getUserData,
+        getAverageAPR
     }
 }
 

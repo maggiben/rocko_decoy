@@ -54,7 +54,7 @@ function SinglePage() {
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
   
-  const { getLoanData } = useLoanDB();
+  const { getLoanData, getAverageAPR } = useLoanDB();
   const { compPrice } = useCompPrice();
 
   const [loanData, setLoanData] = useState<any>();
@@ -63,10 +63,12 @@ function SinglePage() {
   const [LTV, setLTV] = useState<any>();
   const [threshold, setThreshold] = useState<any>();
   const [penalty, setPenalty] = useState<any>();
+  const [interest, setInterest] = useState<any>();
   const [rewardAmount, setRewardAmount] = useState<any>();
   const [rewardRate, setRewardRate] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
+  const [averageAPR, setAverageAPR] = useState<any>(0);
 
   const {
     getETHPrice,
@@ -75,7 +77,8 @@ function SinglePage() {
     getPenalty,
     getThreshold,
     getRewardRate,
-    getRewardAmount,
+    // getRewardAmount,
+    getInterestAccrued,
     getLiquidationPrice,
     getBuffer
   } = useSingleLoan();
@@ -86,6 +89,10 @@ function SinglePage() {
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
         if (active_loans.length > 0) setLoanData(active_loans[0]);
+        
+        const avg_val = await getAverageAPR(active_loans[0].create_time);
+        console.log(avg_val)
+        if (avg_val) setAverageAPR(avg_val);
       }
     }
   }
@@ -116,9 +123,13 @@ function SinglePage() {
     .then(_penalty => setPenalty(_penalty))
     .catch(e => console.log(e))
 
-    getRewardAmount()
-    .then(_reward => setRewardAmount(_reward))
+    getInterestAccrued()
+    .then(_interest => setInterest(_interest))
     .catch(e => console.log(e))
+
+    // getRewardAmount()
+    // .then(_reward => setRewardAmount(_reward))
+    // .catch(e => console.log(e))
 
     getRewardRate()
     .then(_rate => setRewardRate(_rate))
@@ -179,14 +190,14 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <p className=""> Interest Accrued </p>
                   <span className="block text-xl  font-medium">
-                   {currentBallanceInfo.interestAccrued} <small>USDC</small>
+                   {financial(interest, 2)} <small>USDC</small>
                   </span>
                 </div>
 
                 <div className="w-[30%]">
                   <p className=""> Current APR</p>{" "}
                   <div className="block text-xl  font-medium">
-                   {financial(apr, 2)}<span className="text-base">%</span>
+                   {financial(apr, 6)}<span className="text-base">%</span>
                   </div>
                 </div>
 
@@ -197,7 +208,7 @@ function SinglePage() {
                   </div>
 
                   <div className="block text-xl  font-medium">
-                    {currentBallanceInfo.averageAPR}<span className="text-base">%</span>
+                    {financial(averageAPR * 100, 6)}<span className="text-base">%</span>
                   </div>
                 </div>
               </div>
@@ -337,9 +348,9 @@ function SinglePage() {
             <div className="divide-y-2 space-y-3">
               <div className="flex justify-between mt-1">
                 <p className="text-xl font-medium">
-                  {financial(rewardAmount, 6)} COMP{" "}
+                  {financial(interest, 6)} COMP{" "}
                   <span className="block text-sm text-[#545454] font-normal">
-                    ~${financial(Number(compPrice) * rewardAmount, 2)}
+                    ~${financial(Number(compPrice) * interest, 2)}
                   </span>
                 </p>
                 <Image

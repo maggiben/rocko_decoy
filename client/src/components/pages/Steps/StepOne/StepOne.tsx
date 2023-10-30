@@ -33,7 +33,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     getPenalty,
     getThreshold,
     getRewardRate,
-    getRewardAmount
+    getInterestAccrued
   } = useSingleLoan();
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +76,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         const penalty = await getPenalty();
         const threshold = await getThreshold();
         const rewardRate = await getRewardRate();
-        const rewardAmount = await getRewardAmount();
+        const interestAccrued = await getInterestAccrued();
 
         if (setLoanData) {
             setLoanData((prevLoanData) => {
@@ -88,7 +88,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                     liquidationPenalty: penalty,
                     liquidationThreshold: threshold,
                     rewardRate: rewardRate,
-                    rewardAmount: rewardAmount,
+                    rewardAmount: interestAccrued,
                 }
             })
         }

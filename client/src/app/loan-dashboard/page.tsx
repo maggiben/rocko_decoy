@@ -9,6 +9,7 @@ import { useLoanDB } from "@/db/loanDb";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
+import { useSingleLoan } from "@/contract/single";
 
 const Dashboard = () => {
   const [active, setActive] = useState(true);
@@ -17,6 +18,9 @@ const Dashboard = () => {
   const { userInfo } = useZeroDev();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
+
+  const { getBorrowAPR } = useSingleLoan();
+  const [borrowAPR, setBorrowAPR] = useState<any>(0);
 
   const initialize = async () => {
     if (userInfo) {
@@ -34,6 +38,12 @@ const Dashboard = () => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo])
+
+  useEffect(() => {
+    getBorrowAPR()
+    .then(_apr => setBorrowAPR(_apr))
+    .catch(e => console.log(e))
+  })
 
   return (
     <main className="container mx-auto px-4 py-6  lg:py-10 ">
@@ -114,7 +124,7 @@ const Dashboard = () => {
                 <div className="flex">
                   <p className="w-1/2">Current APR</p>
                   <p className="w-1/2 text-right md:text-left">
-                    3.84%
+                    {financial(borrowAPR, 2)}%
                   </p>
                 </div>
                 <div className="flex">
