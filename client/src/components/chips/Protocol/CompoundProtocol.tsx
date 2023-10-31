@@ -21,6 +21,12 @@ const CompoundProtocol: FC<ProtocolProps> = ({
     const [avgRewardRate, setAvgRewardRate] = useState<any>(0);
     const { getMonthAverageAPR, getYearAverageAPR, getYearAvgRewardRate, getRewardRate } = useLoanDB();
 
+    const calculateInterestAccrued = (borrowing: number, apr: number, days: number) => {
+        const seconds = 60 * 60 * 24 * days;
+        const interest = borrowing * (1 + apr / seconds) ** (seconds * days / 365);
+        return interest;
+    }
+
     const updateLoanData = async () => {
         try {
             const borrowing = loanData?.borrowing;
@@ -33,9 +39,9 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / loanData?.collateralPrice;
             const liquidationPrice = borrowing / threshold / collateral;
-            const interestSixMonths = borrowing * currentAPR / 200;
-            const interestOneYear = borrowing * currentAPR / 100;
-            const interestTwoYears = borrowing * currentAPR / 50;
+            const interestSixMonths = calculateInterestAccrued(borrowing, currentAPR/100, 182.5);
+            const interestOneYear = calculateInterestAccrued(borrowing, currentAPR/100, 365);
+            const interestTwoYears = calculateInterestAccrued(borrowing, currentAPR/100, 365*2);
 
             if (setLoanData) {
                 setLoanData((prevLoanData) => {
