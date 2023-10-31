@@ -19,7 +19,7 @@ import { useZeroDev } from "@/hooks/useZeroDev";
 interface DoneTracker {
   step: string;
 }
-const gasFee = 0.0001;
+const gasFee = 0.001;
 
 const DepositingCollateral = () => {
   const retrievedData = sessionStorage.getItem('loanData');
@@ -52,7 +52,7 @@ const DepositingCollateral = () => {
   const { data } = useBalance({ address: address as `0x${string}` });
   const { data: wagmiData } = useBalance({ address: wagmiAddress as `0x${string}` });
   const { chain } = useNetwork();
-  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(Number(loanData?.collateralNeeded), loanData?.borrowing);
+  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
@@ -141,10 +141,8 @@ const DepositingCollateral = () => {
   }
 
   useEffect(() => {
-    if (userInfo)
+    if (batchGetLoan != undefined && userInfo != undefined) {
       setInitialParams();
-
-    if (batchGetLoan != undefined) {
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

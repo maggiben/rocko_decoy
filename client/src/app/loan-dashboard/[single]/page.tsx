@@ -1,20 +1,11 @@
 "use client";
 import Image from "next/image";
-import compound from "@/assets/coins/Compound (COMP).svg";
+import compund from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
-import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import { useAccount } from "wagmi";
-import ModifyWallet from "./modifyWallet/modifyWallet";
-import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";
-import { useSingleLoan } from "@/contract/single";
-import { useLoanDB } from "@/db/loanDb";
-import { useCompPrice } from "@/hooks/usePrice";
-import financial from "@/utility/currencyFormate";
-import { formatDate } from "@/utility/utils";
-import { useParams, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import ModalContainer from "@/components/shared/modalContainer/modalContainer";
+import { useState } from "react";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/pages/Dashboard/invoice/makePayment/makePayment";
 import Alert from "@/components/pages/Dashboard/Alert/Alert";
@@ -77,6 +68,96 @@ const currentBallanceInfo = {
 function SinglePage() {
   const [openModalFor, setOpenModalFor] = useState("");
   const [modalStep, setModalStep] = useState(0);
+  
+  const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
+  const { compPrice } = useCompPrice();
+
+  const [loanData, setLoanData] = useState<any>();
+  const [collateralPrice, setCollateralPrice] = useState<any>();
+  const [apr, setAPR] = useState<any>();
+  const [LTV, setLTV] = useState<any>();
+  const [threshold, setThreshold] = useState<any>();
+  const [penalty, setPenalty] = useState<any>();
+  const [interest, setInterest] = useState<any>();
+  const [rewardAmount, setRewardAmount] = useState<any>();
+  const [rewardRate, setRewardRate] = useState<any>();
+  const [liquidationPrice, setLiquidationPrice] = useState<any>();
+  const [buffer, setBuffer] = useState<any>();
+  const [averageAPR, setAverageAPR] = useState<any>(0);
+
+  const {
+    getETHPrice,
+    getBorrowAPR,
+    getLTV,
+    getPenalty,
+    getThreshold,
+    // getRewardAmount,
+    getInterestAccrued,
+    getLiquidationPrice,
+    getBuffer
+  } = useSingleLoan();
+
+  const initialize = async () => {
+    if (userInfo) {
+      const result = await getLoanData(userInfo?.email);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
+        if (active_loans.length > 0) setLoanData(active_loans[0]);
+        
+        const avg_val = await getAverageAPR(active_loans[0].create_time);
+        console.log(avg_val)
+        if (avg_val) setAverageAPR(avg_val);
+      }
+    }
+  }
+
+  useEffect(() => {
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo]);
+
+  useEffect(() => {
+    getETHPrice()
+    .then(_price => setCollateralPrice(_price))
+    .catch(e => console.log(e))
+
+    getBorrowAPR()
+    .then(_apr => setAPR(_apr))
+    .catch(e => console.log(e))
+
+    getLTV()
+    .then(_ltv => setLTV(_ltv))
+    .catch(e => console.log(e))
+
+    getThreshold()
+    .then(_threshold => setThreshold(_threshold))
+    .catch(e => console.log(e))
+
+    getPenalty()
+    .then(_penalty => setPenalty(_penalty))
+    .catch(e => console.log(e))
+
+    getInterestAccrued()
+    .then(_interest => setInterest(_interest))
+    .catch(e => console.log(e))
+
+    // getRewardAmount()
+    // .then(_reward => setRewardAmount(_reward))
+    // .catch(e => console.log(e))
+
+    getRewardRate()
+    .then(_rate => setRewardRate(_rate))
+    .catch(e => console.log(e))
+
+    getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e))
+
+    getBuffer(loanData?.outstanding_balance, loanData?.collateral)
+    .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e))
+  });
+
   return (
     <>
       <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
@@ -123,7 +204,7 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <p className=""> Interest Accrued </p>
                   <span className="block text-xl  font-medium">
-                    {currentBallanceInfo.interestAccrued} <small>USDC</small>
+                   {financial(interest, 2)} <small>USDC</small>
                   </span>
                 </div>
 
@@ -142,8 +223,7 @@ function SinglePage() {
                   </div>
 
                   <div className="block text-xl  font-medium">
-                    {currentBallanceInfo.averageAPR}
-                    <span className="text-base">%</span>
+                    {financial(averageAPR * 100, 2)}<span className="text-base">%</span>
                   </div>
                 </div>
               </div>
@@ -291,15 +371,15 @@ liquidation can occur once it becomes negative."
             <div className="divide-y-2 space-y-3">
               <div className="flex justify-between mt-1">
                 <p className="text-xl font-medium">
-                  0.0217 COMP
+                  {financial(interest, 6)} COMP{" "}
                   <span className="block text-sm text-[#545454] font-normal">
-                    ~$0.07
+                    ~${financial(Number(compPrice) * interest, 2)}
                   </span>
                 </p>
                 <Image
                   width={24}
                   height={24}
-                  src={compound}
+                  src={compund}
                   alt=""
                   className="w-6 h-6"
                 />
@@ -307,7 +387,7 @@ liquidation can occur once it becomes negative."
               <div className="pt-3">
                 <p>Rewards Rate</p>
                 <h4 className="text-xl font-medium mt-1 md:mt-3">
-                  2.54<span className="text-base">%</span>
+                  {financial(rewardRate * 100, 2)}<span className="text-base">%</span>
                 </h4>
                 <p className="p-6 bg-[#F9F9F9] rounded-2xl text-sm mt-12 lg:mt-[88px] text-[#545454]">
                   Compound protocol offers rewards in its Comp token for usage

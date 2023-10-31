@@ -107,9 +107,7 @@ const ModifyCollateral: React.FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p className="font-semibold">
-                      {info?.details}
-                    </p>
+                    <p className="font-semibold">{info?.details}</p>
                     {info?.subDetails && (
                       <p className="text-sm text-gray-500">
                         {info?.subDetails}
@@ -124,7 +122,7 @@ const ModifyCollateral: React.FC = () => {
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
                           <p className="font-semibold text-sm">
-                           {innerInfo?.details}
+                            {innerInfo?.details}
                           </p>
                           {innerInfo?.subDetails && (
                             <p className="text-sm text-gray-500">
@@ -258,6 +256,7 @@ const ModifyCollateral: React.FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        defaultValue={"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"}
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
@@ -302,7 +301,7 @@ const ModifyCollateral: React.FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/dashboard/invoice`}>
+              <Link href={`/loan-dashboard/invoice`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -312,7 +311,7 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/dashboard/${"invoice"}/${"modify_collateral"}/${amount}`}
+                href={`/loan-dashboard/${"invoice"}/${"modify_collateral"}/${amount}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

@@ -13,7 +13,7 @@ import HoverTooltip from "@/components/shared/tooltip/tooltip";
 
 interface InnerInfo {
   description: string | JSX.Element;
-  details: string| JSX.Element;
+  details: string | JSX.Element;
   subDetails?: string | JSX.Element;
 }
 
@@ -100,12 +100,22 @@ const MakePayment: FC = () => {
             ) : (
               ""
             ),
-          details: payment === currentBalance ? `${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC` : "",
-          subDetails: payment === currentBalance ? `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}` : "",
+          details:
+            payment === currentBalance
+              ? `${new Intl.NumberFormat("en-US", {
+                  maximumFractionDigits: 6,
+                }).format(
+                  parseFloat(payment.toFixed(6).replace(/\.?0+$/, ""))
+                )} USDC`
+              : "",
+          subDetails:
+            payment === currentBalance
+              ? `~$${new Intl.NumberFormat("en-US", {
+                  maximumFractionDigits: 6,
+                }).format(
+                  parseFloat(payment.toFixed(6).replace(/\.?0+$/, ""))
+                )}`
+              : "",
         },
         {
           description:
@@ -121,22 +131,35 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$5.00` : "",
         },
       ],
-      details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC</span>,
+      details: (
+        <span className="font-semibold">
+          {new Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 6,
+          }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, "")))}{" "}
+          USDC
+        </span>
+      ),
       subDetails: `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}`,
+        maximumFractionDigits: 6,
+      }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, "")))}`,
     },
     {
       description: "Projected values after payment",
       subDescription: [
         {
           description: "Outstanding balance",
-          details: <span className="font-semibold text-sm">{(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC</span>,
+          details: (
+            <span className="font-semibold text-sm">
+              {(currentBalance - payment).toFixed(6).replace(/\.?0+$/, "")} USDC
+            </span>
+          ),
           subDetails: `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat((currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')))}`,
+            maximumFractionDigits: 6,
+          }).format(
+            parseFloat(
+              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, "")
+            )
+          )}`,
         },
         {
           description: "Collateral Buffer",
@@ -171,9 +194,7 @@ const MakePayment: FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p className="text-base text-[#141414]">
-                      {info?.details}
-                    </p>
+                    <p className="text-base text-[#141414]">{info?.details}</p>
                     {info?.subDetails && (
                       <p className="text-sm text-[#545454]">
                         {info?.subDetails}
@@ -322,6 +343,7 @@ const MakePayment: FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        defaultValue={"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"}
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
@@ -347,13 +369,10 @@ const MakePayment: FC = () => {
             <ul className="list-disc">
               {payment === currentBalance
                 ? termsFull.map((term, i) => (
-                    <React.Fragment key={i}>
-                      {term.rule}
-                    </React.Fragment>
+                    <React.Fragment key={i}>{term.rule}</React.Fragment>
                   ))
                 : terms.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}
-                    </React.Fragment>
+                    <React.Fragment key={i}>{term.rule}</React.Fragment>
                   ))}
             </ul>
           </div>
@@ -372,7 +391,7 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/dashboard/invoice`}>
+              <Link href={`/loan-dashboard/invoice`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -382,7 +401,7 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/dashboard/${"invoice"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
+                href={`/loan-dashboard/${"invoice"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

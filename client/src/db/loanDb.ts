@@ -77,7 +77,6 @@ export const useLoanDB = () => {
     const getUserData = async ( email: string ) => {
         try {
             const response = await axios.get(`${BACKEND_URL}/users?email=${email}`);
-            console.log("response", response.data);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -85,12 +84,71 @@ export const useLoanDB = () => {
         }
     }
 
+    const getAverageAPR = async ( openDate: Date ) => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=${openDate}`);
+            return response.data.length > 0 ? response.data[0].average_apr : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    const getMonthAverageAPR = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=month`);
+            console.log(response.data)
+            return response.data.length > 0 ? response.data[0].average_apr : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    const getYearAverageAPR = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=year`);
+            console.log(response.data)
+            return response.data.length > 0 ? response.data[0].average_apr : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+    
+    const getYearAvgRewardRate = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/average_reward_rate?openDate=year`);
+            console.log(response.data)
+            return response.data.length > 0 ? response.data[0].average_reward_rate : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+    
+    const getRewardRate = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/reward_rate`);
+            console.log(response.data)
+            return response.data.length > 0 ? response.data[0].borrow_reward_rate : null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+   
     return {
         finalizeLoan,
         updateLoan,
         getLoanData,
         addUser,
-        getUserData
+        getUserData,
+        getAverageAPR,
+        getMonthAverageAPR,
+        getYearAverageAPR,
+        getYearAvgRewardRate,
+        getRewardRate
     }
 }
 

@@ -3,15 +3,11 @@ import { useState } from "react";
 import comp from "@/assets/coins/Compound (COMP).svg";
 import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
-
 import { useLoanDB } from "@/db/loanDb";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
-
-import aave from "@/assets/coins/Aave (AAVE) (1).svg";
-import Image from "next/image";
-import Link from "next/link";
+import { useSingleLoan } from "@/contract/single";
 
 const invoices = [
   {
@@ -103,6 +99,37 @@ const invoices = [
 const Dashboard = () => {
   const [active, setActive] = useState(true);
 
+  const { getLoanData } = useLoanDB();
+  const { userInfo } = useZeroDev();
+  const [activeLoans, setActiveLoans] = useState<any[]>([]);
+  const [closedLoans, setClosedLoans] = useState<any[]>([]);
+
+  const { getBorrowAPR } = useSingleLoan();
+  const [borrowAPR, setBorrowAPR] = useState<any>(0);
+
+  const initialize = async () => {
+    if (userInfo) {
+      const result = await getLoanData(userInfo?.email);
+      if (result) {
+        const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+        const closed_loans = result.filter((loan: any) => loan.loan_active === 0);
+        setActiveLoans(active_loans);
+        setClosedLoans(closed_loans);
+      }
+    }
+  }
+
+  useEffect(() => {
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo])
+
+  useEffect(() => {
+    getBorrowAPR()
+    .then(_apr => setBorrowAPR(_apr))
+    .catch(e => console.log(e))
+  })
+
   return (
     <main className="container mx-auto px-4 py-6  lg:py-10 ">
       <h1 className="text-center md:text-left text-2xl md:text-[28px] font-medium">
@@ -152,7 +179,7 @@ const Dashboard = () => {
                   </div>
                 ))}
                 <Link
-                  href={`/dashboard/${"invoice"}`}
+                  href={`/loan-dashboard/${"invoice"}`}
                   className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
                 >
                   Manage Loan
@@ -169,7 +196,7 @@ const Dashboard = () => {
                 <div className="flex">
                   <p className="w-1/2">{invoice.apr.text}</p>
                   <p className="w-1/2 text-right md:text-left">
-                    {invoice.apr.rate}
+                    {financial(borrowAPR, 2)}%
                   </p>
                 </div>
                 <div className="flex">

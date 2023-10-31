@@ -29,16 +29,10 @@ const ModifyWallet = ({
     getValues,
   } = useForm<FormData>();
 
-  const handleDecimalsOnValue = (value: any) => {
-    const regex = /([0-9]*[\.]{0,1}[0-9]{0,18})/s;
-    return value.match(regex)[0];
-  };
-
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const inputValue = event.target.value;
-    setInputNumber(handleDecimalsOnValue(inputValue));
+    const inputValue = parseFloat(event.target.value);
 
     setInputNumber(inputValue);
   };
@@ -138,16 +132,7 @@ const ModifyWallet = ({
           value={inputNumber}
           onBlur={(event) => {
             /* on onBlur set the number */
-            // const valueWithoutCommas = parseFloat(
-            //   inputNumber?.replace(/,/g, "") || "0"
-            // );
-            // setInputNumber(
-            //   new Intl.NumberFormat("en-US", {
-            //     maximumFractionDigits: 100,
-            //   }).format(valueWithoutCommas)
-            // );
-
-            // setChangeInputType("text");
+            setInputNumber(parseFloat(event.target.value || "0"));
           }}
           onChange={handleBorrowValueChange}
         />
@@ -198,7 +183,7 @@ const ModifyWallet = ({
       </div>
       {/* continue button */}
       <Link
-        href={`/dashboard/${"invoice"}/${"modify_collateral"}?try=${amount}`}
+        href={`/loan-dashboard/${"invoice"}/${"modify_collateral"}?try=${amount}`}
       >
         {" "}
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

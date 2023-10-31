@@ -4,12 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@supports (font-variation-settings: normal) {
-  :root {
-    font-family: "Inter var", sans-serif !important;
-  }
-
-
 /* Common-style */
 .test {
   @apply border-2 border-red-400;
@@ -173,7 +167,7 @@ input[type="checkbox"] {
   background: #f10404;
 }
 
-.range::after {
+/* .range::after {
   content: "";
   position: absolute;
   width: 2.5rem;
@@ -184,7 +178,7 @@ input[type="checkbox"] {
   transform: translateY(-50%);
   border-radius: 50px;
   background: #2C3B8D;
-}
+} */
 
 @media (min-width: 768px) {
   .range::after {

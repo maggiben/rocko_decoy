@@ -2,7 +2,6 @@ import ModalContent from "@/components/shared/modalContainer/modalContent/modalC
 import closeIcon from "@/assets/Close.svg";
 import Image from "next/image";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
 interface FormData {
   numberInput: string;
@@ -181,7 +180,7 @@ const MakePaymentModal = ({
       </div>
       {/* continue button */}
       <Link
-        href={`/dashboard/${"invoice"}/${"make-payment"}?payment=${parseFloat(
+        href={`/loan-dashboard/${"invoice"}/${"make-payment"}?payment=${parseFloat(
           inputNumber?.replace(/,/g, "") || "0"
         )}&currentBalance=${parseFloat(
           currentBalance?.replace(/,/g, "") || "0"

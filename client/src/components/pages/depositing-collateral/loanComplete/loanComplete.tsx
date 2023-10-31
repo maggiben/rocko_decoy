@@ -33,14 +33,14 @@ const LoanComplete = ({
         {id === 1 ? (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
-            href={"/dashboard"}
+            href={"/loan-dashboard"}
           >
             Okay
           </Link>
         ) : (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
-            href={"/dashboard/invoice"}
+            href={"/loan-dashboard/invoice"}
           >
             Okay
           </Link>

@@ -7,13 +7,13 @@ const RangeSlider = ({
   collateralBufferCurrentPercentage?: number;
 }) => {
   const [value, setValue] = useState<number>(
-    collateralBufferCurrentPercentage ? collateralBufferCurrentPercentage : 0
+    collateralBufferCurrentPercentage ? collateralBufferCurrentPercentage : 50
   );
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(
     collateralBufferCurrentPercentage
-      ? (collateralBufferCurrentPercentage / 400) * 100
-      : 0
+      ? (collateralBufferCurrentPercentage / 450) * 100
+      : (50 / (450 - 0)) * 100
   );
   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
 
@@ -28,31 +28,33 @@ const RangeSlider = ({
   }, [value]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value || "0", 10);
-    setValue(newValue);
-    setCustomValue(newValue);
-    setThumbPosition(
-      ((newValue - parseInt(event.target.min, 10)) /
-        (parseInt(event.target.max, 10) - parseInt(event.target.min, 10))) *
-        100
-    );
+    const newValue = parseInt(event.target.value || "50", 10);
+    if (newValue >= 50) {
+      setValue(newValue);
+      setCustomValue(newValue - 50);
+      setThumbPosition(
+        ((newValue - parseInt(event.target.min, 10)) /
+          (parseInt(event.target.max, 10) - parseInt(event.target.min, 10))) *
+          100
+      );
 
-    if (setLoanData) {
-      setLoanData((prevLoanData) => ({
-        ...prevLoanData,
-        activeNextButton: true,
-      }));
+      if (setLoanData) {
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          activeNextButton: true,
+        }));
+      }
     }
   };
 
   const handleCustomInputBlur = (event: FocusEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value || "0", 10);
-    if (newValue <= 1000) {
-      setValue(newValue);
+    const newValue = parseInt(event.target.value || "50", 10);
+    if (newValue <= 1050) {
+      setValue(newValue + 50);
     }
-    if (newValue > 1000) {
-      setCustomValue(1000);
-      setValue(1000);
+    if (newValue > 1050) {
+      setCustomValue(1050 - 50);
+      setValue(1050);
       return;
     }
     if (setLoanData) {
@@ -62,10 +64,10 @@ const RangeSlider = ({
       }));
     }
 
-    if (newValue > 400) return;
+    if (newValue > 450) return;
     setThumbPosition(
-      ((newValue - parseInt(event.target.min, 10)) /
-        (400 - parseInt(event.target.min, 10))) *
+      ((newValue + 50 - parseInt(event.target.min, 10)) /
+        (450 - parseInt(event.target.min, 10))) *
         100
     );
   };
@@ -76,18 +78,18 @@ const RangeSlider = ({
       return;
     }
     const newValue = parseInt(event.target.value, 10);
-    if (newValue <= 1000) {
+    if (newValue <= 1050) {
       setCustomValue(newValue);
     }
 
-    if (newValue > 1000) {
-      setCustomValue(1000);
-      setValue(1000);
+    if (newValue > 1050) {
+      setCustomValue(1050 - 50);
+      setValue(1050);
       return;
     }
 
-    if (newValue >= 400 && newValue <= 1000) {
-      setValue(newValue);
+    if (newValue >= 450 && newValue <= 1050) {
+      setValue(newValue + 50);
     }
   };
 
@@ -106,17 +108,14 @@ const RangeSlider = ({
         <p className="text-sm md:text-base">Higher Risk</p>
 
         <div className="flex-1 flex items-start">
-          <div className="w-10 md:w-20 h-[6px]"></div>
-
           {/* fake bar space of right */}
-          <div className=" flex-1">
+          <div className="relative flex-1">
+            <div className="frame h-3 w-3 bg-[#2C3B8D] rotate-180 absolute top-1 left-[10%]"></div>
+            <div className="frame h-3 w-3 bg-[#2C3B8D] absolute top-4 left-[10%]"></div>
             {/* rang slider container */}
             <div className="relative w-full">
               {/* fake bar start */}
-              <div className="w-10 md:w-20 h-[6px] rounded-full mt[3px] absolute top-1/2 -translate-y-1/2 right-[calc(100%-5px)]">
-                <div className="frame h-3 w-3 bg-[#2C3B8D] rotate-180 absolute -top-[7px]  -right-3"></div>
-                <div className="frame h-3 w-3 bg-[#2C3B8D] absolute top-[3px] -right-3"></div>
-              </div>
+
               {/* fake bar end */}
               {/* initial fix value start */}
               <div className="flex items-center justify-between w-fit absolute  top-10 -left-14 ">
@@ -134,7 +133,7 @@ const RangeSlider = ({
                 type="range"
                 className="range w-full h-[6px]"
                 min="0"
-                max="400"
+                max="450"
                 value={value}
                 onChange={handleInputChange}
                 data-value={value}
@@ -143,13 +142,13 @@ const RangeSlider = ({
                 style={{
                   background: `linear-gradient(to right, #2C3B8D 0%, #2C3B8D ${thumbPosition}%, #E2E2E2 ${thumbPosition}%, #E2E2E2 100%)`,
                 }}
-              />{" "}
+              />
               <div
                 ref={valueDivRef}
                 className="absolute left-0 -top-10 text-center text-white bg-[#2C3B8D] rounded-full py-2 px-4"
                 style={valueDivStyle}
               >
-                <p className="text-xs">{value}%</p>
+                <p className="text-xs">{value - 50}%</p>
                 {/*  <div className="w-1 h-10 bg-[#2C3B8D] absolute top-full left-1/2 -translate-x-1/2"></div> */}
               </div>
             </div>
@@ -158,7 +157,7 @@ const RangeSlider = ({
         <p className="text-sm md:text-base">Lower Risk</p>
       </div>
       {/* custom field */}
-      {!collateralBufferCurrentPercentage && value >= 400 ? (
+      {!collateralBufferCurrentPercentage && value >= 450 ? (
         <div className="ml-auto w-fit space-y-1 mt-10 mb-4 md:mt-0">
           <p className="text-[#141414] font-medium text-xs ">
             Enter custom amount
@@ -169,7 +168,7 @@ const RangeSlider = ({
               name=""
               id=""
               min="0"
-              max="1000"
+              max="1050"
               value={customValue}
               onBlur={handleCustomInputBlur}
               onChange={handleCustomInputChange}
