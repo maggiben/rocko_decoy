@@ -1,19 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import StatusWarning from "@/assets/StatusWarning.svg";
-import ModalContainer from "@/components/shared/modalContainer/modalContainer";
-import ChooseWallet from "@/components/pages/stepFive/chooseWallet/chooseWallet";
-import LoanFinalized from "@/components/pages/stepFive/loanFinalized/loanFinalized";
+import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
+import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
 import correct from "@/assets/correct.svg";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import HoverTooltip from "@/components/shared/tooltip/tooltip";
+import { useParams, useSearchParams } from "next/navigation";
+import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
+import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
+import { useAccount } from "wagmi";
+import { useSingleLoan } from "@/contract/single";
+import financial from "@/utility/currencyFormate";
+import { useZeroDev } from "@/hooks/useZeroDev";
 
 interface InnerInfo {
   description: string | JSX.Element;
-  details: string | JSX.Element;
+  details: string| JSX.Element;
   subDetails?: string | JSX.Element;
 }
 
@@ -72,17 +76,24 @@ const termsFull: Term[] = [
 
 const MakePayment: FC = () => {
   const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
-
   const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
-
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
-
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
+  const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const currentBalance = parseFloat(router.get("currentBalance") || "0"); //! get the URL parameter currentBalance value
+  const currentBalance = parseFloat(router.get("balance") || "0");
+  const collateral = parseFloat(router.get("collateral") || "0");
   const amount = "add"; //! get the URL parameter amount value
+
+  const { address : zerodevAccount } = useAccount();
+  const address = useAddress();
+  const { getLiquidationPrice, getBuffer } = useSingleLoan();
+  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
+  const [ buffer, setBuffer ] = useState<any>();
+
   const invoice: Info[] = [
     {
       description: "Lending Protocol",
@@ -100,29 +111,19 @@ const MakePayment: FC = () => {
             ) : (
               ""
             ),
-          details:
-            payment === currentBalance
-              ? `${new Intl.NumberFormat("en-US", {
-                  maximumFractionDigits: 6,
-                }).format(
-                  parseFloat(payment.toFixed(6).replace(/\.?0+$/, ""))
-                )} USDC`
-              : "",
-          subDetails:
-            payment === currentBalance
-              ? `~$${new Intl.NumberFormat("en-US", {
-                  maximumFractionDigits: 6,
-                }).format(
-                  parseFloat(payment.toFixed(6).replace(/\.?0+$/, ""))
-                )}`
-              : "",
+          details: payment === currentBalance ? `${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC` : "",
+          subDetails: payment === currentBalance ? `~$${new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}` : "",
         },
         {
           description:
             payment === currentBalance ? (
               <div className="flex items-center gap-2">
                 <p className="text-sm">Payment Buffer</p>
-                <HoverTooltip text="Payment Butter" />
+                <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
               </div>
             ) : (
               ""
@@ -131,47 +132,44 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$5.00` : "",
         },
       ],
-      details: (
-        <span className="font-semibold">
-          {new Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 6,
-          }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, "")))}{" "}
-          USDC
-        </span>
-      ),
+      details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC</span>,
       subDetails: `~$${new Intl.NumberFormat("en-US", {
-        maximumFractionDigits: 6,
-      }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, "")))}`,
+                maximumFractionDigits: 6,
+              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}`,
     },
     {
       description: "Projected values after payment",
       subDescription: [
         {
           description: "Outstanding balance",
-          details: (
-            <span className="font-semibold text-sm">
-              {(currentBalance - payment).toFixed(6).replace(/\.?0+$/, "")} USDC
-            </span>
-          ),
+          details: <span className="font-semibold text-sm">{(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC</span>,
           subDetails: `~$${new Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 6,
-          }).format(
-            parseFloat(
-              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, "")
-            )
-          )}`,
+                maximumFractionDigits: 6,
+              }).format(parseFloat((currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')))}`,
         },
         {
           description: "Collateral Buffer",
-          details: <span className="font-semibold text-sm">107%</span>,
+          details: <span className="font-semibold text-sm">{buffer === "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</span>,
         },
         {
           description: "Liquidation Price (ETH)",
-          details: <span className="font-semibold text-sm">$1,221.74</span>,
+          details: <span className="font-semibold text-sm">{liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}</span>,
         },
       ],
     },
   ];
+
+  useEffect(() => {
+    getLiquidationPrice(currentBalance - payment, collateral)
+    .then(_price => setLiquidationPrice(_price))
+    .catch(e => console.log(e));
+
+    getBuffer(currentBalance - payment, collateral)
+    .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e));
+  });
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -194,7 +192,9 @@ const MakePayment: FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p className="text-base text-[#141414]">{info?.details}</p>
+                    <p className="text-base text-[#141414]">
+                      {info?.details}
+                    </p>
                     {info?.subDetails && (
                       <p className="text-sm text-[#545454]">
                         {info?.subDetails}
@@ -300,16 +300,16 @@ const MakePayment: FC = () => {
               </label>
             </div>
             <div className="text-center md:text-left mt-1 lg:mt-0">
-              <button
-                disabled={paymentMethod !== "ethereum"}
-                className={`w-24 md:w-32 h-10 rounded-3xl  text-sm font-semibold ${
-                  paymentMethod === "ethereum"
-                    ? "text-[#eee] bg-[#2C3B8D]"
-                    : "bg-[#eee] text-[#2C3B8D]"
-                }`}
-              >
-                Connect
-              </button>
+              <ConnectWallet
+                btnTitle="Connect"
+                theme="light"
+                style={{
+                  background: paymentMethod === "ethereum" ? "#2C3B8D" : "#eee",
+                  color: paymentMethod === "ethereum" ? "#eee" : "#2C3B8D",
+                  borderRadius: "1.5rem",
+                  minWidth: "8rem",
+                }}
+              />
             </div>
           </div>
           {/* radio btn - 3*/}
@@ -343,7 +343,6 @@ const MakePayment: FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                        defaultValue={"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"}
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
@@ -369,10 +368,13 @@ const MakePayment: FC = () => {
             <ul className="list-disc">
               {payment === currentBalance
                 ? termsFull.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                    <React.Fragment key={i}>
+                      {term.rule}
+                    </React.Fragment>
                   ))
                 : terms.map((term, i) => (
-                    <React.Fragment key={i}>{term.rule}</React.Fragment>
+                    <React.Fragment key={i}>{term.rule}
+                    </React.Fragment>
                   ))}
             </ul>
           </div>
@@ -391,7 +393,7 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/invoice`}>
+              <Link href={`/loan-dashboard/${loanIndex}?active=true`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -401,13 +403,13 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${"invoice"}/${"make-payment"}/processing?payment=${payment}&currentBalance=${currentBalance}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
-                    !connect ? "bg-blue" : "bg-blue/40"
+                    address && zerodevAccount ? "bg-blue" : "bg-blue/40"
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={connect}
+                  disabled={!address || !zerodevAccount}
                 >
                   Confirm
                 </button>
@@ -427,10 +429,6 @@ const MakePayment: FC = () => {
                 setOpenModalFor={setOpenModalFor}
                 setConnect={setConnect}
               />
-            )}
-
-            {modalStep === 1 && (
-              <LoanFinalized setOpenModalFor={setOpenModalFor} />
             )}
           </ModalContainer>
         </>

@@ -40,9 +40,10 @@ const MakePaymentModal = ({
     const inputValue = event.target.value;
     if (
       parseFloat(inputValue?.replace(/,/g, "") || "0") >
-      parseFloat(currentBalance)
+      parseFloat(currentBalance.replace(/,/g, "") || "0")
     ) {
       setInputNumber(handleDecimalsOnValue(currentBalance.replace(/,/g, "")));
+
       return;
     }
 
