@@ -23,6 +23,7 @@ router.post(
       lending_protocol: req.body.lending_protocol,
       loan_active: req.body.loan_active,
       loan_asset: req.body.loan_asset,
+      principal_balance: req.body.outstanding_balance,
       outstanding_balance: req.body.outstanding_balance,
       collateral: req.body.collateral,
       create_time: new Date(),
