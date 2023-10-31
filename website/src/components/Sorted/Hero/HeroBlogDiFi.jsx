@@ -44,7 +44,7 @@ const HeroBlogDiFi = () => {
 
   return (
     <>
-    <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
+    <Link to={`/learn/${heroBlog.fields.slug}`}>
     <section className="hero_blog_container">
       <div className="hero_blog_container_image_container">
         <img

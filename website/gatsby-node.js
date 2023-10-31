@@ -18,11 +18,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage, createRedirect  } = actions
 
   createRedirect({
-    fromPath: '/defi-learning-resources',
-    toPath: '/learn',
-    isPermanent: true,
-    force: true, // This forces the redirect even if there's a page at the old URL
-  },{
     fromPath: '/terms.html',
     toPath: '/terms',
     isPermanent: true,
@@ -69,7 +64,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
 
       createPage({
-        path: `/defi-learning-resources/${post.fields.slug}`,
+        path: `/learn/${post.fields.slug}`,
         component: blogPost,
         context: {
           id: post.id,
