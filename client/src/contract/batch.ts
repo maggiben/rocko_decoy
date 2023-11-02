@@ -9,6 +9,7 @@ import { USDCContract, CometContract, CometRewardContract, WETHContract, network
 import { parseBalance } from '@/utility/utils';
 import { usePrepareContractBatchWrite, useContractBatchWrite } from "@zerodev/wagmi";
 import { useAddress } from "@thirdweb-dev/react";
+import { getRoundDown } from '@/utility/utils';
 
 const WETHABI = require('../constants/weth.json')
 const COMETABI = require('../constants/comet.json')
@@ -148,7 +149,12 @@ export const useRepayFull = (collateral: any, loan: any, borrowBalanceOf: any) =
     const [txHash, setTxHash] = useState("");
     const [success, setSuccess] = useState(false);
 
-    let remaining = loan > borrowBalanceOf ? Math.floor(loan - borrowBalanceOf).toString() : "0"
+    console.log(loan)
+    console.log(borrowBalanceOf)
+    console.log(loan - borrowBalanceOf)
+    console.log(getRoundDown(loan - borrowBalanceOf, 6))
+
+    let remaining = loan > borrowBalanceOf ? getRoundDown(loan - borrowBalanceOf, 6).toString() : "0"
 
     const { config } = usePrepareContractBatchWrite(
         wagmiAddress ? {

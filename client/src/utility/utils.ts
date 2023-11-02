@@ -39,3 +39,9 @@ export const getInterest = (loan: number, apr: number, startLoan: string | numbe
 export const formatDate = (date: number | Date | undefined) => {
     return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
 }
+
+export const getRoundDown = (value: number, fractionalPoints: number) => {
+    let roundedDownNumber = Math.floor(value * Math.pow(10, fractionalPoints)) / Math.pow(10, fractionalPoints);
+
+    return roundedDownNumber;
+}
