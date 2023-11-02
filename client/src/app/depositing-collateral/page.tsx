@@ -102,7 +102,7 @@ const DepositingCollateral = () => {
     finalizeLoan(
       userInfo?.email,
       txHash,
-      loanData?.protocol, true, loanData?.cryptoName,
+      "compound", true, loanData?.cryptoName,
       totalBorrowing, totalCollateral,
       isExistLoan);
 
@@ -210,29 +210,6 @@ const DepositingCollateral = () => {
       return () => clearInterval(interval);
     }
   }, [startA, startB, progress]);
-  useEffect(() => {
-    {
-      progressTracker === 0 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "one" }]);
-    }
-    {
-      progressTracker === 1 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "two" }]);
-    }
-    {
-      progressTracker === 2 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "three" }]);
-      progressTracker === 2 && progress === 100 && setActiveDone(true);
-    }
-    {
-      progressTracker === 3 &&
-        progress === 100 &&
-        setDoneTracker([...doneTracker, { step: "four" }]);
-    }
-  }, [progress, progressTracker, doneTracker]);
 
   //
   return (
@@ -412,9 +389,9 @@ const DepositingCollateral = () => {
               <button
                 onClick={() => setCompleteModal(true)}
                 className={`font-semibold  text-xs md:text-sm ${
-                  (startA || startB) ? "bg-blue/40" : "bg-blue"
+                  !activeDone ? "bg-blue/40" : "bg-blue"
                 } py-[10px] px-6 rounded-full text-white`}
-                disabled={startA || startB}
+                disabled={!activeDone}
               >
                 Done
               </button>
