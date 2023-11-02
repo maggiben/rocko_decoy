@@ -111,7 +111,7 @@ const ModifyStatus = () => {
         </div>
       ))
 
-      setAllDone();
+      setAllDone(txHash);
     } else {
       setError("B");
     }
@@ -130,13 +130,14 @@ const ModifyStatus = () => {
     setCounter(3);
   };
 
-  const setAllDone = async () => {
+  const setAllDone = async (txHash: string) => {
     updateLoan(
       "modifyCollateral",
       loanData?.id,
       0, false,
       status === "add" ? collateral + payment : collateral - payment, 
-      0
+      0,
+      txHash
     );
 
     setDoneTracker([{step: "one"}, { step: "two" }]);
@@ -188,7 +189,7 @@ const ModifyStatus = () => {
         </div>
       ))
   
-      setAllDone();
+      setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [borrowSuccess, success, borrowTxHash, txHash]);

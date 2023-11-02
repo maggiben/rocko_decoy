@@ -10,6 +10,7 @@ import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
 import { useSingleLoan } from "@/contract/single";
+import { NETWORK } from "@/constants/env";
 
 const Dashboard = () => {
   const [active, setActive] = useState(true);
@@ -190,6 +191,11 @@ const Dashboard = () => {
                   <p className="w-1/2 text-right md:text-left">
                     {financial(loan?.interest, 6)} USDC
                   </p>
+                </div>
+                <div className="flex">
+                  <Link className="w-1/2 underline" target="_blank"
+                    href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${loan?.transaction_hash}` : `https://${NETWORK}.etherscan.io/tx/${loan?.transaction_hash}`}
+                  >View loan repayment transaction</Link>
                 </div>
               </div>
             </div>

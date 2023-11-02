@@ -135,7 +135,8 @@ const Processing = () => {
       outStandingBalance - payment,
       currentBalance === payment ? false : true,
       collateral,
-      originalborrowBalance - outStandingBalance
+      originalborrowBalance - outStandingBalance,
+      txHash
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -168,7 +169,7 @@ const Processing = () => {
             href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${tx}` : `https://${NETWORK}.etherscan.io/tx/${tx}`}
             target="_blank"
           >
-            Successfully get repaid!
+            Loan successfully repaid!
           </Link>
         </div>
       ))

@@ -27,19 +27,21 @@ export const useLoanDB = () => {
         });
     }
     
-    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number, interest: number) => {
+    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number, interest: number, txHash: string) => {
         const updateObject = updateType === "repay" ?
         {
             updateType: updateType,
             id: id, 
             loan_active: Number(active),
             outstanding_balance: loan,
-            interest: interest
+            interest: interest,
+            transaction_hash: txHash
         } :
         {
             updateType: updateType,
             id: id, 
             collateral: collateral,
+            transaction_hash: txHash
         };
         axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {
             console.log(res.data);

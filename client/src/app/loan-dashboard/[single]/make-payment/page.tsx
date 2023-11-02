@@ -106,17 +106,13 @@ const MakePayment: FC = () => {
           description:
             payment === currentBalance ? (
               <>
-                <p className="text-sm">Outstanding balance</p>
+                <p className="text-sm">Outstanding Balance</p>
               </>
             ) : (
               ""
             ),
-          details: payment === currentBalance ? `${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC` : "",
-          subDetails: payment === currentBalance ? `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}` : "",
+          details: payment === currentBalance ? `${financial(payment, 6)} USDC` : "",
+          subDetails: payment === currentBalance ? `$${financial(payment, 6)}` : "",
         },
         {
           description:
@@ -132,18 +128,14 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : "",
         },
       ],
-      details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))} USDC</span>,
-      subDetails: `~$${new Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 6,
-              }).format(parseFloat(payment.toFixed(6).replace(/\.?0+$/, '')))}`,
+      details: <span className="font-semibold">{`${financial(payment + Number(PAYMENT_BUFFER), 6)} USDC`}</span>,
+      subDetails: `$${financial(payment + Number(PAYMENT_BUFFER), 6)}`,
     },
     {
       description: "Projected values after payment",
       subDescription: [
         {
-          description: "Outstanding balance",
+          description: "Outstanding Balance",
           details: <span className="font-semibold text-sm">{(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC</span>,
           subDetails: `~$${new Intl.NumberFormat("en-US", {
                 maximumFractionDigits: 6,

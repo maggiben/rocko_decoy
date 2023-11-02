@@ -58,11 +58,12 @@ router.post("/update", (req, res) => {
       outstanding_balance: req.body.outstanding_balance,
       interest: req.body.interest,
       loan_active: req.body.loan_active,
+      transaction_hash: req.body.transaction_hash,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET outstanding_balance = ?, interest = ?, loan_active = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE loans SET outstanding_balance = ?, interest = ?, loan_active = ?, transaction_hash = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.outstanding_balance, data.interest, data.loan_active, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.outstanding_balance, data.interest, data.loan_active, data.transaction_hash, data.modified_time, data.id], (err, results) => {
       if (err) throw err;
       res.send("Amount and Active Status successfully updated");
     });
@@ -70,11 +71,12 @@ router.post("/update", (req, res) => {
     let data = {
       id: req.body.id,
       collateral: req.body.collateral,
+      transaction_hash: req.body.transaction_hash,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET collateral = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE loans SET collateral = ?, transaction_hash = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.collateral, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.collateral, data.transaction_hash, data.modified_time, data.id], (err, results) => {
       if (err) throw err;
       res.send("Buffer, Collateral and LiquidationPrice successfully updated");
     });
