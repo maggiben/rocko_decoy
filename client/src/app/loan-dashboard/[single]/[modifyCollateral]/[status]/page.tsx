@@ -136,6 +136,7 @@ const ModifyStatus = () => {
       loanData?.id,
       0, false,
       status === "add" ? collateral + payment : collateral - payment, 
+      0
     );
 
     setDoneTracker([{step: "one"}, { step: "two" }]);

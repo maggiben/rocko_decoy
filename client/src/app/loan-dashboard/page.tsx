@@ -37,7 +37,7 @@ const Dashboard = () => {
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo])
+  }, [userInfo, active])
 
   useEffect(() => {
     getBorrowAPR()
@@ -188,7 +188,7 @@ const Dashboard = () => {
                 <div className="flex">
                   <p className="w-1/2">Total Interest Accrued</p>
                   <p className="w-1/2 text-right md:text-left">
-                    30 USDC
+                    {financial(loan?.interest, 6)} USDC
                   </p>
                 </div>
               </div>

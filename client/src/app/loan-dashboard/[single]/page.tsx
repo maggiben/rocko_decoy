@@ -63,12 +63,12 @@ function SinglePage() {
   const [LTV, setLTV] = useState<any>();
   const [threshold, setThreshold] = useState<any>();
   const [penalty, setPenalty] = useState<any>();
-  const [interest, setInterest] = useState<any>();
   const [rewardAmount, setRewardAmount] = useState<any>();
   const [rewardRate, setRewardRate] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
   const [averageAPR, setAverageAPR] = useState<any>(0);
+  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
 
   const {
     getETHPrice,
@@ -76,10 +76,10 @@ function SinglePage() {
     getLTV,
     getPenalty,
     getThreshold,
-    // getRewardAmount,
-    getInterestAccrued,
+    getRewardAmount,
     getLiquidationPrice,
-    getBuffer
+    getBuffer,
+    getBorrowBalanceOf
   } = useSingleLoan();
 
   const initialize = async () => {
@@ -87,11 +87,13 @@ function SinglePage() {
       const result = await getLoanData(userInfo?.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
-        if (active_loans.length > 0) setLoanData(active_loans[0]);
+        if (active_loans.length > 0) {
+          setLoanData(active_loans[0]);
         
-        const avg_val = await getAverageAPR(active_loans[0].create_time);
-        console.log(avg_val)
-        if (avg_val) setAverageAPR(avg_val);
+          const avg_val = await getAverageAPR(active_loans[0].create_time);
+          console.log(avg_val)
+          if (avg_val) setAverageAPR(avg_val);
+        }
       }
     }
   }
@@ -122,13 +124,9 @@ function SinglePage() {
     .then(_penalty => setPenalty(_penalty))
     .catch(e => console.log(e))
 
-    getInterestAccrued()
-    .then(_interest => setInterest(_interest))
+    getRewardAmount()
+    .then(_reward => setRewardAmount(_reward))
     .catch(e => console.log(e))
-
-    // getRewardAmount()
-    // .then(_reward => setRewardAmount(_reward))
-    // .catch(e => console.log(e))
 
     getRewardRate()
     .then(_rate => setRewardRate(_rate))
@@ -140,6 +138,10 @@ function SinglePage() {
 
     getBuffer(loanData?.outstanding_balance, loanData?.collateral)
     .then(_buffer => setBuffer(_buffer))
+    .catch(e => console.log(e))
+
+    getBorrowBalanceOf()
+    .then(_balance => setBorrowBalanceOf(_balance))
     .catch(e => console.log(e))
   });
 
@@ -172,9 +174,9 @@ function SinglePage() {
             <div className="divide-y-2 space-y-4">
               <div className="flex justify-between items-center">
                 <p className="text-2xl  font-medium">
-                  {financial(loanData?.outstanding_balance)} <small>USDC</small>
+                  {financial(borrowBalanceOf, 2)} <small>USDC</small>
                   <span className="block text-sm text-[#545454]">
-                    ${financial(loanData?.outstanding_balance)}
+                    ${financial(borrowBalanceOf, 2)}
                   </span>
                 </p>
                 <Image
@@ -189,7 +191,7 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <p className=""> Interest Accrued </p>
                   <span className="block text-xl  font-medium">
-                   {financial(interest, 2)} <small>USDC</small>
+                   {financial(borrowBalanceOf - loanData?.outstanding_balance, 6)} <small>USDC</small>
                   </span>
                 </div>
 
@@ -347,9 +349,9 @@ function SinglePage() {
             <div className="divide-y-2 space-y-3">
               <div className="flex justify-between mt-1">
                 <p className="text-xl font-medium">
-                  {financial(interest, 6)} COMP{" "}
+                  {financial(rewardAmount, 6)} COMP{" "}
                   <span className="block text-sm text-[#545454] font-normal">
-                    ~${financial(Number(compPrice) * interest, 2)}
+                    ~${financial(Number(compPrice) * rewardAmount, 2)}
                   </span>
                 </p>
                 <Image
@@ -381,7 +383,7 @@ function SinglePage() {
               {modalStep === 0 && (
                 <MakePaymentModal
                   setOpenModalFor={setOpenModalFor}
-                  currentBalance={financial(loanData?.outstanding_balance)}
+                  currentBalance={financial(borrowBalanceOf, 6)}
                   collateral={loanData?.collateral}
                 />
               )}

@@ -22,29 +22,26 @@ export const useLoanDB = () => {
             collateral: collateral,
             exist: exist
         };
-        console.log("loanObject", loanObject);
         axios.post(`${BACKEND_URL}/add`, loanObject).then((res) => {
-            console.log(res);
             console.log(res.data);
         });
     }
     
-    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number) => {
+    const updateLoan = (updateType: string, id: number, loan: number, active: boolean, collateral: number, interest: number) => {
         const updateObject = updateType === "repay" ?
         {
             updateType: updateType,
             id: id, 
             loan_active: Number(active),
             outstanding_balance: loan,
+            interest: interest
         } :
         {
             updateType: updateType,
             id: id, 
             collateral: collateral,
         };
-        console.log("updateObject-----", updateObject);
         axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {
-            console.log(res);
             console.log(res.data);
         });        
     }
@@ -52,7 +49,6 @@ export const useLoanDB = () => {
     const getLoanData = async ( user: string ) => {
         try {
             const response = await axios.get(`${BACKEND_URL}/loans?user=${user}`);
-            console.log("response", response.data);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -67,9 +63,7 @@ export const useLoanDB = () => {
             wallet_address: wallet_address,
             active: Number(active),
         };
-        console.log("userObject", userObject);
         axios.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
-            console.log(res);
             console.log(res.data);
         });
     }
@@ -97,7 +91,6 @@ export const useLoanDB = () => {
     const getMonthAverageAPR = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=month`);
-            console.log(response.data)
             return response.data.length > 0 ? response.data[0].average_apr : null;
         } catch (error) {
             console.error(error);
@@ -108,7 +101,6 @@ export const useLoanDB = () => {
     const getYearAverageAPR = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/average_apr?openDate=year`);
-            console.log(response.data)
             return response.data.length > 0 ? response.data[0].average_apr : null;
         } catch (error) {
             console.error(error);
@@ -119,7 +111,6 @@ export const useLoanDB = () => {
     const getYearAvgRewardRate = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/average_reward_rate?openDate=year`);
-            console.log(response.data)
             return response.data.length > 0 ? response.data[0].average_reward_rate : null;
         } catch (error) {
             console.error(error);
@@ -130,7 +121,6 @@ export const useLoanDB = () => {
     const getRewardRate = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/reward_rate`);
-            console.log(response.data)
             return response.data.length > 0 ? response.data[0].borrow_reward_rate : null;
         } catch (error) {
             console.error(error);

@@ -11,7 +11,7 @@ import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import StatusSuccess from "@/assets/StatusSuccess.png";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
-import { NETWORK } from "@/constants/env";
+import { NETWORK, PAYMENT_BUFFER } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useRepayFull, useRepaySome } from "@/contract/batch";
@@ -26,15 +26,20 @@ const Processing = () => {
   const { processing, single : loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
+  let currentBalance = parseFloat(router.get("balance") || "0");
+  currentBalance = currentBalance + (payment - currentBalance == Number(PAYMENT_BUFFER) ? Number(PAYMENT_BUFFER) : 0);
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
   const [ loanData, setLoanData ] = useState<any>();
-  const [ currentBalance, setCurrentBalance ] = useState<number>(0);
   const [ collateral, setCollateral ] = useState<number>(0);
+  const [ outStandingBalance, setOutStandingBalance ] = useState<number>(0);
+  const [ borrowBalanceOf, setBorrowBalanceOf ] = useState<number>(0);
+  const [ originalborrowBalance, setOriginalBorrowBalance ] = useState<number>(0);
+
   // Thirdweb for EOA
   const address = useAddress();
-  const { depositZerodevAccount } = useSingleLoan();
+  const { depositZerodevAccount, getBorrowBalanceOf } = useSingleLoan();
   const { data } = useBalance({ 
     address: address as `0x${string}`, 
     token: USDCContract[networkChainId] as `0x${string}`
@@ -44,8 +49,9 @@ const Processing = () => {
   const { userInfo } = useZeroDev();
   const { chain } = useNetwork();
   const { executeBatchRepaySome, batchRepaySome, success, txHash } = useRepaySome(payment);
-  const { executeBatchRepayFull, batchRepayFull, success: fullySuccess, txHash: fullyTxHash } = useRepayFull(collateral, payment);
+  const { executeBatchRepayFull, batchRepayFull, success: fullySuccess, txHash: fullyTxHash } = useRepayFull(collateral, payment, borrowBalanceOf);
 
+  const [activeDoing, setActiveDoing] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
   const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
   const [startA, setStartA] = useState(false); // true when depositLoan to zerodevAccount
   const [startB, setStartB] = useState(false); // true when start batchTransactions
@@ -58,12 +64,19 @@ const Processing = () => {
 
   const initialize = async () => {
     if (userInfo) {
+      const borrowBalance = await getBorrowBalanceOf();
+      setBorrowBalanceOf(borrowBalance);
+      if (originalborrowBalance == 0) { 
+        console.log(borrowBalance)
+        setOriginalBorrowBalance(borrowBalance)
+      }
+
       const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == 1);
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
-          setCurrentBalance(active_loans[0]?.outstanding_balance);
+          setOutStandingBalance(active_loans[0]?.outstanding_balance);
           setCollateral(active_loans[0]?.collateral);
         }
       }
@@ -71,7 +84,7 @@ const Processing = () => {
   };
 
   const start = async () => {
-    if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
+    if (!zerodevAccount || !address) return; // !zerodevAccount - logout, !address - no EOA
     if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
       toast.error("Invalid Network!");
       return;
@@ -119,9 +132,10 @@ const Processing = () => {
     updateLoan(
       "repay",
       loanData?.id,
-      currentBalance - payment,
+      outStandingBalance - payment,
       currentBalance === payment ? false : true,
-      collateral
+      collateral,
+      originalborrowBalance - outStandingBalance
     );
 
     setDoneTracker([...doneTracker, { step: "two" }]);
@@ -136,11 +150,12 @@ const Processing = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    if (loanData && batchRepayFull != undefined && batchRepaySome != undefined)
-      start();
+    if (!activeDoing && userInfo != undefined && loanData && batchRepayFull != undefined && batchRepaySome != undefined) {
+      start();      setActiveDoing(true);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[zerodevAccount, loanData, batchRepayFull, batchRepaySome]);
+  },[userInfo, loanData, batchRepayFull, batchRepaySome]);
 
   useEffect(() => {
     if (success || fullySuccess) {

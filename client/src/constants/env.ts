@@ -4,6 +4,7 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK || "goerli";
 export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || "";
 export const THIRDWEB_CLIENTID = process.env.NEXT_PUBLIC_THIRDWEB_CLIENTID || "";
+export const PAYMENT_BUFFER = process.env.NEXT_PUBLIC_PAYMENT_BUFFER || 5;
 
 let demoMode = false;
 let sessionFlag = false;

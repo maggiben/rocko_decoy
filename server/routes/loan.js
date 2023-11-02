@@ -31,7 +31,6 @@ router.post(
     };
 
     if (!req.body.exist) { // if new loan on current user
-      console.log(data);
       let sql = "INSERT INTO loans SET ?";
       db.query(sql, data, (err, results) => {
         if (err) throw err;
@@ -51,19 +50,19 @@ router.post(
 //////////////////// Update loan
 
 router.post("/update", (req, res) => {
-  console.log("update req.body", req.body);
   const updateType = req.body.updateType;
 
   if (updateType === "repay") {
     let data = {
       id: req.body.id,
       outstanding_balance: req.body.outstanding_balance,
+      interest: req.body.interest,
       loan_active: req.body.loan_active,
       modified_time: new Date()
     };
-    let sql = "UPDATE loans SET outstanding_balance = ?, loan_active = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE loans SET outstanding_balance = ?, interest = ?, loan_active = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.outstanding_balance, data.loan_active, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.outstanding_balance, data.interest, data.loan_active, data.modified_time, data.id], (err, results) => {
       if (err) throw err;
       res.send("Amount and Active Status successfully updated");
     });

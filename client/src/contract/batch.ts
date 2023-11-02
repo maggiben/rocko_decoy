@@ -1,5 +1,5 @@
 /* global BigInt */
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import {
     useAccount,
     useWaitForTransaction
@@ -141,13 +141,14 @@ export const useRepaySome = (loan: any) => {
     return { executeBatchRepaySome, batchRepaySome, success, txHash, error };
 }
 
-export const useRepayFull = (collateral: any, loan: any) => {
+export const useRepayFull = (collateral: any, loan: any, borrowBalanceOf: any) => {
     const { address : wagmiAddress } = useAccount();
     const address = useAddress();
 
     const [txHash, setTxHash] = useState("");
     const [success, setSuccess] = useState(false);
 
+    let remaining = loan > borrowBalanceOf ? Math.floor(loan - borrowBalanceOf).toString() : "0"
 
     const { config } = usePrepareContractBatchWrite(
         wagmiAddress ? {
@@ -167,7 +168,16 @@ export const useRepayFull = (collateral: any, loan: any) => {
                 functionName: "supply",
                 args: [
                     USDCContract[networkChainId], 
-                    parseBalance(loan.toString(), 6)
+                    parseBalance(borrowBalanceOf.toString(), 6)
+                ],
+            },
+            {
+                address: USDCContract[networkChainId],
+                abi: USDCABI,
+                functionName: "transfer",
+                args: [
+                    address, 
+                    parseBalance(remaining, 6)
                 ],
             },
             {

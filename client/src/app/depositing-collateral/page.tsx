@@ -67,13 +67,6 @@ const DepositingCollateral = () => {
 
     setStartA(true);
 
-    setADone();
-
-    // batch transactions
-    executeBatchGetLoan();
-    setStartB(true);
-    return;
-
     const collateralReceived = await receiveCollateral();
     if (collateralReceived) {
       setADone();
@@ -89,7 +82,7 @@ const DepositingCollateral = () => {
   const receiveCollateral = async (): Promise<any> => {
     if (!wagmiAddress || !loanData) return null;
 
-    const depositResult = await depositZerodevAccount(wagmiAddress, Number(loanData?.collateralNeeded) + gasFee , "ETH");
+    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded + gasFee , "ETH");
     return depositResult;
   }
 
@@ -125,7 +118,6 @@ const DepositingCollateral = () => {
         if (result && result.length > 0) {
           // set isExistLoan
           const match_loan = result.filter((loan: any) => loan.loan_active === 1);
-          console.log(match_loan)
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
             setTotalBorrowing(loanData?.borrowing + match_loan[0].outstanding_balance);

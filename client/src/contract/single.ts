@@ -3,7 +3,7 @@ import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { useAccount } from 'wagmi';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { USDCContract, CometContract, CometRewardContract, WETHContract, ChainlinkEthPriceFeed, networkChainId } from "../constants";
-import { parseBalance } from '@/utility/utils';
+import { formatBalance, parseBalance } from '@/utility/utils';
 import { NETWORK } from "../constants/env";
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -89,14 +89,34 @@ export const useSingleLoan = () => {
     return formattedValue
   }
 
-  const getCollateralBalanceOf = async (): Promise<number> => {
+  const getBorrowBalanceOf = async (): Promise<number> => {
+    if (!zerodevAccount) return 0;
+
     const sdk = new ThirdwebSDK(ProviderNetwork);
-  
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+
+    const value = await contract.call( 
+      "borrowBalanceOf",
+      [
+        zerodevAccount
+      ] )
+
+    const formattedValue = formatBalance(value, 6, 6);
+
+    console.log(formattedValue)
+    return Number(formattedValue)
+  }
+
+  const getCollateralBalanceOf = async (): Promise<number> => {
+    if (!zerodevAccount) return 0;
+
+    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    
     const value = await contract.call( 
       "collateralBalanceOf",
       [
-        address,
+        zerodevAccount,
         WETHContract[networkChainId]
       ] )
 
@@ -118,37 +138,7 @@ export const useSingleLoan = () => {
     return formattedValue
   }
 
-  const getRewardAmount = async() => {
-    if (!zerodevAccount) return 0;
-
-    const sdk = new ThirdwebSDK(ProviderNetwork);
-    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI);
-    const value = await contract.call(
-      "baseTrackingAccrued",
-      [
-        zerodevAccount
-      ]
-    )
-
-    console.log(value)
-
-    // const contract = await sdk.getContract(CometRewardContract[networkChainId], REWARDABI)
-    // const value = await contract.call( 
-    //   "getRewardOwed",
-    //   [
-    //     CometContract[networkChainId],
-    //     zerodevAccount
-    //   ]
-    // )
-
-    // console.log(value.owed)
-    // console.log(value.token)
-  
-    // const formattedValue = Number(ethers.utils.formatEther( value[2] )) * 10 ** 12
-    // return formattedValue
-  }
-
-  const getInterestAccrued = async(): Promise<number> => {
+  const getRewardAmount = async(): Promise<number> => {
     if (!zerodevAccount) return 0;
 
     const sdk = new ThirdwebSDK(ProviderNetwork);
@@ -409,9 +399,9 @@ export const useSingleLoan = () => {
       getThreshold,
       getPenalty,
       getCollateralBalanceOf,
+      getBorrowBalanceOf,
       getRewardAmount,
       getRewardRate,
-      getInterestAccrued,
       getLiquidationPrice,
       getBuffer,
       claimReward,

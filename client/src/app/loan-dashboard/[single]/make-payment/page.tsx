@@ -13,7 +13,7 @@ import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
 import { useAccount } from "wagmi";
 import { useSingleLoan } from "@/contract/single";
 import financial from "@/utility/currencyFormate";
-import { useZeroDev } from "@/hooks/useZeroDev";
+import { PAYMENT_BUFFER } from "@/constants/env";
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -128,8 +128,8 @@ const MakePayment: FC = () => {
             ) : (
               ""
             ),
-          details: payment === currentBalance ? `5.00 USDC` : "",
-          subDetails: payment === currentBalance ? `~$5.00` : "",
+          details: payment === currentBalance ? `${PAYMENT_BUFFER} USDC` : "",
+          subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : "",
         },
       ],
       details: <span className="font-semibold">{new Intl.NumberFormat("en-US", {
@@ -403,7 +403,7 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?payment=${payment}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?balance=${currentBalance}&payment=${payment + Number(PAYMENT_BUFFER)}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
