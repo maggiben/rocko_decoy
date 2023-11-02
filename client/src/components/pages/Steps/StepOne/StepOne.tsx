@@ -189,8 +189,8 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                       if (isNaN(num)) {
                         return "Invalid number";
                       }
-                      if (num < 1000) {
-                        return "Number must be at least 1000";
+                      if (num < 100) {
+                        return "Number must be at least 100";
                       }
                       if (num > 10000000) {
                         return "Maximum amount is 10,000,000";
