@@ -253,17 +253,6 @@ const Processing = () => {
                   : "text-gray-400"
               } text-sm font-medium flex items-center gap-2`}
             >
-              {payment !== currentBalance && (
-                <div
-                  className={`w-5 h-5 rounded-full border p-0 m-0 leading-[0px] ${
-                    progressTracker === 0 || doneTracker[0]?.step === "one"
-                      ? "border-black"
-                      : "border-gray-400"
-                  } flex items-center justify-center text-xs`}
-                >
-                  1
-                </div>
-              )}
               <p className="">Payment Received</p>
             </div>
             {doneTracker[0]?.step === "one" && (
@@ -303,17 +292,6 @@ const Processing = () => {
                   : "text-gray-400"
               } text-sm font-medium flex items-center gap-2`}
             >
-              {payment !== currentBalance && (
-                <div
-                  className={`w-5 h-5 rounded-full border p-0 m-0 leading-[0px] ${
-                    progressTracker === 1 || doneTracker[1]?.step === "two"
-                      ? "border-black"
-                      : "border-gray-400"
-                  } flex items-center justify-center text-xs`}
-                >
-                  2
-                </div>
-              )}
               <p className="">Payment Made to Lending Protocol</p>
             </div>
             {doneTracker[1]?.step === "two" && (

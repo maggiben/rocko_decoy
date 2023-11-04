@@ -16,6 +16,7 @@ import { useCompPrice } from "@/hooks/usePrice";
 import financial from "@/utility/currencyFormate";
 import { formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
+const TOOLTIPS = require('../../../locales/en_tooltips');
 
 const headings = [
   {
@@ -171,7 +172,7 @@ function SinglePage() {
             <div className="divide-y-2 space-y-4">
               <div className="flex justify-between items-center">
                 <p className="text-2xl  font-medium">
-                  {financial(borrowBalanceOf, 2)} <small>USDC</small>
+                  {financial(borrowBalanceOf, 6)} <small>USDC</small>
                   <span className="block text-sm text-[#545454]">
                     ${financial(borrowBalanceOf, 2)}
                   </span>
@@ -202,7 +203,7 @@ function SinglePage() {
                 <div className="w-[30%]">
                   <div className="flex items-center gap-2 ">
                     <p className=""> Average APR</p>{" "}
-                    <HoverTooltip text="hover me" />
+                    <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
                   </div>
 
                   <div className="block text-xl  font-medium">
@@ -237,7 +238,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Loan-to-Value Ratio</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.MAX_LTV} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {LTV * 100}
@@ -247,7 +248,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Liquidation Threshold</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {threshold * 100}
@@ -257,7 +258,7 @@ function SinglePage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 ">
                   <p className="font-normal">Liquidation Penalty</p>{" "}
-                  <HoverTooltip text="hover me" />
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
                 </div>
                 <p className="block text-xl font-medium mt-2">
                   {financial(penalty * 100)}
@@ -303,7 +304,7 @@ function SinglePage() {
               <div className="flex pt-3 gap-x-2">
                 <p className="w-1/2 font-medium">Collateral Posted</p>
                 <p>
-                  {financial(collateralBalanceOf, 2)} ETH
+                  {financial(collateralBalanceOf, 18)} ETH
                   <span className="block text-sm text-[#545454]">
                     ${financial(collateralPrice * collateralBalanceOf, 2)}
                   </span>

@@ -128,8 +128,12 @@ const MakePayment: FC = () => {
           subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : "",
         },
       ],
-      details: <span className="font-semibold">{`${financial(payment + Number(PAYMENT_BUFFER), 6)} USDC`}</span>,
-      subDetails: `$${financial(payment + Number(PAYMENT_BUFFER), 6)}`,
+      details: <span className="font-semibold">{`${financial(payment + 
+        (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
+        , 6)} USDC`}</span>,
+      subDetails: `$${financial(payment + 
+        (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
+        , 6)}`,
     },
     {
       description: "Projected values after payment",
@@ -395,7 +399,9 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?balance=${currentBalance}&payment=${payment + Number(PAYMENT_BUFFER)}`}
+                href={`/loan-dashboard/${loanIndex}/${"make-payment"}/processing?balance=${currentBalance}&payment=${payment + 
+                  (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
+                }`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

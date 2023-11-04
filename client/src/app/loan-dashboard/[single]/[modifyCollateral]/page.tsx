@@ -75,7 +75,7 @@ const ModifyCollateral: React.FC = () => {
     },
     {
       description: "Collateral Amount",
-      details: `${financial(payment, 2)} ETH`,
+      details: `${financial(payment, 18)} ETH`,
       subDetails: `~$${financial(payment * collateralPrice, 2)}`,
     },
     {
@@ -83,7 +83,7 @@ const ModifyCollateral: React.FC = () => {
       subDescription: [
         {
           description: "Total Collateral",
-          details: `${financial(new_collateral, 2)} ETH`,
+          details: `${financial(new_collateral, 18)} ETH`,
           subDetails: `~$${financial(new_collateral * collateralPrice, 2)}`,
         },
         {

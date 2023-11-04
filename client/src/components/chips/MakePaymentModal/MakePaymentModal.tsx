@@ -91,7 +91,7 @@ const MakePaymentModal = ({
       {/* select option */}
       <div className="space-y-3">
         <p className="font-medium text-[#141414]">
-          Outstanding balance: {currentBalance} USDC
+          Outstanding Balance: {currentBalance} USDC
         </p>
       </div>
       {/* input field with react form hook */}
@@ -184,7 +184,7 @@ const MakePaymentModal = ({
               : "--"}
             <span className="block text-gray-600 text-sm font-normal">
               {parseFloat(inputNumber?.replace(/,/g, "") || "0") > 0
-                ? `$${financial(parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0"), 6)}`
+                ? `$${financial(parseFloat(currentBalance?.replace(/,/g, "") || "0") - parseFloat(inputNumber?.replace(/,/g, "") || "0"), 2)}`
                 : "--"}
             </span>
           </p>

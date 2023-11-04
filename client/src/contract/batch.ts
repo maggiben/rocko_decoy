@@ -149,6 +149,7 @@ export const useRepayFull = (collateral: any, loan: any, borrowBalanceOf: any) =
     const [txHash, setTxHash] = useState("");
     const [success, setSuccess] = useState(false);
 
+    console.log(collateral)
     console.log(loan)
     console.log(borrowBalanceOf)
     console.log(loan - borrowBalanceOf)

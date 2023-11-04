@@ -197,7 +197,7 @@ const ModifyWallet = ({
           <p className="text-sm text-gray-600">Total Collateral</p>
           {/* after putting a value on inputfield the number(based on user's intention like "add" or "withdraw") will show */}
           <p className="font-semibold text-right">
-            {inputNumber ? `${financial(new_collateral, 2)} ETH` : "--"}
+            {inputNumber ? `${financial(new_collateral, 18)} ETH` : "--"}
             <span className="block text-gray-600 text-sm font-normal">
               {inputNumber
                 ? `~$${financial(new_collateral * collateralPrice, 2)}`
