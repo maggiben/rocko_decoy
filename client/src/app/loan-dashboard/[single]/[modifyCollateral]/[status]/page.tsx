@@ -32,7 +32,7 @@ const ModifyStatus = () => {
   const [ collateral, setCollateral ] = useState<number>(0);
   // Thirdweb for EOA
   const address = useAddress();
-  const { wethToETH, depositZerodevAccount } = useSingleLoan();
+  const { wethToETH, depositZerodevAccount, getCollateralBalanceOf } = useSingleLoan();
   const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address : zerodevAccount } = useAccount();
@@ -151,10 +151,7 @@ const ModifyStatus = () => {
       const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == 1);
-        if (active_loans.length > 0) {
-          setLoanData(active_loans[0]);
-          setCollateral(active_loans[0]?.collateral);
-        }        
+        if (active_loans.length > 0) setLoanData(active_loans[0]);
       }
     }
   };
@@ -163,6 +160,12 @@ const ModifyStatus = () => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
+
+  useEffect(() => {
+    getCollateralBalanceOf()
+    .then(_value => setCollateral(_value))
+    .catch(e => console.log(e))
+  })
 
   useEffect(() => {
     if (loanData && batchAddCollateral != undefined && batchBorrowCollateral != undefined)

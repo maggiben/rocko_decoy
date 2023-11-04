@@ -7,6 +7,7 @@ import { formatBalance, parseBalance } from '@/utility/utils';
 import { NETWORK } from "../constants/env";
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
+const BASIC_COMETABI = require('../constants/basic_comet.json');
 const USDCABI = require('../constants/usdc.json');
 const REWARDABI = require('../constants/reward.json');
 const ASSET_ID = 2;
@@ -111,7 +112,7 @@ export const useSingleLoan = () => {
     if (!zerodevAccount) return 0;
 
     const sdk = new ThirdwebSDK(ProviderNetwork);
-    const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
+    const contract = await sdk.getContract(CometContract[networkChainId], BASIC_COMETABI)
     
     const value = await contract.call( 
       "collateralBalanceOf",

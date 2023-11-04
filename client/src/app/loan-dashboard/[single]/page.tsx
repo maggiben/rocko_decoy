@@ -33,15 +33,6 @@ const headings = [
   },
 ];
 
-const currentBallanceInfo = {
-  amount: "1,012.13",
-  subAmount: "$1,012.13",
-  interestAccrued: "12.13",
-  currentAPR: "3.84",
-  averageAPR: "3.84",
-  dateOpened: "March 11, 2023",
-}
-
 const allTimeHigh = 4872.19;
 
 function SinglePage() {
@@ -69,6 +60,7 @@ function SinglePage() {
   const [buffer, setBuffer] = useState<any>();
   const [averageAPR, setAverageAPR] = useState<any>(0);
   const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
+  const [collateralBalanceOf, setCollateralBalanceOf] = useState<any>(0);
 
   const {
     getETHPrice,
@@ -79,7 +71,8 @@ function SinglePage() {
     getRewardAmount,
     getLiquidationPrice,
     getBuffer,
-    getBorrowBalanceOf
+    getBorrowBalanceOf,
+    getCollateralBalanceOf
   } = useSingleLoan();
 
   const initialize = async () => {
@@ -132,17 +125,21 @@ function SinglePage() {
     .then(_rate => setRewardRate(_rate))
     .catch(e => console.log(e))
 
-    getLiquidationPrice(loanData?.outstanding_balance, loanData?.collateral)
+    getLiquidationPrice(loanData?.outstanding_balance, collateralBalanceOf)
     .then(_price => setLiquidationPrice(_price))
     .catch(e => console.log(e))
 
-    getBuffer(loanData?.outstanding_balance, loanData?.collateral)
+    getBuffer(loanData?.outstanding_balance, collateralBalanceOf)
     .then(_buffer => setBuffer(_buffer))
     .catch(e => console.log(e))
 
     getBorrowBalanceOf()
     .then(_balance => setBorrowBalanceOf(_balance))
     .catch(e => console.log(e))
+
+    getCollateralBalanceOf()
+    .then(_balance => setCollateralBalanceOf(_balance))
+    .catch(e => console.log(e))    
   });
 
   return (
@@ -306,9 +303,9 @@ function SinglePage() {
               <div className="flex pt-3 gap-x-2">
                 <p className="w-1/2 font-medium">Collateral Posted</p>
                 <p>
-                  {financial(loanData?.collateral, 2)} ETH
+                  {financial(collateralBalanceOf, 2)} ETH
                   <span className="block text-sm text-[#545454]">
-                    ${financial(collateralPrice * loanData?.collateral, 2)}
+                    ${financial(collateralPrice * collateralBalanceOf, 2)}
                   </span>
                 </p>
               </div>
@@ -384,7 +381,7 @@ function SinglePage() {
                 <MakePaymentModal
                   setOpenModalFor={setOpenModalFor}
                   currentBalance={financial(borrowBalanceOf, 6)}
-                  collateral={loanData?.collateral}
+                  collateral={collateralBalanceOf}
                 />
               )}
             </ModalContainer>
@@ -398,7 +395,7 @@ function SinglePage() {
                   setModalStep={setModalStep}
                   setOpenModalFor={setOpenModalFor}
                   currentBalance={financial(loanData?.outstanding_balance)}
-                  collateral={loanData?.collateral}
+                  collateral={collateralBalanceOf}
                 />
               )}
             </ModalContainer>

@@ -39,7 +39,7 @@ const Processing = () => {
 
   // Thirdweb for EOA
   const address = useAddress();
-  const { depositZerodevAccount, getBorrowBalanceOf } = useSingleLoan();
+  const { depositZerodevAccount, getBorrowBalanceOf, getCollateralBalanceOf } = useSingleLoan();
   const { data } = useBalance({ 
     address: address as `0x${string}`, 
     token: USDCContract[networkChainId] as `0x${string}`
@@ -71,13 +71,15 @@ const Processing = () => {
         setOriginalBorrowBalance(borrowBalance)
       }
 
+      const collateralBalance = await getCollateralBalanceOf();
+      setCollateral(collateralBalance);
+
       const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter((loan: any) => loan.loan_active == 1);
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
           setOutStandingBalance(active_loans[0]?.outstanding_balance);
-          setCollateral(active_loans[0]?.collateral);
         }
       }
     }
@@ -129,6 +131,10 @@ const Processing = () => {
   };
 
   const setAllDone = async (txHash: string) => {
+    console.log(collateral)
+    console.log(borrowBalanceOf)
+    console.log(originalborrowBalance)
+
     updateLoan(
       "repay",
       loanData?.id,
