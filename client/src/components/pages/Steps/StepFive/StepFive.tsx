@@ -100,6 +100,10 @@ const StepFive: React.FC = () => {
       details: loanData?.buffer + "%",
     },
     {
+      description: "Liquidation Price",
+      details: `$${financial(loanData?.liquidationPrice, 2)}`,
+    },    
+    {
       description: "Estimated Time to Receive Loan",
       details: "<15 Minutes*",
     },
@@ -241,9 +245,12 @@ const StepFive: React.FC = () => {
       {/* ---------------------- Second Section Start ------------------------ */}
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-5">
-          <h3 className="text-xl font-medium mb-6">
+          <h3 className="text-xl font-medium mb-1">
             Where do you want to receive your loan?
           </h3>
+          <p className="text-sm text-gray-600 mb-6">
+            You can use the same account or wallet to provide collateral for your loan
+          </p>
           <div className="md:flex justify-between mb-7">
             <div className="flex md:items-center">
               <input
