@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AiFillEye } from "react-icons/ai";
 import { AiFillEyeInvisible } from "react-icons/ai";
-import google from "@/assets/google-icon 1.svg";
+// import google from "@/assets/google-icon 1.svg";
 import Image from "next/image";
 
 interface ShowPass {
@@ -146,7 +146,7 @@ const Signup = () => {
           {/* //!Divider-end */}
           {/* //!SocialBtn-start */}
           <button className="w-full form-border rounded-lg px-4 py-[14px] flex items-center gap-x-3">
-            <Image src={google} height={24} width={24} alt="google-icon" />
+            {/* <Image src={google} height={24} width={24} alt="google-icon" /> */}
             <span>Continue with Google</span>
           </button>
           {/* //!SocialBtn-end */}
