@@ -129,6 +129,17 @@ export const useLoanDB = () => {
             return null;
         }
     }
+
+    const getUserIp = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/ip`);
+            console.log(response.data)
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
    
     return {
         finalizeLoan,
@@ -140,7 +151,8 @@ export const useLoanDB = () => {
         getMonthAverageAPR,
         getYearAverageAPR,
         getYearAvgRewardRate,
-        getRewardRate
+        getRewardRate,
+        getUserIp
     }
 }
 

@@ -30,7 +30,7 @@ const Header = () => {
     const { disconnect } = useDisconnect();
     const { address, isConnected } = useAccount();
     const { userInfo } = useZeroDev();
-    const { getUserData, addUser } = useLoanDB();
+    const { getUserData, addUser, getUserIp } = useLoanDB();
 
     const OnLogin = async () => {
         await connect({
@@ -57,6 +57,8 @@ const Header = () => {
           }
         });
       }
+
+      getUserIp().then(res => console.log(res));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 

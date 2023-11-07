@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {db} = require('../db')
+const IP = require('ip');
 
 /////////////////// Get loans
 
@@ -113,6 +114,14 @@ router.get('/users', (req, res) => {
     if (err) throw err;
     res.status(200).json(results);
   })
+})
+
+
+// Get User IP
+
+router.get('/ip', (req, res) => {
+  const ipAddress = IP.address();
+  res.send(ipAddress)
 })
 
 
