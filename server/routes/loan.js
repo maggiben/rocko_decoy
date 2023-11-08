@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {db} = require('../db')
-const IP = require('ip');
+const axios = require('axios');
 
 /////////////////// Get loans
 
@@ -118,10 +118,18 @@ router.get('/users', (req, res) => {
 
 
 // Get User IP
+const VPNAPI_URL = 'https://vpnapi.io/api';  
+const VPNAPI_KEY = process.env.VPNAPI_KEY;
 
-router.get('/ip', (req, res) => {
-  const ipAddress = IP.address();
-  res.send(ipAddress)
+router.get('/vpn', async (req, res) => {
+  try {
+    const ip = req.query.ip;
+    const response = await axios.get(`${VPNAPI_URL}/${ip}?key=${VPNAPI_KEY}`);
+    res.send(response)
+  } catch (err) {
+    console.error('Error call vpnapi:', error);
+    res.status(500).send('Failed to call vpn api', error);
+  }
 })
 
 

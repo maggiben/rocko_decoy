@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BACKEND_URL } from "@/constants/env";
+import {publicIp, publicIpv4, publicIpv6} from 'public-ip';
 
 export const useLoanDB = () => {
     const finalizeLoan = (
@@ -130,9 +131,10 @@ export const useLoanDB = () => {
         }
     }
 
-    const getUserIp = async () => {
+    const getVpnInfo = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/ip`);
+            const ip = await publicIpv4();
+            const response = await axios.get(`${BACKEND_URL}/vpn?ip=${ip}`);
             console.log(response.data)
             return response.data;
         } catch (error) {
@@ -152,7 +154,7 @@ export const useLoanDB = () => {
         getYearAverageAPR,
         getYearAvgRewardRate,
         getRewardRate,
-        getUserIp
+        getVpnInfo
     }
 }
 
