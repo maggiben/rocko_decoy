@@ -124,10 +124,8 @@ const VPNAPI_KEY = process.env.VPNAPI_KEY;
 router.get('/vpn', async (req, res) => {
   try {
     const ip = req.query.ip;
-    const response = await axios.get(`${VPNAPI_URL}/${ip}`, {
-      key: VPNAPI_KEY
-    });
-    res.send(response)
+    const response = await axios.get(`${VPNAPI_URL}/${ip}?key=${VPNAPI_KEY}`);
+    res.send(response.data)
   } catch (error) {
     console.error('Error call vpnapi:', error);
     res.status(500).send('Failed to call vpn api', error);
