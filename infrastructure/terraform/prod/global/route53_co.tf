@@ -87,3 +87,46 @@ resource "aws_route53_record" "rocko_co_testnet" {
   records = ["get-rocko-0x7f3f368defb751b7401b5f6d8.netlify.app."]
 }
 
+#
+# Sendgrid configuration
+#
+resource "aws_route53_record" "rocko_co_url3269" {
+  zone_id = aws_route53_zone.rocko_co.id
+  name    = "url3269"
+  type    = "CNAME"
+  ttl     = 60
+  records = ["sendgrid.net"]
+}
+
+resource "aws_route53_record" "rocko_co_39066360" {
+  zone_id = aws_route53_zone.rocko_co.id
+  name    = "39066360"
+  type    = "CNAME"
+  ttl     = 60
+  records = ["sendgrid.net"]
+}
+
+resource "aws_route53_record" "rocko_co_em3975" {
+  zone_id = aws_route53_zone.rocko_co.id
+  name    = "em3975"
+  type    = "CNAME"
+  ttl     = 60
+  records = ["u39066360.wl111.sendgrid.net"]
+}
+
+resource "aws_route53_record" "rocko_co_s1_domainkey" {
+  zone_id = aws_route53_zone.rocko_co.id
+  name    = "s1._domainkey"
+  type    = "CNAME"
+  ttl     = 60
+  records = ["s1.domainkey.u39066360.wl111.sendgrid.net"]
+}
+
+resource "aws_route53_record" "rocko_co_s2_domainkey" {
+  zone_id = aws_route53_zone.rocko_co.id
+  name    = "s2._domainkey"
+  type    = "CNAME"
+  ttl     = 60
+  records = ["s2.domainkey.u39066360.wl111.sendgrid.net"]
+}
+
