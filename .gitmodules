@@ -1,0 +1,3 @@
+[submodule "website/content/learn"]
+	path = website/content/learn
+	url = git@github.com:getrocko/learn-content.git
