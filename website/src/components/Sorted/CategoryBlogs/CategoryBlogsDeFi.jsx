@@ -41,7 +41,7 @@ const CategoryBlogsDeFi = () => {
           {categoryBlogs &&
             categoryBlogs.map(({ node }) => (
               <Link
-                to={`/learning-resources/${node.fields.slug}`}
+                to={`/learn/${node.fields.slug}`}
                 key={node.id}
                 className="block"
               >

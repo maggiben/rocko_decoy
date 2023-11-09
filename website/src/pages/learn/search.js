@@ -58,7 +58,7 @@ const SearchPage = ({ data,location }) => {
           {results.length > 0 &&
             results.map(({ node }) => (
               <Link
-                to={`/learning-resources/${node.fields.slug}`}
+                to={`/learn/${node.fields.slug}`}
                 key={node.id}
                 className="block"
               >
