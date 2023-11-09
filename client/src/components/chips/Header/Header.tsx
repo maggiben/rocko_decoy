@@ -34,6 +34,7 @@ const Header = () => {
     const { address, isConnected } = useAccount();
     const { userInfo } = useZeroDev();
     const { getUserData, addUser, isVPN } = useLoanDB();
+    const [isUnavailable, setIsUnavailable] = useState(false);
 
     const OnLogin = async () => {
         await connect({
@@ -51,6 +52,25 @@ const Header = () => {
       }
     };
 
+    const detectVPN = () => {
+      if (sessionStorage.getItem('clientAllowed') !== 'true') {
+        console.log("Start to detect vpn:");
+        isVPN().then(response => {
+          if (response.status === 200) {
+            sessionStorage.setItem('clientAllowed', 'true');
+          } else {
+            setIsUnavailable(true);
+            
+            if (response.data === "Failed region/vpn test") {
+              router.push(`/unavailable?reason=region`);
+            } else {
+              router.push(`/unavailable?reason=vpn`);
+            }
+          }
+        });
+      }
+    }
+
     /* search user in users table and add userInfo to table if nothing */
     useEffect(() => {
       if (userInfo) {
@@ -61,21 +81,7 @@ const Header = () => {
         });
       }
 
-      if (sessionStorage.getItem('clientAllowed') !== 'true') {
-        console.log("Start to detect vpn:");
-        isVPN().then(response => {
-          if (response.status === 200) {
-            sessionStorage.setItem('clientAllowed', 'true');
-          } else {
-            if (response.data === "Failed region/vpn test") {
-              toast.error("Sorry, our service is not available in your region. If you believe this is a mistake, please contact support@rocko.co");
-            } else {
-              toast.error("If you are trying to access rocko.co using a VPN, please disconnect and try again. VPNs are not supported.");
-            }
-            router.push('/unavailable');
-          }
-        });
-      }
+      detectVPN();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
@@ -94,7 +100,7 @@ const Header = () => {
     }, []);
     
     return (
-        <nav className="header-custom sticky top-0 left-0 z-50">
+        <nav className={`header-custom sticky top-0 left-0 z-50 ${isUnavailable ? 'pointer-events-none opacity-50' : ''}`}>
           <div className="w-full bg-white">
             <div className="container mx-auto px-[15px] bg-white ">
               <div className="flex justify-between  py-[10px] items-center">

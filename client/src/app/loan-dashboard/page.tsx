@@ -88,7 +88,7 @@ const Dashboard = () => {
                     src={comp}
                     alt=""
                     className="w-5 h-5" />
-                  <h1 className="md:text-xl font-medium">{loan?.lending_protocol} - </h1>
+                  <h1 className="md:text-xl font-medium">Compound - </h1>
                   <Image
                     width={20}
                     height={20}
