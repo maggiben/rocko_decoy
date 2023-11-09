@@ -120,15 +120,30 @@ router.get('/users', (req, res) => {
 // Get User IP
 const VPNAPI_URL = 'https://vpnapi.io/api';  
 const VPNAPI_KEY = process.env.VPNAPI_KEY;
+const blacklist_country_code = ['CU', 'IR', 'KP', 'RU', 'SY', 'UA'];
 
 router.get('/vpn', async (req, res) => {
   try {
     const ip = req.query.ip;
     const response = await axios.get(`${VPNAPI_URL}/${ip}?key=${VPNAPI_KEY}`);
-    res.send(response.data)
+
+    const { security, location } = response.data;
+
+    if (blacklist_country_code.includes(location.country_code)) {
+      res.status(403).send('Failed region/vpn test');
+    } else {
+      if ( security.vpn === false &&
+        security.proxy === false &&
+        security.tor === false &&
+        security.relay === false 
+      ) {
+        res.status(200).send('No VPN, Proxy, Tor, or Relay detected');
+      } else {
+        res.status(403).send('VPN, Proxy, Tor, or Relay detected');
+      }
+    }
   } catch (error) {
-    console.error('Error call vpnapi:', error);
-    res.status(500).send('Failed to call vpn api', error);
+    res.status(403).send('Failed region/vpn test');
   }
 })
 

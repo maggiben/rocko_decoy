@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
+import toast from "react-hot-toast";
 import logo from "@/assets/logo.png";
 import user from "@/assets/images/user.png";
 import { useEffect, useState, useRef } from "react";
@@ -22,6 +24,7 @@ const Header = () => {
       shimDisconnect: true
     }});
     const loginRef: any = useRef();
+    const router = useRouter()
 
     const [toggle, setToggle] = useState(false);
     const [toggleDown, setToggleDown] = useState(false);
@@ -30,7 +33,7 @@ const Header = () => {
     const { disconnect } = useDisconnect();
     const { address, isConnected } = useAccount();
     const { userInfo } = useZeroDev();
-    const { getUserData, addUser, getVpnInfo } = useLoanDB();
+    const { getUserData, addUser, isVPN } = useLoanDB();
 
     const OnLogin = async () => {
         await connect({
@@ -58,11 +61,17 @@ const Header = () => {
         });
       }
 
-      getVpnInfo().then(res => {
-        console.log(res);
-        console.log(res && res.security)
-      });
-
+      if (sessionStorage.getItem('clientAllowed') !== 'true') {
+        console.log("Start to detect vpn:");
+        isVPN().then(is_vpn => {
+          if (is_vpn) {
+            toast.error("If you are trying to access rocko.co using a VPN, please disconnect and try again. VPNs are not supported.");
+            router.push('/unavailable');
+          } else {
+            sessionStorage.setItem('clientAllowed', 'true');
+          }
+        });
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 

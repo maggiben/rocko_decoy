@@ -131,15 +131,14 @@ export const useLoanDB = () => {
         }
     }
 
-    const getVpnInfo = async () => {
+    const isVPN = async () => {
         try {
             const ip = await publicIpv4();
             const response = await axios.get(`${BACKEND_URL}/vpn?ip=${ip}`);
-            console.log(response.data)
-            return response.data;
+
+            return response.status !== 200
         } catch (error) {
-            console.error(error);
-            return null;
+            return true;
         }
     }
    
@@ -154,7 +153,7 @@ export const useLoanDB = () => {
         getYearAverageAPR,
         getYearAvgRewardRate,
         getRewardRate,
-        getVpnInfo
+        isVPN
     }
 }
 
