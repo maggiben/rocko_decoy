@@ -16,15 +16,15 @@ In the world of finance, the age-old practice of secure lending and borrowing ha
 
   
 
-One of the fundamental features of DeFi is borrowing, where users can obtain loans by leveraging their cryptocurrency assets as collateral.
+One of the fundamental features of DeFi is borrowing, where users can obtain crypto backed loans by leveraging their cryptocurrency assets as collateral.
 
   
 
-In this article, we will explain how to borrow from a DeFi protocol. Or skip the steps and get a loan through Rocko! Let's get to it!
+In this article, we will explain how to borrow from a DeFi protocol. Or skip the steps and get a [crypto loan](https://rocko.co) through Rocko! Let's get to it!
 
   
 
-[Rocko enables crypto owners to easily borrow using their crypto as collateral. Access low-rate loans from trusted DeFi protocols and get funds in minutes — no matter your expertise! Get started!]
+[Rocko enables crypto owners to easily borrow using their crypto as collateral. Access low-rate crypto backed loans from trusted DeFi protocols and get funds in minutes — no matter your expertise! Get started!]
 
 ## Step 1: Choosing the Protocol
 
@@ -63,7 +63,7 @@ In DeFi lending, collateral plays a pivotal role. So, the next step to borrow fr
 
   
 
-Generally speaking, collateral assets are the ones that you lock up in a smart contract to secure your loan. They are usually less stable and more volatile than the loan assets, which are the ones that you receive in exchange for your collateral. For example, you may lock up Ethereum (ETH) as collateral and borrow USDC as a borrowing asset.
+Generally speaking, collateral assets are the ones that you lock up in a smart contract to secure your crypto backed loan. They are usually less stable and more volatile than the loan assets, which are the ones that you receive in exchange for your collateral. For example, you may lock up Ethereum (ETH) as collateral and borrow USDC as a borrowing asset.
 
   
 
@@ -73,7 +73,7 @@ The main factors that determine which assets you can or want use as collateral a
 
 -   Availability: Not all protocols support all assets. You need to check if the protocol you choose has the asset you want to borrow/use.
     
--   Liquidity: Liquidity refers to how easily an asset can be bought or sold in the market without affecting its price. Higher liquidity means lower slippage and lower risk of price fluctuations. You want your collateral asset to have high liquidity so that it can be easily sold in case of liquidation. You also want your borrowing asset to have high liquidity so that you can quickly repay your loan or swap it for another asset.
+-   Liquidity: Liquidity refers to how easily an asset can be bought or sold in the market without affecting its price. Higher liquidity means lower slippage and lower risk of price fluctuations. You want your collateral asset to have high liquidity so that it can be easily sold in case of liquidation. You also want your borrowing asset to have high liquidity so that you can quickly repay your [crypto loan](https://rocko.co) or swap it for another asset.
     
 -   Interest Rate: Interest rate is the cost of borrowing an asset or, when supplying an asset, the return generated. A higher interest rate for borrowed assets means you will incur interest more quickly so you should try to choose an asset with a low-interest rate to reduce your borrowing expense.
     
@@ -86,13 +86,11 @@ DeFi even allows you to borrow a variety of assets using your crypto as collater
 
 You can learn more about borrowing vs. supplying in our article: How Defi Protocols work
 
-## Step 3: Loan Terms
+## Step 3: Crypto Loan Terms
 
 The third step is to understand Loan terms.
 
-  
-
-Loan terms in DeFi are much more flexible than in traditional. For most loans, you get to choose how long you want to borrow the funds. Want a short-term loan to pay down credit card debt? Or a long-term loan for a down payment on a house? DeFi offers both so it's up to you. Additionally, many loans don’t have monthly minimum payment or repayment fees. This means you’re able to repay your loan at any time or quickly refinance to a cheaper rate.
+Crypto loan terms in DeFi are much more flexible than in traditional. For most loans, you get to choose how long you want to borrow the funds. Want a short-term loan to pay down credit card debt? Or a long-term loan for a down payment on a house? DeFi offers both so it's up to you. Additionally, many loans don’t have monthly minimum payment or repayment fees. This means you’re able to repay your loan at any time or quickly refinance to a cheaper rate.
 
 Before taking out a loan, the following are the loan terms you should understand:
 

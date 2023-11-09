@@ -27,7 +27,7 @@ Central to Aave are its tokens - $AAVE and $aTokens. While $AAVE is a governance
 
 Lending on Aave is straightforward. Users deposit assets, which then earn interest based on borrowing demand. These deposits are represented by $aTokens in their wallets, which increase in value as interest accrues.
 
-Borrowing has its nuances. Aave allows for both over-collateralized and under-collateralized loans. The former requires users to provide collateral exceeding the borrowed amount, serving as a security measure. The latter, while more flexible, has stringent requirements and is currently available to select institutions.
+Borrowing has its nuances. Aave allows for both over-collateralized and under-collateralized crypto loans. The former requires users to provide collateral exceeding the borrowed amount, serving as a security measure. The latter, while more flexible, has stringent requirements and is currently available to select institutions.
 
 ## Interest Rate Mechanisms
 

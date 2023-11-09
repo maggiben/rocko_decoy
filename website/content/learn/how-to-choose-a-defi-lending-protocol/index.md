@@ -1,6 +1,6 @@
 ---
-title: "Picking the Perfect DeFi Loan & Protocol"
-description: "Dive deep into the world of decentralized finance loans. From understanding various lending protocols to matching them with your financial goals, this guide will equip you to make informed decisions for your unique borrowing needs."
+title: "Picking the Perfect Crypto Loan & Protocol"
+description: "Dive deep into the world of decentralized finance crypto loans. From understanding various lending protocols to matching them with your financial goals, this guide will equip you to make informed decisions for your unique borrowing needs."
 date: "2023-10-13T22:40:32.169Z"
 tags:
   - Crypto & DeFi
@@ -13,11 +13,11 @@ featured: false
 
 In the sprawling world of decentralized finance (DeFi), navigating through the myriad of lending options can be overwhelming. The choice you make can greatly influence your financial journey in the crypto realm. Why does selecting the right loan and platform matter so much? Let's delve in.
 
-# Understanding Different DeFi Loans
+# Understanding Different Crypto Loans
 
-## Collateralized Loans
+## Collateralized Crypto Backed Loans
 
-These are the secured loans in the DeFi ecosystem. Borrowers provide collateral – often in the form of other cryptocurrencies. The primary benefit? Potentially lower interest rates due to reduced lender risk.
+[Crypto backed loans](https://rocko.co), the secured loans in the DeFi ecosystem. Borrowers provide collateral – often in the form of other cryptocurrencies. The primary benefit? Potentially lower interest rates due to reduced lender risk.
 
 ## Flash Loans
 

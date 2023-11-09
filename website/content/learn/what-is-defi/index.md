@@ -27,7 +27,7 @@ While DeFi concepts can theoretically be built on any blockchain, Ethereum stand
 
 Ethereum's smart contracts are self-executing contracts where the terms of the agreement or conditions are written directly into the lines of code. This feature is pivotal for DeFi, ensuring that all transactions, trades, and other financial operations happen transparently and without interference.
 
-# Lending Protocols in DeFi
+# Crypto Backed Loans in DeFi
 
 To bring this abstract idea into more concrete terms, let’s dive into one of the most popular DeFi applications: lending protocols.
 
@@ -43,7 +43,7 @@ The interest rates for borrowers and lenders are determined algorithmically base
 
 ## Aave
 
-Aave is another popular DeFi lending protocol that offers both fixed and variable interest rates. What sets Aave apart is its unique features:
+Aave is another popular crypto loan protocol that offers both fixed and variable interest rates. What sets Aave apart is its unique features:
 
 Flash Loans: These are uncollateralized loans, but there's a catch! The loan must be borrowed and repaid within a single Ethereum transaction. This can be useful for experienced traders looking to exploit arbitrage opportunities.
 

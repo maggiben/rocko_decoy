@@ -28,7 +28,7 @@ The question arises, why would anyone want to use a volatile asset like cryptocu
 
 2. **Flexibility in Accessing Funds**: The blockchain never sleeps. Whether it's midday or midnight, the ability to lock in a loan can be a few clicks away.
 
-3. **No Credit Checks**: With the value of the loan secured by the collateral, lengthy credit checks become redundant, ensuring a swift borrowing process.
+3. **No Credit Checks**: With the value of the crypto backed loan secured by the collateral, lengthy credit checks become redundant, ensuring a swift borrowing process.
 
 ## Understanding Loan-to-Value (LTV) Ratio
 

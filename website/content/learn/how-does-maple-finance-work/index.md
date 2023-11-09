@@ -1,6 +1,6 @@
 ---
 title: "Maple Magic: The DeFi Lending Landscape Reinvented"
-description: Explore Maple Finance, the next-gen DeFi lending platform, catering to institutional and premium borrowers. Dive deep into its mechanics, features, and how it's revolutionizing the world of decentralized loans.
+description: Explore Maple Finance, the next-gen DeFi lending platform, catering to institutional and premium borrowers. Dive deep into its mechanics, features, and how it's revolutionizing the world of decentralized crypto loans.
 date: "2023-10-13T22:40:32.169Z"
 tags:
   - Borrowing
@@ -35,7 +35,7 @@ Maple's native token, **MPL**, is more than just a token. It grants holders gove
 
 ## The Borrower Experience
 
-Maple caters predominantly to institutional and premium borrowers. These borrowers, vetted by Credit Delegates, can access larger loan amounts with tailored terms. This curated experience has positioned Maple as the go-to for high-profile DeFi borrowers.
+Maple caters predominantly to institutional and premium borrowers. These borrowers, vetted by Credit Delegates, can access larger [crypto loan](https://rocko.co) amounts with tailored terms. This curated experience has positioned Maple as the go-to for high-profile DeFi borrowers.
 
 ## How Liquidity Providers Benefit
 

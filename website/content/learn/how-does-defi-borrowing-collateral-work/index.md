@@ -21,7 +21,7 @@ Collateral in DeFi serves as a guarantee for borrowers. Simply put, it's like le
 
 ## Liquidation: The What and the Why
 
-A liquidation event occurs when the value of a borrower's collateral falls below a required threshold. This is where things get messy. Your collateral could be sold off to pay back the loan, often at a penalty. For borrowers, the consequences are clear: loss of valuable assets and a potential financial setback.
+A liquidation event occurs when the value of a borrower's collateral falls below a required threshold. This is where things get messy. Your collateral could be sold off to pay back the [crypto loan](https://rocko.co), often at a penalty. For borrowers, the consequences are clear: loss of valuable assets and a potential financial setback.
 
 ## Factors Leading to Liquidation
 
@@ -35,7 +35,7 @@ Several elements can push an account towards liquidation:
 
 Evading liquidation requires vigilance, timely action, and strategic planning:
 
-1. **Monitor Regularly**: Always keep an eye on the value of your collateral and the health of your loan.
+1. **Monitor Regularly**: Always keep an eye on the value of your collateral and the health of your [crypto loan](https://rocko.co).
 2. **Conservative LTV Ratios**: By not maxing out on the potential borrowing amount, you provide a buffer against price volatility.
 3. **Diversify**: Using a mix of assets as collateral can shield against the poor performance of any single asset.
 

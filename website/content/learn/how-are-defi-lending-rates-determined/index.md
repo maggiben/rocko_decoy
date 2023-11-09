@@ -32,7 +32,7 @@ Aave, another dominant player in the DeFi lending space, has its nuances in dete
 
 2. **Rate Switching:** A unique feature Aave offers is the ability for borrowers to switch between stable and variable rates. This allows borrowers to capitalize on market conditions, opting for stable rates when variable rates are too volatile, and vice-versa.
 
-3. **Flash Loans:** Aave introduced the concept of flash loans, uncollateralized loans that are borrowed and repaid within a single transaction. While these don't directly affect APR for standard loans, they represent an innovative use case that indirectly influences the platform's overall lending dynamics.
+3. **Flash Loans:** Aave introduced the concept of flash loans, uncollateralized crypto loans that are borrowed and repaid within a single transaction. While these don't directly affect APR for standard loans, they represent an innovative use case that indirectly influences the platform's overall lending dynamics.
 
 4. **DAO Governance:** Similar to Compound, Aave's protocol parameters, including those that influence interest rates, can be updated through a decentralized governance process. Aave token holders can propose changes, and if these proposals receive enough votes, they are adopted.
 
