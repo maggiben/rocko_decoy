@@ -8,6 +8,8 @@ const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const slugify = require('slugify')
 
+const SHOW_BLOG = process.env.FEATURE_FLAG_SHOW_BLOG === 'true';
+
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
 
@@ -30,6 +32,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     force: true, // This forces the redirect even if there's a page at the old URL
   })
 
+  if (SHOW_BLOG) {
   // Get all markdown blog posts sorted by date
   const result = await graphql(`
     {
@@ -59,6 +62,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // `context` is available in the template as a prop and as a variable in GraphQL
 
   if (posts.length > 0) {
+    console.log("Creating blog posts ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************")
     posts.forEach((post, index) => {
       const previousPostId = index === 0 ? null : posts[index - 1].id
       const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
@@ -74,28 +78,31 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
+  }
+
 
 
 }
 
-/**
- * @type {import('gatsby').GatsbyNode['onCreateNode']}
- */
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+if (SHOW_BLOG) {
+  /**
+   * @type {import('gatsby').GatsbyNode['onCreateNode']}
+   */
+  exports.onCreateNode = ({ node, actions, getNode }) => {
+    const { createNodeField } = actions
 
-  if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
-    const resultText = value.replace(/^\/|\/$/g, '');
-// console.log('value...', value)
-    createNodeField({
-      name: `slug`,
-      node,
-      value:resultText,
-    })
+    if (node.internal.type === `MarkdownRemark`) {
+      const value = createFilePath({ node, getNode })
+      const resultText = value.replace(/^\/|\/$/g, '');
+  // console.log('value...', value)
+      createNodeField({
+        name: `slug`,
+        node,
+        value:resultText,
+      })
+    }
   }
 }
-
 /**
  * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
  */
