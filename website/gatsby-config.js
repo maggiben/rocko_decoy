@@ -8,7 +8,6 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 const siteUrl = `https://rocko.co/`;
-const SHOW_BLOG = process.env.FEATURE_FLAG_SHOW_BLOG === 'true';
 
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -83,7 +82,7 @@ module.exports = {
             }
           }
         `,
-        feeds: !SHOW_BLOG ? [] : [
+        feeds: [
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
               return allMarkdownRemark.nodes.map(node => {
