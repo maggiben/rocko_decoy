@@ -63,12 +63,16 @@ const Header = () => {
 
       if (sessionStorage.getItem('clientAllowed') !== 'true') {
         console.log("Start to detect vpn:");
-        isVPN().then(is_vpn => {
-          if (is_vpn) {
-            toast.error("If you are trying to access rocko.co using a VPN, please disconnect and try again. VPNs are not supported.");
-            router.push('/unavailable');
-          } else {
+        isVPN().then(response => {
+          if (response.status === 200) {
             sessionStorage.setItem('clientAllowed', 'true');
+          } else {
+            if (response.data === "Failed region/vpn test") {
+              toast.error("Sorry, our service is not available in your region. If you believe this is a mistake, please contact support@rocko.co");
+            } else {
+              toast.error("If you are trying to access rocko.co using a VPN, please disconnect and try again. VPNs are not supported.");
+            }
+            router.push('/unavailable');
           }
         });
       }

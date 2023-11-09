@@ -136,9 +136,9 @@ export const useLoanDB = () => {
             const ip = await publicIpv4();
             const response = await axios.get(`${BACKEND_URL}/vpn?ip=${ip}`);
 
-            return response.status !== 200
-        } catch (error) {
-            return true;
+            return response;
+        } catch (error: any) {
+            return error.response;
         }
     }
    
