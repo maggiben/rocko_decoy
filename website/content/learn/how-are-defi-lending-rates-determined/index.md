@@ -12,7 +12,7 @@ authorImg: /learn/author-1.jpg
 
 # How DeFi Lending Protocol APR Rates Are Determined
 
-The Decentralized Finance (DeFi) ecosystem has revolutionized traditional financial systems by introducing services like lending and borrowing without the need for intermediaries. Two prominent platforms in this ecosystem, Compound and Aave, have attracted significant attention because of their innovative approach to determining Annual Percentage Rate (APR) for lending and borrowing. Let’s delve deeper into how these platforms determine their rates and the role of DAO voting in this process.
+The Decentralized Finance (DeFi) ecosystem has revolutionized traditional financial systems by introducing services like lending and borrowing without the need for intermediaries. Two prominent platforms in this ecosystem, Compound and Aave, have attracted significant attention because of their innovative approach to determining Annual Percentage Rate (APR) for DeFi lending and borrowing. Let’s delve deeper into how these platforms determine their DeFi loan rates and the role of DAO voting in this process.
 
 ## Compound
 
@@ -20,7 +20,7 @@ Compound operates as an algorithmic, autonomous interest rate protocol—meaning
 
 1. **Supply and Demand:** At the core of Compound's interest rate model is a dynamic between supply and demand. When the demand to borrow a particular asset increases, the interest rates rise. Conversely, when demand decreases, the rates fall.
 
-2. **Interest Rate Curves:** Compound uses interest rate curves to adjust rates algorithmically. These curves ensure that as the liquidity in a market decreases (i.e., more people borrow), the interest rate increases, and vice-versa.
+2. **DeFi Interest Rate Curves:** Compound uses interest rate curves to adjust rates algorithmically. These curves ensure that as the liquidity in a market decreases (i.e., more people borrow), the interest rate increases, and vice-versa.
 
 3. **DAO Governance:** The initial interest rate model and curve parameters are not set in stone. Compound's governance process allows the community to propose and vote on changes. If the community feels that a different model or parameters would be more beneficial, they can submit a proposal. If the proposal garners enough support, the change is implemented.
 

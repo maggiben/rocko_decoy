@@ -29,9 +29,9 @@ Lending on Aave is straightforward. Users deposit assets, which then earn intere
 
 Borrowing has its nuances. Aave allows for both over-collateralized and under-collateralized crypto loans. The former requires users to provide collateral exceeding the borrowed amount, serving as a security measure. The latter, while more flexible, has stringent requirements and is currently available to select institutions.
 
-## Interest Rate Mechanisms
+## DeFi Interest Rate Mechanisms
 
-Aave's dynamic interest rates cater to both lenders and borrowers. Rates are determined based on supply and demand dynamics. Users can choose between stable and variable rates. While stable rates offer predictability, variable rates can be more economical, especially in low-demand scenarios.
+Aave's dynamic interest rates cater to both lenders and borrowers. DeFi loan rates are determined based on supply and demand dynamics. Users can choose between stable and variable rates. While stable rates offer predictability, variable rates can be more economical, especially in low-demand scenarios.
 
 ## Flash Loans: Aave's Standout Feature
 

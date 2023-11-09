@@ -38,7 +38,7 @@ _Collateral Factor and Health_: These metrics are vital for users, as they deter
 
 **Interest Rates on Compound**
 
-Compound's unique algorithm determines the interest rates, ensuring a balance between supply and demand.
+Compound's unique algorithm determines its DeFi loan rates, ensuring a balance between supply and demand.
 
 **Governance and Decentralization**
 

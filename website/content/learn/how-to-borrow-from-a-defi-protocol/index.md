@@ -1,5 +1,5 @@
 ---
-title: 'Ultimate Guide on "How to Borrow from a DeFi Protocol"'
+title: 'Ultimate Guide on "How Does DeFi Lending Work"'
 date: "2023-10-03T18:45:32.169Z"
 description: Unlock the power of your cryptocurrency assets by leveraging them for borrowing. This guide explores how digital collateral is changing the borrowing landscape.
 tags:
@@ -10,7 +10,7 @@ authorImg: /learn/author-2.jpg
 authorByline: CEO (Chief Executive Officer)
 ---
 
-# Ultimate Guide on "How to Borrow from a DeFi Protocol"
+# Ultimate Guide on "How Does DeFi Lending Work"
 
 In the world of finance, the age-old practice of secure lending and borrowing has traditionally been the domain of banks and established financial institutions. Whenever individuals required a loan, mortgage, or credit, they instinctively turned to their trusted banks. However, DeFi, or Decentralized Finance, has revolutionized the world of traditional finance.
 
@@ -30,15 +30,10 @@ In this article, we will explain how to borrow from a DeFi protocol. Or skip the
 
 The first step in borrowing from a DeFi protocol is selecting the right platform. DeFi is a rapidly evolving space with numerous protocols to choose from.
 
-  
-
 Each DeFi protocol has its own features, interest rates, and flavours (okay, not really flavours, but you get the idea). Research them, read reviews, and find the one that suits your crypto cravings.
 
-  
+When evaluating DeFi protocols, consider factors such as
 
-When evaluating protocols, consider factors such as
-
-  
 
 -   The supported collateral assets and assets you can borrow
     
@@ -49,13 +44,9 @@ When evaluating protocols, consider factors such as
 -   The user interface and experience of the protocol
     
 
-  
-
 Some of the most popular and reputable protocols are Aave, Compound, and MakerDAO. However, these are just some examples of DeFi protocols that you can use to borrow crypto assets.
 
-  
-
-Related Article:  How to Choose the Perfect DeFi Protocol: A Complete Guide
+Related Article:  [How to Choose the Perfect DeFi Protocol: A Complete Guide](/learn/how-to-choose-a-defi-lending-protocol)
 
 ## Step 2: Collateral Assets and Assets You Can Borrow
 
@@ -106,7 +97,7 @@ Before taking out a loan, the following are the loan terms you should understand
 
   
 
--   Interest Rate: As covered above, interest rate is the cost of borrowing an asset or the return of supplying an asset. Interest rates can be either fixed or floating. A fixed interest rate means that the rate is constant and does not change over time. A floating interest rate means that the rate changes periodically based on market conditions. Different protocols have different interest rates for different assets and some offer fixed interest rates for fixed-term loans.
+-   Interest Rate: As covered above, interest rate is the cost of borrowing an asset or the return of supplying an asset. Interest rates can be either fixed or floating rate. A fixed interest rate means that the rate is constant and does not change over time. A floating interest rate means that the rate changes periodically based on market conditions. Different protocols have different interest rates for different assets and some offer fixed interest rates for fixed-term loans.
     
 
   
@@ -117,7 +108,7 @@ You should understand the loan terms of the protocol that you choose and make su
 
 You can learn more about liquidation and how to avoid it in our article: How Defi Protocols work
 
-## Step 4: Floating vs. Fixed Interest Rate
+## Step 4: floating Interest Rate vs. Fixed Interest Rate
 
 We've touched on this a bit already, but let's dive deeper into the rabbit hole of interest rates.
 
@@ -127,7 +118,7 @@ Floating interest rates in DeFi are similar to variable interest rates in tradit
 
   
 
-So, one of the most important factors to consider when borrowing from a DeFi protocol is whether to choose a floating or a fixed interest rate. Both have their advantages and disadvantages, depending on your preferences and expectations.
+So, one of the most important factors to consider when borrowing from a DeFi protocol is whether to choose a floating rate or a fixed interest rate. Both have their advantages and disadvantages, depending on your preferences and expectations.
 
   
 
@@ -141,7 +132,7 @@ So, one of the most important factors to consider when borrowing from a DeFi pro
 
   
 
-The choice between a floating or a fixed interest rate depends on your risk appetite, time horizon, and market outlook.
+The choice between a floating rate or a fixed interest rate depends on your risk appetite, time horizon, and market outlook.
 
   
 

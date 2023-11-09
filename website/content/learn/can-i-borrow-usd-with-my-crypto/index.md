@@ -1,6 +1,6 @@
 ---
 title: "Unlocking Dollars: Borrowing USD with Your Crypto Collateral"
-description: "Want to access liquidity without selling your precious crypto assets? Dive into this guide to understand how to seamlessly borrow USD using your cryptocurrencies as collateral."
+description: "Want to access liquidity without selling your precious crypto assets? Dive into this guide to understand how to borrow against crypto."
 date: "2023-10-13T22:40:32.169Z"
 tags:
   - Borrowing
@@ -21,29 +21,21 @@ Accessing liquidity without offloading crypto assets is a strategic move for man
 - **No Credit Checks**: Unlike traditional bank loans, these [crypto loans](https://rocko.co) are primarily based on the value of your collateral, meaning credit scores take a backseat.
 - **Spending Flexibility**: From unexpected expenses to lucrative investment opportunities, having liquid cash at hand is undeniably advantageous.
 
-## How Does It Work?
+## How to Borrow Against Crypto?
 
 The mechanics of crypto backed loans can be broken down into three straightforward steps:
 
-1. **Collateralize Your Crypto**: Deposit your crypto into a secure account on a lending platform. This serves as collateral for your USD loan.
+1. **What is Collateral in Crypto**: Deposit your crypto into a secure account on a lending platform. This serves as collateral for your USD loan.
 2. **Understand LTV (Loan-to-Value) Ratios**: The amount you can borrow is typically defined by an LTV ratio. If a platform offers a 50% LTV, and you collateralize $10,000 worth of Bitcoin, you can borrow up to $5,000 in USD.
 3. **Receiving USD**: Depending on the platform, you can receive USD directly into your bank account or opt for USD stablecoins.
 
-## Choosing the Right Platform
-
-Several platforms facilitate crypto-backed loans, each with its nuances:
-
-- **Nexo**: Known for instant loans with no credit checks and flexible repayments.
-- **BlockFi**: Offers competitive interest rates and a good LTV range.
-- **Celsius**: Renowned for its no-fee approach and weekly interest payouts.
-
 When choosing, consider interest rates, LTV ratios, and terms of service.
 
-## Advantages of Crypto-backed USD Loans
+## Advantages of Crypto backed USD Loans
 
 Borrowing USD against your crypto comes with unique perks:
 
-- **Competitive Interest Rates**: These [crypto loans](https://rocko.co) typically have lower interest rates than unsecured personal loans or credit card debts.
+- **Competitive DeFi Interest Rates**: These [crypto loans](https://rocko.co) typically have lower interest rates than unsecured personal loans or credit card debts.
 - **Tax Efficiency**: By borrowing against crypto rather than selling, you may sidestep potential capital gains taxes.
 - **Retain Crypto Upside**: If your crypto's value surges, you stand to benefit from its appreciation, as you still hold the asset.
 

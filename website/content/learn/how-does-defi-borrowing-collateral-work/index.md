@@ -15,7 +15,11 @@ featured: false
 
 In the thriving world of decentralized finance (DeFi), collateral is the linchpin. As we dive into the mechanics of how DeFi platforms function, the looming danger of liquidation remains a pressing concern for many, especially for over-leveraged portfolios.
 
-## Understanding Collateral in DeFi
+## What is a Collateralized Loan?
+
+A collateralized loan is a loan backed by collateral. In the DeFi world, this collateral is typically crypto assets. The value of the collateral is used to determine the amount of the loan. If the borrower fails to repay the loan, the lender can seize the collateral.
+
+## What is Crypto Collateral?
 
 Collateral in DeFi serves as a guarantee for borrowers. Simply put, it's like leaving your watch at the pawnshop to get a loan; if you can't repay, the shop keeps the watch. In DeFi, instead of watches, it's your crypto assets. The primary benefits of collateral include trustless transactions and instant access to funds. However, managing collateral comes with its challenges, chiefly the threat of liquidation.
 
@@ -43,7 +47,7 @@ Evading liquidation requires vigilance, timely action, and strategic planning:
 
 Stablecoins, pegged to stable assets like the USD, offer a shield against volatility. By including stablecoins in your collateral mix, you can maintain a steadier loan-to-value ratio, reducing liquidation risks.
 
-## Emergency Protocols: Tools and Resources
+## Emergency DeFi Protocols: Tools and Resources
 
 In the rapidly evolving DeFi space, several tools have emerged to aid users:
 

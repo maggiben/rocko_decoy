@@ -29,7 +29,7 @@ Ethereum's smart contracts are self-executing contracts where the terms of the a
 
 # Crypto Backed Loans in DeFi
 
-To bring this abstract idea into more concrete terms, let’s dive into one of the most popular DeFi applications: lending protocols.
+To bring this abstract idea into more concrete terms, let’s dive into one of the most popular DeFi applications: lending protocols using some of the best crypto lending platforms as case studies.
 
 ## Compound
 
