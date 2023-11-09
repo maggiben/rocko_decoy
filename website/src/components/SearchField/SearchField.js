@@ -2,16 +2,15 @@ import { navigate } from "gatsby"
 import React, { useEffect } from "react"
 import { BiSearchAlt2 } from "react-icons/bi"
 
-const SearchField = ({ query, handleInputChange,isFocused }) => {
-  
-  useEffect(() => {
-    if (query?.length) {
-      navigate(`/learn/search?query=${encodeURIComponent(query)}`)
-    }
-  }, [query])
+const SearchField = ({ query, handleInputChange ,submitted,handleKeyPress}) => {
+
+  const handleSearch = () => {
+    navigate(`/learn/search?query=${query}`, { state: { query } })
+  }
+ 
   return (
     <div className="tags_container_search_input">
-      <BiSearchAlt2 className="tags_container_search_icon" />
+      <BiSearchAlt2 onClick={handleSearch} className="tags_container_search_icon" />
       <input
         type="text"
         name="search"
@@ -20,11 +19,7 @@ const SearchField = ({ query, handleInputChange,isFocused }) => {
         className="tags_container_search_inputfield"
         value={query}
         onChange={handleInputChange}
-        onFocus={() =>{
-          navigate(`/learn/search?query=`)
-        }}
-        autoFocus={isFocused}
-        
+        onKeyDown={handleKeyPress}
       />
     </div>
   )

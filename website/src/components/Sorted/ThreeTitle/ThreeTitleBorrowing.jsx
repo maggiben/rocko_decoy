@@ -1,7 +1,8 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
 import BlogsContainer from "../../BlogsContainer/BlogsContainer"
-const ThreeTitleDeFi = () => {
+
+const ThreeTitleBorrowing = () => {
   // !latest post data
   const latestPostData = useStaticQuery(graphql`{
       allMarkdownRemark(
@@ -11,7 +12,7 @@ const ThreeTitleDeFi = () => {
           frontmatter: {
             coverUrl: {}
             author: {}
-            tags: { in: "DeFi Borrowing & Lending" }
+            tags: { in: "Borrowing" }
           }
         }
       ) {
@@ -43,4 +44,4 @@ const ThreeTitleDeFi = () => {
   )
 }
 
-export default ThreeTitleDeFi
+export default ThreeTitleBorrowing

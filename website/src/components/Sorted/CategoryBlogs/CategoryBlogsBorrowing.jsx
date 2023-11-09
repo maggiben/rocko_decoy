@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Link, graphql, useStaticQuery } from "gatsby"
 
-const CategoryBlogsDeFi = () => {
+const CategoryBlogsBorrowing = () => {
   const query = graphql`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { eq: "DeFi Borrowing & Lending" } } }
+        filter: { frontmatter: { tags: { eq: "Borrowing" } } }
         sort: { frontmatter: { date: ASC } }
         skip: 3
       ) {
@@ -75,4 +75,4 @@ const CategoryBlogsDeFi = () => {
   )
 }
 
-export default CategoryBlogsDeFi
+export default CategoryBlogsBorrowing

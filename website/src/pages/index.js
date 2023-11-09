@@ -1,6 +1,7 @@
-import * as React from "react"
+import React from "react"
 import rockoLogo from "../images/logo.svg"
 import Footer from "../../../ui-lib/Footer/Footer"
+import FormWrapper from "../components/shared/FormWrapper"
 // import website styles
 // import "../styles/style.scss"
 
@@ -52,11 +53,7 @@ const Index = ({}) => {
                           below to be notified as soon as we launch!
                         </p>
                       </div>
-                      <form
-                        className="form form--banner"
-                        action="https://rocko.us11.list-manage.com/subscribe/post?u=a55ca9db1b050104dac6c18a3&amp;id=d64d1776bc&amp;f_id=0036a0e0f0"
-                        method="post"
-                      >
+                      <FormWrapper  className="form form--banner">
                         <div className="input-holder">
                           <input
                             name="EMAIL"
@@ -84,7 +81,7 @@ const Index = ({}) => {
                             value=""
                           />
                         </div>
-                      </form>
+                      </FormWrapper>
                       <div className="banner__social">
                         <ul className="d-flex justify-content-center align-items-center">
                           <li>
@@ -105,10 +102,8 @@ const Index = ({}) => {
             </section>
           </main>
         </div>
-
-     
       </div>
-      <Footer/>
+      <Footer />
     </>
   )
 }

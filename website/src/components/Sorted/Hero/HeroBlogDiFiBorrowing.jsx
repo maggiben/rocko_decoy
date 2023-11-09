@@ -1,13 +1,20 @@
-import image2 from "../../images/placeHolderImage-2.png"
-import user from "../../images/blog-user.png"
+import image2 from "../../../images/placeHolderImage-2.png"
+import user from "../../../images/blog-user.png"
 import { Link, graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
 
-const HeroBlog = () => {
+const HeroBlogBorrowing = () => {
   const query = graphql`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { featured: { eq: true } } }
+        filter: {
+          frontmatter: {
+            featured: { eq: true }
+            coverUrl: {}
+            author: {}
+            tags: { in: "Borrowing" }
+          }
+        }
         limit: 1
       ) {
         edges {
@@ -18,8 +25,6 @@ const HeroBlog = () => {
               date(formatString: "MMMM DD, YYYY")
               featured
               tags
-              coverUrl
-              description
               author
               authorImg
               authorByline
@@ -35,10 +40,10 @@ const HeroBlog = () => {
   `
 
   const data = useStaticQuery(query)
-  const heroBlog = data?.allMarkdownRemark?.edges[0].node
-  // console.log('heroBlog', heroBlog)
+  const heroBlog = data?.allMarkdownRemark?.edges[0]?.node
 
-  return (
+  return heroBlog && (
+    <>
     <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
     <section className="hero_blog_container">
       <div className="hero_blog_container_image_container">
@@ -80,7 +85,8 @@ const HeroBlog = () => {
       </article>
     </section>
     </Link>
+    </>
   )
 }
 
-export default HeroBlog
+export default HeroBlogBorrowing

@@ -38,7 +38,7 @@ const CategoryBlogsFAQ = () => {
       <div className="category_blogs_container  space-y-5">
         {categoryBlogs &&
           categoryBlogs.map(({ node }) => (
-            <Link to={`/learn/${node.fields.slug}`} key={node.id} className="block">
+            <Link to={`/learning-resources/${node.fields.slug}`} key={node.id} className="block">
               <article className="category_blogs_content">
                 <img
                   src={node.frontmatter.coverUrl}

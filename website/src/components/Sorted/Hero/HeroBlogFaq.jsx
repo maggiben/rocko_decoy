@@ -45,7 +45,7 @@ const HeroBlogFaq = () => {
   return (
     heroBlog && (
       <>
-        <Link to={`/learn/${heroBlog.fields.slug}`}>
+        <Link to={`/learning-resources/${heroBlog.fields.slug}`}>
           <section className="hero_blog_container">
             <div className="hero_blog_container_image_container">
               <img

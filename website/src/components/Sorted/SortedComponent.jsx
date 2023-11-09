@@ -8,39 +8,47 @@ import ThreeTitleCryptoDeFi from "./ThreeTitle/ThreeTitleCryptoDeFi"
 import CategoryBlogsDeFi from "./CategoryBlogs/CategoryBlogsDeFi"
 import CategoryBlogsFAQ from "./CategoryBlogs/CategoryBlogsFAQ"
 import CategoryBlogsCryptoDeFi from "./CategoryBlogs/CategoryBlogsCryptoDeFi"
+import HeroBlogBorrowing from "./Hero/HeroBlogDiFiBorrowing"
+import ThreeTitleBorrowing from "./ThreeTitle/ThreeTitleBorrowing"
+import CategoryBlogsBorrowing from "./CategoryBlogs/CategoryBlogsBorrowing"
 
 const hero = {
-  "DeFi Borrowing & Lending": {
+  "de-fi-borrowing-and-lending": {
     Component: <HeroBlogDiFi />,
     ThreeTitle: <ThreeTitleDeFi />,
     CategoryBlogs: <CategoryBlogsDeFi />,
   },
-  "Rocko FAQs": {
+  "borrowing": {
+    Component: <HeroBlogBorrowing />,
+    ThreeTitle: <ThreeTitleBorrowing />,
+    CategoryBlogs: <CategoryBlogsBorrowing />,
+  },
+  "rocko-faqs": {
     Component: <HeroBlogFaq />,
     ThreeTitle: <ThreeTitleFAQ />,
     CategoryBlogs: <CategoryBlogsFAQ />,
   },
-  "Crypto & DeFi": {
+  "crypto-and-de-fi": {
     Component: <HeroBlogCryptoDeFi />,
     ThreeTitle: <ThreeTitleCryptoDeFi />,
     CategoryBlogs: <CategoryBlogsCryptoDeFi />,
   },
 }
 const SortedComponent = ({ selectCategory }) => {
-  const tag = selectCategory?.name
+  const tag = selectCategory?.hash
 
   return (
     <>
       {/* //! hero start */}
-      {hero[tag].Component}
+      {hero[tag]?.Component}
       {/* //! hero end */}
 
       {/* //! Three Title start */}
-      {hero[tag].ThreeTitle}
+      {hero[tag]?.ThreeTitle}
       {/* //! Three Title end */}
 
       {/* //! Category Blogs start */}
-      {hero[tag].CategoryBlogs}
+      {hero[tag]?.CategoryBlogs}
       {/* //! Category Blogs end */}
     </>
   )

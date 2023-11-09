@@ -1,14 +1,19 @@
 // src/templates/search.js
 import React, { useState, useEffect } from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, navigate} from "gatsby"
 import SearchField from "../../components/SearchField/SearchField"
 import Layout from "../../components/layout"
+import { BiChevronRight } from "react-icons/bi"
 
-const SearchPage = ({ data }) => {
+const SearchPage = ({ data,location }) => {
   const posts = data.allMarkdownRemark.edges
-
-  const [query, setQuery] = useState("")
+  
+  const [query, setQuery] = useState(location?.state?.query || "")
   const [results, setResults] = useState([])
+
+  const handleBackButton = () => {
+    navigate(-1) || navigate("/learn")
+  }
 
   const handleInputChange = event => {
     setQuery(event.target.value)
@@ -20,13 +25,12 @@ const SearchPage = ({ data }) => {
         const regex = new RegExp(query, "gi")
         const filteredPosts = posts.filter(post => {
           return (
-            post.node.frontmatter.title.match(regex) ||
-            post.node.frontmatter.description.match(regex)
+            post.node.frontmatter.description.match(regex)||  post.node.frontmatter.title.match(regex)
           )
         })
         setResults(filteredPosts)
       } else {
-        setResults(posts)
+        setResults([])
       }
     }, 1000)
 
@@ -36,19 +40,25 @@ const SearchPage = ({ data }) => {
   // console.log(results)
   return (
     <Layout>
-      <div className="flex items-center justify-end px-10 container mx-auto">
-        <SearchField
-          handleInputChange={handleInputChange}
-          query={query}
-          isFocused={true}
-        />
-      </div>
+       <section className="tags_container_parent">
+        <div className="tags_container">
+        <button className="blog_home_button" onClick={handleBackButton}>
+            <BiChevronRight className="blog_home_button_icon" />{" "}
+            <span>Back</span>
+          </button>
+          <SearchField
+            handleInputChange={handleInputChange}
+            query={query}
+            isFocused={true}
+          />
+        </div>
+      </section>
       <section className={`!py-16`}>
         <div className="category_blogs_container space-y-5">
           {results.length > 0 &&
             results.map(({ node }) => (
               <Link
-                to={`/learn/${node.fields.slug}`}
+                to={`/learning-resources/${node.fields.slug}`}
                 key={node.id}
                 className="block"
               >

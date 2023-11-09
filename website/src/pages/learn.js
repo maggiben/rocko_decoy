@@ -18,16 +18,29 @@ const Index = () => {
   const [selectCategory, setSelectCategory] = React.useState({
     id: "all",
     name: "All",
+    hash: "",
   })
+
+  React.useEffect(() => {
+    if (window.location.hash) {
+      console.log(window.location.hash, selectCategory)
+      setSelectCategory({
+        id: window.location.hash,
+        name: window.location.hash.replace("#", ""),
+        hash: window.location.hash.replace("#", ""),
+      })
+    }
+  }, [])
 
   React.useEffect(() => {
     if (selectCategory.name === "All") {
       navigate("/learn")
     } else {
-      // navigate(`/learn#${slugify(selectCategory.name)}`)
-      window.location.hash = slugify(selectCategory.name)
+      window.location.hash = slugify(selectCategory.hash)
     }
   }, [selectCategory])
+
+  console.log(selectCategory)
 
   return (
     <Layout>

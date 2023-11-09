@@ -1,10 +1,23 @@
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
-import slugify from "slugify"
+import { useStaticQuery, graphql, navigate } from "gatsby"
+import slugify from "@sindresorhus/slugify"
 import SearchField from "../SearchField/SearchField"
 
 const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
-  // const [tags, setTags] = React.useState([])
+  const [query, setQuery] = React.useState("")
+  const [submitted, setSubmitted] = React.useState(false)
+
+  const handleInputChange = event => {
+    setQuery(event.target.value)
+    setSubmitted(false)
+  }
+  const handleKeyPress = event => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      setSubmitted(true)
+      navigate(`/learn/search?query=${query}`,{state:{query}})
+    }
+  }
 
   const data = useStaticQuery(graphql`
     query MyQuery {
@@ -41,6 +54,8 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
     id,
   }))
 
+  // console.log(uniqueTagsArray)
+
   return (
     <section className="tags_container_parent">
       <div className="tags_container">
@@ -58,6 +73,7 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
                 ...prev,
                 id: "all",
                 name: "All",
+                hash: "",
               }))
             }
           >
@@ -65,27 +81,13 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
           </button>
           {uniqueTagsArray.length > 0 &&
             uniqueTagsArray.map(tag => {
-              const path = slugify(tag?.tag, {
-                trim: true,
-                lower: true,
-              })
-              let mainPath = ""
-              if (path === "defi-borrowing-and-lending") {
-                mainPath = "de-fi-borrowing-and-lending"
-              } else if (path === "rocko-faqs") {
-                mainPath = "rocko-fa-qs"
-              } else if (path === "crypto-and-defi") {
-                mainPath = "crypto-and-de-fi"
-              } else {
-                mainPath = "blog"
-              }
+              const path = slugify(tag?.tag)
 
               return (
                 <button
-                  // to={`/${mainPath}`}
                   key={tag?.id}
                   className={`tags_container_tags_buttons ${
-                    selectCategory.id === tag?.id
+                    selectCategory.hash === path
                       ? "tags_container_tags_buttons_select"
                       : "tags_container_tags_buttons_unselect"
                   }`}
@@ -94,17 +96,21 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
                       ...prev,
                       id: tag?.id,
                       name: tag?.tag,
+                      hash: path,
                     }))
                   }
                 >
-                  {tag?.tag === "DeFi Borrowing & Lending"
-                    ? "Borrowing"
-                    : tag?.tag}
+                  {tag?.tag}
                 </button>
               )
             })}
         </div>
-        <SearchField />
+        <SearchField
+          handleInputChange={handleInputChange}
+          query={query}
+          handleKeyPress={handleKeyPress}
+          submitted={submitted}
+        />
       </div>
     </section>
   )

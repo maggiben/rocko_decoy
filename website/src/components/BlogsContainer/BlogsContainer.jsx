@@ -4,7 +4,6 @@ import { BiChevronRight } from "react-icons/bi"
 import slugify from '@sindresorhus/slugify';
 
 const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
-  console.log({blogDetails})
   // console.log(blogDetails)
   return (
     <section
@@ -26,7 +25,7 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
           {blogDetails.map((details, i) =>{
             // const slug = slugify(details.node.frontmatter.title)
             return(
-            <Link to={`/learn/${details.node.fields.slug}`} key={details.node.id}>
+            <Link to={`/learning-resources/${details.node.fields.slug}`} key={details.node.id}>
               <article>
                 <img
                   src={details.node.frontmatter.coverUrl}
