@@ -7,6 +7,8 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+const siteUrl = `https://rocko.co/`;
+
 module.exports = {
   siteMetadata: {
     title: `Rocko: Learn DeFi`,
@@ -15,7 +17,7 @@ module.exports = {
       summary: `DeFi made simple`,
     },
     description: `Rocko: DeFi for everyone`,
-    siteUrl: `https://rocko.co/`,
+    siteUrl,
     social: {
       twitter: `rockodefi`,
     },
@@ -24,6 +26,7 @@ module.exports = {
     `gatsby-plugin-image`,
     `gatsby-plugin-sass`,
     'gatsby-plugin-postcss',
+    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
