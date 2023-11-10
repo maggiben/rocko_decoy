@@ -13,6 +13,7 @@ import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { NETWORK } from "@/constants/env";
 import { useZeroDev } from "@/hooks/useZeroDev";
 import { useLoanDB } from "@/db/loanDb";
+import { usePathname } from "next/navigation";
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
@@ -24,7 +25,8 @@ const Header = () => {
       shimDisconnect: true
     }});
     const loginRef: any = useRef();
-    const router = useRouter()
+    const router = useRouter();
+    const pathName = usePathname();
 
     const [toggle, setToggle] = useState(false);
     const [toggleDown, setToggleDown] = useState(false);
@@ -81,7 +83,11 @@ const Header = () => {
         });
       }
 
-    //  detectVPN();
+      if (pathName === "/unavailable") {
+        setIsUnavailable(true);
+      } else {
+        detectVPN();
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
