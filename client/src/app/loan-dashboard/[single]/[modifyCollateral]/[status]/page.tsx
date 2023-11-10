@@ -16,6 +16,7 @@ import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
 import { useZeroDev } from "@/hooks/useZeroDev";
+import { etherscanLink } from "@/utility/utils";
 
 interface DoneTracker {
   step: string;
@@ -88,7 +89,7 @@ const ModifyStatus = () => {
     const depositResult = await depositZerodevAccount(zerodevAccount, payment, "ETH");
     return depositResult;
   }
-  
+
   const setADone = () => {
     setStartA(false); 
     setProgress(0);
@@ -169,7 +170,7 @@ const ModifyStatus = () => {
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link className="hover:text-green-700" 
-            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
+            href={etherscanLink(txHash)}
             target="_blank"
           >
             Successfully transaction is completed!

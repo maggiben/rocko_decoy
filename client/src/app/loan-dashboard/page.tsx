@@ -7,7 +7,7 @@ import eth from "@/assets/coins/Ether (ETH).svg";
 import usdc from "@/assets/coins/USD Coin (USDC).svg";
 import { useLoanDB } from "@/db/loanDb";
 import financial from "@/utility/currencyFormate";
-import { formatDate } from "@/utility/utils";
+import { etherscanLink, formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
 import { useSingleLoan } from "@/contract/single";
 import { NETWORK } from "@/constants/env";
@@ -194,7 +194,7 @@ const Dashboard = () => {
                 </div>
                 <div className="flex">
                   <Link className="w-1/2 underline" target="_blank"
-                    href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${loan?.transaction_hash}` : `https://${NETWORK}.etherscan.io/tx/${loan?.transaction_hash}`}
+                    href={etherscanLink(loan?.transaction_hash)}
                   >View loan repayment transaction</Link>
                 </div>
               </div>

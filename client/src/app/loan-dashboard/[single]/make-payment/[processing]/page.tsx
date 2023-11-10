@@ -17,6 +17,7 @@ import { useLoanDB } from "@/db/loanDb";
 import { useRepayFull, useRepaySome } from "@/contract/batch";
 import { USDCContract, networkChainId } from "@/constants";
 import { useZeroDev } from "@/hooks/useZeroDev";
+import { etherscanLink } from "@/utility/utils";
 
 interface DoneTracker {
   step: string;
@@ -172,7 +173,7 @@ const Processing = () => {
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link className="hover:text-green-700" 
-            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${tx}` : `https://${NETWORK}.etherscan.io/tx/${tx}`}
+            href={etherscanLink(tx)}
             target="_blank"
           >
             Loan successfully repaid!

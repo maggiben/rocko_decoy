@@ -1,3 +1,4 @@
+import { NETWORK } from '@/constants/env'
 import { ethers } from 'ethers'
 
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
@@ -44,4 +45,8 @@ export const getRoundDown = (value: number, fractionalPoints: number) => {
     let roundedDownNumber = Math.floor(value * Math.pow(10, fractionalPoints)) / Math.pow(10, fractionalPoints);
 
     return roundedDownNumber;
+}
+
+export const etherscanLink = (txHash: string, type: string | undefined = 'tx') => {
+    return NETWORK === "mainnet" ? `https://etherscan.io/${type}/${txHash}` : `https://${NETWORK}.etherscan.io/${type}/${txHash}`
 }

@@ -15,6 +15,7 @@ import { NETWORK } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
 import { LoanData } from "@/types/type";
 import { useZeroDev } from "@/hooks/useZeroDev";
+import { etherscanLink } from "@/utility/utils";
 
 interface DoneTracker {
   step: string;
@@ -57,6 +58,7 @@ const DepositingCollateral = () => {
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
     if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+      console.log({chain, chainname: chain.name.toUpperCase(), network: NETWORK.toUpperCase(), boo: chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()})
       toast.error("Invalid Network!");
       return;
     }
@@ -150,7 +152,7 @@ const DepositingCollateral = () => {
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link className="hover:text-green-700" 
-            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
+            href={etherscanLink(txHash)}
             target="_blank"
           >
             Loan successfully fulfilled!
