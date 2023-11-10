@@ -81,7 +81,7 @@ const Header = () => {
         });
       }
 
-      detectVPN();
+    //  detectVPN();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInfo]);
 
