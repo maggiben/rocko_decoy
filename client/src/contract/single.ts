@@ -20,7 +20,7 @@ export const useSingleLoan = () => {
   const signer: ethers.Signer | undefined = useSigner();
 
   const getETHPrice = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(NETWORK);
+    const sdk = new ThirdwebSDK(ProviderNetwork);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const price = await contract.call( 

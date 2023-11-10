@@ -20,6 +20,8 @@ resource "aws_lambda_function" "get_compound_usdc_data" {
   timeout       = 600
   memory_size   = 512
 
+  # TODO Update contract addresses to mainnet
+  
   environment {
     variables = {
       ROCKO_ENV           = local.environment
