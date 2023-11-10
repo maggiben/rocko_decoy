@@ -134,6 +134,7 @@ export const useLoanDB = () => {
     const isVPN = async () => {
         try {
             const ip = await publicIpv4();
+            console.log("ipv4 address: ", ip);
             const response = await axios.get(`${BACKEND_URL}/vpn?ip=${ip}`);
 
             return response;
