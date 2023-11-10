@@ -10,7 +10,6 @@ import financial from "@/utility/currencyFormate";
 import { etherscanLink, formatDate } from "@/utility/utils";
 import { useZeroDev } from "@/hooks/useZeroDev";
 import { useSingleLoan } from "@/contract/single";
-import { NETWORK } from "@/constants/env";
 
 const Dashboard = () => {
   const [active, setActive] = useState(true);

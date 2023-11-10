@@ -11,7 +11,7 @@ import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import StatusSuccess from "@/assets/StatusSuccess.png";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
-import { NETWORK } from "@/constants/env";
+import { BLOCKCHAIN } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
@@ -54,7 +54,7 @@ const ModifyStatus = () => {
 
   const start = async () => {
     if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
-    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error("Invalid Network!");
       return;
     }

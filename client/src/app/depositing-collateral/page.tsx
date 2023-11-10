@@ -11,7 +11,7 @@ import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
 import { useGetLoan } from "@/contract/batch";
 import { useSingleLoan } from "@/contract/single";
-import { NETWORK } from "@/constants/env";
+import { BLOCKCHAIN } from "@/constants/env";
 import { useLoanDB } from "@/db/loanDb";
 import { LoanData } from "@/types/type";
 import { useZeroDev } from "@/hooks/useZeroDev";
@@ -57,8 +57,7 @@ const DepositingCollateral = () => {
 
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
-    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
-      console.log({chain, chainname: chain.name.toUpperCase(), network: NETWORK.toUpperCase(), boo: chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()})
+    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error("Invalid Network!");
       return;
     }

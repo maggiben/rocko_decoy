@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { USDCContract, CometContract, CometRewardContract, WETHContract, ChainlinkEthPriceFeed, networkChainId } from "../constants";
 import { formatBalance, parseBalance } from '@/utility/utils';
-import { NETWORK } from "../constants/env";
+import { BLOCKCHAIN } from "../constants/env";
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
 const BASIC_COMETABI = require('../constants/basic_comet.json');
@@ -12,15 +12,13 @@ const USDCABI = require('../constants/usdc.json');
 const REWARDABI = require('../constants/reward.json');
 const ASSET_ID = 2;
 
-const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
-
 export const useSingleLoan = () => {
   const address = useAddress()
   const { address: zerodevAccount } = useAccount();
   const signer: ethers.Signer | undefined = useSigner();
 
   const getETHPrice = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const price = await contract.call( 
@@ -34,7 +32,7 @@ export const useSingleLoan = () => {
   }
 
   const getBorrowAPR = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const utilization = await contract.call( "getUtilization" )
@@ -49,7 +47,7 @@ export const useSingleLoan = () => {
   }
 
   const getLTV = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -63,7 +61,7 @@ export const useSingleLoan = () => {
   }
 
   const getThreshold = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -77,7 +75,7 @@ export const useSingleLoan = () => {
   }
 
   const getPenalty = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
   
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const assetInfo = await contract.call( "getAssetInfo",
@@ -93,7 +91,7 @@ export const useSingleLoan = () => {
   const getBorrowBalanceOf = async (): Promise<number> => {
     if (!zerodevAccount) return 0;
 
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
 
     const value = await contract.call( 
@@ -111,7 +109,7 @@ export const useSingleLoan = () => {
   const getCollateralBalanceOf = async (): Promise<number> => {
     if (!zerodevAccount) return 0;
 
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
     const contract = await sdk.getContract(CometContract[networkChainId], BASIC_COMETABI)
     
     const value = await contract.call( 
@@ -126,7 +124,7 @@ export const useSingleLoan = () => {
   }
 
   const getRewardRate = async (): Promise<number> => {
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call( 
       "baseTrackingBorrowSpeed"
@@ -142,7 +140,7 @@ export const useSingleLoan = () => {
   const getRewardAmount = async(): Promise<number> => {
     if (!zerodevAccount) return 0;
 
-    const sdk = new ThirdwebSDK(ProviderNetwork);
+    const sdk = new ThirdwebSDK(BLOCKCHAIN);
     const contract = await sdk.getContract(CometContract[networkChainId], COMETABI)
     const value = await contract.call(
       "userBasic",

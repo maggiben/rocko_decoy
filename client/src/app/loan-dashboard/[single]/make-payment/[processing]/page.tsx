@@ -11,7 +11,7 @@ import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import StatusSuccess from "@/assets/StatusSuccess.png";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
-import { NETWORK, PAYMENT_BUFFER } from "@/constants/env";
+import { BLOCKCHAIN, PAYMENT_BUFFER } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useRepayFull, useRepaySome } from "@/contract/batch";
@@ -88,7 +88,7 @@ const Processing = () => {
 
   const start = async () => {
     if (!zerodevAccount || !address) return; // !zerodevAccount - logout, !address - no EOA
-    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error("Invalid Network!");
       return;
     }

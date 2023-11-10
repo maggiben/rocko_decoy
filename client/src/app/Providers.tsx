@@ -2,14 +2,12 @@
 
 import ZeroDevWrapper from "./ZerodevWrapper";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { NETWORK, THIRDWEB_CLIENTID } from "@/constants/env";
-
-const ProviderNetwork = NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
+import { BLOCKCHAIN, THIRDWEB_CLIENTID } from "@/constants/env";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <ZeroDevWrapper>
-            <ThirdwebProvider activeChain={ProviderNetwork} clientId={THIRDWEB_CLIENTID}>
+            <ThirdwebProvider activeChain={BLOCKCHAIN} clientId={THIRDWEB_CLIENTID}>
                 {children}
             </ThirdwebProvider>
         </ZeroDevWrapper>
