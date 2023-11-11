@@ -7,12 +7,11 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
-
-const siteUrl = `https://rocko.co/`;
-
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
+
+const siteUrl = `https://rocko.co/`;
 
 const sitemap = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true' ? [`gatsby-plugin-sitemap`] : [];
 
