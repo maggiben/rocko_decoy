@@ -7,11 +7,14 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+
 const siteUrl = `https://rocko.co/`;
 
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
+
+const sitemap = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true' ? [`gatsby-plugin-sitemap`] : [];
 
 module.exports = {
   siteMetadata: {
@@ -27,10 +30,10 @@ module.exports = {
     },
   },
   plugins: [
+    ...sitemap,
     `gatsby-plugin-image`,
     `gatsby-plugin-sass`,
     'gatsby-plugin-postcss',
-    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
