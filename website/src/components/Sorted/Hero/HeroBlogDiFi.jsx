@@ -40,7 +40,7 @@ const HeroBlogDiFi = () => {
   `
 
   const data = useStaticQuery(query)
-  const heroBlog = data?.allMarkdownRemark?.edges[0]?.node
+  const heroBlog = data?.allMarkdownRemark?.edges?.[0]?.node
 
   return heroBlog && (
     <>

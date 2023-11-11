@@ -35,10 +35,11 @@ const HeroBlog = () => {
   `
 
   const data = useStaticQuery(query)
-  const heroBlog = data?.allMarkdownRemark?.edges[0].node
+
+  const heroBlog = data?.allMarkdownRemark?.edges?.[0]?.node
   // console.log('heroBlog', heroBlog)
 
-  return (
+  return heroBlog && (
     <Link to={`/learn/${heroBlog.fields.slug}`}>
     <section className="hero_blog_container">
       <div className="hero_blog_container_image_container">
