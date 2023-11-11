@@ -40,7 +40,7 @@ const SearchPage = ({ data,location }) => {
     }
   }, [query])
 
-  if (!SHOW_BLOG !== 'true') {
+  if (!SHOW_BLOG) {
     return null
   }
 
