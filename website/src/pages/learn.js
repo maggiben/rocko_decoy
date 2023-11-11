@@ -12,8 +12,10 @@ import SortedComponent from "../components/Sorted/SortedComponent"
 import { navigate } from "gatsby"
 import slugify from "@sindresorhus/slugify"
 import Layout from "../components/layout"
+const SHOW_BLOG = process.env.FEATURE_FLAG_SHOW_BLOG === 'true';
 
 const Index = () => {
+
   //* useState Hooks
   const [selectCategory, setSelectCategory] = React.useState({
     id: "all",
@@ -41,6 +43,10 @@ const Index = () => {
   }, [selectCategory])
 
   console.log(selectCategory)
+
+  if (!SHOW_BLOG) {
+    return null
+  }
 
   return (
     <Layout>
