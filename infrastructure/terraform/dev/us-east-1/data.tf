@@ -28,3 +28,6 @@ data "aws_secretsmanager_secret_version" "provider_url_prod" {
   secret_id = "prod/provider_url"
 }
 
+data "aws_secretsmanager_secret_version" "vpnapi_key" {
+  secret_id = "prod/vpn_api_key"
+}

@@ -67,6 +67,7 @@ resource "aws_ecs_task_definition" "rocko_backend" {
       {"name": "GEMINI_CLIENT_ID", "value": "${jsondecode(data.aws_secretsmanager_secret_version.gemini_creds.secret_string)["client_id"]}"},
       {"name": "BACKEND_URL", "value": "${local.backend_url}"},
       {"name": "CLIENT_URL", "value": "${local.client_url}"},
+      {"name": "VPNAPI_KEY", "value": "${jsondecode(data.aws_secretsmanager_secret_version.vpnapi_key.secret_string)["api_key"]}"},
       {"name": "ROCKO_DB_HOST", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["host"]}"},
       {"name": "ROCKO_DB_USER", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["username"]}"},
       {"name": "ROCKO_DB_PASSWORD", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"},
