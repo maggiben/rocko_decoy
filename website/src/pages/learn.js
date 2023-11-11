@@ -12,6 +12,7 @@ import SortedComponent from "../components/Sorted/SortedComponent"
 import { navigate } from "gatsby"
 import slugify from "@sindresorhus/slugify"
 import Layout from "../components/layout"
+
 const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true';
 
 const Index = () => {

@@ -4,7 +4,9 @@ import { Link, graphql, navigate} from "gatsby"
 import SearchField from "../../components/SearchField/SearchField"
 import Layout from "../../components/layout"
 import { BiChevronRight } from "react-icons/bi"
+
 const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true';
+
 const SearchPage = ({ data,location }) => {
 
   const posts = data.allMarkdownRemark.edges
