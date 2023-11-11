@@ -4,8 +4,9 @@ import { Link, graphql, navigate} from "gatsby"
 import SearchField from "../../components/SearchField/SearchField"
 import Layout from "../../components/layout"
 import { BiChevronRight } from "react-icons/bi"
-
+const SHOW_BLOG = process.env.FEATURE_FLAG_SHOW_BLOG === 'true';
 const SearchPage = ({ data,location }) => {
+
   const posts = data.allMarkdownRemark.edges
   
   const [query, setQuery] = useState(location?.state?.query || "")
@@ -20,22 +21,28 @@ const SearchPage = ({ data,location }) => {
   }
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (query?.length) {
-        const regex = new RegExp(query, "gi")
-        const filteredPosts = posts.filter(post => {
-          return (
-            post.node.frontmatter.description.match(regex)||  post.node.frontmatter.title.match(regex)
-          )
-        })
-        setResults(filteredPosts)
-      } else {
-        setResults([])
-      }
-    }, 1000)
-
-    return () => clearTimeout(delayDebounceFn)
+    if (SHOW_BLOG) {
+      const delayDebounceFn = setTimeout(() => {
+        if (query?.length) {
+          const regex = new RegExp(query, "gi")
+          const filteredPosts = posts.filter(post => {
+            return (
+              post.node.frontmatter.description.match(regex)||  post.node.frontmatter.title.match(regex)
+            )
+          })
+          setResults(filteredPosts)
+        } else {
+          setResults([])
+        }
+      }, 1000)
+  
+      return () => clearTimeout(delayDebounceFn)
+    }
   }, [query])
+
+  if (!SHOW_BLOG !== 'true') {
+    return null
+  }
 
   // console.log(results)
   return (
