@@ -20,3 +20,16 @@ resource "aws_route53_record" "rocko_dev_ns" {
     "ns-1597.awsdns-07.co.uk."
   ]
 }
+
+resource "aws_route53_record" "rocko_site_ns" {
+  zone_id = aws_route53_zone.rocko_cloud.id
+  type    = "NS"
+  ttl     = "60"
+  name    = "site.rocko.cloud"
+  records = [
+    "ns-1872.awsdns-42.co.uk.",
+    "ns-339.awsdns-42.com.",
+    "ns-760.awsdns-31.net.",
+    "ns-1326.awsdns-37.org."
+  ]
+}
