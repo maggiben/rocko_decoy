@@ -149,12 +149,6 @@ export const useRepayFull = (collateral: any, loan: any, borrowBalanceOf: any) =
     const [txHash, setTxHash] = useState("");
     const [success, setSuccess] = useState(false);
 
-    console.log(collateral)
-    console.log(loan)
-    console.log(borrowBalanceOf)
-    console.log(loan - borrowBalanceOf)
-    console.log(getRoundDown(loan - borrowBalanceOf, 6))
-
     let remaining = loan > borrowBalanceOf ? getRoundDown(loan - borrowBalanceOf, 6).toString() : "0"
 
     const { config } = usePrepareContractBatchWrite(
@@ -190,13 +184,25 @@ export const useRepayFull = (collateral: any, loan: any, borrowBalanceOf: any) =
             {
                 address: CometContract[networkChainId],
                 abi: COMETABI,
-                functionName: "withdrawTo",
+                functionName: "withdraw",
                 args: [
-                    address ? address : wagmiAddress,
                     WETHContract[networkChainId],
                     parseBalance(collateral.toString())
                 ]
             },
+            {
+                address: WETHContract[networkChainId],
+                abi: WETHABI,
+                functionName: "withdraw",
+                args: [
+                    parseBalance(collateral.toString())
+                ],
+            },                
+            {
+                to: address as `0x${string}`,
+                data: '0x',
+                value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
+            },              
             {
                 address: CometRewardContract[networkChainId],
                 abi: REWARDABI,
@@ -303,26 +309,30 @@ export const useBorrowCollateral = (collateral: any) => {
     const [success, setSuccess] = useState(false);
 
     const { config } = usePrepareContractBatchWrite(
-        wagmiAddress ? {
+        wagmiAddress && address ? {
             calls: [
                 {
                     address: CometContract[networkChainId],
                     abi: COMETABI,
-                    functionName: "withdrawTo",
+                    functionName: "withdraw",
                     args: [
-                        address ? address : wagmiAddress,
                         WETHContract[networkChainId],
                         parseBalance(collateral.toString())
                     ]
                 },
-                // {
-                //     address: WETHContract[networkChainId],
-                //     abi: WETHABI,
-                //     functionName: "withdraw",
-                //     args: [
-                //         ethers.utils.parseEther(collateral.toString())
-                //     ]
-                // }
+                {
+                    address: WETHContract[networkChainId],
+                    abi: WETHABI,
+                    functionName: "withdraw",
+                    args: [
+                        parseBalance(collateral.toString())
+                    ],
+                },                
+                {
+                    to: address as `0x${string}`,
+                    data: '0x',
+                    value: BigInt(Number(ethers.utils.parseEther(collateral.toString())))
+                },                
             ],
             enabled: true
         } : {

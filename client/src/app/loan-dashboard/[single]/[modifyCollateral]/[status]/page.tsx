@@ -88,36 +88,7 @@ const ModifyStatus = () => {
     const depositResult = await depositZerodevAccount(zerodevAccount, payment, "ETH");
     return depositResult;
   }
-
-  const startBorrowB = async () => {
-    setADone();
-    setStartB(true);
-
-    if (!address) return null;
-
-    const swapResult = await wethToETH(payment);
-    console.log(swapResult);
-    if (swapResult) {
-      const txHash = swapResult.receipt.transactionHash;
-      toast(() => (
-        <div className="flex items-center underline gap-2">
-          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-          <Link className="hover:text-green-700" 
-            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${txHash}` : `https://${NETWORK}.etherscan.io/tx/${txHash}`}
-            target="_blank"
-          >
-            Successfully transaction is completed!
-          </Link>
-        </div>
-      ))
-
-      setAllDone(txHash);
-    } else {
-      setError("B");
-    }
-    return swapResult;
-  } 
-
+  
   const setADone = () => {
     setStartA(false); 
     setProgress(0);
@@ -175,8 +146,22 @@ const ModifyStatus = () => {
   },[zerodevAccount, loanData, batchAddCollateral, batchBorrowCollateral]);
 
   useEffect(() => {
-    if (borrowSuccess)
-      startBorrowB();
+    if (borrowSuccess) {
+      console.log("---transactionHash of batchTransactions---", borrowTxHash);
+      toast(() => (
+        <div className="flex items-center underline gap-2">
+          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+          <Link className="hover:text-green-700"
+            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${borrowTxHash}` : `https://${NETWORK}.etherscan.io/tx/${borrowTxHash}`}
+            target="_blank"
+          >
+            Successfully transaction is completed!
+          </Link>
+        </div>
+      ))
+
+      setAllDone(borrowTxHash);
+    }
 
     if (success) {
       console.log("---transactionHash of batchTransactions---", txHash);
