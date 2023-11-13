@@ -51,6 +51,30 @@ data "aws_subnets" "private-subnets" {
   }
 }
 
+data "aws_subnet" "public-subnet1" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.dev-infrastructure-vpc.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["dev-infrastructure-public-1"]
+  }
+}
+
+data "aws_subnet" "public-subnet2" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.dev-infrastructure-vpc.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["dev-infrastructure-public-2"]
+  }
+}
+
 data "aws_security_group" "ecs-sg" {
   filter {
     name   = "tag:Name"
