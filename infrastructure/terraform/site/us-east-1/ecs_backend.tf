@@ -21,11 +21,11 @@ resource "aws_ecs_service" "rocko_backend" {
     assign_public_ip = false
   }
 
-#  load_balancer {
-#    target_group_arn = module.rocko_lb_backend.target_group_id
-#    container_name   = "${local.environment}-rocko_backend"
-#    container_port   = 5000
-#  }
+  load_balancer {
+    target_group_arn = module.rocko_lb_backend.target_group_id
+    container_name   = "${local.environment}-rocko_backend"
+    container_port   = 5000
+  }
 
   tags = {
     Name      = "${local.environment}-rocko_backend"
