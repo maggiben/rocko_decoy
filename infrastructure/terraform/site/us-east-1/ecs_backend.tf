@@ -16,7 +16,7 @@ resource "aws_ecs_service" "rocko_backend" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [data.aws_security_group.ecs-sg.id]
+    security_groups  = [aws_security_group.rocko-ecs.id]
     subnets          = data.aws_subnets.private-subnets.ids
     assign_public_ip = false
   }
