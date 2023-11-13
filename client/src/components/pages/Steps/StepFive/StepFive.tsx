@@ -162,7 +162,7 @@ const StepFive: React.FC = () => {
               <HoverTooltip text="this is tooltip" />
             </div>
           ),
-          details: `${financial(loanData?.rewardRate, 2)}%`,
+          details: `${financial(loanData?.rewardRate * 100, 2)}%`,
         },
       ],
     },

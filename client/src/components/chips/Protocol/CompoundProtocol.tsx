@@ -17,13 +17,12 @@ const CompoundProtocol: FC<ProtocolProps> = ({
     const { loanData, setLoanData } = useLoanData();
     const [monthAvgAPR, setMonthAvgAPR] = useState<any>(0);
     const [yearAvgAPR, setYearAvgAPR] = useState<any>(0);
-    const [rewardRate, setRewardRate] = useState<any>(0);
     const [avgRewardRate, setAvgRewardRate] = useState<any>(0);
     const { getMonthAverageAPR, getYearAverageAPR, getYearAvgRewardRate, getRewardRate } = useLoanDB();
 
     const calculateInterestAccrued = (borrowing: number, apr: number, days: number) => {
         const seconds = 60 * 60 * 24 * days;
-        const interest = borrowing * (1 + apr / seconds) ** (seconds * days / 365);
+        const interest = borrowing * (1 + apr / seconds) ** (seconds * days / 365) - borrowing;
         return interest;
     }
 
@@ -34,7 +33,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
             const loanToValue = loanData?.loanToValue;
             const penalty = loanData?.liquidationPenalty;
             const threshold = loanData?.liquidationThreshold;
-            const rewardRate = loanData?.rewardRate;
+            const rewardRate = await getRewardRate();
             const rewardAmount = loanData?.rewardAmount;
             const collateralInUSD = borrowing / loanToValue * (1 + loanData?.buffer / 100);
             const collateral = collateralInUSD / loanData?.collateralPrice;
@@ -75,10 +74,6 @@ const CompoundProtocol: FC<ProtocolProps> = ({
 
         getYearAverageAPR()
         .then(_apr => setYearAvgAPR(_apr))
-        .catch(_err => console.log(_err));
-
-        getRewardRate()
-        .then(_rate => setRewardRate(_rate))
         .catch(_err => console.log(_err));
 
         getYearAvgRewardRate()
@@ -210,7 +205,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                             <span className="">Current Rate</span>
                         </p>
                         <p className="font-semibold text-blackPrimary">
-                            {financial(rewardRate * 100, 2)}%
+                            {financial(loanData?.rewardRate * 100, 2)}%
                         </p>
                     </div>                
                     <div>
