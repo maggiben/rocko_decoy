@@ -11,7 +11,7 @@ import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import StatusSuccess from "@/assets/StatusSuccess.png";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 import { useAddress } from "@thirdweb-dev/react";
-import { BLOCKCHAIN } from "@/constants/env";
+import { NETWORK } from "@/constants/env";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useAddCollateral, useBorrowCollateral } from "@/contract/batch";
@@ -54,7 +54,7 @@ const ModifyStatus = () => {
 
   const start = async () => {
     if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
-    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
+    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
       toast.error("Invalid Network!");
       return;
     }
@@ -89,7 +89,7 @@ const ModifyStatus = () => {
     const depositResult = await depositZerodevAccount(zerodevAccount, payment, "ETH");
     return depositResult;
   }
-
+  
   const setADone = () => {
     setStartA(false); 
     setProgress(0);
@@ -153,7 +153,7 @@ const ModifyStatus = () => {
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link className="hover:text-green-700"
-            href={NETWORK === "mainnet" ? `https://etherscan.io/tx/${borrowTxHash}` : `https://${NETWORK}.etherscan.io/tx/${borrowTxHash}`}
+            href={etherscanLink(borrowTxHash)}
             target="_blank"
           >
             Successfully transaction is completed!
