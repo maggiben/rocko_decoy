@@ -15,7 +15,7 @@ resource "aws_ecs_cluster" "rocko" {
 resource "aws_security_group" "rocko-ecs" {
   name        = "${local.environment}-rocko-ecs-security-group"
   description = "Rocko ECS SG"
-  vpc_id      = module.rocko-vpc-dev.infrastructure-vpc-id
+  vpc_id      = data.aws_vpc.dev-infrastructure-vpc.id
 
   tags = {
     Name      = "${local.environment}-rocko_ecs"
