@@ -1,5 +1,13 @@
 data "aws_region" "current" {}
 
+data "aws_secretsmanager_secret_version" "coinbase_creds" {
+  secret_id = "dev/coinbase_oauth_creds"
+}
+
+data "aws_secretsmanager_secret_version" "gemini_creds" {
+  secret_id = "dev/gemini_oauth_creds"
+}
+
 data "aws_secretsmanager_secret_version" "db_creds" {
   secret_id = "dev/db_creds"
 }
@@ -14,6 +22,10 @@ data "aws_secretsmanager_secret_version" "provider_url" {
 
 data "aws_secretsmanager_secret_version" "cmc_api_key" {
   secret_id = "prod/cmc_key"
+}
+
+data "aws_secretsmanager_secret_version" "vpnapi_key" {
+  secret_id = "prod/vpn_api_key"
 }
 
 data "aws_vpc" "dev-infrastructure-vpc" {
