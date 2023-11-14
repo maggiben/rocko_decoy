@@ -33,3 +33,17 @@ resource "aws_route53_record" "rocko_site_ns" {
     "ns-1326.awsdns-37.org."
   ]
 }
+
+resource "aws_route53_record" "rocko_prod_ns" {
+  zone_id = aws_route53_zone.rocko_cloud.id
+  type    = "NS"
+  ttl     = "60"
+  name    = "prod.rocko.cloud"
+  records = [
+    "ns-384.awsdns-48.com.",
+    "ns-1230.awsdns-25.org.",
+    "ns-837.awsdns-40.net.",
+    "ns-1898.awsdns-45.co.uk."
+  ]
+}
+
