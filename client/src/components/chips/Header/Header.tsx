@@ -20,9 +20,12 @@ const net = (chains as { [key: string]: any })[NETWORK];
 const Header = () => {
     const { chains } = configureChains( [net], [publicProvider()] );
     const auth0Connector = new Auth0WalletConnector({chains, options: {
-      projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || "",
+      projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID,
       shimDisconnect: true
     }});
+
+    console.log({net, env: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID, chains})
+
     const loginRef: any = useRef();
     const router = useRouter();
     const pathName = usePathname();
@@ -38,6 +41,7 @@ const Header = () => {
     const [isUnavailable, setIsUnavailable] = useState(false);
 
     const OnLogin = async () => {
+      console.log({auth0Connector})
         await connect({
           connector: auth0Connector
         });
