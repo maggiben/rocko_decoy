@@ -328,12 +328,6 @@ or drops. "
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
                 <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
-                <div className="flex flex-col md:flex-row items-center gap-y-1 md:gap-2 absolute right-0">
-                  <p className="text-center md:text-left text-sm md:text-base">
-                    Alerts On
-                  </p>
-                  <ToggleBtn />
-                </div>
                 {/* //!alert start */}
                 <Alert
                   title=" Collateral Buffer Alerts"
