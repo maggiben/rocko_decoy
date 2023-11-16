@@ -10,6 +10,7 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";
+import Alert from "@/components/pages/Dashboard/Alert/Alert";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
 import { useCompPrice } from "@/hooks/usePrice";
@@ -216,6 +217,14 @@ function SinglePage() {
                   <small className="block font-normal">Date Opened</small>
                   {loanData?.create_time && formatDate(new Date(loanData?.create_time))}
                 </p>
+                {/* //! Alert start  */}
+                <Alert
+                  title="APR Alerts"
+                  alertFor="APR"
+                  description="Set up alerts to be notified if your interest rate spikes
+or drops. "
+                />
+                {/* //! Alert end */}
                 <div className="mt-5 md:mt-8 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
                   <button
                     onClick={() => setOpenModalFor("Make Payment")}
@@ -325,6 +334,15 @@ function SinglePage() {
                   </p>
                   <ToggleBtn />
                 </div>
+                {/* //!alert start */}
+                <Alert
+                  title=" Collateral Buffer Alerts"
+                  alertFor="collateralBuffer"
+                  description="Set up alerts to be notified when your collateral buffer is 
+getting too low. Alerts are automatically sent at 5% as
+liquidation can occur once it becomes negative."
+                />
+                {/* //!alert end */}
               </div>
               <div className="pt-6 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
               <button

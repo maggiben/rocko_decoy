@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LoneProvider from "@/context/loanContext/loanContext";
+import AlertProvider from "@/context/alertContext/alertContext";
 import Providers from "./Providers";
 import { Toaster } from 'react-hot-toast';
 
