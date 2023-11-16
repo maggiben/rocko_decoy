@@ -1,8 +1,8 @@
 "use client";
 import { FC, useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
-import ModalContainer from "@/components/shared/modalContainer/modalContainer";
-import ModalContent from "@/components/shared/modalContainer/modalContent/modalContent";
+import ModalContainer from "@/components/chips/ModalContainer/modalContainer";
+import ModalContent from "@/components/chips/ModalContainer/modalContent/modalContent";
 import Image from "next/image";
 import closeIcon from "@/assets/Close.svg";
 import { useAlert } from "@/context/alertContext/alertContext";
