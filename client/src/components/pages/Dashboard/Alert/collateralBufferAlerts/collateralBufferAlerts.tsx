@@ -1,4 +1,4 @@
-import ModalContent from "@/components/chips/ModalContainer/modalContent/modalContent";
+import ModalContent from "@/components/chips/ModalContent/ModalContent";
 import { FiPlus } from "react-icons/fi";
 import { AiOutlineMail, AiOutlineRight } from "react-icons/ai";
 import Image from "next/image";

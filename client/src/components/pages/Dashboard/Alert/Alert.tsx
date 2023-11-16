@@ -1,6 +1,6 @@
 import { Dispatch, FC, useState } from "react";
 import ToggleBTN from "../toggleBTN/toggleBTN";
-import ModalContainer from "@/components/chips/ModalContainer/modalContainer";
+import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import CollateralBufferAlerts from "./collateralBufferAlerts/collateralBufferAlerts";
 import { useAlert } from "@/context/alertContext/alertContext";
 
