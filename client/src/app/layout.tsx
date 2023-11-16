@@ -25,7 +25,9 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Toaster position="bottom-right" reverseOrder={true} />
-          <LoneProvider>{children}</LoneProvider>
+        <LoneProvider>
+          <AlertProvider>{children}</AlertProvider>
+        </LoneProvider>
         </Providers>
       </body>
     </html>
