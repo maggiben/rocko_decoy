@@ -180,6 +180,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
           comingSoon: true,
         },
       ],
+      description: "You will be able to choose the amount of collateral to post after confirming the lending protocol for your loan."
     },
     // Choose the lending protocol to borrow from
     {

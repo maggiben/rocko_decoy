@@ -24,6 +24,10 @@ const StepTwo: FC<AssetStep> = ({assets, id, title, description}) => {
                 </p>
                 
                 <ChooseCoins assets={assets}/>
+
+                <div className="w-full rounded-2xl p-6 bg-[#EEE] text-[#545454] font-medium">
+                    {description}
+                </div>
             </div>
             </div>
             <div className="p-6 border border-[#E2E2E2] flex-1 rounded-2xl">
