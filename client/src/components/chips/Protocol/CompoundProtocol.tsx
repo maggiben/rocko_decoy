@@ -114,11 +114,11 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                 }}
                 className={`rounded-full py-[10px] px-6  text-sm font-semibold ${
                     selectProtocol === name
-                    ? "text-[#eee] bg-[#2C3B8D] "
+                    ? "bg-[#eee] text-[#2C3B8D] border-[#2C3B8D] border-2"
                     : "bg-[#eee] text-[#2C3B8D]"
                 }`}
                 >
-                Select
+                    {selectProtocol === name ? "Selected" : "Select"}
                 </button>
             </div>
             </div>
