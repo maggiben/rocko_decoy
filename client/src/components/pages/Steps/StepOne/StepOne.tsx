@@ -221,8 +221,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
             </div>
             <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
               <p className="text-sm text-blackSecondary">
-                Only USDC (a USD-backed stablecoin) is available at this time.
-                However, you can convert USDC into USD on most crypto exchanges.{" "}
+                USD is only available for U.S. Coinbase users at this time. If you do not have a Coinbase account, you can receive USDC (a USD-backed stablecoin with a 1:1 value) and convert it into USD on many U.S. crypto exchanges.{" "}
                 <Link href={"/"} className="underline">
                   Learn more.
                 </Link>

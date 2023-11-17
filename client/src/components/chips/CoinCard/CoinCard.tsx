@@ -48,7 +48,7 @@ const CoinCard: FC<CoinCardProps> = ({
         <Image width={40} height={40} src={coinIcon} alt="Ether" className="" />
         {isComingSoon && (
           <div className="px-2 py-[2px] bg-[#EEE] rounded-[5px] text-[#545454] font-medium  text-[11px]">
-            Coming Soon
+            {coinShortName === "USD" ? "U.S. Coinbase users only" : "Coming Soon"}
           </div>
         )}
       </div>
