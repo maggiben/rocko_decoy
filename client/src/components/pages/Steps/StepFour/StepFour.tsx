@@ -6,7 +6,7 @@ import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
 
 const StepFour: FC<RiskStep> = ({ title, description }) => {
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
@@ -191,7 +191,7 @@ const StepFour: FC<RiskStep> = ({ title, description }) => {
                     <input
                       type="range"
                       className="range w-full "
-                      min="0"
+                      min="10"
                       max="400"
                       value={value}
                       onChange={handleInputChange}
@@ -224,7 +224,7 @@ const StepFour: FC<RiskStep> = ({ title, description }) => {
                     type="number"
                     name=""
                     id=""
-                    min="0"
+                    min="10"
                     max="1000"
                     value={customValue}
                     onBlur={handleCustomInputBlur}

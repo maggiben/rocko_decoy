@@ -28,7 +28,7 @@ export const loneContext = createContext<ContextValues>({
     twentyFourMonthInterest: 0,
     paymentMethod: "",
 
-    buffer: 0,
+    buffer: 10,
     loanToValue: 0,
     collateralPrice: 0,
     subCollateralPrice: 0,
@@ -69,7 +69,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
     paymentMethod: "",
-    buffer: 0,
+    buffer: 10,
     collateralNeeded: 0,
     loanToValue: 0,
     collateralPrice: 0,

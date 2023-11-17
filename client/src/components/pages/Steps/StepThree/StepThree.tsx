@@ -90,8 +90,8 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
                 fill="none"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M10.0001 11.3215L14.4108 6.91076L15.5894 8.08927L10.0001 13.6785L4.41084 8.08927L5.58936 6.91076L10.0001 11.3215Z"
                   fill="#2C3B8D"
                 />

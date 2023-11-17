@@ -10,6 +10,7 @@ import HoverTooltip from "@/components/chips/HoverTooltip/HoverTooltip";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import ModifyWallet from "./modifyWallet/modifyWallet";
 import MakePaymentModal from "@/components/chips/MakePaymentModal/MakePaymentModal";
+import BorrowMoreModal from "@/components/chips/BorrowMoreModal/BorrowMoreModal";
 import Alert from "@/components/pages/Dashboard/Alert/Alert";
 import { useSingleLoan } from "@/contract/single";
 import { useLoanDB } from "@/db/loanDb";
@@ -221,8 +222,7 @@ function SinglePage() {
                 <Alert
                   title="APR Alerts"
                   alertFor="APR"
-                  description="Set up alerts to be notified if your interest rate spikes
-or drops. "
+                  description="Set up alerts to be notified if your interest rate spikes or drops. "
                 />
                 {/* //! Alert end */}
                 <div className="mt-5 md:mt-8 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
@@ -232,10 +232,18 @@ or drops. "
                   >
                     Make a Payment
                   </button>
-                  <p className="text-sm text-center md:text-left text-[#545454] font-normal">
-                    There is no payment due date for this loan. You can repay it
-                    in part or in full at anytime.
-                  </p>
+                  <div className="flex md:flex-row flex-col just-between items-center gap-6">
+                    <button
+                      onClick={() => setOpenModalFor("Borrow More")}
+                      className="text-sm font-semibold bg-[#EEE] text-[#2C3B8D] rounded-3xl px-7 py-3 w-max mx-auto md:m-0 min-w-[167px]"
+                    >
+                      Borrow More
+                    </button>                  
+                    <p className="text-sm text-center md:text-left text-[#545454] font-normal">
+                      There is no payment due date for this loan. You can repay it
+                      in part or in full at anytime.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -414,6 +422,20 @@ liquidation can occur once it becomes negative."
             </ModalContainer>
           </>
         )}
+        {openModalFor && openModalFor === "Borrow More" && (
+          <>
+            <ModalContainer>
+              {modalStep === 0 && (
+                <BorrowMoreModal
+                  // setModalStep={setModalStep}
+                  setOpenModalFor={setOpenModalFor}
+                  currentBalance={financial(loanData?.outstanding_balance)}
+                  collateral={collateralBalanceOf}
+                />
+              )}
+            </ModalContainer>
+          </>
+        )}        
         {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}
       </main>
     </>
