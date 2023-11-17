@@ -38,13 +38,13 @@ const HeroBlog = () => {
 
   const heroBlog = data?.allMarkdownRemark?.edges?.[0]?.node
   // console.log('heroBlog', heroBlog)
-
+console.log({ heroBlog})
   return heroBlog && (
     <Link to={`/learn/${heroBlog.fields.slug}`}>
     <section className="hero_blog_container">
       <div className="hero_blog_container_image_container">
         <img
-          src={image2}
+          src={heroBlog?.frontmatter.coverUrl || image2}
           alt="blog2"
           // style={{ width: "100%", height: "371px" }}
           className="hero_blog_container_image"

@@ -100,7 +100,7 @@ const SingleBlog = () => {
                   className="!rounded-full !object-cover"
                 />
                 <p className="!text-sm">
-                  Vince DePalma{" "}
+                  Vince X{" "}
                   <span className="!text-xs !text-[#545454] !block">
                     Co-Founder
                   </span>

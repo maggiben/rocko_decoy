@@ -30,8 +30,8 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
                 <img
                   src={details.node.frontmatter.coverUrl}
                   alt="blog3"
-                  height={197}
-                  style={{ width: "100%" }}
+                  // height={197}
+                  style={{ width: "100%", height: "219px" }}
                   className="blogs_container_details_article_image"
                 />
 
