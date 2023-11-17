@@ -13,7 +13,7 @@ import useLoanData from "@/hooks/useLoanData";
 import toast from "react-hot-toast";
 import { configureChains, useConnect } from 'wagmi';
 import { Auth0WalletConnector } from '@zerodev/wagmi';
-import * as chains from 'wagmi/chains'
+import * as blockchains from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public';
 import { NETWORK } from "@/constants/env";
 
@@ -26,7 +26,7 @@ const stepsName = [
   "Loan Summary",
 ];
 
-const net = (chains as { [key: string]: any })[NETWORK];
+const net = (blockchains as { [key: string]: any })[NETWORK];
 
 export default function Home() {
   const { address: zerodevAccount } = useAccount();

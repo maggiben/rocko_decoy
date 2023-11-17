@@ -8,7 +8,7 @@ import { useAccount, useBalance, useContractWrite } from "wagmi";
 import { USDCContract, WETHContract, networkChainId } from "@/constants";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
-import { parseBalance } from "@/utility/utils";
+import { etherscanLink, parseBalance } from "@/utility/utils";
 import Image from "next/image";
 
 const WETHABI = require('../../constants/weth.json')
@@ -73,7 +73,9 @@ const Profile: React.FC = () => {
   const invoice2 = [
     {
         description: "Address",
-        details: zerodevAccount ? zerodevAccount : "",
+        details: zerodevAccount 
+          ? <a target="_blank" href={etherscanLink(zerodevAccount, 'address')} className="underline">{zerodevAccount}</a> 
+          : "",
     },
     {
         description: "Total Balance",
