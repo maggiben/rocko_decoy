@@ -321,12 +321,16 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     {
       id: 4,
       title: "Choose how much collateral buffer you want",
+      subTitle: "Maintaining a Collateral Buffer of 50% or more at all times is recommended to avoid collateral liquidation.",
       risk: {
         minRisk: 0,
         maxRisk: 200,
       },
-      description:
-        "Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. A collateral buffer is the percentage of collateral you provide above what is required. A larger collateral buffer will reduce the asset price at which your collateral would be liquidated (i.e. liquidation price).",
+      description: (
+        <>
+          Your loan requires your collateral to maintain a certain value at all times, otherwise your collateral may be liquidated (i.e. sold) by the lender. <b>A collateral buffer is the percentage of collateral you provide above what is required for your loan.</b> A larger collateral buffer will reduce the asset price at which your collateral would be liquidated (i.e. liquidation price).        
+        </>
+      ),
     },
     {
       id: 5,

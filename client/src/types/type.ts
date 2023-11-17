@@ -99,11 +99,12 @@ export interface ProtocolStep {
 export interface RiskStep {
   id?: number;
   title?: string;
+  subTitle?: string;
   risk?: {
     minRisk?: number;
     maxRisk?: number;
   };
-  description?: string;
+  description?: any;
 }
 
 export interface LoanData {

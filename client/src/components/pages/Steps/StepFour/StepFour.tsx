@@ -5,7 +5,7 @@ import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
 import useLoanData from "@/hooks/useLoanData";
 import financial from "@/utility/currencyFormate";
 
-const StepFour: FC<RiskStep> = ({ title, description }) => {
+const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
@@ -159,6 +159,9 @@ const StepFour: FC<RiskStep> = ({ title, description }) => {
             <p className=" text-xl font-medium  text-blackPrimary lg:text-start text-center">
               {title}
             </p>
+            <p className=" text-sm font-medium mt-1 text-blackPrimary lg:text-start text-center">
+              {subTitle}
+            </p>            
 
             <div className="flex items-center justify-between gap-1 md:gap-3 mt-20 md:mt-[144px]  py-4">
               <p className="text-sm md:text-base">Higher Risk</p>
