@@ -168,3 +168,33 @@ input[type='checkbox'] {
 .frame {
   clip-path: polygon(50% 30%, 0% 100%, 100% 100%);
 }
+
+.form-border {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(226 226 226/var(--tw-border-opacity))
+}
+
+
+.alert-container::-webkit-scrollbar {
+  width: 1px;
+  background-color: transparent;
+}
+
+.alert-container::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.alert-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.alert-container::-webkit-scrollbar-thumb:hover {
+  background-color: transparent;
+}
+
+.alert-container::-webkit-scrollbar-thumb:active {
+  background-color: transparent;
+}

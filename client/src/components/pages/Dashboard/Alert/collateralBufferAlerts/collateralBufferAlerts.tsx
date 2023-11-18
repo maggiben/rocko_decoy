@@ -165,7 +165,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                                 ) : (
                                   <>&lt;</>
                                 )}
-                                {aprAlert.currentInterestRate.percentage}
+                                {aprAlert.currentInterestRate.percentage}%
                               </p>
                             </div>
                             <div
@@ -231,7 +231,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                                 ) : (
                                   <>&lt;</>
                                 )}
-                                {aprAlert.currentInterestRate.percentage}
+                                {aprAlert.currentInterestRate.percentage}%
                               </p>
                             </div>
                             <div
@@ -304,7 +304,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                                 ) : (
                                   <>&lt;</>
                                 )}{" "}
-                                {bufferAlert.currentCollateralBuffer.percentage}
+                                {bufferAlert.currentCollateralBuffer.percentage}%
                               </p>
                             </div>
                             <div
@@ -369,7 +369,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                                 ) : (
                                   <>&lt;</>
                                 )}
-                                {bufferAlert.currentCollateralBuffer.percentage}
+                                {bufferAlert.currentCollateralBuffer.percentage}%
                               </p>
                             </div>
                             <div

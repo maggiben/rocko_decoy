@@ -333,16 +333,16 @@ function SinglePage() {
                   {liquidationPrice == "N/A" ? "N/A" : `$${financial(liquidationPrice, 2)}`}
                 </p>
               </div>
-              <div className="flex items-center gap-x-2 py-5 relative">
-                <p className="w-1/2 font-medium">Collateral Buffer</p>
-                <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
+              <div>
+                <div className="flex items-center gap-x-2 py-5 relative">
+                  <p className="w-1/2 font-medium">Collateral Buffer</p>
+                  <p>{buffer == "N/A" ? "N/A" : `${financial(buffer * 100)}%`}</p>
+                </div>
                 {/* //!alert start */}
                 <Alert
                   title=" Collateral Buffer Alerts"
                   alertFor="collateralBuffer"
-                  description="Set up alerts to be notified when your collateral buffer is 
-getting too low. Alerts are automatically sent at 5% as
-liquidation can occur once it becomes negative."
+                  description="Set up alerts to be notified when your collateral buffer is getting too low. Alerts are automatically sent at 5% as liquidation can occur once it becomes negative."
                 />
                 {/* //!alert end */}
               </div>
