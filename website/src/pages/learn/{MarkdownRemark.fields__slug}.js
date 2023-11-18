@@ -138,7 +138,7 @@ const SingleBlog = ({ data }) => {
                 {post?.frontmatter?.title}
               </h2>
 
-              <p className="!text-xs !text-[#545454]">Sept 24, 2023</p>
+              <p className="!text-xs !text-[#545454]">{post?.frontmatter.date}</p>
               <div className="!flex !space-x-3 !items-center !pt-6">
                 <div className={`!w-10 !h-10 !rounded-full ${ !post?.frontmatter.authorImg && 'border-2 !border-blue-700' }`}>
                   {

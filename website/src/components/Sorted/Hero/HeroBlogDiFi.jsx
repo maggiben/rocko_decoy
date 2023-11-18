@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
-import Hero from "./Hero"
+import Hero from "../../Hero"
 
 const HeroBlogDiFi = () => {
   const query = graphql`

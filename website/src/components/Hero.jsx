@@ -1,5 +1,5 @@
-import image2 from "../../../images/placeHolderImage-2.png"
-import user from "../../../images/blog-user.png"
+import image2 from "../images/placeHolderImage-2.png"
+import user from "../images/blog-user.png"
 import { Link } from "gatsby"
 import * as React from "react"
 
