@@ -7,12 +7,9 @@ import Seo from '../components/seo'
 
 // TODO remove this unused template
 
-function BlogPostTemplate({
-  data: { previous, next, site, markdownRemark: post },
-  location,
-}) {
+function BlogPostTemplate({ data: { previous, next, markdownRemark: post } }) {
   // const siteTitle = site.siteMetadata?.title || `Title`
-  console.log({ previous, next, site, post, location })
+
   return (
     <Layout>
       <article

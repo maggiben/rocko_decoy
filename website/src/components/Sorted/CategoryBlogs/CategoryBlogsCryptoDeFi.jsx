@@ -1,8 +1,8 @@
-import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
-import CategoryBlogs from "./CategoryBlogs"
+import * as React from 'react'
+import { graphql, useStaticQuery } from 'gatsby'
+import CategoryBlogs from './CategoryBlogs'
 
-const CategoryBlogsCryptoDeFi = () => {
+function CategoryBlogsCryptoDeFi() {
   const query = graphql`
     {
       allMarkdownRemark(

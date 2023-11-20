@@ -4,7 +4,7 @@ import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
 
-function NotFoundPage({ data }) {
+function NotFoundPage() {
   return (
     <Layout>
       <h1>404: Not Found</h1>

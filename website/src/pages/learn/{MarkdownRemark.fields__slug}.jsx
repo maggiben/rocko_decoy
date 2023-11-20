@@ -84,6 +84,7 @@ function SingleBlog({ data }) {
   }
 
   const handleBackButton = () => {
+    // eslint-disable-next-line no-unused-expressions
     navigate(-1) || navigate('/learn')
   }
 
@@ -100,7 +101,11 @@ function SingleBlog({ data }) {
       <>
         {/* //!Share to social-media section -- start */}
         <section className="share_social_media_container">
-          <button className="blog_home_button" onClick={handleBackButton}>
+          <button
+            type="button"
+            className="blog_home_button"
+            onClick={handleBackButton}
+          >
             <BiChevronRight className="blog_home_button_icon" />{' '}
             <span>Back</span>
           </button>
@@ -108,11 +113,10 @@ function SingleBlog({ data }) {
             <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4 !text-black">
               Share
             </p>
-            {socialIcons.map(({ Icon }) => {
-              Icon
-            })}
+            {socialIcons.map(({ Icon }) => Icon)}
             {/* copy to clipboard button */}
             <button
+              type="button"
               className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center"
               onClick={handleCopyButton}
             >
@@ -176,12 +180,13 @@ function SingleBlog({ data }) {
           {/* //!singleBlog prop changes some style in subscriber component */}
           <Subscribe singleBlog />
           <div
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: post?.html }}
             className="blog-content"
           />
           {/* //!Article Tags Section Start */}
           <div className="article_tags_container">
-            {post?.frontmatter?.tags.map((tag) => {
+            {post?.frontmatter?.tags.map(tag => {
               const hash = slugify(tag)
               return (
                 <Link
@@ -234,10 +239,10 @@ function SingleBlog({ data }) {
           <p className="single_blog_p">
             Join{' '}
             <Link to="https://rocko.co" className="underline italic">
-              Rocko's waitlist
+              Rocko&apos;s waitlist
             </Link>{' '}
             today and be the first to be notified when they launch! You can also
-            learn more on Rocko's homepage.
+            learn more on Rocko&apos;s homepage.
           </p>
         </main>
         {/* //!Blog section -- end */}

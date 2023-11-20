@@ -1,8 +1,8 @@
-import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
-import CategoryBlogs from "./CategoryBlogs"
+import * as React from 'react'
+import { graphql, useStaticQuery } from 'gatsby'
+import CategoryBlogs from './CategoryBlogs'
 
-const CategoryBlogsBorrowing = () => {
+function CategoryBlogsBorrowing() {
   const query = graphql`
     {
       allMarkdownRemark(
@@ -36,7 +36,6 @@ const CategoryBlogsBorrowing = () => {
   // console.log(categoryBlogs, categoryBlogsData)
 
   return categoryBlogs && <CategoryBlogs categoryBlogs={categoryBlogs} />
-
 }
 
 export default CategoryBlogsBorrowing

@@ -1,19 +1,16 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React from "react"
-import BlogsContainer from "../../BlogsContainer/BlogsContainer"
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import BlogsContainer from '../../BlogsContainer/BlogsContainer'
 
-const ThreeTitleBorrowing = () => {
+function ThreeTitleBorrowing() {
   // !latest post data
-  const latestPostData = useStaticQuery(graphql`{
+  const latestPostData = useStaticQuery(graphql`
+    {
       allMarkdownRemark(
         limit: 3
         sort: { frontmatter: { date: DESC } }
         filter: {
-          frontmatter: {
-            coverUrl: {}
-            author: {}
-            tags: { in: "Borrowing" }
-          }
+          frontmatter: { coverUrl: {}, author: {}, tags: { in: "Borrowing" } }
         }
       ) {
         edges {
@@ -37,11 +34,7 @@ const ThreeTitleBorrowing = () => {
   `)
   const latestPost = latestPostData?.allMarkdownRemark?.edges
 
-  return latestPost && (
-    <>
-      <BlogsContainer blogDetails={latestPost} />
-    </>
-  )
+  return latestPost && <BlogsContainer blogDetails={latestPost} />
 }
 
 export default ThreeTitleBorrowing

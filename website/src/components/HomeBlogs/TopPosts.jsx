@@ -1,7 +1,8 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React from "react"
-import BlogsContainer from "../BlogsContainer/BlogsContainer"
-const TopPosts = () => {
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import BlogsContainer from '../BlogsContainer/BlogsContainer'
+
+function TopPosts() {
   // !top post data
   const topPostData = useStaticQuery(graphql`
     query FeaturedTopPosts {
@@ -36,13 +37,11 @@ const TopPosts = () => {
   // console.log(topPost)
 
   return (
-    <>
-      <BlogsContainer
-        blogDetails={topPost}
-        blogsCategory="Top Posts"
-        grayBG="bg-[#F9F9F9]"
-      />
-    </>
+    <BlogsContainer
+      blogDetails={topPost}
+      blogsCategory="Top Posts"
+      grayBG="bg-[#F9F9F9]"
+    />
   )
 }
 

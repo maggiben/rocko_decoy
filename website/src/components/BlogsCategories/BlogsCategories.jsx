@@ -1,10 +1,10 @@
-import * as React from "react"
-import { useStaticQuery, graphql, navigate } from "gatsby"
-import slugify from "@sindresorhus/slugify"
-import SearchField from "../SearchField/SearchField"
+import * as React from 'react'
+import { useStaticQuery, graphql, navigate } from 'gatsby'
+import slugify from '@sindresorhus/slugify'
+import SearchField from '../SearchField/SearchField'
 
-const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
-  const [query, setQuery] = React.useState("")
+function BlogsCategories({ selectCategory, setSelectCategory }) {
+  const [query, setQuery] = React.useState('')
   const [submitted, setSubmitted] = React.useState(false)
 
   const handleInputChange = event => {
@@ -12,10 +12,10 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
     setSubmitted(false)
   }
   const handleKeyPress = event => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault()
       setSubmitted(true)
-      navigate(`/learn/search?query=${query}`,{state:{query}})
+      navigate(`/learn/search?query=${query}`, { state: { query } })
     }
   }
 
@@ -34,12 +34,10 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
     }
   `)
 
-  const tags = data?.allMarkdownRemark?.edges.map(tag => {
-    return {
-      id: tag.node.id,
-      tag: tag.node.frontmatter?.tags[0],
-    }
-  })
+  const tags = data?.allMarkdownRemark?.edges.map(tag => ({
+    id: tag.node.id,
+    tag: tag.node.frontmatter?.tags[0],
+  }))
 
   const uniqueTagsMap = new Map()
 
@@ -61,19 +59,20 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
       <div className="tags_container">
         <div className="!space-x-2 !order-2 !flex !flex-wrap !justify-center !gap-y-3 tags_container_tags">
           <button
+            type="button"
             // to={`/${mainPath}`}
-            key={"all"}
+            key="all"
             className={`tags_container_tags_buttons ${
-              selectCategory.id === "all"
-                ? "tags_container_tags_buttons_select"
-                : "tags_container_tags_buttons_unselect"
+              selectCategory.id === 'all'
+                ? 'tags_container_tags_buttons_select'
+                : 'tags_container_tags_buttons_unselect'
             }`}
             onClick={() =>
               setSelectCategory(prev => ({
                 ...prev,
-                id: "all",
-                name: "All",
-                hash: "",
+                id: 'all',
+                name: 'All',
+                hash: '',
               }))
             }
           >
@@ -85,11 +84,12 @@ const BlogsCategories = ({ selectCategory, setSelectCategory }) => {
 
               return (
                 <button
+                  type="button"
                   key={tag?.id}
                   className={`tags_container_tags_buttons ${
                     selectCategory.hash === path
-                      ? "tags_container_tags_buttons_select"
-                      : "tags_container_tags_buttons_unselect"
+                      ? 'tags_container_tags_buttons_select'
+                      : 'tags_container_tags_buttons_unselect'
                   }`}
                   onClick={() =>
                     setSelectCategory(prev => ({

@@ -84,6 +84,7 @@ function Index() {
                         <ul className="d-flex justify-content-center align-items-center">
                           <li>
                             <a
+                              aria-label="Twitter"
                               href="https://twitter.com/rockodefi"
                               className="d-flex align-items-center justify-content-center rounded-circle"
                               target="_blank"

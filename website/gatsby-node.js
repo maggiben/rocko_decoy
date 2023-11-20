@@ -10,7 +10,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 // const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true';
 
 // Define the template for blog post
-const blogPost = path.resolve(`./src/templates/blog-post.js`)
+const blogPost = path.resolve(`./src/templates/blog-post.jsx`)
 
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}

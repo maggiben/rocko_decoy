@@ -2,7 +2,7 @@ import { navigate } from 'gatsby'
 import React from 'react'
 import { BiSearchAlt2 } from 'react-icons/bi'
 
-function SearchField({ query, handleInputChange, submitted, handleKeyPress }) {
+function SearchField({ query, handleInputChange, handleKeyPress }) {
   const handleSearch = () => {
     navigate(`/learn/search?query=${query}`, { state: { query } })
   }

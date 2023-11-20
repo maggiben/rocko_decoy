@@ -68,14 +68,14 @@ const Index = () => {
               <p>
                 <strong>What personal information do we process?</strong>&nbsp;When you visit, use, or navigate our Services, we may process personal information depending on how
                 you interact with&nbsp;Rocko Inc.&nbsp;and the Services, the choices you make, and the products and features you use. Learn more about&nbsp;<a
-                  href="http://127.0.0.1:5500/privacy/index.html#personalinfo"
+                  href="#personalinfo"
                   >personal information you disclose to us</a
                 >.
               </p>
 
               <p>
                 <strong>Do we process any sensitive personal information?</strong>&nbsp;We may process sensitive personal information when necessary with your consent or as
-                otherwise permitted by applicable law. Learn more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#sensitiveinfo">sensitive information we process</a>.
+                otherwise permitted by applicable law. Learn more about&nbsp;<a href="#sensitiveinfo">sensitive information we process</a>.
               </p>
 
               <p><strong>Do we receive any information from third parties?</strong>&nbsp;We do not receive any information from third parties.</p>
@@ -83,12 +83,12 @@ const Index = () => {
               <p>
                 <strong>How do we process your information?</strong>&nbsp;We process your information to provide, improve, and administer our Services, communicate with you, for
                 security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent. We process your information only
-                when we have a valid legal reason to do so. Learn more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#infouse">how we process your information</a>.
+                when we have a valid legal reason to do so. Learn more about&nbsp;<a href="#infouse">how we process your information</a>.
               </p>
 
               <p>
                 <strong>In what situations and with which&nbsp;parties do we share personal information?</strong>&nbsp;We may share information in specific situations and with
-                specific&nbsp;third parties. Learn more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#whoshare"
+                specific&nbsp;third parties. Learn more about&nbsp;<a href="#whoshare"
                   >when and with whom we share your personal information</a
                 >.
               </p>
@@ -97,13 +97,13 @@ const Index = () => {
                 <strong>How do we keep your information safe?</strong>&nbsp;We have&nbsp;organizational&nbsp;and technical processes and procedures in place to protect your
                 personal information. However, no electronic transmission over the internet or information storage technology can be guaranteed to be 100% secure, so we cannot
                 promise or guarantee that hackers, cybercriminals, or other&nbsp;unauthorized&nbsp;third parties will not be able to defeat our security and improperly collect,
-                access, steal, or modify your information. Learn more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#infosafe">how we keep your information safe</a>.
+                access, steal, or modify your information. Learn more about&nbsp;<a href="#infosafe">how we keep your information safe</a>.
               </p>
 
               <p>
                 <strong>What are your rights?</strong>&nbsp;Depending on where you are located geographically, the applicable privacy law may mean you have certain rights regarding
-                your personal information. Learn more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#privacyrights">your privacy rights</a>.&nbsp;information. Learn
-                more about&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#privacyrights">your privacy rights</a>.
+                your personal information. Learn more about&nbsp;<a href="#privacyrights">your privacy rights</a>.&nbsp;information. Learn
+                more about&nbsp;<a href="#privacyrights">your privacy rights</a>.
               </p>
 
               <p>
@@ -116,7 +116,7 @@ const Index = () => {
               </p>
 
               <p>
-                Want to learn more about what&nbsp;Rocko Inc.&nbsp;does with any information we collect?&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#toc"
+                Want to learn more about what&nbsp;Rocko Inc.&nbsp;does with any information we collect?&nbsp;<a href="#toc"
                   >Review the privacy notice in full</a
                 >.
               </p>
@@ -125,52 +125,52 @@ const Index = () => {
 
               <ol>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infocollect">WHAT INFORMATION DO WE COLLECT?</a>
+                  <a href="#infocollect">WHAT INFORMATION DO WE COLLECT?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infouse">HOW DO WE PROCESS YOUR INFORMATION?</a>
+                  <a href="#infouse">HOW DO WE PROCESS YOUR INFORMATION?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#legalbases">WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL INFORMATION?</a>
+                  <a href="#legalbases">WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL INFORMATION?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#whoshare">WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?</a>
+                  <a href="#whoshare">WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#cookies">DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?</a>
+                  <a href="#cookies">DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#sociallogins">HOW DO WE HANDLE YOUR SOCIAL LOGINS?</a>
+                  <a href="#sociallogins">HOW DO WE HANDLE YOUR SOCIAL LOGINS?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#inforetain">HOW LONG DO WE KEEP YOUR INFORMATION?</a>
+                  <a href="#inforetain">HOW LONG DO WE KEEP YOUR INFORMATION?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infosafe">HOW DO WE KEEP YOUR INFORMATION SAFE?</a>
+                  <a href="#infosafe">HOW DO WE KEEP YOUR INFORMATION SAFE?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infominors">DO WE COLLECT INFORMATION FROM MINORS?</a>
+                  <a href="#infominors">DO WE COLLECT INFORMATION FROM MINORS?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#privacyrights">WHAT ARE YOUR PRIVACY RIGHTS?</a>
+                  <a href="#privacyrights">WHAT ARE YOUR PRIVACY RIGHTS?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#DNT">CONTROLS FOR DO-NOT-TRACK FEATURES</a>
+                  <a href="#DNT">CONTROLS FOR DO-NOT-TRACK FEATURES</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#caresidents">DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</a>
+                  <a href="#caresidents">DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#virginia">DO VIRGINIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</a>
+                  <a href="#virginia">DO VIRGINIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#policyupdates">DO WE MAKE UPDATES TO THIS NOTICE?</a>
+                  <a href="#policyupdates">DO WE MAKE UPDATES TO THIS NOTICE?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#contact">HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a>
+                  <a href="#contact">HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a>
                 </li>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#request">HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?</a>
+                  <a href="#request">HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?</a>
                 </li>
               </ol>
 
@@ -210,7 +210,7 @@ const Index = () => {
                   financial data<br />
                   <strong>Social Media Login Data.&nbsp;</strong>We may provide you with the option to register with us using your existing social media account details, like your
                   Facebook, Twitter, or other social media account. If you choose to register in this way, we will collect the information described in the section
-                  called&nbsp;&quot;<a href="http://127.0.0.1:5500/privacy/index.html#sociallogins">HOW DO WE HANDLE YOUR SOCIAL LOGINS?</a>&quot;&nbsp;below.<br />
+                  called&nbsp;&quot;<a href="#sociallogins">HOW DO WE HANDLE YOUR SOCIAL LOGINS?</a>&quot;&nbsp;below.<br />
                   <br />
                   <strong>Application Data.</strong>&nbsp;If you use our application(s), we also may collect the following information if you choose to provide us with access or
                   permission:
@@ -311,7 +311,7 @@ const Index = () => {
 
               <p>
                 We may process your information if you have given us specific permission (i.e.,&nbsp;express consent) to use your personal information for a specific purpose, or in
-                situations where your permission can be inferred (i.e.,&nbsp;implied consent). You can&nbsp;<a href="http://127.0.0.1:5500/privacy/index.html#withdrawconsent"
+                situations where your permission can be inferred (i.e.,&nbsp;implied consent). You can&nbsp;<a href="#withdrawconsent"
                   >withdraw your consent</a
                 >&nbsp;at any time.
               </p>
@@ -455,7 +455,7 @@ const Index = () => {
                 In some regions (like&nbsp;Canada), you have certain rights under applicable data protection laws. These may include the right (i) to request access and obtain a
                 copy of your personal information, (ii) to request rectification or erasure; (iii) to restrict the processing of your personal information; and (iv) if applicable,
                 to data portability. In certain circumstances, you may also have the right to object to the processing of your personal information. You can make such a request by
-                contacting us by using the contact details provided in the section&nbsp;&quot;<a href="http://127.0.0.1:5500/privacy/index.html#contact"
+                contacting us by using the contact details provided in the section&nbsp;&quot;<a href="#contact"
                   >HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a
                 >&quot;&nbsp;below.
               </p>
@@ -483,7 +483,7 @@ const Index = () => {
                 <strong><u>Withdrawing your consent:</u></strong
                 >&nbsp;If we are relying on your consent to process your personal information,&nbsp;which may be express and/or implied consent depending on the applicable
                 law,&nbsp;you have the right to withdraw your consent at any time. You can withdraw your consent at any time by contacting us by using the contact details provided
-                in the section&nbsp;&quot;<a href="http://127.0.0.1:5500/privacy/index.html#contact">HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a>&quot;&nbsp;below.
+                in the section&nbsp;&quot;<a href="#contact">HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a>&quot;&nbsp;below.
               </p>
 
               <p>
@@ -495,7 +495,7 @@ const Index = () => {
                 <strong><u>Opting out of marketing and promotional communications:</u></strong
                 ><strong><u>&nbsp;</u></strong
                 >You can unsubscribe from our marketing and promotional communications at any time by&nbsp;clicking on the unsubscribe link in the emails that we send,&nbsp;or by
-                contacting us using the details provided in the section&nbsp;&quot;<a href="http://127.0.0.1:5500/privacy/index.html#contact"
+                contacting us using the details provided in the section&nbsp;&quot;<a href="#contact"
                   >HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a
                 >&quot;&nbsp;below. You will then be removed from the marketing lists. However, we may still communicate with you &mdash; for example, to send you service-related
                 messages that are necessary for the administration and use of your account, to respond to service requests, or for other non-marketing purposes.
@@ -923,19 +923,19 @@ const Index = () => {
 
               <ul>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infocollect">Personal data we collect</a>
+                  <a href="#infocollect">Personal data we collect</a>
                 </li>
               </ul>
 
               <ul>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#infouse">How we use your personal data</a>
+                  <a href="#infouse">How we use your personal data</a>
                 </li>
               </ul>
 
               <ul>
                 <li>
-                  <a href="http://127.0.0.1:5500/privacy/index.html#whoshare">When and with whom we share your personal data</a><br />
+                  <a href="#whoshare">When and with whom we share your personal data</a><br />
                   <u>Your rights with respect to your personal data</u>
                 </li>
                 <li>&nbsp;</li>

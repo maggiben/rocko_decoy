@@ -1,60 +1,60 @@
-import * as React from "react"
-import image1 from "../../images/placeHolderImage-1.png"
-import image2 from "../../images/placeHolderImage-2.png"
-import image3 from "../../images/placeHolderImage-3.png"
+import * as React from 'react'
+import image1 from '../../images/placeHolderImage-1.png'
+import image2 from '../../images/placeHolderImage-2.png'
+import image3 from '../../images/placeHolderImage-3.png'
 // *Create an array of blog post objects
 const blogDetails = [
   {
     image: image1,
-    category: "Category 1",
-    title: "A blog post title 1",
-    description: "A description of the article 1",
-    publishedDate: "Sept 24, 2023",
+    category: 'Category 1',
+    title: 'A blog post title 1',
+    description: 'A description of the article 1',
+    publishedDate: 'Sept 24, 2023',
   },
   {
     image: image2,
-    category: "Category 2",
-    title: "A blog post title 2",
-    description: "A description of the article 2",
-    publishedDate: "Sept 25, 2023",
+    category: 'Category 2',
+    title: 'A blog post title 2',
+    description: 'A description of the article 2',
+    publishedDate: 'Sept 25, 2023',
   },
   {
     image: image3,
-    category: "Category 3",
-    title: "A blog post title 3",
-    description: "A description of the article 3",
-    publishedDate: "Sept 26, 2023",
+    category: 'Category 3',
+    title: 'A blog post title 3',
+    description: 'A description of the article 3',
+    publishedDate: 'Sept 26, 2023',
   },
   {
     image: image1,
-    category: "Category 1",
-    title: "A blog post title 1",
-    description: "A description of the article 1",
-    publishedDate: "Sept 24, 2023",
+    category: 'Category 1',
+    title: 'A blog post title 1',
+    description: 'A description of the article 1',
+    publishedDate: 'Sept 24, 2023',
   },
   {
     image: image2,
-    category: "Category 2",
-    title: "A blog post title 2",
-    description: "A description of the article 2",
-    publishedDate: "Sept 25, 2023",
+    category: 'Category 2',
+    title: 'A blog post title 2',
+    description: 'A description of the article 2',
+    publishedDate: 'Sept 25, 2023',
   },
   {
     image: image3,
-    category: "Category 3",
-    title: "A blog post title 3",
-    description: "A description of the article 3",
-    publishedDate: "Sept 26, 2023",
+    category: 'Category 3',
+    title: 'A blog post title 3',
+    description: 'A description of the article 3',
+    publishedDate: 'Sept 26, 2023',
   },
 ]
 
-const CategoryBlogsContainer = () => {
+function CategoryBlogsContainer() {
   return (
-    <section className={`!py-16`}>
+    <section className="!py-16">
       <div className="!container !mx-auto !px-4 !space-y-10 category_blogs_container">
         {blogDetails.map(
-          ({ image, category, title, description, publishedDate }, i) => (
-            <React.Fragment key={i}>
+          ({ image, category, title, description, publishedDate }) => (
+            <React.Fragment key={title.toLowerCase().replace(/\s+/g, '-')}>
               <article className="!flex !flex-col !gap-y-6 category_blogs_content">
                 <img
                   src={image}
@@ -70,7 +70,7 @@ const CategoryBlogsContainer = () => {
                 </div>
               </article>
             </React.Fragment>
-          )
+          ),
         )}
       </div>
     </section>

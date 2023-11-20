@@ -14,6 +14,7 @@ function SearchPage({ data, location }) {
   const [results, setResults] = useState([])
 
   const handleBackButton = () => {
+    // eslint-disable-next-line no-unused-expressions
     navigate(-1) || navigate('/learn')
   }
 
@@ -21,6 +22,7 @@ function SearchPage({ data, location }) {
     setQuery(event.target.value)
   }
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (SHOW_BLOG) {
       const delayDebounceFn = setTimeout(() => {
@@ -50,7 +52,11 @@ function SearchPage({ data, location }) {
     <Layout>
       <section className="tags_container_parent">
         <div className="tags_container">
-          <button className="blog_home_button" onClick={handleBackButton}>
+          <button
+            type="button"
+            className="blog_home_button"
+            onClick={handleBackButton}
+          >
             <BiChevronRight className="blog_home_button_icon" />{' '}
             <span>Back</span>
           </button>

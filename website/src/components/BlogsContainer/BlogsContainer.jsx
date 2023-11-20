@@ -1,13 +1,12 @@
-import { Link } from "gatsby"
-import * as React from "react"
-import { BiChevronRight } from "react-icons/bi"
+import { Link } from 'gatsby'
+import * as React from 'react'
+import { BiChevronRight } from 'react-icons/bi'
 
-const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
-
+function BlogsContainer({ blogDetails, blogsCategory, grayBG, viewButton }) {
   return (
     <section
       className={`${
-        grayBG && "blogs_container_parent_bg_gray"
+        grayBG && 'blogs_container_parent_bg_gray'
       } blogs_container_parent`}
     >
       <div className="blogs_container">
@@ -15,21 +14,23 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
           <h1 className="blogs_container_title_h1">{blogsCategory}</h1>
           {viewButton && (
             <p className="blogs_container_title_p">
-              {viewButton}{" "}
+              {viewButton}{' '}
               <BiChevronRight className="blogs_container_title_icon" />
             </p>
           )}
         </div>
         <div className="!grid !grid-cols-1 !gap-y-12  blogs_container_details">
-          {blogDetails.map((details) =>{
-            return(
-            <Link to={`/learn/${details.node.fields.slug}`} key={details.node.id}>
+          {blogDetails.map(details => (
+            <Link
+              to={`/learn/${details.node.fields.slug}`}
+              key={details.node.id}
+            >
               <article>
                 <img
                   src={details.node.frontmatter.coverUrl}
                   alt="blog3"
                   // height={197}
-                  style={{ width: "100%", height: "219px" }}
+                  style={{ width: '100%', height: '219px' }}
                   className="blogs_container_details_article_image"
                 />
 
@@ -54,7 +55,7 @@ const BlogsContainer = ({ blogDetails, blogsCategory, grayBG, viewButton }) => {
                 </div>
               </article>
             </Link>
-          )})}
+          ))}
         </div>
       </div>
     </section>

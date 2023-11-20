@@ -1,7 +1,8 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React from "react"
-import BlogsContainer from "../../BlogsContainer/BlogsContainer"
-const ThreeTitleCryptoDeFi = () => {
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import BlogsContainer from '../../BlogsContainer/BlogsContainer'
+
+function ThreeTitleCryptoDeFi() {
   // !latest post data
   const latestPostData = useStaticQuery(graphql`
     {
@@ -37,11 +38,7 @@ const ThreeTitleCryptoDeFi = () => {
   `)
   const latestPost = latestPostData?.allMarkdownRemark?.edges
 
-  return (
-    <>
-      <BlogsContainer blogDetails={latestPost} />
-    </>
-  )
+  return <BlogsContainer blogDetails={latestPost} />
 }
 
 export default ThreeTitleCryptoDeFi

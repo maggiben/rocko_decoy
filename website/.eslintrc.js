@@ -18,11 +18,16 @@ module.exports = {
     'static/',
     '.cache/',
     '.netlify/',
-    'src/pages/terms.js',
-    'src/pages/privacy.js',
+    'src/pages/terms.jsx',
+    'src/pages/privacy.jsx',
+  ],
+  overrides: [
+    {
+      files: ['*.jsx', '*.js'],
+    },
   ],
   rules: {
     'prettier/prettier': 'error',
-    // 'react/prop-types': 'off', // todo temp rule
+    'react/prop-types': 'off', // todo turn this back on after switching to typescript
   },
 }

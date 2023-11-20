@@ -41,12 +41,10 @@ function Index() {
     }
   }, [selectCategory])
 
-  console.log(selectCategory)
-
   if (!SHOW_BLOG) {
     return null
   }
-  console.log({ selectCategory })
+
   return (
     <Layout>
       <>

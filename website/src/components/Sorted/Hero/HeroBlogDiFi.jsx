@@ -1,8 +1,8 @@
-import { graphql, useStaticQuery } from "gatsby"
-import * as React from "react"
-import Hero from "../../Hero"
+import { graphql, useStaticQuery } from 'gatsby'
+import * as React from 'react'
+import Hero from '../../Hero'
 
-const HeroBlogDiFi = () => {
+function HeroBlogDiFi() {
   const query = graphql`
     {
       allMarkdownRemark(

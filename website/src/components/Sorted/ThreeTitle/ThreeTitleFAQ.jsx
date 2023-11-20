@@ -1,8 +1,8 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React from "react"
-import BlogsContainer from "../../BlogsContainer/BlogsContainer"
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import BlogsContainer from '../../BlogsContainer/BlogsContainer'
 
-const ThreeTitleFAQ = () => {
+function ThreeTitleFAQ() {
   // !latest post data
   const latestPostData = useStaticQuery(graphql`
     {
@@ -10,7 +10,11 @@ const ThreeTitleFAQ = () => {
         limit: 3
         sort: { frontmatter: { date: DESC } }
         filter: {
-          frontmatter: { coverUrl: {}, author: {}, tags: { in: "Rocko How-tos" } }
+          frontmatter: {
+            coverUrl: {}
+            author: {}
+            tags: { in: "Rocko How-tos" }
+          }
         }
       ) {
         edges {
@@ -34,11 +38,7 @@ const ThreeTitleFAQ = () => {
   `)
   const latestPost = latestPostData?.allMarkdownRemark?.edges
 
-  return (
-    <>
-      <BlogsContainer blogDetails={latestPost}/>
-    </>
-  )
+  return <BlogsContainer blogDetails={latestPost} />
 }
 
 export default ThreeTitleFAQ

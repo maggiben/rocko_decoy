@@ -1,9 +1,11 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React from "react"
-import BlogsContainer from "../BlogsContainer/BlogsContainer"
-const LatestPosts = () => {
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import BlogsContainer from '../BlogsContainer/BlogsContainer'
+
+function LatestPosts() {
   // !latest post data
-  const latestPostData = useStaticQuery(graphql`{
+  const latestPostData = useStaticQuery(graphql`
+    {
       allMarkdownRemark(limit: 3, sort: { frontmatter: { date: DESC } }) {
         edges {
           node {
@@ -28,9 +30,7 @@ const LatestPosts = () => {
   // console.log('latestPost testing now', latestPost)
 
   return (
-    <>
-      <BlogsContainer blogDetails={latestPost} blogsCategory="Latest Posts" />
-    </>
+    <BlogsContainer blogDetails={latestPost} blogsCategory="Latest Posts" />
   )
 }
 

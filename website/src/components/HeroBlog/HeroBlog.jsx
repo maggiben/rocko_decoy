@@ -1,8 +1,8 @@
-import { graphql, useStaticQuery } from "gatsby"
-import * as React from "react"
-import Hero from "../Hero"
+import { graphql, useStaticQuery } from 'gatsby'
+import * as React from 'react'
+import Hero from '../Hero'
 
-const HeroBlog = () => {
+function HeroBlog() {
   const query = graphql`
     {
       allMarkdownRemark(
@@ -38,7 +38,6 @@ const HeroBlog = () => {
 
   const heroBlog = data?.allMarkdownRemark?.edges?.[0]?.node
 
-console.log({ heroBlog}, 'xxyy')
   return heroBlog && <Hero heroBlog={heroBlog} />
 }
 
