@@ -1,5 +1,5 @@
 import { navigate } from "gatsby"
-import React, { useEffect } from "react"
+import React from "react"
 import { BiSearchAlt2 } from "react-icons/bi"
 
 const SearchField = ({ query, handleInputChange ,submitted,handleKeyPress}) => {

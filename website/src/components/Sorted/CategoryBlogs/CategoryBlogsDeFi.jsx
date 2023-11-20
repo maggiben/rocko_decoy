@@ -6,8 +6,8 @@ const CategoryBlogsDeFi = () => {
   const query = graphql`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { eq: "DeFi Borrowing & Lending" } } }
-        sort: { frontmatter: { date: ASC } }
+        filter: { frontmatter: { tags: { eq: "Borrowing" } } }
+        sort: { frontmatter: { date: DESC } }
         skip: 3
       ) {
         edges {

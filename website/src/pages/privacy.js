@@ -1,7 +1,7 @@
 import * as React from "react"
 import rockoLogo from "../images/logo.svg"
-// import "../styles/style.scss"
-const Index = ({  }) => {
+
+const Index = () => {
 
   return (
     <>
@@ -43,7 +43,7 @@ const Index = ({  }) => {
               </p>
 
               <ul>
-                <li>Visit our website&nbsp;at&nbsp;<a href="https://rocko.co/" target="_blank">https://rocko.co</a>, or any website of ours that links to this privacy notice</li>
+                <li>Visit our website&nbsp;at&nbsp;<a href="https://rocko.co/" rel="noopener noreferrer" target="_blank">https://rocko.co</a>, or any website of ours that links to this privacy notice</li>
                 <li>Download and use&nbsp;our mobile application&nbsp;(Rocko),&nbsp;or any other application of ours that links to this privacy notice</li>
                 <li>
                   Engage with us in other related ways, including any sales, marketing, or events<br />
@@ -60,7 +60,7 @@ const Index = ({  }) => {
                     >This summary provides key points from our privacy notice, but you can find out more details about any of these topics by clicking the link following each key
                     point or by using our&nbsp;</em
                   ></strong
-                ><a href="http://127.0.0.1:5500/privacy/index.html#toc"
+                ><a aria-label="Table of Contents" href="#toc"
                   ><strong><em>table of contents</em></strong></a
                 ><strong><em>&nbsp;below to find the section you are looking for.</em></strong>
               </p>

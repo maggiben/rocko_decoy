@@ -152,7 +152,7 @@ const DepositingCollateral = () => {
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link className="hover:text-green-700" 
             href={etherscanLink(txHash)}
-            target="_blank"
+            rel="noopener noreferrer"
           >
             Loan successfully fulfilled!
           </Link>

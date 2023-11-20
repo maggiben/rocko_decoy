@@ -6,12 +6,13 @@ const HeroBlogDiFi = () => {
   const query = graphql`
     {
       allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
         filter: {
           frontmatter: {
             featured: { eq: true }
             coverUrl: {}
             author: {}
-            tags: { in: "DeFi Borrowing & Lending" }
+            tags: { in: "Borrowing" }
           }
         }
         limit: 1

@@ -175,6 +175,7 @@ const Processing = () => {
           <Link className="hover:text-green-700" 
             href={etherscanLink(tx)}
             target="_blank"
+            rel="noopener noreferrer"
           >
             Loan successfully repaid!
           </Link>

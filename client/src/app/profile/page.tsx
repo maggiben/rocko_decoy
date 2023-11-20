@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
     {
         description: "Address",
         details: zerodevAccount 
-          ? <a target="_blank" href={etherscanLink(zerodevAccount, 'address')} className="underline">{zerodevAccount}</a> 
+          ? <a target="_blank" rel="noopener noreferrer" href={etherscanLink(zerodevAccount, 'address')} className="underline">{zerodevAccount}</a> 
           : "",
     },
     {

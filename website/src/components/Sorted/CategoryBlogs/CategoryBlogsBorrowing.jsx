@@ -7,7 +7,7 @@ const CategoryBlogsBorrowing = () => {
     {
       allMarkdownRemark(
         filter: { frontmatter: { tags: { eq: "Borrowing" } } }
-        sort: { frontmatter: { date: ASC } }
+        sort: { frontmatter: { date: DESC } }
         skip: 3
       ) {
         edges {

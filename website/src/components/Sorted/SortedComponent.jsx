@@ -23,7 +23,7 @@ const hero = {
     ThreeTitle: <ThreeTitleBorrowing />,
     CategoryBlogs: <CategoryBlogsBorrowing />,
   },
-  "rocko-faqs": {
+  "rocko-how-tos": {
     Component: <HeroBlogFaq />,
     ThreeTitle: <ThreeTitleFAQ />,
     CategoryBlogs: <CategoryBlogsFAQ />,

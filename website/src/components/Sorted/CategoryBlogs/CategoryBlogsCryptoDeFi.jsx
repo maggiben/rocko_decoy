@@ -7,7 +7,7 @@ const CategoryBlogsCryptoDeFi = () => {
     {
       allMarkdownRemark(
         filter: { frontmatter: { tags: { eq: "Crypto & DeFi" } } }
-        sort: { frontmatter: { date: ASC } }
+        sort: { frontmatter: { date: DESC } }
         skip: 3
       ) {
         edges {

@@ -78,6 +78,7 @@ const TransferFundModal = ({
                       <Link className="hover:text-green-700" 
                         href={etherscanLink(data?.hash)}
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Withdraw successfully completed!
                       </Link>

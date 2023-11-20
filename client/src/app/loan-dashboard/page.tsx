@@ -192,7 +192,7 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="flex">
-                  <Link className="w-1/2 underline" target="_blank"
+                  <Link className="w-1/2 underline" target="_blank" rel="noopener noreferrer"
                     href={etherscanLink(loan?.transaction_hash)}
                   >View loan repayment transaction</Link>
                 </div>

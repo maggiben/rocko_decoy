@@ -5,11 +5,13 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
+// TODO remove this unused template
+
 const BlogPostTemplate = ({
   data: { previous, next, site, markdownRemark: post },
   location,
 }) => {
-  const siteTitle = site.siteMetadata?.title || `Title`
+  // const siteTitle = site.siteMetadata?.title || `Title`
   console.log({previous, next, site, post, location})
   return (
     <Layout>

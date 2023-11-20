@@ -6,7 +6,8 @@ const TopPosts = () => {
   const topPostData = useStaticQuery(graphql`
     query PostsWithDeFiBorrowingLendingTag {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { in: "DeFi Borrowing & Lending" } } }
+        sort: { frontmatter: { date: DESC } }
+        filter: { frontmatter: { tags: { in: "Borrowing" } } }
         limit: 3
       ) {
         edges {

@@ -155,6 +155,7 @@ const ModifyStatus = () => {
           <Link className="hover:text-green-700"
             href={etherscanLink(borrowTxHash)}
             target="_blank"
+            rel="noopener noreferrer"
           >
             Successfully transaction is completed!
           </Link>
@@ -172,6 +173,7 @@ const ModifyStatus = () => {
           <Link className="hover:text-green-700" 
             href={etherscanLink(txHash)}
             target="_blank"
+            rel="noopener noreferrer"
           >
             Successfully transaction is completed!
           </Link>

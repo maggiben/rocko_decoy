@@ -26,7 +26,6 @@ const Index = () => {
 
   React.useEffect(() => {
     if (window.location.hash) {
-      console.log(window.location.hash, selectCategory)
       setSelectCategory({
         id: window.location.hash,
         name: window.location.hash.replace("#", ""),
@@ -48,7 +47,7 @@ const Index = () => {
   if (!SHOW_BLOG) {
     return null
   }
-
+console.log({selectCategory })
   return (
     <Layout>
       <>

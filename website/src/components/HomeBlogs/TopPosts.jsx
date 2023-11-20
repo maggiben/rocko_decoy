@@ -6,6 +6,7 @@ const TopPosts = () => {
   const topPostData = useStaticQuery(graphql`
     query FeaturedTopPosts {
       allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
         filter: { frontmatter: { featured: { eq: true } } }
         limit: 3
         skip: 1

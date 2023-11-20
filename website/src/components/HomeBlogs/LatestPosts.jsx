@@ -4,7 +4,7 @@ import BlogsContainer from "../BlogsContainer/BlogsContainer"
 const LatestPosts = () => {
   // !latest post data
   const latestPostData = useStaticQuery(graphql`{
-      allMarkdownRemark(limit: 3, sort: { frontmatter: { date: ASC } }) {
+      allMarkdownRemark(limit: 3, sort: { frontmatter: { date: DESC } }) {
         edges {
           node {
             id

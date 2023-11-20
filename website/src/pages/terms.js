@@ -1,7 +1,7 @@
 import * as React from "react"
 import rockoLogo from "../images/logo.svg"
-// import "../styles/style.scss"
-const Index = ({  }) => {
+
+const Index = () => {
 
   return (
     <>
@@ -64,7 +64,7 @@ const Index = ({  }) => {
                   ><span
                     ><span
                       ><span
-                        >We operate&nbsp;the website&nbsp;<a href="https://rocko.co/" target="_blank"><span>https://rocko.co</span></a
+                        >We operate&nbsp;the website&nbsp;<a href="https://rocko.co/" rel="noopener noreferrer" target="_blank"><span>https://rocko.co</span></a
                         >(the&nbsp;"<strong>Site</strong>"),&nbsp;the mobile application&nbsp;Rocko&nbsp;(the&nbsp;"<strong>App</strong>"), as well as any other related products
                         and services that refer or link to these legal terms (the&nbsp;"<strong>Legal Terms</strong>") (collectively, the&nbsp;"<strong>Services</strong>").</span
                       ></span
@@ -154,7 +154,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#services"
+                          ><a aria-label="Our services" href="/terms/#services"
                             ><span><span>1. OUR SERVICES</span></span></a
                           ></span
                         ></span
@@ -167,7 +167,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#ip"><span>2. INTELLECTUAL PROPERTY RIGHTS</span></a></span
+                          ><a aria-label="IP Rights" href="/terms/#ip"><span>2. INTELLECTUAL PROPERTY RIGHTS</span></a></span
                         ></span
                       ></span
                     ></span
@@ -178,7 +178,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#userreps"
+                          ><a aria-label="User Representations" href="/terms/#userreps"
                             ><span><span>3. USER REPRESENTATIONS</span></span></a
                           ></span
                         ></span
@@ -191,7 +191,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#userreg"
+                          ><a aria-label="User Registration" href="/terms/#userreg"
                             ><span><span>4. USER REGISTRATION</span></span></a
                           ></span
                         ></span
@@ -204,7 +204,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#purchases"
+                          ><a aria-label="Purchases and Payment" href="/terms/#purchases"
                             ><span><span>5. PURCHASES AND PAYMENT</span></span></a
                           ></span
                         ></span
@@ -217,7 +217,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#cancel"
+                          ><a aria-label="Cancellation" href="/terms/#cancel"
                             ><span><span>6. CANCELLATION</span></span></a
                           ></span
                         ></span
@@ -230,7 +230,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#prohibited"
+                          ><a aria-label="Prohibited Activities" href="/terms/#prohibited"
                             ><span><span>7. PROHIBITED ACTIVITIES</span></span></a
                           ></span
                         ></span
@@ -243,7 +243,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#ugc"
+                          ><a aria-label="User Generated Contributions" href="/terms/#ugc"
                             ><span><span>8. USER GENERATED CONTRIBUTIONS</span></span></a
                           ></span
                         ></span
@@ -256,7 +256,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#license"
+                          ><a aria-label="License" href="/terms/#license"
                             ><span><span>9. CONTRIBUTION&nbsp;LICENSE</span></span></a
                           ></span
                         ></span
@@ -269,7 +269,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#mobile"
+                          ><a aria-label="Mobile" href="/terms/#mobile"
                             ><span><span>10. MOBILE APPLICATION&nbsp;LICENSE</span></span></a
                           ></span
                         ></span
@@ -282,7 +282,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#socialmedia"
+                          ><a aria-label="Social Media" href="/terms/#socialmedia"
                             ><span><span>11. SOCIAL MEDIA</span></span></a
                           ></span
                         ></span
@@ -295,7 +295,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#sitemanage"
+                          ><a aria-label="Services management" href="/terms/#sitemanage"
                             ><span><span>12. SERVICES MANAGEMENT</span></span></a
                           ></span
                         ></span
@@ -308,7 +308,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#ppyes"
+                          ><a aria-label="Privacy Policy" href="/terms/#ppyes"
                             ><span><span>13. PRIVACY POLICY</span></span></a
                           ></span
                         ></span
@@ -321,7 +321,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#terms"
+                          ><a aria-label="Term and Termination" href="/terms/#terms"
                             ><span><span>14. TERM AND TERMINATION</span></span></a
                           ></span
                         ></span
@@ -334,7 +334,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#modifications"
+                          ><a aria-label="Modifications and interruptions" href="/terms/#modifications"
                             ><span><span>15. MODIFICATIONS AND INTERRUPTIONS</span></span></a
                           ></span
                         ></span
@@ -347,7 +347,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#law"
+                          ><a aria-label="Governing Law" href="/terms/#law"
                             ><span><span>16. GOVERNING LAW</span></span></a
                           ></span
                         ></span
@@ -360,7 +360,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#disputes"
+                          ><a aria-label="Disputes" href="/terms/#disputes"
                             ><span><span>17. DISPUTE RESOLUTION</span></span></a
                           ></span
                         ></span
@@ -373,7 +373,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#corrections"
+                          ><a aria-label="Corrections" href="/terms/#corrections"
                             ><span><span>18. CORRECTIONS</span></span></a
                           ></span
                         ></span
@@ -386,7 +386,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#disclaimer"
+                          ><a aria-label="Disclaimer" href="/terms/#disclaimer"
                             ><span><span>19. DISCLAIMER</span></span></a
                           ></span
                         ></span
@@ -399,7 +399,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#liability"
+                          ><a aria-label="Limitations of Liability" href="/terms/#liability"
                             ><span><span>20. LIMITATIONS OF LIABILITY</span></span></a
                           ></span
                         ></span
@@ -412,7 +412,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#indemnification"
+                          ><a aria-label="Indemnification" href="/terms/#indemnification"
                             ><span><span>21. INDEMNIFICATION</span></span></a
                           ></span
                         ></span
@@ -425,7 +425,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#userdata"
+                          ><a aria-label="User Data" href="/terms/#userdata"
                             ><span><span>22. USER DATA</span></span></a
                           ></span
                         ></span
@@ -438,7 +438,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#electronic"
+                          ><a aria-label="ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES" href="/terms/#electronic"
                             ><span><span>23. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</span></span></a
                           ></span
                         ></span
@@ -451,7 +451,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#california"
+                          ><a aria-label="CALIFORNIA USERS AND RESIDENTS" href="/terms/#california"
                             ><span><span>24. CALIFORNIA USERS AND RESIDENTS</span></span></a
                           ></span
                         ></span
@@ -464,7 +464,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#misc"
+                          ><a aria-label="MISCELLANEOUS" href="/terms/#misc"
                             ><span><span>25. MISCELLANEOUS</span></span></a
                           ></span
                         ></span
@@ -477,7 +477,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         ><span
-                          ><a href="/terms/#contact"
+                          ><a aria-label="CONTACT US" href="/terms/#contact"
                             ><span><span>26. CONTACT US</span></span></a
                           ></span
                         ></span
@@ -487,7 +487,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="services">
                 <span
                   ><span
                     ><span
@@ -532,7 +532,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="ip">
                 <span
                   ><span
                     ><span
@@ -615,7 +615,7 @@ const Index = ({  }) => {
                       ><span><span>Subject to your compliance with these Legal Terms, including the&nbsp;"</span></span
                       ><span
                         ><span
-                          ><a href="/terms/#prohibited"
+                          ><a aria-label="PROHIBITED ACTIVITIES" href="/terms/#prohibited"
                             ><span><span>PROHIBITED ACTIVITIES</span></span></a
                           ></span
                         ></span
@@ -830,7 +830,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="userreps">
                 <span
                   ><span
                     ><span
@@ -872,7 +872,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="userreg">
                 <span
                   ><span
                     ><span
@@ -900,7 +900,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="purchases">
                 <span
                   ><span
                     ><span
@@ -964,7 +964,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="cancel">
                 <span
                   ><span
                     ><span
@@ -1001,7 +1001,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="prohibited">
                 <span
                   ><span
                     ><span
@@ -1353,7 +1353,7 @@ const Index = ({  }) => {
                 </li>
               </ul>
 
-              <h2>
+              <h2 id="ugc">
                 <span
                   ><span
                     ><span
@@ -1563,7 +1563,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="license">
                 <span
                   ><span
                     ><span
@@ -1618,7 +1618,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="mobile">
                 <span
                   ><span
                     ><span
@@ -1703,7 +1703,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="socialmedia">
                 <span
                   ><span
                     ><span
@@ -1752,7 +1752,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="sitemanage">
                 <span
                   ><span
                     ><span
@@ -1785,7 +1785,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="ppyes">
                 <span
                   ><span
                     ><span
@@ -1806,7 +1806,7 @@ const Index = ({  }) => {
                     ><span
                       ><span
                         >We care about data privacy and security. Please review our Privacy Policy:<strong
-                          >&nbsp;<a href="/privacy/" target="_blank"><span>https://rocko.co/privacy/</span></a></strong
+                          >&nbsp;<a href="/privacy/" rel="noopener noreferrer" target="_blank"><span>https://rocko.co/privacy/</span></a></strong
                         >. By using the Services, you agree to be bound by our Privacy Policy, which is incorporated into these Legal Terms. Please be advised the Services are
                         hosted in&nbsp;the&nbsp;United States. If you access the Services from any other region of the world with laws or other requirements governing personal data
                         collection, use, or disclosure that differ from applicable laws in&nbsp;the&nbsp;United States, then through your continued use of the Services, you are
@@ -1818,7 +1818,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <p>
+              <p id="terms">
                 <span
                   ><span
                     ><span
@@ -1862,7 +1862,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="modifications">
                 <span
                   ><span
                     ><span
@@ -1906,7 +1906,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="law">
                 <span
                   ><span
                     ><span
@@ -1933,7 +1933,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="disputes">
                 <span
                   ><span
                     ><span
@@ -1972,7 +1972,7 @@ const Index = ({  }) => {
                         ></span
                       ><span
                         ><span
-                          ><a href="http://www.adr.org/" target="_blank"><span>American Arbitration Association (AAA) website</span></a></span
+                          ><a href="http://www.adr.org/" rel="noopener noreferrer" target="_blank"><span>American Arbitration Association (AAA) website</span></a></span
                         ></span
                       ><span
                         ><span
@@ -2091,7 +2091,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="corrections">
                 <span
                   ><span
                     ><span
@@ -2121,7 +2121,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="disclaimer">
                 <span
                   ><span
                     ><span
@@ -2159,7 +2159,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="liability">
                 <span
                   ><span
                     ><span
@@ -2185,7 +2185,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="indemnification">
                 <span
                   ><span
                     ><span
@@ -2216,7 +2216,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="userdata">
                 <span
                   ><span
                     ><span
@@ -2243,7 +2243,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="electronic">
                 <span
                   ><span
                     ><span
@@ -2272,7 +2272,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="california">
                 <span
                   ><span
                     ><span
@@ -2298,7 +2298,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="misc">
                 <span
                   ><span
                     ><span
@@ -2330,7 +2330,7 @@ const Index = ({  }) => {
                 >
               </p>
 
-              <h2>
+              <h2 id="contact">
                 <span
                   ><span
                     ><span

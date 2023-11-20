@@ -40,7 +40,7 @@ const SearchPage = ({ data,location }) => {
   
       return () => clearTimeout(delayDebounceFn)
     }
-  }, [query])
+  }, [query, posts])
 
   if (!SHOW_BLOG) {
     return null
@@ -103,7 +103,7 @@ const SearchPage = ({ data,location }) => {
 
 export const blogPostWithRegex = graphql`
   {
-    allMarkdownRemark(sort: { frontmatter: { date: ASC } }) {
+    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
       edges {
         node {
           id

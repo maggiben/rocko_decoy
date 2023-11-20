@@ -2,10 +2,8 @@ import React from "react"
 import rockoLogo from "../images/logo.svg"
 import Footer from "../../../ui-lib/Footer/Footer"
 import FormWrapper from "../components/shared/FormWrapper"
-// import website styles
-// import "../styles/style.scss"
 
-const Index = ({}) => {
+const Index = () => {
   return (
     <>
       <a className="accessibility" href="#main">
@@ -40,7 +38,7 @@ const Index = ({}) => {
                   <div className="col-md-8 col-lg-6">
                     <div className="banner__content text-center">
                       <div className="banner__logo">
-                        <a href="#">
+                        <a href="/">
                           <img src={rockoLogo} alt="rocko.co" />
                         </a>
                       </div>
@@ -89,6 +87,7 @@ const Index = ({}) => {
                               href="https://twitter.com/rockodefi"
                               className="d-flex align-items-center justify-content-center rounded-circle"
                               target="_blank"
+                              rel="noopener noreferrer"
                             >
                               <span className="rocko rocko-twitter !text-[#293992]"></span>
                             </a>

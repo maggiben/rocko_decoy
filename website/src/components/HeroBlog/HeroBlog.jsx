@@ -7,6 +7,7 @@ const HeroBlog = () => {
     {
       allMarkdownRemark(
         filter: { frontmatter: { featured: { eq: true } } }
+        sort: { frontmatter: { date: DESC } }
         limit: 1
       ) {
         edges {
@@ -36,8 +37,8 @@ const HeroBlog = () => {
   const data = useStaticQuery(query)
 
   const heroBlog = data?.allMarkdownRemark?.edges?.[0]?.node
-  // console.log('heroBlog', heroBlog)
-console.log({ heroBlog})
+
+console.log({ heroBlog}, 'xxyy')
   return heroBlog && <Hero heroBlog={heroBlog} />
 }
 

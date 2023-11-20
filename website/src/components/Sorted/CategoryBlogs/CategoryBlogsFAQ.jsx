@@ -6,8 +6,8 @@ const CategoryBlogsFAQ = () => {
   const query = graphql`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { eq: "Rocko FAQs" } } }
-        sort: { frontmatter: { date: ASC } }
+        filter: { frontmatter: { tags: { eq: "Rocko How-tos" } } }
+        sort: { frontmatter: { date: DESC } }
         skip: 3
       ) {
         edges {

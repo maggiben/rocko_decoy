@@ -6,6 +6,7 @@ const TopPosts = () => {
   const topPostData = useStaticQuery(graphql`
     query PostsWithCryptoDeFiTag {
       allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
         filter: { frontmatter: { tags: { in: "Crypto & DeFi" } } }
         limit: 3
       ) {

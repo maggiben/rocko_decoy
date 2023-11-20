@@ -6,6 +6,7 @@ const HeroBlogBorrowing = () => {
   const query = graphql`
     {
       allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
         filter: {
           frontmatter: {
             featured: { eq: true }

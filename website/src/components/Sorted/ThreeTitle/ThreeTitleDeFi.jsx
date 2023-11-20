@@ -6,12 +6,12 @@ const ThreeTitleDeFi = () => {
   const latestPostData = useStaticQuery(graphql`{
       allMarkdownRemark(
         limit: 3
-        sort: { frontmatter: { date: ASC } }
+        sort: { frontmatter: { date: DESC } }
         filter: {
           frontmatter: {
             coverUrl: {}
             author: {}
-            tags: { in: "DeFi Borrowing & Lending" }
+            tags: { in: "Borrowing" }
           }
         }
       ) {

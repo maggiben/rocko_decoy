@@ -6,7 +6,8 @@ const TopPosts = () => {
   const topPostData = useStaticQuery(graphql`
     query PostsWithFaqsTag {
       allMarkdownRemark(
-        filter: { frontmatter: { tags: { in: "Rocko FAQs" } } }
+        sort: { frontmatter: { date: DESC } }
+        filter: { frontmatter: { tags: { in: "Rocko How-tos" } } }
         limit: 3
       ) {
         edges {
@@ -36,7 +37,7 @@ const TopPosts = () => {
     <>
       <BlogsContainer
         blogDetails={topPost}
-        blogsCategory="Rocko FAQs"
+        blogsCategory="Rocko How-tos"
         grayBG="bg-[#F9F9F9]"
       />
     </>

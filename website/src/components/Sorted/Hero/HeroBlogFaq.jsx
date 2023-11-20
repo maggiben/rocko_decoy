@@ -6,12 +6,13 @@ const HeroBlogFaq = () => {
   const query = graphql`
     {
       allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
         filter: {
           frontmatter: {
             featured: { eq: true }
             coverUrl: {}
             author: {}
-            tags: { in: "Rocko FAQs" }
+            tags: { in: "Rocko How-tos" }
           }
         }
         limit: 1
