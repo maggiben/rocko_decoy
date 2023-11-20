@@ -6,7 +6,6 @@
 
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const slugify = require('slugify')
 
 // const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true';
 
