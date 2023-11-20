@@ -1,9 +1,9 @@
-import React from "react"
-import rockoLogo from "../images/logo.svg"
-import Footer from "../../../ui-lib/Footer/Footer"
-import FormWrapper from "../components/shared/FormWrapper"
+import React from 'react'
+import rockoLogo from '../images/logo.svg'
+import Footer from '../../../ui-lib/Footer/Footer'
+import FormWrapper from '../components/shared/FormWrapper'
 
-const Index = () => {
+function Index() {
   return (
     <>
       <a className="accessibility" href="#main">
@@ -22,7 +22,7 @@ const Index = () => {
                     href="mailto:&#104;&#101;&#108;&#108;&#111;&#064;&#114;&#111;&#099;&#107;&#111;&#046;&#099;&#111;"
                     className="btn btn-light"
                   >
-                    <span className="rocko rocko-mail"></span>
+                    <span className="rocko rocko-mail" />
                     &#104;&#101;&#108;&#108;&#111;&#064;&#114;&#111;&#099;&#107;&#111;&#046;&#099;&#111;
                   </a>
                 </div>
@@ -51,7 +51,7 @@ const Index = () => {
                           below to be notified as soon as we launch!
                         </p>
                       </div>
-                      <FormWrapper  className="form form--banner">
+                      <FormWrapper className="form form--banner">
                         <div className="input-holder">
                           <input
                             name="EMAIL"
@@ -70,12 +70,12 @@ const Index = () => {
 
                         <div
                           aria-hidden="true"
-                          style={{ position: "absolute", left: "-5000px" }}
+                          style={{ position: 'absolute', left: '-5000px' }}
                         >
                           <input
                             type="text"
                             name="b_a55ca9db1b050104dac6c18a3_d64d1776bc"
-                            tabindex="-1"
+                            tabIndex="-1"
                             value=""
                           />
                         </div>
@@ -89,7 +89,7 @@ const Index = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <span className="rocko rocko-twitter !text-[#293992]"></span>
+                              <span className="rocko rocko-twitter !text-[#293992]" />
                             </a>
                           </li>
                         </ul>

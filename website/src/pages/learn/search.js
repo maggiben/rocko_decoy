@@ -1,21 +1,20 @@
 // src/templates/search.js
-import React, { useState, useEffect } from "react"
-import { Link, graphql, navigate} from "gatsby"
-import SearchField from "../../components/SearchField/SearchField"
-import Layout from "../../components/layout"
-import { BiChevronRight } from "react-icons/bi"
+import React, { useState, useEffect } from 'react'
+import { Link, graphql, navigate } from 'gatsby'
+import { BiChevronRight } from 'react-icons/bi'
+import SearchField from '../../components/SearchField/SearchField'
+import Layout from '../../components/layout'
 
-const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true';
+const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
 
-const SearchPage = ({ data,location }) => {
-
+function SearchPage({ data, location }) {
   const posts = data.allMarkdownRemark.edges
-  
-  const [query, setQuery] = useState(location?.state?.query || "")
+
+  const [query, setQuery] = useState(location?.state?.query || '')
   const [results, setResults] = useState([])
 
   const handleBackButton = () => {
-    navigate(-1) || navigate("/learn")
+    navigate(-1) || navigate('/learn')
   }
 
   const handleInputChange = event => {
@@ -26,18 +25,18 @@ const SearchPage = ({ data,location }) => {
     if (SHOW_BLOG) {
       const delayDebounceFn = setTimeout(() => {
         if (query?.length) {
-          const regex = new RegExp(query, "gi")
-          const filteredPosts = posts.filter(post => {
-            return (
-              post.node.frontmatter.description.match(regex)||  post.node.frontmatter.title.match(regex)
-            )
-          })
+          const regex = new RegExp(query, 'gi')
+          const filteredPosts = posts.filter(
+            post =>
+              post.node.frontmatter.description.match(regex) ||
+              post.node.frontmatter.title.match(regex),
+          )
           setResults(filteredPosts)
         } else {
           setResults([])
         }
       }, 1000)
-  
+
       return () => clearTimeout(delayDebounceFn)
     }
   }, [query, posts])
@@ -49,20 +48,20 @@ const SearchPage = ({ data,location }) => {
   // console.log(results)
   return (
     <Layout>
-       <section className="tags_container_parent">
+      <section className="tags_container_parent">
         <div className="tags_container">
-        <button className="blog_home_button" onClick={handleBackButton}>
-            <BiChevronRight className="blog_home_button_icon" />{" "}
+          <button className="blog_home_button" onClick={handleBackButton}>
+            <BiChevronRight className="blog_home_button_icon" />{' '}
             <span>Back</span>
           </button>
           <SearchField
             handleInputChange={handleInputChange}
             query={query}
-            isFocused={true}
+            isFocused
           />
         </div>
       </section>
-      <section className={`!py-16`}>
+      <section className="!py-16">
         <div className="category_blogs_container space-y-5">
           {results.length > 0 &&
             results.map(({ node }) => (

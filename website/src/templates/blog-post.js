@@ -1,18 +1,18 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from 'react'
+import { Link, graphql } from 'gatsby'
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Bio from '../components/bio'
+import Layout from '../components/layout'
+import Seo from '../components/seo'
 
 // TODO remove this unused template
 
-const BlogPostTemplate = ({
+function BlogPostTemplate({
   data: { previous, next, site, markdownRemark: post },
   location,
-}) => {
+}) {
   // const siteTitle = site.siteMetadata?.title || `Title`
-  console.log({previous, next, site, post, location})
+  console.log({ previous, next, site, post, location })
   return (
     <Layout>
       <article
@@ -63,7 +63,7 @@ const BlogPostTemplate = ({
   )
 }
 
-export const Head = ({ data: { markdownRemark: post } }) => {
+export function Head({ data: { markdownRemark: post } }) {
   return (
     <Seo
       title={post.frontmatter.title}

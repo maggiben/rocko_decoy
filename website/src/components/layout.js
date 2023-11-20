@@ -1,8 +1,8 @@
+import * as React from 'react'
+import Header from '../../../ui-lib/Header/Header'
+import Footer from '../../../ui-lib/Footer/Footer'
 
-import * as React from "react"
-import Header from "../../../ui-lib/Header/Header"
-import Footer from "../../../ui-lib/Footer/Footer"
-const Layout = ({ children }) => {
+function Layout({ children }) {
   return (
     <>
       <Header />

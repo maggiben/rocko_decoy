@@ -16,20 +16,22 @@ const blogPost = path.resolve(`./src/templates/blog-post.js`)
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
 exports.createPages = async ({ graphql, actions, reporter }) => {
-  const { createPage, createRedirect  } = actions
+  const { createPage, createRedirect } = actions
 
-  createRedirect({
-    fromPath: '/terms.html',
-    toPath: '/terms',
-    isPermanent: true,
-    force: true, // This forces the redirect even if there's a page at the old URL
-  },
-  {
-    fromPath: '/privacy.html',
-    toPath: '/privacy',
-    isPermanent: true,
-    force: true, // This forces the redirect even if there's a page at the old URL
-  })
+  createRedirect(
+    {
+      fromPath: '/terms.html',
+      toPath: '/terms',
+      isPermanent: true,
+      force: true, // This forces the redirect even if there's a page at the old URL
+    },
+    {
+      fromPath: '/privacy.html',
+      toPath: '/privacy',
+      isPermanent: true,
+      force: true, // This forces the redirect even if there's a page at the old URL
+    },
+  )
 
   // Get all markdown blog posts sorted by date
   const result = await graphql(`
@@ -48,7 +50,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   if (result.errors) {
     reporter.panicOnBuild(
       `There was an error loading your blog posts`,
-      result.errors
+      result.errors,
     )
     return
   }
@@ -75,30 +77,25 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
-  
-
-
-
 }
 
+/**
+ * @type {import('gatsby').GatsbyNode['onCreateNode']}
+ */
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
 
-  /**
-   * @type {import('gatsby').GatsbyNode['onCreateNode']}
-   */
-  exports.onCreateNode = ({ node, actions, getNode }) => {
-    const { createNodeField } = actions
-
-    if (node.internal.type === `MarkdownRemark`) {
-      const value = createFilePath({ node, getNode })
-      const resultText = value.replace(/^\/|\/$/g, '');
-  // console.log('value...', value)
-      createNodeField({
-        name: `slug`,
-        node,
-        value:resultText,
-      })
-    }
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({ node, getNode })
+    const resultText = value.replace(/^\/|\/$/g, '')
+    // console.log('value...', value)
+    createNodeField({
+      name: `slug`,
+      node,
+      value: resultText,
+    })
   }
+}
 
 /**
  * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}

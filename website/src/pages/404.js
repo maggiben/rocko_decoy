@@ -1,10 +1,10 @@
-import * as React from "react"
-import { graphql } from "gatsby"
+import * as React from 'react'
+import { graphql } from 'gatsby'
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Layout from '../components/layout'
+import Seo from '../components/seo'
 
-const NotFoundPage = ({ data }) => {
+function NotFoundPage({ data }) {
   return (
     <Layout>
       <h1>404: Not Found</h1>
@@ -13,7 +13,9 @@ const NotFoundPage = ({ data }) => {
   )
 }
 
-export const Head = () => <Seo title="404: Not Found" />
+export function Head() {
+  return <Seo title="404: Not Found" />
+}
 
 export default NotFoundPage
 

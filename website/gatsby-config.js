@@ -7,13 +7,16 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
-require("dotenv").config({
+require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
-});
+})
 
-const siteUrl = `https://rocko.co/`;
+const siteUrl = `https://rocko.co/`
 
-const sitemap = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true' ? [`gatsby-plugin-sitemap`] : [];
+const sitemap =
+  process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
+    ? [`gatsby-plugin-sitemap`]
+    : []
 
 module.exports = {
   siteMetadata: {
@@ -86,17 +89,15 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes.map(node => {
-                return Object.assign({}, node.frontmatter, {
-                  description: node.excerpt,
-                  date: node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + node.fields.slug,
-                  custom_elements: [{ "content:encoded": node.html }],
-                })
-              })
-            },
+            serialize: ({ query: { site, allMarkdownRemark } }) =>
+              allMarkdownRemark.nodes.map(node => ({
+                ...node.frontmatter,
+                description: node.excerpt,
+                date: node.frontmatter.date,
+                url: site.siteMetadata.siteUrl + node.fields.slug,
+                guid: site.siteMetadata.siteUrl + node.fields.slug,
+                custom_elements: [{ 'content:encoded': node.html }],
+              })),
             query: `{
               allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
                 nodes {
@@ -112,8 +113,8 @@ module.exports = {
                 }
               }
             }`,
-            output: "/rss.xml",
-            title: "Rocko Learn DeFi RSS Feed",
+            output: '/rss.xml',
+            title: 'Rocko Learn DeFi RSS Feed',
           },
         ],
       },
@@ -137,14 +138,14 @@ module.exports = {
       options: {
         // You can add multiple tracking ids and a pageview event will be fired for all of them.
         trackingIds: [
-          "G-52RK7QP1HV", // Google Analytics / GA
+          'G-52RK7QP1HV', // Google Analytics / GA
           // Other tracking IDs can be added here as needed
         ],
         // This object gets passed directly to the gtag config command
         gtagConfig: {
           // optimize_id: "OPT_CONTAINER_ID", // OPTIONAL: Add Optimize tracking id
           anonymize_ip: true, // OPTIONAL: Anonymize IP addresses
-          cookie_expires: 0,  // OPTIONAL: Set cookie expiration time
+          cookie_expires: 0, // OPTIONAL: Set cookie expiration time
         },
         // This object is used for configuration specific to this plugin
         pluginConfig: {
