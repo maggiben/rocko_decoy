@@ -12,10 +12,12 @@ import { useAlert } from "@/context/alertContext/alertContext";
 import { DELETE_ALERT } from "@/constant/constant";
 import { AprAlertType, BufferAlertType } from "@/types/type";
 import { sortAprAlert, sortBufferAlert } from "@/utility/sortAlert";
+import { useAlertDB } from "@/db/alertDb";
 
 interface Props {
   setOpenModalFor: Function;
   title: string;
+  loanId: number;
   description: string;
   alertFor: "collateralBuffer" | "APR";
   toggleAlert?: boolean;
@@ -25,11 +27,13 @@ interface Props {
 const CollateralBufferAlerts: FC<Props> = ({
   setOpenModalFor,
   title,
+  loanId,
   description,
   alertFor,
   toggleAlert,
   setToggleAlert,
 }) => {
+  const { deleteAlert } = useAlertDB();
   const [next, setNext] = useState(toggleAlert || false);
   const {
     aprAlertState,
@@ -37,7 +41,7 @@ const CollateralBufferAlerts: FC<Props> = ({
     aprAlertDispatch,
     bufferAlertDispatch,
   } = useAlert();
-  console.log({ aprAlertState, bufferAlertState });
+
   const handleCloseButton = () => {
     setToggleAlert(
       alertFor === "APR" && aprAlertState.length > 0
@@ -49,8 +53,9 @@ const CollateralBufferAlerts: FC<Props> = ({
     setOpenModalFor("");
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = async (index: number, aprAlert: any) => {
     console.log(index, alertFor);
+    await deleteAlert(aprAlert?.id)
     if (alertFor === "APR") {
       aprAlertDispatch({ type: DELETE_ALERT, index: index });
     } else {
@@ -170,7 +175,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                             </div>
                             <div
                               className="cursor-pointer"
-                              onClick={() => handleDelete(index)}
+                              onClick={() => handleDelete(index, aprAlert)}
                             >
                               <Image
                                 src={remove}
@@ -236,7 +241,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                             </div>
                             <div
                               className="cursor-pointer"
-                              onClick={() => handleDelete(index)}
+                              onClick={() => handleDelete(index, aprAlert)}
                             >
                               <Image
                                 src={remove}
@@ -309,7 +314,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                             </div>
                             <div
                               className="cursor-pointer"
-                              onClick={() => handleDelete(index)}
+                              onClick={() => handleDelete(index, bufferAlert)}
                             >
                               <Image
                                 src={remove}
@@ -374,7 +379,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                             </div>
                             <div
                               className="cursor-pointer"
-                              onClick={() => handleDelete(index)}
+                              onClick={() => handleDelete(index, bufferAlert)}
                             >
                               <Image
                                 src={remove}
@@ -426,6 +431,7 @@ const CollateralBufferAlerts: FC<Props> = ({
         </>
       ) : (
         <AlertForm
+          loanId={loanId}
           description=""
           setOpenModalFor={setOpenModalFor}
           title={title}

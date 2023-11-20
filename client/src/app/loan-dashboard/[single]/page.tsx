@@ -86,7 +86,7 @@ function SinglePage() {
         const active_loans = result.filter((loan: any) => loan.loan_active == (isActive ? 1 : 0));
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
-        
+                  
           const avg_val = await getAverageAPR(active_loans[0].create_time);
           console.log(avg_val)
           if (avg_val) setAverageAPR(avg_val);
@@ -197,7 +197,7 @@ function SinglePage() {
                     <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
                   </div>
                   <span className="block text-xl  font-medium">
-                   {financial(borrowBalanceOf / collateralPrice * collateralBalanceOf * 100)}<small>%</small>
+                   {financial(borrowBalanceOf / (collateralPrice * collateralBalanceOf) * 100)}<small>%</small>
                   </span>
                 </div>                         
                 {/* <Image
@@ -242,6 +242,7 @@ function SinglePage() {
                 {/* //! Alert start  */}
                 <Alert
                   title="APR Alerts"
+                  loanId={loanData?.id}
                   alertFor="APR"
                   description="Set up alerts to be notified if your interest rate spikes or drops. "
                 />
@@ -362,6 +363,7 @@ function SinglePage() {
                 {/* //!alert start */}
                 <Alert
                   title=" Collateral Buffer Alerts"
+                  loanId={loanData?.id}
                   alertFor="collateralBuffer"
                   description="Set up alerts to be notified when your collateral buffer is getting too low. Alerts are automatically sent at 5% as liquidation can occur once it becomes negative."
                 />

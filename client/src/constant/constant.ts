@@ -7,3 +7,4 @@ export const ADD_ALERT = "ADD_ALERT";
 export const ALERT_OFF = "ALERT_OFF";
 export const UPDATE_ALERT = "UPDATE_ALERT";
 export const DELETE_ALERT = "DELETE_ALERT";
+export const CLEAR_ALERT = "CLEAR_ALERT";

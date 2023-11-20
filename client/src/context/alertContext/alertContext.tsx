@@ -4,6 +4,7 @@ import {
   ALERT_OFF,
   DELETE_ALERT,
   UPDATE_ALERT,
+  CLEAR_ALERT
 } from "@/constant/constant";
 import {
   AlertContextValues,
@@ -48,9 +49,12 @@ function aprAlertReducer(
 
       return newStateDelete;
     }
-
     case ALERT_OFF:
       return [];
+    case CLEAR_ALERT: {
+      state = []
+      return state
+    }
     default:
       return state;
   }
@@ -91,6 +95,10 @@ function bufferAlertReducer(
 
     case ALERT_OFF:
       return [];
+    case CLEAR_ALERT: {
+      state = [];
+      return state
+    }
     default:
       return state;
   }

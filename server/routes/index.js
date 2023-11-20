@@ -6,10 +6,12 @@ const coinbaseRouter = require('./coinbase');
 const healthcheckRouter = require('./healthcheck');
 const loanRouter = require('./loan');
 const assetRouter = require('./asset');
+const alertRouter = require('./alert');
 
 router.use('/', coinbaseRouter);
 router.use('/', healthcheckRouter);
 router.use('/', loanRouter);
 router.use('/', assetRouter);
+router.use('/', alertRouter);
 
 module.exports = router;

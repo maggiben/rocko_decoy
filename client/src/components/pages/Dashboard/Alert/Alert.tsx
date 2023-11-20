@@ -1,17 +1,20 @@
-import { Dispatch, FC, useState } from "react";
+import { Dispatch, FC, useEffect, useState } from "react";
 import ToggleBTN from "../toggleBTN/toggleBTN";
 import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
 import CollateralBufferAlerts from "./collateralBufferAlerts/collateralBufferAlerts";
 import { useAlert } from "@/context/alertContext/alertContext";
+import { useAlertDB } from "@/db/alertDb";
 
 interface Props {
   title: string;
+  loanId: number;
   description: string;
   alertFor: "collateralBuffer" | "APR";
 }
 
-const Alert: FC<Props> = ({ title, description, alertFor }) => {
-  const { aprAlertState, bufferAlertState } = useAlert();
+const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
+  const { getAlertData } = useAlertDB();
+  const { aprAlertState, bufferAlertState, aprAlertDispatch, bufferAlertDispatch } = useAlert();
 
   const [toggleAlert, setToggleAlert] = useState<boolean | undefined>(
     alertFor === "APR" && aprAlertState.length > 0
@@ -22,7 +25,88 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
   );
   const [openModalFor, setOpenModalFor] = useState("");
 
-  console.log(openModalFor);
+  const getFrequencyObject = (repeat: number) => {
+    const secs_one_day = 60 * 60 * 24;
+    const secs_one_hour = 60 * 60;
+    const secs_one_min = 60;
+
+    if (repeat > secs_one_day) {
+      return {
+        interval: "Day(s)",
+        repeat: repeat / secs_one_day
+      }
+    } else if (repeat > secs_one_hour) {
+      return {
+        interval: "Hour(s)",
+        repeat: repeat / secs_one_hour
+      }
+    } else if (repeat > secs_one_min) {
+      return {
+        interval: "Min(s)",
+        repeat: repeat / secs_one_min
+      }
+    }
+  };
+
+  const getAlerts = async () => {
+    const result = await getAlertData(loanId);
+    if (result) {
+      const alerts = result.filter((alert: any) => alert.active === 1 && alert.loan_id === loanId);
+      // clear alert states
+      aprAlertDispatch({ type: "CLEAR_ALERT" });
+      bufferAlertDispatch({ type: "CLEAR_ALERT" });
+      // add alerts from db to states
+      alerts.map((alert:any) => {
+        /* for apr alert */
+        if(alert?.alert_type === "APR"){
+          aprAlertDispatch(
+            {
+            type: "ADD_ALERT",
+            alert: {
+              id: alert.id,
+              alertMethods: {
+                email: alert?.alert_email === 1 ? "email@rocko.com" : "",
+                sms: alert?.alert_phone === 1 ? "55.555.5555" : "",
+              },
+              currentInterestRate: {
+                percentage: alert?.alert_threshold,
+                position: alert?.alert_metric,
+              },
+              frequency: {
+                interval: getFrequencyObject(alert?.alert_repeat_secs)?.interval,
+                repeat: getFrequencyObject(alert?.alert_repeat_secs)?.repeat,
+              },
+            },
+          })
+        }
+        /* for collateral buffer alert */
+         if(alert?.alert_type === "Collateral")
+          bufferAlertDispatch({
+            type: "ADD_ALERT",
+            alert: {
+              id: alert.id,
+              alertMethods: {
+                email: alert?.alert_email === 1 ? "email@rocko.com" : "",
+                sms: alert?.alert_phone === 1 ? "55.555.5555" : "",
+              },
+              currentCollateralBuffer: {
+                percentage: alert?.alert_threshold,
+                position: alert?.alert_metric,
+              },
+              frequency: {
+                interval: getFrequencyObject(alert?.alert_repeat_secs)?.interval,
+                repeat: getFrequencyObject(alert?.alert_repeat_secs)?.repeat,
+              },
+            },
+          })
+        })     
+    }
+  }
+  
+  const OnManageAlerts = async () => {
+    setOpenModalFor(`manage-${title}`);
+    await getAlerts();
+  }
 
   return (
     <>
@@ -54,9 +138,7 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
         </div>
         <div className="flex  items-center gap-8">
           <button
-            onClick={() => {
-              setOpenModalFor(`manage-${title}`);
-            }}
+            onClick={() => { OnManageAlerts() }}
             type="button"
             className="text-[#2C3B8D] text-xs font-semibold py-2 px-3 bg-[#EEE] rounded-full"
           >
@@ -94,6 +176,7 @@ const Alert: FC<Props> = ({ title, description, alertFor }) => {
             <CollateralBufferAlerts
               setOpenModalFor={setOpenModalFor}
               title={title}
+              loanId={loanId}
               description={description}
               alertFor={alertFor}
               toggleAlert={!openModalFor.startsWith("manage")}

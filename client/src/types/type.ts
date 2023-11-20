@@ -7,6 +7,7 @@ import {
   UPDATE_ALERT_TYPE,
   UPDATE_FREQUENCY,
   UPDATE_INTEREST_RATE,
+  CLEAR_ALERT
 } from "@/constant/constant";
 import { Dispatch, SetStateAction } from "react";
 
@@ -146,6 +147,7 @@ export interface ContextValues {
 
 // arp alert
 export interface AprAlertType {
+  id: number;
   alertMethods: {
     email?: string;
     sms?: string;
@@ -163,6 +165,7 @@ export interface AprAlertType {
 }
 
 export interface BufferAlertType {
+  id: number;
   alertMethods: {
     email?: string;
     sms?: string;
@@ -191,16 +194,20 @@ export type AprAlertAction =
   | { type: typeof ADD_ALERT; alert: AprAlertType }
   | { type: typeof UPDATE_ALERT; alert: AprAlertType; index: number }
   | { type: typeof DELETE_ALERT; index: number }
-  | { type: typeof ALERT_OFF };
+  | { type: typeof ALERT_OFF }
+  | { type: typeof CLEAR_ALERT };
+  
 
 export type BufferAlertAction =
   | { type: typeof ADD_ALERT; alert: BufferAlertType }
   | { type: typeof UPDATE_ALERT; alert: BufferAlertType; index: number }
   | { type: typeof DELETE_ALERT; index: number }
-  | { type: typeof ALERT_OFF };
+  | { type: typeof ALERT_OFF }
+  | { type: typeof CLEAR_ALERT };
 
 export interface AlertFormProps {
   setOpenModalFor: Function;
+  loanId: number;
   title: string;
   description: string;
   setNext: Function;

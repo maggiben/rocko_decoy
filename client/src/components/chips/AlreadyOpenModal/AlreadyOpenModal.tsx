@@ -18,7 +18,7 @@ const AlreadyOpenModal = ({
 
     const onReturn = () => {
         setOpenModalFor("");
-        router.push("/loan-dashboard");
+        router.push("/loan-dashboard/1?active=true");
     }
 
     return (
@@ -26,7 +26,7 @@ const AlreadyOpenModal = ({
         <div className="flex items-start justify-between gap-2 ">
         <h4 className="text-2xl font-semibold font-inter">You already have an open loan</h4>
         {/* close button start */}
-        {/* <div>
+        <div>
             <button
             onClick={() => setOpenModalFor("")}
             className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
@@ -39,7 +39,7 @@ const AlreadyOpenModal = ({
                 className="w-full"
             />
             </button>
-        </div> */}
+        </div>
         {/* close button end */}
         </div>
         {/* select option */}

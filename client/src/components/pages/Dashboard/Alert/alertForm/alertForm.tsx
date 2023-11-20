@@ -8,6 +8,7 @@ import Image from "next/image";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { AlertFormProps, AprAlertType, BufferAlertType } from "@/types/type";
 import SelectOptionTwo from "../collateralBufferAlerts/selectOption/SelectOptionTwo";
+import { useAlertDB } from "@/db/alertDb";
 import { useAlert } from "@/context/alertContext/alertContext";
 import Link from "next/link";
 import { UPDATE_ALERT } from "@/constant/constant";
@@ -18,6 +19,7 @@ interface Checked {
 }
 
 const AlertForm: FC<AlertFormProps> = ({
+  loanId,
   description,
   setOpenModalFor,
   title,
@@ -27,6 +29,7 @@ const AlertForm: FC<AlertFormProps> = ({
   forUpdate,
   updateIndex,
 }) => {
+  const { addAlert, updateAlert } = useAlertDB();
   const {
     aprAlertDispatch,
     aprAlertState,
@@ -36,6 +39,7 @@ const AlertForm: FC<AlertFormProps> = ({
 
   const [collateralBufferAlert, setCollateralBufferAlert] =
     useState<BufferAlertType>({
+      id: forUpdate ? forUpdate?.id : bufferAlertState.length + 1,
       alertMethods: {
         email: forUpdate ? forUpdate.alertMethods.email : "",
         sms: forUpdate ? forUpdate.alertMethods.sms : "",
@@ -170,11 +174,20 @@ const AlertForm: FC<AlertFormProps> = ({
 
   const handleCollateralForm = () => {
     console.log(collateralBufferAlert);
+    console.log("forupdate---", forUpdate);
+    // add alert to db
+    if (!forUpdate) {
+      addAlert(alertFor, loanId, collateralBufferAlert);
+    } else {
+      updateAlert(forUpdate?.id, collateralBufferAlert, 1)
+    }
+
     if (forUpdate && alertFor === "APR") {
       aprAlertDispatch({
         type: UPDATE_ALERT,
         index: updateIndex as number,
         alert: {
+          id: forUpdate?.id,
           alertMethods: {
             email: collateralBufferAlert?.alertMethods?.email,
             sms: collateralBufferAlert?.alertMethods?.sms,
@@ -197,6 +210,7 @@ const AlertForm: FC<AlertFormProps> = ({
         type: UPDATE_ALERT,
         index: updateIndex as number,
         alert: {
+          id: forUpdate?.id,
           alertMethods: {
             email: collateralBufferAlert?.alertMethods?.email,
             sms: collateralBufferAlert?.alertMethods?.sms,
@@ -220,6 +234,7 @@ const AlertForm: FC<AlertFormProps> = ({
       aprAlertDispatch({
         type: "ADD_ALERT",
         alert: {
+          id: aprAlertState.length + 1,
           alertMethods: {
             email: collateralBufferAlert?.alertMethods?.email,
             sms: collateralBufferAlert?.alertMethods?.sms,
@@ -239,6 +254,7 @@ const AlertForm: FC<AlertFormProps> = ({
       bufferAlertDispatch({
         type: "ADD_ALERT",
         alert: {
+          id: bufferAlertState.length + 1,
           alertMethods: {
             email: collateralBufferAlert?.alertMethods?.email,
             sms: collateralBufferAlert?.alertMethods?.sms,
@@ -555,7 +571,7 @@ const AlertForm: FC<AlertFormProps> = ({
           <p className="text-sm">
             {/* //todo: For now it doesn’t need to link anywhere */}
             Your email and phone number can be updated via your{" "}
-            <Link href={"#"} className="underline">
+            <Link href={"/profile"} className="underline">
               profile page{" "}
             </Link>
             which is located in the top right corner
