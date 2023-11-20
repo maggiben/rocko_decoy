@@ -10,11 +10,11 @@ import {
   WhatsappShareButton,
   TelegramShareButton,
 } from 'react-share'
-import fb_icon from '../../images/fb-icon.svg'
-import x_icon from '../../images/x-icon.svg'
-import linkedin_icon from '../../images/linkedin-icon.svg'
-import whatsapp_icon from '../../images/whatsapp-icon.svg'
-import telegram_icon from '../../images/telegram-svgrepo-com.svg'
+import fbIcon from '../../images/fb-icon.svg'
+import xIcon from '../../images/x-icon.svg'
+import linkedinIcon from '../../images/linkedin-icon.svg'
+import whatsappIcon from '../../images/whatsapp-icon.svg'
+import telegramIcon from '../../images/telegram-svgrepo-com.svg'
 
 import LatestPosts from '../../components/HomeBlogs/LatestPosts'
 import Subscribe from '../../components/Subscribe/Subscribe'
@@ -35,7 +35,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <FacebookShareButton url={shareUrl}>
-            <img src={fb_icon} alt="social-icon" height={16} width={16} />
+            <img src={fbIcon} alt="social-icon" height={16} width={16} />
           </FacebookShareButton>
         </div>
       ),
@@ -44,7 +44,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <TwitterShareButton url={shareUrl}>
-            <img src={x_icon} alt="social-icon" height={16} width={16} />
+            <img src={xIcon} alt="social-icon" height={16} width={16} />
           </TwitterShareButton>
         </div>
       ),
@@ -53,7 +53,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <LinkedinShareButton url={shareUrl}>
-            <img src={linkedin_icon} alt="social-icon" height={16} width={16} />
+            <img src={linkedinIcon} alt="social-icon" height={16} width={16} />
           </LinkedinShareButton>
         </div>
       ),
@@ -62,7 +62,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <TelegramShareButton url={shareUrl}>
-            <img src={telegram_icon} alt="social-icon" height={16} width={16} />
+            <img src={telegramIcon} alt="social-icon" height={16} width={16} />
           </TelegramShareButton>
         </div>
       ),
@@ -71,7 +71,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className=" md:!hidden  !h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center ">
           <WhatsappShareButton url={shareUrl}>
-            <img src={whatsapp_icon} alt="social-icon" height={16} width={16} />
+            <img src={whatsappIcon} alt="social-icon" height={16} width={16} />
           </WhatsappShareButton>
         </div>
       ),
@@ -108,9 +108,9 @@ function SingleBlog({ data }) {
             <p className="!text-sm !pr-4 !border-r-[1px] !border-[#E2E2E2] !mr-4 !text-black">
               Share
             </p>
-            {socialIcons.map(({ Icon }, i) => (
-              <>{Icon}</>
-            ))}
+            {socialIcons.map(({ Icon }) => {
+              Icon
+            })}
             {/* copy to clipboard button */}
             <button
               className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center"
@@ -181,11 +181,11 @@ function SingleBlog({ data }) {
           />
           {/* //!Article Tags Section Start */}
           <div className="article_tags_container">
-            {post?.frontmatter?.tags.map((tag, i) => {
+            {post?.frontmatter?.tags.map((tag) => {
               const hash = slugify(tag)
               return (
                 <Link
-                  key={i}
+                  key={hash}
                   to={`/learn/#${hash}`}
                   className="!py-[10px] !px-6 !rounded-3xl !border-[1px] !border-[#E2E2E2] !font-[500] !text-sm !text-black !bg-[#EEE]"
                 >
@@ -234,7 +234,7 @@ function SingleBlog({ data }) {
           <p className="single_blog_p">
             Join{' '}
             <Link to="https://rocko.co" className="underline italic">
-              Rocko’s waitlist
+              Rocko's waitlist
             </Link>{' '}
             today and be the first to be notified when they launch! You can also
             learn more on Rocko's homepage.
