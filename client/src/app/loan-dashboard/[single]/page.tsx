@@ -176,20 +176,37 @@ function SinglePage() {
           <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6">
             <h1 className="text-xl mb-4 font-medium">Current Balance</h1>
             <div className="divide-y-2 space-y-4">
-              <div className="flex justify-between items-center">
-                <p className="text-2xl  font-medium">
-                  {financial(borrowBalanceOf, 6)} <small>USDC</small>
-                  <span className="block text-sm text-[#545454]">
-                    ${financial(borrowBalanceOf, 2)}
+              <div className="flex justify-between flex-wrap gap-1 md:gap-0 pt-4">
+                <div className="w-[30%]">
+                  <p className="text-2xl  font-medium">
+                    {financial(borrowBalanceOf, 6)} <small>USDC</small>
+                    <span className="block text-sm text-[#545454]">
+                      ${financial(borrowBalanceOf, 2)}
+                    </span>
+                  </p>
+                </div>
+                <div className="w-[30%]">
+                  <p className=""> Available to Borrow </p>
+                  <span className="block text-xl  font-medium">
+                   {financial(collateralPrice * collateralBalanceOf * LTV - borrowBalanceOf, 6)} <small>USDC</small>
                   </span>
-                </p>
-                <Image
+                </div>         
+                <div className="w-[30%]">
+                  <div className="flex items-center gap-2 ">
+                    <p className=""> Current LTV </p>
+                    <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
+                  </div>
+                  <span className="block text-xl  font-medium">
+                   {financial(borrowBalanceOf / collateralPrice * collateralBalanceOf * 100)}<small>%</small>
+                  </span>
+                </div>                         
+                {/* <Image
                   width={24}
                   height={24}
                   src={usdc}
                   alt=""
                   className="w-6 h-6"
-                />
+                /> */}
               </div>
               <div className="flex justify-between flex-wrap gap-1 md:gap-0 pt-4">
                 <div className="w-[30%]">
