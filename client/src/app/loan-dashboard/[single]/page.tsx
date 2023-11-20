@@ -43,6 +43,7 @@ function SinglePage() {
   const searchParams = useSearchParams();
   const loanIndex = Number(params.single);
   const isActive = searchParams.get('active');
+  const isBorrowMore = searchParams.get('borrow-more');
   const { userInfo } = useZeroDev();
 
   const [openModalFor, setOpenModalFor] = useState("");
@@ -90,6 +91,9 @@ function SinglePage() {
           console.log(avg_val)
           if (avg_val) setAverageAPR(avg_val);
         }
+
+        if (isBorrowMore)
+          setOpenModalFor("Borrow More");
       }
     }
   }

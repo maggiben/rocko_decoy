@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import toast from "react-hot-toast";
 import logo from "@/assets/logo.png";
 import user from "@/assets/images/user.png";
+import ModalContainer from "../ModalContainer/ModalContainer";
+import AlreadyOpenModal from "../AlreadyOpenModal/AlreadyOpenModal";
 import { useEffect, useState, useRef } from "react";
 import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
@@ -32,12 +34,13 @@ const Header = () => {
 
     const [toggle, setToggle] = useState(false);
     const [toggleDown, setToggleDown] = useState(false);
+    const [openModalFor, setOpenModalFor] = useState("");
 
     const { connect } = useConnect();
     const { disconnect } = useDisconnect();
     const { address, isConnected } = useAccount();
     const { userInfo } = useZeroDev();
-    const { getUserData, addUser, isVPN } = useLoanDB();
+    const { getUserData, addUser, isVPN, getLoanData } = useLoanDB();
     const [isUnavailable, setIsUnavailable] = useState(false);
 
     const OnLogin = async () => {
@@ -80,8 +83,17 @@ const Header = () => {
     useEffect(() => {
       if (userInfo) {
         getUserData(userInfo.email).then(async (res) => {
+          /* if user not exist */
           if (res && res.length === 0) {
             addUser(userInfo.idToken, userInfo.email, address as `0x${string}`, false);
+          } else {
+          /* if user exist */
+            const result = await getLoanData(userInfo?.email);
+            const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+            console.log(pathName)
+            if (active_loans?.length > 0 && pathName === "/") { /* if there is an active loan */
+              setOpenModalFor("Already Open");
+            }
           }
         });
       }
@@ -254,6 +266,15 @@ const Header = () => {
               </div>
             </div>
           )}
+        {openModalFor && openModalFor === "Already Open" && (
+          <>
+            <ModalContainer>
+              <AlreadyOpenModal
+                setOpenModalFor={setOpenModalFor}
+              />
+            </ModalContainer>
+          </>
+        )}          
         </nav>
     );
     
