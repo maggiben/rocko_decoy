@@ -158,7 +158,7 @@ function DepositingCollateral() {
   };
 
   useEffect(() => {
-    if (batchGetLoan != undefined && userInfo != undefined) {
+    if (batchGetLoan !== undefined && userInfo !== undefined) {
       setInitialParams();
       start();
     }

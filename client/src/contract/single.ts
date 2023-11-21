@@ -1,4 +1,4 @@
-import { Contract, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useAddress, useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
@@ -170,8 +170,8 @@ export const useSingleLoan = () => {
   ): Promise<number | string> => {
     if (
       typeof loan === 'undefined' ||
-      Number(loan) == 0 ||
-      Number(collateral) == 0
+      Number(loan) === 0 ||
+      Number(collateral) === 0
     )
       return 'N/A';
 
@@ -187,8 +187,8 @@ export const useSingleLoan = () => {
   ): Promise<number | string> => {
     if (
       typeof loan === 'undefined' ||
-      Number(loan) == 0 ||
-      Number(collateral) == 0
+      Number(loan) === 0 ||
+      Number(collateral) === 0
     )
       return 'N/A';
 
@@ -246,20 +246,23 @@ export const useSingleLoan = () => {
   };
 
   const depositZerodevAccount = async (
-    zerodevAccount: string,
+    zerodevDepositAccount: string,
     amount: number | string,
     currency: string,
   ) => {
-    if (!signer || !zerodevAccount || Number(amount) <= 0) return null;
+    if (!signer || !zerodevDepositAccount || Number(amount) <= 0) return null;
 
     const sdk = ThirdwebSDK.fromSigner(signer);
     try {
-      if (currency == 'ETH') {
-        const txResult = await sdk.wallet.transfer(zerodevAccount, amount);
+      if (currency === 'ETH') {
+        const txResult = await sdk.wallet.transfer(
+          zerodevDepositAccount,
+          amount,
+        );
         return txResult;
       }
       const txResult = await sdk.wallet.transfer(
-        zerodevAccount,
+        zerodevDepositAccount,
         amount,
         USDCContract[networkChainId],
       );

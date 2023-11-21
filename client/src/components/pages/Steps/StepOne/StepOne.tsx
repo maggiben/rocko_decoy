@@ -53,7 +53,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
 
   const initialize = () => {
     setSelectedCoin('USDC');
-    if (loanData?.borrowing != 0)
+    if (loanData?.borrowing !== 0)
       setValue('numberInput', financial(loanData?.borrowing), {
         shouldValidate: true,
       });

@@ -190,7 +190,7 @@ const Profile: React.FC = () => {
                     <div className="w-[38%] md:w-1/2 text-right md:text-right">
                       <div className="flex gap-1 justify-end md:justify-end">
                         <p>{info?.details}</p>
-                        {info?.description == 'Contact Email' && (
+                        {info?.description === 'Contact Email' && (
                           <Image
                             src={
                               !openContactEmailEditBox
@@ -207,7 +207,7 @@ const Profile: React.FC = () => {
                             }
                           />
                         )}
-                        {info?.description == 'Contact Number' && (
+                        {info?.description === 'Contact Number' && (
                           <Image
                             src={
                               !openContactNumberEdit
@@ -226,7 +226,7 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    {info?.description == 'Contact Email' &&
+                    {info?.description === 'Contact Email' &&
                       openContactEmailEditBox && (
                         <>
                           <input
@@ -264,7 +264,7 @@ const Profile: React.FC = () => {
                           </div>
                         </>
                       )}
-                    {info?.description == 'Contact Number' &&
+                    {info?.description === 'Contact Number' &&
                       openContactNumberEdit && (
                         <>
                           <input

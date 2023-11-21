@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import closeIcon from '@/assets/Close.svg';
 import ModalContent from '../ModalContent/ModalContent';

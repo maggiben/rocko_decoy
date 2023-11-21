@@ -31,7 +31,7 @@ function Processing() {
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   let currentBalance = parseFloat(router.get('balance') || '0');
   currentBalance +=
-    payment - currentBalance == Number(PAYMENT_BUFFER)
+    payment - currentBalance === Number(PAYMENT_BUFFER)
       ? Number(PAYMENT_BUFFER)
       : 0;
 
@@ -79,7 +79,7 @@ function Processing() {
     if (userInfo) {
       const borrowBalance = await getBorrowBalanceOf();
       setBorrowBalanceOf(borrowBalance);
-      if (originalborrowBalance == 0) {
+      if (originalborrowBalance === 0) {
         console.log(borrowBalance);
         setOriginalBorrowBalance(borrowBalance);
       }
@@ -90,7 +90,7 @@ function Processing() {
       const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter(
-          (loan: any) => loan.loan_active == 1,
+          (loan: any) => loan.loan_active === 1,
         );
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
@@ -178,10 +178,10 @@ function Processing() {
   useEffect(() => {
     if (
       !activeDoing &&
-      userInfo != undefined &&
+      userInfo !== undefined &&
       loanData &&
-      batchRepayFull != undefined &&
-      batchRepaySome != undefined
+      batchRepayFull !== undefined &&
+      batchRepaySome !== undefined
     ) {
       start();
       setActiveDoing(true);

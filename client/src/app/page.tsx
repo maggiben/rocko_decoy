@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   const nextStep = async () => {
-    if (!zerodevAccount && currentStep == 2) {
+    if (!zerodevAccount && currentStep === 2) {
       toast.error('Please log in to finalize your loan!');
       await loginZerodev();
       return;
@@ -67,7 +67,7 @@ export default function Home() {
       return;
     }
 
-    if (currentStep == loanSteps.length - 1) setIsFinalized(true);
+    if (currentStep === loanSteps.length - 1) setIsFinalized(true);
 
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
       setCurrentStep(currentStep + 1);
@@ -89,11 +89,11 @@ export default function Home() {
   const currentData = loanSteps[currentStep];
 
   const isValidateNextButton = () => {
-    if (currentStep == loanSteps.length - 1) {
+    if (currentStep === loanSteps.length - 1) {
       const isValidate =
         loanData?.paymentMethod === 'ethereum'
-          ? address != null
-          : loanData?.paymentMethod != '';
+          ? address !== null
+          : loanData?.paymentMethod !== '';
 
       return isValidate;
     }

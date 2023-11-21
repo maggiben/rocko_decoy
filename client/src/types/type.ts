@@ -1,15 +1,15 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import {
   ADD_ALERT,
   ALERT_OFF,
   DELETE_ALERT,
   UPDATE_ALERT,
-  UPDATE_ALERT_METHOD,
-  UPDATE_ALERT_TYPE,
-  UPDATE_FREQUENCY,
-  UPDATE_INTEREST_RATE,
+  // UPDATE_ALERT_METHOD,
+  // UPDATE_ALERT_TYPE,
+  // UPDATE_FREQUENCY,
+  // UPDATE_INTEREST_RATE,
   CLEAR_ALERT,
 } from '@/constant/constant';
-import { Dispatch, SetStateAction } from 'react';
 
 export interface CoinCardProps {
   coinIcon: string;
@@ -183,13 +183,6 @@ export interface BufferAlertType {
   };
 }
 
-export interface AlertContextValues {
-  aprAlertState: AprAlertType[];
-  bufferAlertState: BufferAlertType[];
-  aprAlertDispatch: Dispatch<AprAlertAction>;
-  bufferAlertDispatch: Dispatch<BufferAlertAction>;
-}
-
 export type AprAlertAction =
   | { type: typeof ADD_ALERT; alert: AprAlertType }
   | { type: typeof UPDATE_ALERT; alert: AprAlertType; index: number }
@@ -203,6 +196,12 @@ export type BufferAlertAction =
   | { type: typeof DELETE_ALERT; index: number }
   | { type: typeof ALERT_OFF }
   | { type: typeof CLEAR_ALERT };
+export interface AlertContextValues {
+  aprAlertState: AprAlertType[];
+  bufferAlertState: BufferAlertType[];
+  aprAlertDispatch: Dispatch<AprAlertAction>;
+  bufferAlertDispatch: Dispatch<BufferAlertAction>;
+}
 
 export interface AlertFormProps {
   setOpenModalFor: Function;

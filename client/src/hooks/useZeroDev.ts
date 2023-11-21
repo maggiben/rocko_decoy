@@ -1,5 +1,5 @@
 import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export const useZeroDev = () => {

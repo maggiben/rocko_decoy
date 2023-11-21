@@ -36,7 +36,7 @@ function Unavailable() {
   return (
     <main className="container mx-auto px-4 lg:py-10 flex justify-center">
       <div className="bg-gray-100 rounded-lg p-8 pb-24 max-w-md w-full mt-[8%]">
-        {reason == 'region' ? (
+        {reason === 'region' ? (
           <>
             {alert.region.title}
             {alert.region.content}

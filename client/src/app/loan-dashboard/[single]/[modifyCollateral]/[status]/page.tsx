@@ -137,7 +137,7 @@ function ModifyStatus() {
       const result = await getLoanData(userInfo.email);
       if (result) {
         const active_loans = result.filter(
-          (loan: any) => loan.loan_active == 1,
+          (loan: any) => loan.loan_active === 1,
         );
         if (active_loans.length > 0) setLoanData(active_loans[0]);
       }
@@ -158,8 +158,8 @@ function ModifyStatus() {
   useEffect(() => {
     if (
       loanData &&
-      batchAddCollateral != undefined &&
-      batchBorrowCollateral != undefined
+      batchAddCollateral !== undefined &&
+      batchBorrowCollateral !== undefined
     )
       start();
 

@@ -1,5 +1,5 @@
 /* global BigInt */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAccount, useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
 import { parseBalance, getRoundDown } from '@/utility/utils';

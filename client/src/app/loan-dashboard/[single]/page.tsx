@@ -86,7 +86,7 @@ function SinglePage() {
       const result = await getLoanData(userInfo?.email);
       if (result) {
         const active_loans = result.filter(
-          (loan: any) => loan.loan_active == (isActive ? 1 : 0),
+          (loan: any) => loan.loan_active === (isActive ? 1 : 0),
         );
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
@@ -337,7 +337,7 @@ function SinglePage() {
             >
               Liquidation Price{' '}
               <span className="block text-center text-[#141414]">
-                {liquidationPrice == 'N/A'
+                {liquidationPrice === 'N/A'
                   ? 'N/A'
                   : `$${financial(liquidationPrice, 2)}`}
               </span>
@@ -391,7 +391,7 @@ function SinglePage() {
             <div className="flex pt-3 gap-x-2">
               <p className="w-1/2 font-medium">Liquidation Price</p>
               <p>
-                {liquidationPrice == 'N/A'
+                {liquidationPrice === 'N/A'
                   ? 'N/A'
                   : `$${financial(liquidationPrice, 2)}`}
               </p>
@@ -399,7 +399,9 @@ function SinglePage() {
             <div>
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
-                <p>{buffer == 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}</p>
+                <p>
+                  {buffer === 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}
+                </p>
               </div>
               {/* //!alert start */}
               <Alert

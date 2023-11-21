@@ -3,7 +3,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { FC, useEffect, useState } from 'react';
+import React, { JSX, FC, useEffect, useState } from 'react';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
@@ -171,7 +171,7 @@ const MakePayment: FC = () => {
           description: 'Liquidation Price (ETH)',
           details: (
             <span className="font-semibold text-sm">
-              {liquidationPrice == 'N/A'
+              {liquidationPrice === 'N/A'
                 ? 'N/A'
                 : `$${financial(liquidationPrice, 2)}`}
             </span>

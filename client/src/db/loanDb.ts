@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BACKEND_URL } from '@/constants/env';
-import { publicIp, publicIpv4, publicIpv6 } from 'public-ip';
+import { publicIp } from 'public-ip';
 
 export const useLoanDB = () => {
   const finalizeLoan = (
