@@ -29,7 +29,7 @@ interface Info {
 }
 
 interface Term {
-  rule: JSX.Element;
+  rule: React.JSX.Element;
 }
 
 const terms: Term[] = [
