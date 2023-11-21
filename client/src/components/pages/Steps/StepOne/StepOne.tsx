@@ -1,29 +1,30 @@
-"use client";
-import Link from "next/link";
-import { ChangeEvent, FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
-import CoinCard from "@/components/chips/CoinCard/CoinCard";
-import useLoanData from "@/hooks/useLoanData";
-import financial from "@/utility/currencyFormate";
-import { CurrencyStep } from "@/types/type";
-import usdc from "@/assets/coins/USD Coin (USDC).svg";
-import { useSingleLoan } from "@/contract/single";
+'use client';
+
+import Link from 'next/link';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
+import CoinCard from '@/components/chips/CoinCard/CoinCard';
+import useLoanData from '@/hooks/useLoanData';
+import financial from '@/utility/currencyFormate';
+import { CurrencyStep } from '@/types/type';
+import usdc from '@/assets/coins/USD Coin (USDC).svg';
+import { useSingleLoan } from '@/contract/single';
 
 interface FormData {
   numberInput: string;
 }
 
 const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
-  const [selectedCoin, setSelectedCoin] = useState("");
+  const [selectedCoin, setSelectedCoin] = useState('');
   const [activeInputField, setActiveInputField] = useState(true);
   const {
     register,
     formState: { errors, isLoading, isValid, isValidating },
     setValue,
-    getValues
+    getValues,
     // TODO figure out why onBlur isnt working
-  } = useForm<FormData>({mode: "onBlur"});
+  } = useForm<FormData>({ mode: 'onBlur' });
 
   const { loanData, setLoanData } = useLoanData();
   const {
@@ -33,69 +34,66 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     getPenalty,
     getThreshold,
     getRewardRate,
-    getRewardAmount
+    getRewardAmount,
   } = useSingleLoan();
 
   const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    const num = inputValue === "" ? 0 : parseFloat(inputValue.replace(/,/g, ''));
-    setValue("numberInput", financial(num), { shouldValidate: true });
+    const num =
+      inputValue === '' ? 0 : parseFloat(inputValue.replace(/,/g, ''));
+    setValue('numberInput', financial(num), { shouldValidate: true });
 
     if (setLoanData) {
-      setLoanData((prevLoanData) => {
-        return {
-          ...prevLoanData,
-          borrowing: (num || 0),
-        };
-      });
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        borrowing: num || 0,
+      }));
     }
   };
 
   const initialize = () => {
-    setSelectedCoin("USDC");
+    setSelectedCoin('USDC');
     if (loanData?.borrowing != 0)
-      setValue("numberInput", financial(loanData?.borrowing), { shouldValidate: true });
+      setValue('numberInput', financial(loanData?.borrowing), {
+        shouldValidate: true,
+      });
 
     if (setLoanData) {
-      setLoanData((prevLoanData) => {
-        return {
-          ...prevLoanData,
-          coin: "USDC",
-          currentAPR: 0,
-          coinIcon: usdc,
-        };
-      });
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        coin: 'USDC',
+        currentAPR: 0,
+        coinIcon: usdc,
+      }));
     }
   };
 
   const updateLoanData = async () => {
     try {
-        const currentPrice = await getETHPrice();
-        const currentAPR = await getBorrowAPR();
-        const loanToValue = await getLTV();
-        const penalty = await getPenalty();
-        const threshold = await getThreshold();
-        const rewardRate = await getRewardRate();
-        const rewardAmount = await getRewardAmount();
+      const currentPrice = await getETHPrice();
+      const currentAPR = await getBorrowAPR();
+      const loanToValue = await getLTV();
+      const penalty = await getPenalty();
+      const threshold = await getThreshold();
+      const rewardRate = await getRewardRate();
+      const rewardAmount = await getRewardAmount();
 
-        if (setLoanData) {
-            setLoanData((prevLoanData) => {
-                return {
-                    ...prevLoanData,
-                    collateralPrice: currentPrice,
-                    currentAPR: currentAPR,
-                    loanToValue: loanToValue,
-                    liquidationPenalty: penalty,
-                    liquidationThreshold: threshold,
-                    rewardRate: rewardRate,
-                    rewardAmount: rewardAmount,
-                }
-            })
-        }
-    } catch(e) {
-        console.log({e}, 'Cannot update loan data')
+      if (setLoanData) {
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          collateralPrice: currentPrice,
+          currentAPR,
+          loanToValue,
+          liquidationPenalty: penalty,
+          liquidationThreshold: threshold,
+          rewardRate,
+          rewardAmount,
+        }));
+      }
+    } catch (e) {
+      console.log({ e }, 'Cannot update loan data');
     }
-  }
+  };
 
   useEffect(() => {
     updateLoanData();
@@ -103,44 +101,44 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   }, []);
 
   useEffect(() => {
-    const inputElement = document.getElementById("numberField");
+    const inputElement = document.getElementById('numberField');
     if (inputElement) {
       inputElement.focus();
-    };
+    }
 
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelect = (info: any) => {
-    console.log(info)
+    console.log(info);
     setSelectedCoin(info.coinShortName);
     // when select coin then can type value
     setActiveInputField(true);
 
     if (setLoanData) {
-      setLoanData((prevLoanData) => {
-        return {
-          ...prevLoanData,
-          coin: info.coinShortName,
-          currentAPR: parseFloat(info.currentAPR),
-          coinIcon: info.coinIcon,
-        };
-      });
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        coin: info.coinShortName,
+        currentAPR: parseFloat(info.currentAPR),
+        coinIcon: info.coinIcon,
+      }));
     }
   };
 
   useEffect(() => {
-    const borrowingValue = getValues("numberInput");
+    const borrowingValue = getValues('numberInput');
 
     if (setLoanData) {
-      setLoanData((prevLoanData) => {
-        return {
-          ...prevLoanData,
-          activeNextButton: true,
-          nextValidation: borrowingValue ? (errors.numberInput ? errors.numberInput.message : "") : "defaultError",
-        };
-      });
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        activeNextButton: true,
+        nextValidation: borrowingValue
+          ? errors.numberInput
+            ? errors.numberInput.message
+            : ''
+          : 'defaultError',
+      }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors, isValid]);
@@ -165,9 +163,9 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                 // <div key={singleCurrency.id} className="max-w-[200px] flex-1">
                 <CoinCard
                   key={singleCurrency.id}
-                  coinIcon={singleCurrency.symbol || ""}
-                  coinShortName={singleCurrency.name || ""}
-                  coinName={singleCurrency.fullName || ""}
+                  coinIcon={singleCurrency.symbol || ''}
+                  coinShortName={singleCurrency.name || ''}
+                  coinName={singleCurrency.fullName || ''}
                   selectedCoin={selectedCoin}
                   handleSelect={handleSelect}
                   currentAPR={singleCurrency.currentAPR}
@@ -182,18 +180,18 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               </p>
               <div className="flex items-center justify-start gap-4 p-4 rounded-[10px] border border-[#E6E6E6] max-w-[310px] w-full bg-white ">
                 <input
-                  {...register("numberInput", {
-                    required: "Number is required",
+                  {...register('numberInput', {
+                    required: 'Number is required',
                     validate: (value) => {
-                      const num = parseFloat(value.replace(/,/g, ''))
+                      const num = parseFloat(value.replace(/,/g, ''));
                       if (isNaN(num)) {
-                        return "Invalid number";
+                        return 'Invalid number';
                       }
                       if (num < 100) {
-                        return "Number must be at least 100";
+                        return 'Number must be at least 100';
                       }
                       if (num > 10000000) {
-                        return "Maximum amount is 10,000,000";
+                        return 'Maximum amount is 10,000,000';
                       }
                       return true;
                     },
@@ -202,7 +200,10 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                   id="numberField"
                   min={1}
                   onKeyDown={(event) => {
-                    if (!/^\d$/.test(event.key) && !/^Control|Tab|Arrow|Backspace|Delete$/.test(event.key)) {
+                    if (
+                      !/^\d$/.test(event.key) &&
+                      !/^Control|Tab|Arrow|Backspace|Delete$/.test(event.key)
+                    ) {
                       event.preventDefault();
                     }
                   }}
@@ -221,8 +222,11 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
             </div>
             <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
               <p className="text-sm text-blackSecondary">
-                USD is only available for U.S. Coinbase users at this time. If you do not have a Coinbase account, you can receive USDC (a USD-backed stablecoin with a 1:1 value) and convert it into USD on many U.S. crypto exchanges.{" "}
-                <Link href={"/"} className="underline">
+                USD is only available for U.S. Coinbase users at this time. If
+                you do not have a Coinbase account, you can receive USDC (a
+                USD-backed stablecoin with a 1:1 value) and convert it into USD
+                on many U.S. crypto exchanges.{' '}
+                <Link href="/" className="underline">
                   Learn more.
                 </Link>
               </p>
@@ -234,7 +238,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         </div>
       </section>
     </main>
-  );  
-}
+  );
+};
 
 export default StepOne;

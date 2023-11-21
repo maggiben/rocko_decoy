@@ -1,17 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import StatusWarning from "@/assets/StatusWarning.svg";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import ChooseWallet from "@/components/chips/ChooseWallet/ChooseWallet";
-import correct from "@/assets/correct.svg";
-import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
-import { useAccount } from "wagmi";
-import { useSingleLoan } from "@/contract/single";
-import financial from "@/utility/currencyFormate";
+
+'use client';
+
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import StatusWarning from '@/assets/StatusWarning.svg';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
+import correct from '@/assets/correct.svg';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useAddress, ConnectWallet } from '@thirdweb-dev/react';
+import { useAccount } from 'wagmi';
+import { useSingleLoan } from '@/contract/single';
+import financial from '@/utility/currencyFormate';
 
 interface InnerInfo {
   description: string;
@@ -44,54 +46,53 @@ const terms: Term[] = [
 ];
 
 const ModifyCollateral: React.FC = () => {
-  const [paymentMethod, setPaymentMethod] = useState(""); //! capture which payment method or radio btn a user will select
-  const [openModalFor, setOpenModalFor] = useState(""); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
+  const [paymentMethod, setPaymentMethod] = useState(''); //! capture which payment method or radio btn a user will select
+  const [openModalFor, setOpenModalFor] = useState(''); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
   const [collateralPrice, setCollateralPrice] = useState<number>(0);
 
   const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const amount = router.get("try"); //! get the URL parameter value
-  const loanIndex = parseFloat(basicRouter.single.toString() || "0");
-  const payment = parseFloat(router.get("payment") || "0"); //! get the URL parameter payment value
-  const basicCollateral = parseFloat(router.get("collateral") || "0");
-  const currentBalance = parseFloat(router.get("balance") || "0");
+  const amount = router.get('try'); //! get the URL parameter value
+  const loanIndex = parseFloat(basicRouter.single.toString() || '0');
+  const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
+  const basicCollateral = parseFloat(router.get('collateral') || '0');
+  const currentBalance = parseFloat(router.get('balance') || '0');
 
-  const new_collateral = amount === "add" ? 
-                basicCollateral + payment : 
-                basicCollateral - payment;
+  const new_collateral =
+    amount === 'add' ? basicCollateral + payment : basicCollateral - payment;
 
-  const { address : zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useAccount();
   const address = useAddress();
   const { getETHPrice, getLiquidationPrice, getBuffer } = useSingleLoan();
-  const [ liquidationPrice, setLiquidationPrice ] = useState<any>();
-  const [ buffer, setBuffer ] = useState<any>();
+  const [liquidationPrice, setLiquidationPrice] = useState<any>();
+  const [buffer, setBuffer] = useState<any>();
 
   const invoice: Info[] = [
     {
-      description: "Lending Protocol",
+      description: 'Lending Protocol',
       details: <span className="underline font-normal">Compound Finance</span>,
     },
     {
-      description: "Collateral Amount",
+      description: 'Collateral Amount',
       details: `${financial(payment, 18)} ETH`,
       subDetails: `~$${financial(payment * collateralPrice, 2)}`,
     },
     {
-      description: "Projected values after collateral modification",
+      description: 'Projected values after collateral modification',
       subDescription: [
         {
-          description: "Total Collateral",
+          description: 'Total Collateral',
           details: `${financial(new_collateral, 18)} ETH`,
           subDetails: `~$${financial(new_collateral * collateralPrice, 2)}`,
         },
         {
-          description: "Collateral Buffer",
+          description: 'Collateral Buffer',
           details: `${financial(buffer * 100)}%`,
         },
         {
-          description: "Liquidation Price (ETH)",
+          description: 'Liquidation Price (ETH)',
           details: `$${financial(liquidationPrice, 2)}`,
         },
       ],
@@ -100,22 +101,22 @@ const ModifyCollateral: React.FC = () => {
 
   useEffect(() => {
     getETHPrice()
-    .then(_price => setCollateralPrice(_price))
-    .catch(e => console.log(e));
+      .then((_price) => setCollateralPrice(_price))
+      .catch((e) => console.log(e));
 
     getLiquidationPrice(currentBalance, new_collateral)
-    .then(_price => setLiquidationPrice(_price))
-    .catch(e => console.log(e));
+      .then((_price) => setLiquidationPrice(_price))
+      .catch((e) => console.log(e));
 
     getBuffer(currentBalance, new_collateral)
-    .then(_buffer => setBuffer(_buffer))
-    .catch(e => console.log(e));    
+      .then((_buffer) => setBuffer(_buffer))
+      .catch((e) => console.log(e));
   });
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Modify Collateral</h1>
-      {amount === "add" ? (
+      {amount === 'add' ? (
         <p>
           You’re adding more <strong>ETH</strong> to your loan collateral
         </p>
@@ -137,9 +138,7 @@ const ModifyCollateral: React.FC = () => {
                     {info?.description}
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-left">
-                    <p className="font-semibold">
-                      {info?.details}
-                    </p>
+                    <p className="font-semibold">{info?.details}</p>
                     {info?.subDetails && (
                       <p className="text-sm text-gray-500">
                         {info?.subDetails}
@@ -154,7 +153,7 @@ const ModifyCollateral: React.FC = () => {
                         </div>
                         <div className="pt-1 md:pt-0 w-[35%] md:w-1/2 text-right md:text-left">
                           <p className="font-semibold text-sm">
-                           {innerInfo?.details}
+                            {innerInfo?.details}
                           </p>
                           {innerInfo?.subDetails && (
                             <p className="text-sm text-gray-500">
@@ -175,11 +174,11 @@ const ModifyCollateral: React.FC = () => {
       <section className="my-6">
         <div className="lg:max-w-4xl border-2 rounded-2xl p-3 lg:p-5">
           <h3 className="text-xl font-medium mb-6">
-            {amount === "add"
-              ? "Choose your funding source"
-              : "Where do you want to receive your collateral?"}
+            {amount === 'add'
+              ? 'Choose your funding source'
+              : 'Where do you want to receive your collateral?'}
           </h3>
-          {/* radio btn - 1 Container*/}
+          {/* radio btn - 1 Container */}
           <div className="md:flex justify-between mb-7">
             {/* radio btn - 1 */}
             <div className="flex md:items-center">
@@ -193,7 +192,7 @@ const ModifyCollateral: React.FC = () => {
               />
               <label htmlFor="wallet1" className="pl-4">
                 <p className="font-medium">
-                  Coinbase or Gemini Account{" "}
+                  Coinbase or Gemini Account{' '}
                   <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
                     Recommended
                   </span>
@@ -207,12 +206,12 @@ const ModifyCollateral: React.FC = () => {
               {/* based on the connect value toggling the buttons */}
               {connect ? (
                 <button
-                  onClick={() => setOpenModalFor("Coinbase or Gemini")}
-                  disabled={paymentMethod !== "default"}
+                  onClick={() => setOpenModalFor('Coinbase or Gemini')}
+                  disabled={paymentMethod !== 'default'}
                   className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
-                    paymentMethod === "default"
-                      ? "text-[#eee] bg-[#2C3B8D]"
-                      : "bg-[#eee] text-[#2C3B8D]"
+                    paymentMethod === 'default'
+                      ? 'text-[#eee] bg-[#2C3B8D]'
+                      : 'bg-[#eee] text-[#2C3B8D]'
                   }`}
                 >
                   Sign in
@@ -225,9 +224,9 @@ const ModifyCollateral: React.FC = () => {
               )}
             </div>
           </div>
-          {/* radio btn - 2 Container*/}
+          {/* radio btn - 2 Container */}
           <div className="md:flex justify-between mb-7">
-            {/* radio btn - 2*/}
+            {/* radio btn - 2 */}
             <div className="flex items-center">
               <input
                 type="radio"
@@ -249,15 +248,15 @@ const ModifyCollateral: React.FC = () => {
                 btnTitle="Connect"
                 theme="light"
                 style={{
-                  background: paymentMethod === "ethereum" ? "#2C3B8D" : "#eee",
-                  color: paymentMethod === "ethereum" ? "#eee" : "#2C3B8D",
-                  borderRadius: "1.5rem",
-                  minWidth: "8rem",
+                  background: paymentMethod === 'ethereum' ? '#2C3B8D' : '#eee',
+                  color: paymentMethod === 'ethereum' ? '#eee' : '#2C3B8D',
+                  borderRadius: '1.5rem',
+                  minWidth: '8rem',
                 }}
               />
             </div>
           </div>
-          {/* radio btn - 3*/}
+          {/* radio btn - 3 */}
           <div className="flex items-start mb-7">
             <input
               type="radio"
@@ -277,38 +276,36 @@ const ModifyCollateral: React.FC = () => {
                 </p>
               </label>
 
-              {/* if select other address then it will be active -- start*/}
-              {paymentMethod === "other" && (
-                <>
-                  <div className="">
-                    <p className="text-sm font-semibold font-inter mb-2">
-                      Enter Wallet Address
-                    </p>
-                    <div className="max-w-[426px] w-full">
-                      <input
-                        type="text"
-                        className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                      />
-                    </div>
-                    <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
-                      <Image
-                        src={StatusWarning}
-                        width={24}
-                        height={24}
-                        alt="warning"
-                      />
-                      <p className="text-sm font-inter text-[#010304]">
-                        Caution: Please ensure this address is correct as
-                        inputting an incorrect address could lead to lost funds.
-                      </p>
-                    </div>
+              {/* if select other address then it will be active -- start */}
+              {paymentMethod === 'other' && (
+                <div className="">
+                  <p className="text-sm font-semibold font-inter mb-2">
+                    Enter Wallet Address
+                  </p>
+                  <div className="max-w-[426px] w-full">
+                    <input
+                      type="text"
+                      className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                    />
                   </div>
-                </>
+                  <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
+                    <Image
+                      src={StatusWarning}
+                      width={24}
+                      height={24}
+                      alt="warning"
+                    />
+                    <p className="text-sm font-inter text-[#010304]">
+                      Caution: Please ensure this address is correct as
+                      inputting an incorrect address could lead to lost funds.
+                    </p>
+                  </div>
+                </div>
               )}
-              {/* if select other address then it will be active -- end*/}
+              {/* if select other address then it will be active -- end */}
             </div>
           </div>
-          {amount === "add" && (
+          {amount === 'add' && (
             <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
               <ul className="list-disc">
                 {terms.map((term, i) => (
@@ -321,12 +318,10 @@ const ModifyCollateral: React.FC = () => {
       </section>
       {/* ---------------------- Second Section End ------------------------ */}
       {/* ---------------------footer start------------------- */}
-      <div className="h-20 w-full"></div>
+      <div className="h-20 w-full" />
       <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
         <div className="bg-[#F7F7F7] h-1 w-full relative">
-          <div
-            className={`duration-500 bg-blue h-full absolute left-0 top-0 w-8/12`}
-          ></div>
+          <div className="duration-500 bg-blue h-full absolute left-0 top-0 w-8/12" />
         </div>
         <div className="container mx-auto">
           <div className="p-4">
@@ -342,11 +337,11 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${"modify_collateral"}/${amount}?payment=${payment}`}
+                href={`/loan-dashboard/${loanIndex}/${'modify_collateral'}/${amount}?payment=${payment}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${
-                    address && zerodevAccount ? "bg-blue" : "bg-blue/40"
+                    address && zerodevAccount ? 'bg-blue' : 'bg-blue/40'
                   } py-[10px]  px-6 rounded-full text-white `}
                   disabled={!address || !zerodevAccount}
                 >
@@ -359,18 +354,16 @@ const ModifyCollateral: React.FC = () => {
       </div>
       {/* //!---------------------footer end------------------- */}
       {/* //! If user select the first radio button and click "Sign in"  btn then chosseWallet popup/modal will show and passing modalStep,openModalFor&connet value to chooseWallet popup/modal [for mor details about the props look up where they're initialize] */}
-      {paymentMethod === "default" && openModalFor && (
-        <>
-          <ModalContainer>
-            {modalStep === 0 && (
-              <ChooseWallet
-                setModalStep={setModalStep}
-                setOpenModalFor={setOpenModalFor}
-                setConnect={setConnect}
-              />
-            )}
-          </ModalContainer>
-        </>
+      {paymentMethod === 'default' && openModalFor && (
+        <ModalContainer>
+          {modalStep === 0 && (
+            <ChooseWallet
+              setModalStep={setModalStep}
+              setOpenModalFor={setOpenModalFor}
+              setConnect={setConnect}
+            />
+          )}
+        </ModalContainer>
       )}
     </main>
   );

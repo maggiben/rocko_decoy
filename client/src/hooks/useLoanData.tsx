@@ -1,11 +1,7 @@
-import { loneContext } from "@/context/loanContext/loanContext"
-import { ContextValues } from "@/types/type"
-import { useContext } from "react"
+import { loneContext } from '@/context/loanContext/loanContext';
+import { ContextValues } from '@/types/type';
+import { useContext } from 'react';
 
+const useLoanData = (): ContextValues => useContext<ContextValues>(loneContext);
 
-
-const useLoanData = ():ContextValues => {
-    return useContext<ContextValues>(loneContext)
-}
-
-export default useLoanData
+export default useLoanData;

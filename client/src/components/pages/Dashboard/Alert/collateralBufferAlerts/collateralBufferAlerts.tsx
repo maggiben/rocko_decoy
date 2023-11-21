@@ -1,25 +1,25 @@
-import ModalContent from "@/components/chips/ModalContent/ModalContent";
-import { FiPlus } from "react-icons/fi";
-import { AiOutlineMail, AiOutlineRight } from "react-icons/ai";
-import Image from "next/image";
-import { FC, Fragment, useState } from "react";
-import closeIcon from "@/assets/Close.svg";
-import AlertForm from "../alertForm/alertForm";
-import { IoMdCall } from "react-icons/io";
-import notification from "@/assets/notifications_active.svg";
-import remove from "@/assets/delete.svg";
-import { useAlert } from "@/context/alertContext/alertContext";
-import { DELETE_ALERT } from "@/constant/constant";
-import { AprAlertType, BufferAlertType } from "@/types/type";
-import { sortAprAlert, sortBufferAlert } from "@/utility/sortAlert";
-import { useAlertDB } from "@/db/alertDb";
+import ModalContent from '@/components/chips/ModalContent/ModalContent';
+import { FiPlus } from 'react-icons/fi';
+import { AiOutlineMail, AiOutlineRight } from 'react-icons/ai';
+import Image from 'next/image';
+import { FC, Fragment, useState } from 'react';
+import closeIcon from '@/assets/Close.svg';
+import { IoMdCall } from 'react-icons/io';
+import notification from '@/assets/notifications_active.svg';
+import remove from '@/assets/delete.svg';
+import { useAlert } from '@/context/alertContext/alertContext';
+import { DELETE_ALERT } from '@/constant/constant';
+import { AprAlertType, BufferAlertType } from '@/types/type';
+import { sortAprAlert, sortBufferAlert } from '@/utility/sortAlert';
+import { useAlertDB } from '@/db/alertDb';
+import AlertForm from '../alertForm/alertForm';
 
 interface Props {
   setOpenModalFor: Function;
   title: string;
   loanId: number;
   description: string;
-  alertFor: "collateralBuffer" | "APR";
+  alertFor: 'collateralBuffer' | 'APR';
   toggleAlert?: boolean;
   setToggleAlert: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
@@ -44,37 +44,37 @@ const CollateralBufferAlerts: FC<Props> = ({
 
   const handleCloseButton = () => {
     setToggleAlert(
-      alertFor === "APR" && aprAlertState.length > 0
+      alertFor === 'APR' && aprAlertState.length > 0
         ? true
-        : alertFor === "collateralBuffer" && bufferAlertState.length > 0
-        ? true
-        : undefined
+        : alertFor === 'collateralBuffer' && bufferAlertState.length > 0
+          ? true
+          : undefined,
     );
-    setOpenModalFor("");
+    setOpenModalFor('');
   };
 
   const handleDelete = async (index: number, aprAlert: any) => {
     console.log(index, alertFor);
-    await deleteAlert(aprAlert?.id)
-    if (alertFor === "APR") {
-      aprAlertDispatch({ type: DELETE_ALERT, index: index });
+    await deleteAlert(aprAlert?.id);
+    if (alertFor === 'APR') {
+      aprAlertDispatch({ type: DELETE_ALERT, index });
     } else {
-      bufferAlertDispatch({ type: DELETE_ALERT, index: index });
+      bufferAlertDispatch({ type: DELETE_ALERT, index });
     }
   };
 
   const sortArpAlertState = sortAprAlert(aprAlertState);
   const sortBufferAlertState = sortBufferAlert(bufferAlertState);
 
-  console.log(sortArpAlertState, sortBufferAlertState)
-  
+  console.log(sortArpAlertState, sortBufferAlertState);
+
   const [forUpdate, setForUpdate] = useState<
     BufferAlertType | AprAlertType | undefined
   >();
   const [forUpdateIndex, setForUpdateIndex] = useState<number>();
   const handleForUpdate = (
     index: number,
-    alertType: BufferAlertType | AprAlertType
+    alertType: BufferAlertType | AprAlertType,
   ) => {
     setForUpdate(alertType);
     setForUpdateIndex(index);
@@ -124,7 +124,7 @@ const CollateralBufferAlerts: FC<Props> = ({
           {/* //!----------------------------------------------------------------- */}
           <div className="p-4 form-border rounded-2xl mb-6 h-full ">
             <div className="overflow-auto max-h-[45vh] alert-container">
-              {alertFor === "APR" &&
+              {alertFor === 'APR' &&
                 sortArpAlertState.length > 0 &&
                 sortArpAlertState.map((aprAlert, index) => (
                   <Fragment key={index}>
@@ -165,7 +165,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                               />
                               <p className="text-xs font-[500] whitespace-nowrap">
                                 {aprAlert.currentInterestRate.position ===
-                                "Above" ? (
+                                'Above' ? (
                                   <>&gt;</>
                                 ) : (
                                   <>&lt;</>
@@ -231,7 +231,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                               />
                               <p className="text-xs font-[500]  whitespace-nowrap">
                                 {aprAlert.currentInterestRate.position ===
-                                "Above" ? (
+                                'Above' ? (
                                   <>&gt;</>
                                 ) : (
                                   <>&lt;</>
@@ -263,7 +263,7 @@ const CollateralBufferAlerts: FC<Props> = ({
                     <hr className="my-4" />
                   </Fragment>
                 ))}
-              {alertFor === "collateralBuffer" &&
+              {alertFor === 'collateralBuffer' &&
                 sortBufferAlertState.length > 0 &&
                 sortBufferAlertState.map((bufferAlert, index) => (
                   <Fragment key={index}>
@@ -304,12 +304,13 @@ const CollateralBufferAlerts: FC<Props> = ({
                               />
                               <p className="text-xs font-[500] whitespace-nowrap">
                                 {bufferAlert.currentCollateralBuffer
-                                  .position === "Above" ? (
+                                  .position === 'Above' ? (
                                   <>&gt;</>
                                 ) : (
                                   <>&lt;</>
-                                )}{" "}
-                                {bufferAlert.currentCollateralBuffer.percentage}%
+                                )}{' '}
+                                {bufferAlert.currentCollateralBuffer.percentage}
+                                %
                               </p>
                             </div>
                             <div
@@ -369,12 +370,13 @@ const CollateralBufferAlerts: FC<Props> = ({
                               />
                               <p className="text-xs font-[500]  whitespace-nowrap">
                                 {bufferAlert.currentCollateralBuffer
-                                  .position === "Above" ? (
+                                  .position === 'Above' ? (
                                   <>&gt;</>
                                 ) : (
                                   <>&lt;</>
                                 )}
-                                {bufferAlert.currentCollateralBuffer.percentage}%
+                                {bufferAlert.currentCollateralBuffer.percentage}
+                                %
                               </p>
                             </div>
                             <div
@@ -423,7 +425,7 @@ const CollateralBufferAlerts: FC<Props> = ({
             <button
               // type="submit"
               onClick={handleCloseButton}
-              className={`py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]`}
+              className="py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]"
             >
               Done
             </button>

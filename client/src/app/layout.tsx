@@ -1,17 +1,17 @@
-import Header from "@/components/chips/Header/Header";
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import LoneProvider from "@/context/loanContext/loanContext";
-import AlertProvider from "@/context/alertContext/alertContext";
-import Providers from "./Providers";
+import Header from '@/components/chips/Header/Header';
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import LoneProvider from '@/context/loanContext/loanContext';
+import AlertProvider from '@/context/alertContext/alertContext';
 import { Toaster } from 'react-hot-toast';
+import Providers from './Providers';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Rocko",
-  description: "Rocko - Crypto backed loans",
+  title: 'Rocko',
+  description: 'Rocko - Crypto backed loans',
 };
 
 export default function RootLayout({
@@ -24,14 +24,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Header />
-          <Toaster position="bottom-right" reverseOrder={true} />
-        <LoneProvider>
-          <AlertProvider>{children}</AlertProvider>
-        </LoneProvider>
+          <Toaster position="bottom-right" reverseOrder />
+          <LoneProvider>
+            <AlertProvider>{children}</AlertProvider>
+          </LoneProvider>
         </Providers>
       </body>
     </html>
   );
 }
-
-

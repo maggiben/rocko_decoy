@@ -1,17 +1,18 @@
-"use client";
-import Link from "next/link";
-import { useState } from "react";
-import { AiFillEye } from "react-icons/ai";
-import { AiFillEyeInvisible } from "react-icons/ai";
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+
 // import google from "@/assets/google-icon 1.svg";
-import Image from "next/image";
+import Image from 'next/image';
 
 interface ShowPass {
   pass: boolean;
   confirmPass: boolean;
 }
 
-const Signup = () => {
+function Signup() {
   const [showPass, setShowPass] = useState<ShowPass>({
     pass: false,
     confirmPass: false,
@@ -60,7 +61,7 @@ const Signup = () => {
               Password
             </label>
             <input
-              type={showPass.pass ? "text" : "password"}
+              type={showPass.pass ? 'text' : 'password'}
               required
               placeholder="Type your password here..."
               id="password"
@@ -70,19 +71,13 @@ const Signup = () => {
               <AiFillEye
                 className="h-5 w-5 ml-auto mr-4 -mt-8 cursor-pointer"
                 onClick={() =>
-                  setShowPass((prev) => {
-                    return { ...prev, pass: false };
-                  })
+                  setShowPass((prev) => ({ ...prev, pass: false }))
                 }
               />
             ) : (
               <AiFillEyeInvisible
                 className="h-5 w-5 ml-auto mr-4 -mt-8 cursor-pointer"
-                onClick={() =>
-                  setShowPass((prev) => {
-                    return { ...prev, pass: true };
-                  })
-                }
+                onClick={() => setShowPass((prev) => ({ ...prev, pass: true }))}
               />
             )}
           </div>
@@ -96,7 +91,7 @@ const Signup = () => {
               Confirm Password
             </label>
             <input
-              type={showPass.confirmPass ? "text" : "password"}
+              type={showPass.confirmPass ? 'text' : 'password'}
               required
               placeholder="Confirm your password..."
               id="confirmpassword"
@@ -106,18 +101,14 @@ const Signup = () => {
               <AiFillEye
                 className="eye-icon"
                 onClick={() =>
-                  setShowPass((prev) => {
-                    return { ...prev, confirmPass: false };
-                  })
+                  setShowPass((prev) => ({ ...prev, confirmPass: false }))
                 }
               />
             ) : (
               <AiFillEyeInvisible
                 className="eye-icon"
                 onClick={() =>
-                  setShowPass((prev) => {
-                    return { ...prev, confirmPass: true };
-                  })
+                  setShowPass((prev) => ({ ...prev, confirmPass: true }))
                 }
               />
             )}
@@ -132,16 +123,16 @@ const Signup = () => {
           </button>
           {/* //!Button-end */}
           <p className="text-center">
-            Already have an account?{" "}
-            <Link href={"/auth/signin"} className="text-[#2C3B8D]">
+            Already have an account?{' '}
+            <Link href="/auth/signin" className="text-[#2C3B8D]">
               Login
             </Link>
           </p>
           {/* //!Divider-start */}
           <div className="flex items-center">
-            <div className="form-border w-full h-[1px]"></div>
+            <div className="form-border w-full h-[1px]" />
             <p className="px-3">OR</p>
-            <div className="form-border w-full h-[1px]"></div>
+            <div className="form-border w-full h-[1px]" />
           </div>
           {/* //!Divider-end */}
           {/* //!SocialBtn-start */}
@@ -154,6 +145,6 @@ const Signup = () => {
       </form>
     </main>
   );
-};
+}
 
 export default Signup;

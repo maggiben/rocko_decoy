@@ -1,30 +1,28 @@
-import { FC, useEffect, useState } from "react";
-import { ProtocolStep } from "@/types/type";
-import FilterOptions from "@/components/chips/FilterOptions/FilterOptions";
-import SortOptions from "@/components/chips/SortOptions/SortOptions";
-import Protocol from "@/components/chips/Protocol/Protocol";
-import CompoundProtocol from "@/components/chips/Protocol/CompoundProtocol";
-import useLoanData from "@/hooks/useLoanData";
-import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
+import { FC, useEffect, useState } from 'react';
+import { ProtocolStep } from '@/types/type';
+import FilterOptions from '@/components/chips/FilterOptions/FilterOptions';
+import SortOptions from '@/components/chips/SortOptions/SortOptions';
+import Protocol from '@/components/chips/Protocol/Protocol';
+import CompoundProtocol from '@/components/chips/Protocol/CompoundProtocol';
+import useLoanData from '@/hooks/useLoanData';
+import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
 
 type FilterOptionsProps = string;
 
 const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
   const { loanData, setLoanData } = useLoanData();
-  const [selectProtocol, setSelectProtocol] = useState("");
-  const [sortOption, setSortOption] = useState("APR (lowest)");
+  const [selectProtocol, setSelectProtocol] = useState('');
+  const [sortOption, setSortOption] = useState('APR (lowest)');
   const [filterOptions, setFilterOptions] = useState<FilterOptionsProps[]>([]);
 
   const initialize = () => {
-    if (loanData?.protocol !== "") {
-      setSelectProtocol(loanData?.protocol || "");
+    if (loanData?.protocol !== '') {
+      setSelectProtocol(loanData?.protocol || '');
       if (setLoanData) {
-        setLoanData((prevLoanData) => {
-          return {
-            ...prevLoanData,
-            activeNextButton:true,
-          }
-        });
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          activeNextButton: true,
+        }));
       }
     }
   };
@@ -116,13 +114,13 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
               {title}
             </p>
             <div className="divide-y-2 divide-[#E2E2E2]">
-              <CompoundProtocol 
+              <CompoundProtocol
                 interestRate={3.88}
                 name="Compound Finance"
                 symbol="/icons/Compound (COMP).svg"
                 handleProtocol={handleProtocol}
                 selectProtocol={selectProtocol}
-              />              
+              />
               {protocols?.map((protocol) => (
                 <Protocol
                   key={protocol.id}

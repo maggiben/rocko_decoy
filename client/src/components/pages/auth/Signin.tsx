@@ -1,12 +1,13 @@
-"use client";
-import Link from "next/link";
-import { useState } from "react";
-import { AiFillEye } from "react-icons/ai";
-import { AiFillEyeInvisible } from "react-icons/ai";
-// import google from "@/assets/google-icon 1.svg";
-import Image from "next/image";
+'use client';
 
-const Signin = () => {
+import Link from 'next/link';
+import { useState } from 'react';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+
+// import google from "@/assets/google-icon 1.svg";
+import Image from 'next/image';
+
+function Signin() {
   const [showPass, setShowPass] = useState<boolean>(false);
   return (
     <main className="auth flex justify-center items-center py-16 md:py-[74px] px-5 md:px-0 bg-[#F6F6F6]">
@@ -38,7 +39,7 @@ const Signin = () => {
               </Link>
             </div>
             <input
-              type={showPass ? "text" : "password"}
+              type={showPass ? 'text' : 'password'}
               required
               placeholder="Type your password here..."
               id="password"
@@ -66,16 +67,16 @@ const Signin = () => {
           </button>
           {/* //!Button-end */}
           <p className="text-center">
-            Don’t have an account?{" "}
-            <Link href={"/auth/signup"} className="text-[#2C3B8D]">
+            Don’t have an account?{' '}
+            <Link href="/auth/signup" className="text-[#2C3B8D]">
               Sign up
             </Link>
           </p>
           {/* //!Divider-start */}
           <div className="flex items-center">
-            <div className="form-border w-full h-[1px]"></div>
+            <div className="form-border w-full h-[1px]" />
             <p className="px-3">OR</p>
-            <div className="form-border w-full h-[1px]"></div>
+            <div className="form-border w-full h-[1px]" />
           </div>
           {/* //!Divider-end */}
           {/* //!SocialBtn-start */}
@@ -88,6 +89,6 @@ const Signin = () => {
       </form>
     </main>
   );
-};
+}
 
 export default Signin;

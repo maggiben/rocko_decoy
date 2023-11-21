@@ -1,19 +1,26 @@
-import { FC, ChangeEvent, FocusEvent, useState, useEffect, useRef } from "react";
-import { RiskStep } from "@/types/type";
-import Link from "next/link";
-import LoanSummary from "@/components/chips/LoanSummary/LoanSummary";
-import useLoanData from "@/hooks/useLoanData";
-import financial from "@/utility/currencyFormate";
+import {
+  FC,
+  ChangeEvent,
+  FocusEvent,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
+import { RiskStep } from '@/types/type';
+import Link from 'next/link';
+import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
+import useLoanData from '@/hooks/useLoanData';
+import financial from '@/utility/currencyFormate';
 
 const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
-  
+
   const [minimum, setMinimum] = useState<number>(0);
-  const {loanData,setLoanData} = useLoanData()
-  
+  const { loanData, setLoanData } = useLoanData();
+
   const valueDivRef = useRef<HTMLDivElement | null>(null);
 
   const initialize = () => {
@@ -23,17 +30,13 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     // for keeping status
     if (loanData?.buffer !== 0 && loanData?.buffer) {
       setValue(loanData?.buffer);
-      setThumbPosition(
-        (loanData?.buffer / 400) * 100
-      );
-    
+      setThumbPosition((loanData?.buffer / 400) * 100);
+
       if (setLoanData) {
-        setLoanData((prevLoanData) => {
-          return {
-            ...prevLoanData,
-            activeNextButton:true,
-          }
-        });
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          activeNextButton: true,
+        }));
       }
     }
   };
@@ -43,38 +46,41 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       const loanToValue: any = loanData?.loanToValue;
       const threshold: any = loanData?.liquidationThreshold;
       const ethPrice = loanData?.collateralPrice;
-      const collateralInUSD = loanData?.borrowing ? loanData?.borrowing / loanToValue * (1 + newBuffer / 100) : 0;
+      const collateralInUSD = loanData?.borrowing
+        ? (loanData?.borrowing / loanToValue) * (1 + newBuffer / 100)
+        : 0;
       const collateral = collateralInUSD / ethPrice;
-      const liquidationPrice = loanData?.borrowing ? loanData?.borrowing / threshold / collateral : 0;
-      
+      const liquidationPrice = loanData?.borrowing
+        ? loanData?.borrowing / threshold / collateral
+        : 0;
+
       if (setLoanData) {
-        setLoanData((prevLoanData) => {
-          return {
-              ...prevLoanData,
-              buffer: newBuffer,
-              collateralNeeded: collateral,
-              liquidationPrice: liquidationPrice,
-              activeNextButton: true,
-            }
-        })
+        setLoanData((prevLoanData) => ({
+          ...prevLoanData,
+          buffer: newBuffer,
+          collateralNeeded: collateral,
+          liquidationPrice,
+          activeNextButton: true,
+        }));
       }
     } catch (e) {
-        console.error({e}, "Cannot update loan buffer");
+      console.error({ e }, 'Cannot update loan buffer');
     }
-  }
+  };
 
-  const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const newValue = parseInt(event.target.value, 10);
     setValue(newValue);
     setCustomValue(newValue);
     setThumbPosition(
       ((newValue - parseInt(event.target.min, 10)) /
         (parseInt(event.target.max, 10) - parseInt(event.target.min, 10))) *
-        100
+        100,
     );
 
-    if(setLoanData)
-      await updateLoanData(newValue);
+    if (setLoanData) await updateLoanData(newValue);
   };
 
   const handleCustomInputBlur = (event: FocusEvent<HTMLInputElement>) => {
@@ -98,12 +104,14 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     setThumbPosition(
       ((newValue - parseInt(event.target.min, 10)) /
         (400 - parseInt(event.target.min, 10))) *
-        100
+        100,
     );
   };
-  const handleCustomInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCustomInputChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     console.log(event.target.value);
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       setCustomValue(undefined);
       return;
     }
@@ -121,17 +129,16 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       setValue(newValue);
     }
 
-    if(setLoanData)
-      await updateLoanData(newValue > 1000 ? 1000 : newValue);    
+    if (setLoanData) await updateLoanData(newValue > 1000 ? 1000 : newValue);
   };
 
-  const isEnd = thumbPosition === 100 ;
-    const adjustedThumbPosition = isEnd
-      ? thumbPosition - (valueDivWidth / 2)  // Subtract half of value div width
-      : thumbPosition;
+  const isEnd = thumbPosition === 100;
+  const adjustedThumbPosition = isEnd
+    ? thumbPosition - valueDivWidth / 2 // Subtract half of value div width
+    : thumbPosition;
 
   const valueDivStyle = {
-    left: `calc(${thumbPosition}% - ${80/2}px)`,
+    left: `calc(${thumbPosition}% - ${80 / 2}px)`,
   };
 
   useEffect(() => {
@@ -140,8 +147,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   }, []);
 
   useEffect(() => {
-    if (valueDivRef.current)
-      setValueDivWidth(valueDivRef.current.offsetWidth);
+    if (valueDivRef.current) setValueDivWidth(valueDivRef.current.offsetWidth);
   }, [value]);
 
   return (
@@ -161,13 +167,13 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
             </p>
             <p className=" text-sm font-medium mt-1 text-blackPrimary lg:text-start text-center">
               {subTitle}
-            </p>            
+            </p>
 
             <div className="flex items-center justify-between gap-1 md:gap-3 mt-20 md:mt-[144px]  py-4">
               <p className="text-sm md:text-base">Higher Risk</p>
 
               <div className="flex-1 flex items-start">
-                <div className="w-10 md:w-20 h-[6px]"></div>
+                <div className="w-10 md:w-20 h-[6px]" />
 
                 {/* fake bar space of right */}
                 <div className=" flex-1">
@@ -175,8 +181,8 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                   <div className="relative w-full">
                     {/* fake bar start */}
                     <div className="w-10 md:w-20 h-[6px] rounded-full bg-[#2C3B8D] mt-[3px] absolute top-1/2 -translate-y-1/2 right-[calc(100%-4px)]">
-                      <div className="frame h-3 w-3 bg-[#2C3B8D] rotate-180 absolute -top-2  -right-3"></div>
-                      <div className="frame h-3 w-3 bg-[#2C3B8D] absolute top-[2px] -right-3"></div>
+                      <div className="frame h-3 w-3 bg-[#2C3B8D] rotate-180 absolute -top-2  -right-3" />
+                      <div className="frame h-3 w-3 bg-[#2C3B8D] absolute top-[2px] -right-3" />
                     </div>
                     {/* fake bar end */}
                     {/* initial fix value start */}
@@ -186,7 +192,8 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                           Minimum collateral required:
                         </p>
                         <p className="text-[#141414] text-xs whitespace-nowrap">
-                          {financial(minimum, 4)} ETH (${financial(loanData?.collateralPrice * minimum, 2)})
+                          {financial(minimum, 4)} ETH ($
+                          {financial(loanData?.collateralPrice * minimum, 2)})
                         </p>
                       </div>
                     </div>
@@ -202,7 +209,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                       style={{
                         background: `linear-gradient(to right, #2C3B8D 0%, #2C3B8D ${thumbPosition}%, #E2E2E2 ${thumbPosition}%, #E2E2E2 100%)`,
                       }}
-                    />{" "}
+                    />{' '}
                     <div
                       ref={valueDivRef}
                       className="absolute w-20 h-12 left-0 -top-16 text-center text-white bg-[#2C3B8D] rounded-full py-3 px-4"
@@ -236,14 +243,14 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                       const keyPressed = event.key;
                       const isDecimalDigit = /^\d+$/.test(keyPressed);
                       const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
-  
+
                       if (
-                        (!isDecimalDigit && !(event.key === "Backspace")) ||
+                        (!isDecimalDigit && !(event.key === 'Backspace')) ||
                         isAllowedHexChar
                       ) {
                         event.preventDefault();
                       }
-                      if (event.key === "-") {
+                      if (event.key === '-') {
                         event.preventDefault();
                       }
                     }}
@@ -253,13 +260,13 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                 </div>
               </div>
             ) : (
-              <div className="h-12 w-full"></div>
+              <div className="h-12 w-full" />
             )}
             {/* ${value >= 400 ? ' pt-6 ' : 'pt-12'} */}
 
-            <p className={`text-sm text-blackSecondary`}>
-              {description}{" "}
-              <Link href={"/"} className="underline">
+            <p className="text-sm text-blackSecondary">
+              {description}{' '}
+              <Link href="/" className="underline">
                 Learn more.
               </Link>
             </p>

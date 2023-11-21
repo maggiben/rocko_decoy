@@ -7,9 +7,9 @@ import {
   UPDATE_ALERT_TYPE,
   UPDATE_FREQUENCY,
   UPDATE_INTEREST_RATE,
-  CLEAR_ALERT
-} from "@/constant/constant";
-import { Dispatch, SetStateAction } from "react";
+  CLEAR_ALERT,
+} from '@/constant/constant';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface CoinCardProps {
   coinIcon: string;
@@ -71,13 +71,13 @@ export interface AssetStep {
 }
 
 // Interface for protocol step
-export interface ProtocolProps  {
+export interface ProtocolProps {
   id?: string;
   name?: string;
   symbol?: string;
   interestRate?: number;
   selectProtocol?: string;
-  handleProtocol?:Function;
+  handleProtocol?: Function;
   protocolInfos?: {
     id?: string;
     title?: string;
@@ -118,7 +118,7 @@ export interface LoanData {
   twelveMonthInterest: number;
   twentyFourMonthInterest: number;
   paymentMethod: string;
-  cryptoName:string;
+  cryptoName: string;
   cryptoIcon: string;
   buffer: number;
   loanToValue: number;
@@ -131,7 +131,7 @@ export interface LoanData {
   subLiquidationPrice: number;
   rewardRate: number;
   rewardAmount: number;
-  activeNextButton?:boolean;
+  activeNextButton?: boolean;
   nextValidation: any;
 }
 // ContextValues interface using the above step interfaces
@@ -143,7 +143,7 @@ export interface ContextValues {
   setCurrentStep?: Dispatch<SetStateAction<number>>;
 }
 
-//? alert interface
+// ? alert interface
 
 // arp alert
 export interface AprAlertType {
@@ -196,7 +196,6 @@ export type AprAlertAction =
   | { type: typeof DELETE_ALERT; index: number }
   | { type: typeof ALERT_OFF }
   | { type: typeof CLEAR_ALERT };
-  
 
 export type BufferAlertAction =
   | { type: typeof ADD_ALERT; alert: BufferAlertType }
@@ -211,9 +210,8 @@ export interface AlertFormProps {
   title: string;
   description: string;
   setNext: Function;
-  alertFor: "collateralBuffer" | "APR";
+  alertFor: 'collateralBuffer' | 'APR';
   setToggleAlert: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   forUpdate?: BufferAlertType | AprAlertType;
   updateIndex?: number | string;
 }
-

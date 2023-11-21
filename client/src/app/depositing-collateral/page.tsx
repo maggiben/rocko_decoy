@@ -1,34 +1,39 @@
-"use client";
-import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import toast from "react-hot-toast";
-import LoanComplete from "@/components/chips/LoanComplete/LoanComplete";
-import CircleProgressBar from "@/components/chips/CircleProgressBar/CircleProgressBar";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import StatusSuccess from "@/assets/StatusSuccess.png";
-import { useAccount, useBalance, useNetwork } from "wagmi";
-import { useAddress } from "@thirdweb-dev/react";
-import { useGetLoan } from "@/contract/batch";
-import { useSingleLoan } from "@/contract/single";
-import { BLOCKCHAIN } from "@/constants/env";
-import { useLoanDB } from "@/db/loanDb";
-import { LoanData } from "@/types/type";
-import { useZeroDev } from "@/hooks/useZeroDev";
-import { etherscanLink } from "@/utility/utils";
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import toast from 'react-hot-toast';
+import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
+import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+import StatusSuccess from '@/assets/StatusSuccess.png';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAddress } from '@thirdweb-dev/react';
+import { useGetLoan } from '@/contract/batch';
+import { useSingleLoan } from '@/contract/single';
+import { BLOCKCHAIN } from '@/constants/env';
+import { useLoanDB } from '@/db/loanDb';
+import { LoanData } from '@/types/type';
+import { useZeroDev } from '@/hooks/useZeroDev';
+import { etherscanLink } from '@/utility/utils';
 
 interface DoneTracker {
   step: string;
 }
 const gasFee = 0.001;
 
-const DepositingCollateral = () => {
+function DepositingCollateral() {
   const retrievedData = sessionStorage.getItem('loanData');
-  const loanData : LoanData = JSON.parse(retrievedData || "");
+  const loanData: LoanData = JSON.parse(retrievedData || '');
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
-  const [totalBorrowing, setTotalBorrowing] = useState<number>(loanData?.borrowing);
-  const [totalCollateral, setTotalCollateral] = useState<number>(loanData?.collateralNeeded);
+  const [totalBorrowing, setTotalBorrowing] = useState<number>(
+    loanData?.borrowing,
+  );
+  const [totalCollateral, setTotalCollateral] = useState<number>(
+    loanData?.collateralNeeded,
+  );
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -49,20 +54,23 @@ const DepositingCollateral = () => {
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
-  const { address : wagmiAddress } = useAccount();
+  const { address: wagmiAddress } = useAccount();
   const { data } = useBalance({ address: address as `0x${string}` });
-  const { data: wagmiData } = useBalance({ address: wagmiAddress as `0x${string}` });
+  const { data: wagmiData } = useBalance({
+    address: wagmiAddress as `0x${string}`,
+  });
   const { chain } = useNetwork();
-  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } = useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
+    useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
 
   const start = async () => {
     if (!wagmiAddress || !address || !loanData) return;
     if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
-      toast.error("Invalid Network!");
+      toast.error('Invalid Network!');
       return;
     }
     if (Number(data?.formatted) < loanData?.collateralNeeded) {
-      toast.error("Insufficient Collateral Balance!");
+      toast.error('Insufficient Collateral Balance!');
       return;
     }
 
@@ -78,60 +86,76 @@ const DepositingCollateral = () => {
     } else {
       setAError();
     }
-  }
+  };
 
   const receiveCollateral = async (): Promise<any> => {
     if (!wagmiAddress || !loanData) return null;
 
-    const depositResult = await depositZerodevAccount(wagmiAddress, loanData?.collateralNeeded + gasFee , "ETH");
+    const depositResult = await depositZerodevAccount(
+      wagmiAddress,
+      loanData?.collateralNeeded + gasFee,
+      'ETH',
+    );
     return depositResult;
-  }
+  };
 
   const setADone = () => {
-    setStartA(false); 
+    setStartA(false);
     setProgress(0);
-    setDoneTracker([...doneTracker, { step: "one" }]);
-  }
+    setDoneTracker([...doneTracker, { step: 'one' }]);
+  };
 
   const setAError = () => {
     setStartA(false);
     setProgress(0);
     setCounter(3);
-  }
+  };
 
   const setAllDone = async (txHash: string) => {
     finalizeLoan(
       userInfo?.email,
       txHash,
-      "compound", true, loanData?.cryptoName,
-      totalBorrowing, totalCollateral,
-      isExistLoan);
+      'compound',
+      true,
+      loanData?.cryptoName,
+      totalBorrowing,
+      totalCollateral,
+      isExistLoan,
+    );
 
-    setDoneTracker([...doneTracker, { step: "two" }]);
+    setDoneTracker([...doneTracker, { step: 'two' }]);
     setStartB(false);
     setActiveDone(true);
     setCompleteModal(true);
-  }
+  };
 
   const setInitialParams = () => {
     if (userInfo) {
-      getLoanData(userInfo?.email).then(result => {
+      getLoanData(userInfo?.email).then((result) => {
         if (result && result.length > 0) {
           // set isExistLoan
-          const match_loan = result.filter((loan: any) => loan.loan_active === 1);
+          const match_loan = result.filter(
+            (loan: any) => loan.loan_active === 1,
+          );
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
-            setTotalBorrowing(loanData?.borrowing + match_loan[0].outstanding_balance);
-            setTotalCollateral(loanData?.collateralNeeded + match_loan[0].collateral);
+            setTotalBorrowing(
+              loanData?.borrowing + match_loan[0].outstanding_balance,
+            );
+            setTotalCollateral(
+              loanData?.collateralNeeded + match_loan[0].collateral,
+            );
           }
 
           // set navigation id
-          const active_loans = result.filter((loan: any) => loan.loan_active === 1);
+          const active_loans = result.filter(
+            (loan: any) => loan.loan_active === 1,
+          );
           setNewLoanID(active_loans.length + 1);
         }
       });
     }
-  }
+  };
 
   useEffect(() => {
     if (batchGetLoan != undefined && userInfo != undefined) {
@@ -139,26 +163,26 @@ const DepositingCollateral = () => {
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[batchGetLoan, userInfo])
+  }, [batchGetLoan, userInfo]);
 
   useEffect(() => {
-    if (error)
-      console.log(error)
+    if (error) console.log(error);
 
     if (success) {
-      console.log("---transactionHash of batchTransactions---", txHash);
+      console.log('---transactionHash of batchTransactions---', txHash);
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-          <Link className="hover:text-green-700" 
+          <Link
+            className="hover:text-green-700"
             href={etherscanLink(txHash)}
             rel="noopener noreferrer"
           >
             Loan successfully fulfilled!
           </Link>
         </div>
-      ))
-  
+      ));
+
       setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -187,9 +211,7 @@ const DepositingCollateral = () => {
         if (progress === 80) {
           clearInterval(interval);
         } else {
-          setProgress((prevProg) => {
-            return prevProg + 20;
-          });
+          setProgress((prevProg) => prevProg + 20);
         }
       }, 7000);
 
@@ -202,9 +224,7 @@ const DepositingCollateral = () => {
         if (progress === 80) {
           clearInterval(interval);
         } else {
-          setProgress((prevProg) => {
-            return prevProg + 20;
-          });
+          setProgress((prevProg) => prevProg + 20);
         }
       }, 7000);
 
@@ -216,26 +236,30 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-[28px] lg:text-3xl font-medium text-center lg:text-left">
-        {activeDone ? "Fulfilling Loan" : startA ? "Waiting for Collateral" : "Depositing Collateral"}
+        {activeDone
+          ? 'Fulfilling Loan'
+          : startA
+            ? 'Waiting for Collateral'
+            : 'Depositing Collateral'}
       </h1>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <p className="text-black">Estimated time remaining</p>
           <h1 className="text-2xl font-semibold mb-4">
-            {" "}
-            {`${activeDone ? "Complete!" : `${counter} minutes`}`}{" "}
+            {' '}
+            {`${activeDone ? 'Complete!' : `${counter} minutes`}`}{' '}
           </h1>
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
-                progressTracker === 0 || doneTracker[0]?.step === "one"
-                  ? "text-black"
-                  : "text-gray-400"
+                progressTracker === 0 || doneTracker[0]?.step === 'one'
+                  ? 'text-black'
+                  : 'text-gray-400'
               }`}
             >
               Collateral Received
             </p>
-            {doneTracker[0]?.step === "one" && (
+            {doneTracker[0]?.step === 'one' && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -248,14 +272,14 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
               </svg>
             )}
-            {progressTracker === 0 && !(doneTracker[0]?.step === "one") && (
+            {progressTracker === 0 && !(doneTracker[0]?.step === 'one') && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -267,14 +291,14 @@ const DepositingCollateral = () => {
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
-                progressTracker === 1 || doneTracker[1]?.step === "two"
-                  ? "text-black"
-                  : "text-gray-400"
+                progressTracker === 1 || doneTracker[1]?.step === 'two'
+                  ? 'text-black'
+                  : 'text-gray-400'
               }`}
             >
               Collateral Deposited in Lending Protocol
             </p>
-            {doneTracker[1]?.step === "two" && (
+            {doneTracker[1]?.step === 'two' && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -287,15 +311,15 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
               </svg>
             )}
 
-            {progressTracker === 1 && !(doneTracker[1]?.step === "two") && (
+            {progressTracker === 1 && !(doneTracker[1]?.step === 'two') && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -307,16 +331,16 @@ const DepositingCollateral = () => {
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
-                progressTracker === 1 || doneTracker[1]?.step === "two"
-                // progressTracker === 2 || doneTracker[2]?.step === "three"
-                  ? "text-black"
-                  : "text-gray-400"
+                progressTracker === 1 || doneTracker[1]?.step === 'two'
+                  ? // progressTracker === 2 || doneTracker[2]?.step === "three"
+                    'text-black'
+                  : 'text-gray-400'
               }`}
             >
               Loan Delivered to Your Account
             </p>
             {/* {doneTracker[2]?.step === "three" && ( */}
-            {doneTracker[1]?.step === "two" && (
+            {doneTracker[1]?.step === 'two' && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -329,15 +353,15 @@ const DepositingCollateral = () => {
                   fill="#05944F"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
                   fill="white"
                 />
               </svg>
             )}
             {/* {progressTracker === 2 && !(doneTracker[2]?.step === "three") && ( */}
-            {progressTracker === 1 && !(doneTracker[1]?.step === "two") && (
+            {progressTracker === 1 && !(doneTracker[1]?.step === 'two') && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -358,25 +382,23 @@ const DepositingCollateral = () => {
             id={newLoanID}
           /> */}
           <LoanComplete
-            title={"Loan Complete"}
-            details={
-              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            }
+            title="Loan Complete"
+            details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             id={newLoanID}
-          />          
+          />
         </ModalContainer>
       )}
-      
+
       {/* footer */}
-      <div className="h-20 w-full"></div>
+      <div className="h-20 w-full" />
       <div className=" mt-24 fixed bottom-0 left-0 w-full bg-white ">
         <div className="bg-[#F7F7F7] h-1 w-full relative">
           <div
             /*  style={{
               width: `${(100 / loanSteps.length) * (currentStep + 1)}%`,
             }} */
-            className={`duration-500 bg-blue h-full absolute left-0 top-0 w-full`}
-          ></div>
+            className="duration-500 bg-blue h-full absolute left-0 top-0 w-full"
+          />
         </div>
         <div className="container mx-auto">
           <div className="p-4 flex items-center justify-between  ">
@@ -390,7 +412,7 @@ const DepositingCollateral = () => {
               <button
                 onClick={() => setCompleteModal(true)}
                 className={`font-semibold  text-xs md:text-sm ${
-                  !activeDone ? "bg-blue/40" : "bg-blue"
+                  !activeDone ? 'bg-blue/40' : 'bg-blue'
                 } py-[10px] px-6 rounded-full text-white`}
                 disabled={!activeDone}
               >
@@ -402,6 +424,6 @@ const DepositingCollateral = () => {
       </div>
     </main>
   );
-};
+}
 
 export default DepositingCollateral;

@@ -1,29 +1,34 @@
-import { Dispatch, FC, useEffect, useState } from "react";
-import ToggleBTN from "../toggleBTN/toggleBTN";
-import ModalContainer from "@/components/chips/ModalContainer/ModalContainer";
-import CollateralBufferAlerts from "./collateralBufferAlerts/collateralBufferAlerts";
-import { useAlert } from "@/context/alertContext/alertContext";
-import { useAlertDB } from "@/db/alertDb";
+import { Dispatch, FC, useEffect, useState } from 'react';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+import { useAlert } from '@/context/alertContext/alertContext';
+import { useAlertDB } from '@/db/alertDb';
+import CollateralBufferAlerts from './collateralBufferAlerts/collateralBufferAlerts';
+import ToggleBTN from '../toggleBTN/toggleBTN';
 
 interface Props {
   title: string;
   loanId: number;
   description: string;
-  alertFor: "collateralBuffer" | "APR";
+  alertFor: 'collateralBuffer' | 'APR';
 }
 
 const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
   const { getAlertData } = useAlertDB();
-  const { aprAlertState, bufferAlertState, aprAlertDispatch, bufferAlertDispatch } = useAlert();
+  const {
+    aprAlertState,
+    bufferAlertState,
+    aprAlertDispatch,
+    bufferAlertDispatch,
+  } = useAlert();
 
   const [toggleAlert, setToggleAlert] = useState<boolean | undefined>(
-    alertFor === "APR" && aprAlertState.length > 0
+    alertFor === 'APR' && aprAlertState.length > 0
       ? true
-      : alertFor === "collateralBuffer" && bufferAlertState.length > 0
-      ? true
-      : undefined
+      : alertFor === 'collateralBuffer' && bufferAlertState.length > 0
+        ? true
+        : undefined,
   );
-  const [openModalFor, setOpenModalFor] = useState("");
+  const [openModalFor, setOpenModalFor] = useState('');
 
   const getFrequencyObject = (repeat: number) => {
     const secs_one_day = 60 * 60 * 24;
@@ -32,81 +37,86 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
 
     if (repeat > secs_one_day) {
       return {
-        interval: "Day(s)",
-        repeat: repeat / secs_one_day
-      }
-    } else if (repeat > secs_one_hour) {
+        interval: 'Day(s)',
+        repeat: repeat / secs_one_day,
+      };
+    }
+    if (repeat > secs_one_hour) {
       return {
-        interval: "Hour(s)",
-        repeat: repeat / secs_one_hour
-      }
-    } else if (repeat > secs_one_min) {
+        interval: 'Hour(s)',
+        repeat: repeat / secs_one_hour,
+      };
+    }
+    if (repeat > secs_one_min) {
       return {
-        interval: "Min(s)",
-        repeat: repeat / secs_one_min
-      }
+        interval: 'Min(s)',
+        repeat: repeat / secs_one_min,
+      };
     }
   };
 
   const getAlerts = async () => {
     const result = await getAlertData(loanId);
     if (result) {
-      const alerts = result.filter((alert: any) => alert.active === 1 && alert.loan_id === loanId);
+      const alerts = result.filter(
+        (alert: any) => alert.active === 1 && alert.loan_id === loanId,
+      );
       // clear alert states
-      aprAlertDispatch({ type: "CLEAR_ALERT" });
-      bufferAlertDispatch({ type: "CLEAR_ALERT" });
+      aprAlertDispatch({ type: 'CLEAR_ALERT' });
+      bufferAlertDispatch({ type: 'CLEAR_ALERT' });
       // add alerts from db to states
-      alerts.map((alert:any) => {
+      alerts.map((alert: any) => {
         /* for apr alert */
-        if(alert?.alert_type === "APR"){
-          aprAlertDispatch(
-            {
-            type: "ADD_ALERT",
+        if (alert?.alert_type === 'APR') {
+          aprAlertDispatch({
+            type: 'ADD_ALERT',
             alert: {
               id: alert.id,
               alertMethods: {
-                email: alert?.alert_email === 1 ? "email@rocko.com" : "",
-                sms: alert?.alert_phone === 1 ? "55.555.5555" : "",
+                email: alert?.alert_email === 1 ? 'email@rocko.com' : '',
+                sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
               },
               currentInterestRate: {
                 percentage: alert?.alert_threshold,
                 position: alert?.alert_metric,
               },
               frequency: {
-                interval: getFrequencyObject(alert?.alert_repeat_secs)?.interval,
+                interval: getFrequencyObject(alert?.alert_repeat_secs)
+                  ?.interval,
                 repeat: getFrequencyObject(alert?.alert_repeat_secs)?.repeat,
               },
             },
-          })
+          });
         }
         /* for collateral buffer alert */
-         if(alert?.alert_type === "Collateral")
+        if (alert?.alert_type === 'Collateral')
           bufferAlertDispatch({
-            type: "ADD_ALERT",
+            type: 'ADD_ALERT',
             alert: {
               id: alert.id,
               alertMethods: {
-                email: alert?.alert_email === 1 ? "email@rocko.com" : "",
-                sms: alert?.alert_phone === 1 ? "55.555.5555" : "",
+                email: alert?.alert_email === 1 ? 'email@rocko.com' : '',
+                sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
               },
               currentCollateralBuffer: {
                 percentage: alert?.alert_threshold,
                 position: alert?.alert_metric,
               },
               frequency: {
-                interval: getFrequencyObject(alert?.alert_repeat_secs)?.interval,
+                interval: getFrequencyObject(alert?.alert_repeat_secs)
+                  ?.interval,
                 repeat: getFrequencyObject(alert?.alert_repeat_secs)?.repeat,
               },
             },
-          })
-        })     
+          });
+      });
     }
-  }
-  
+  };
+
   const OnManageAlerts = async () => {
     setOpenModalFor(`manage-${title}`);
     await getAlerts();
-  }
+  };
 
   return (
     <>
@@ -138,7 +148,9 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
         </div>
         <div className="flex  items-center gap-8">
           <button
-            onClick={() => { OnManageAlerts() }}
+            onClick={() => {
+              OnManageAlerts();
+            }}
             type="button"
             className="text-[#2C3B8D] text-xs font-semibold py-2 px-3 bg-[#EEE] rounded-full"
           >
@@ -146,44 +158,40 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
           </button>
           <div className="flex  items-center gap-4">
             <p className="text-center md:text-left text-sm md:text-base">
-              Alerts {toggleAlert ? "On" : "Off"}
+              Alerts {toggleAlert ? 'On' : 'Off'}
             </p>
             <ToggleBTN
-              setToggleAlert={
-                setToggleAlert 
-              }
+              setToggleAlert={setToggleAlert}
               toggleAlert={toggleAlert}
               setOpenModalFor={setOpenModalFor}
               title={
-                alertFor === "collateralBuffer"
-                  ? "Turn off Collateral Buffer Alerts"
-                  : "Turn off APR Alerts"
+                alertFor === 'collateralBuffer'
+                  ? 'Turn off Collateral Buffer Alerts'
+                  : 'Turn off APR Alerts'
               }
               alertFor={alertFor}
               description={
-                alertFor === "collateralBuffer"
-                  ? "Are you sure you want to turn off Collateral Buffer alerts? This will delete any existing Collateral Buffer alerts."
-                  : "Are you sure you want to turn off APR alerts? This will delete any existing APR alerts."
+                alertFor === 'collateralBuffer'
+                  ? 'Are you sure you want to turn off Collateral Buffer alerts? This will delete any existing Collateral Buffer alerts.'
+                  : 'Are you sure you want to turn off APR alerts? This will delete any existing APR alerts.'
               }
             />
           </div>
         </div>
       </div>
       {openModalFor && (
-        <>
-          <ModalContainer>
-            {/* //todo change the name if both alert is same function  */}
-            <CollateralBufferAlerts
-              setOpenModalFor={setOpenModalFor}
-              title={title}
-              loanId={loanId}
-              description={description}
-              alertFor={alertFor}
-              toggleAlert={!openModalFor.startsWith("manage")}
-              setToggleAlert={setToggleAlert }
-            />
-          </ModalContainer>
-        </>
+        <ModalContainer>
+          {/* //todo change the name if both alert is same function  */}
+          <CollateralBufferAlerts
+            setOpenModalFor={setOpenModalFor}
+            title={title}
+            loanId={loanId}
+            description={description}
+            alertFor={alertFor}
+            toggleAlert={!openModalFor.startsWith('manage')}
+            setToggleAlert={setToggleAlert}
+          />
+        </ModalContainer>
       )}
     </>
   );

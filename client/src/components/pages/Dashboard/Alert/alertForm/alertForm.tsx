@@ -1,17 +1,17 @@
-import closeIcon from "@/assets/Close.svg";
-import { FC, useRef, useState } from "react";
-import SelectOptionOne from "../collateralBufferAlerts/selectOption/SelectOptionOne";
-import { IoIosCheckbox, IoMdCall } from "react-icons/io";
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
-import { AiOutlineMail } from "react-icons/ai";
-import Image from "next/image";
-import { BiLeftArrowAlt } from "react-icons/bi";
-import { AlertFormProps, AprAlertType, BufferAlertType } from "@/types/type";
-import SelectOptionTwo from "../collateralBufferAlerts/selectOption/SelectOptionTwo";
-import { useAlertDB } from "@/db/alertDb";
-import { useAlert } from "@/context/alertContext/alertContext";
-import Link from "next/link";
-import { UPDATE_ALERT } from "@/constant/constant";
+import closeIcon from '@/assets/Close.svg';
+import { FC, useRef, useState } from 'react';
+import { IoIosCheckbox, IoMdCall } from 'react-icons/io';
+import { MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { AiOutlineMail } from 'react-icons/ai';
+import Image from 'next/image';
+import { BiLeftArrowAlt } from 'react-icons/bi';
+import { AlertFormProps, AprAlertType, BufferAlertType } from '@/types/type';
+import { useAlertDB } from '@/db/alertDb';
+import { useAlert } from '@/context/alertContext/alertContext';
+import Link from 'next/link';
+import { UPDATE_ALERT } from '@/constant/constant';
+import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
+import SelectOptionOne from '../collateralBufferAlerts/selectOption/SelectOptionOne';
 
 interface Checked {
   email: boolean;
@@ -41,26 +41,26 @@ const AlertForm: FC<AlertFormProps> = ({
     useState<BufferAlertType>({
       id: forUpdate ? forUpdate?.id : bufferAlertState.length + 1,
       alertMethods: {
-        email: forUpdate ? forUpdate.alertMethods.email : "",
-        sms: forUpdate ? forUpdate.alertMethods.sms : "",
+        email: forUpdate ? forUpdate.alertMethods.email : '',
+        sms: forUpdate ? forUpdate.alertMethods.sms : '',
       },
       currentCollateralBuffer: {
         position: forUpdate
-          ? alertFor === "collateralBuffer"
+          ? alertFor === 'collateralBuffer'
             ? (forUpdate as BufferAlertType).currentCollateralBuffer.position
             : (forUpdate as AprAlertType).currentInterestRate.position
-          : "",
+          : '',
         percentage: forUpdate
-          ? alertFor === "collateralBuffer"
+          ? alertFor === 'collateralBuffer'
             ? (forUpdate as BufferAlertType).currentCollateralBuffer.percentage
             : (forUpdate as AprAlertType).currentInterestRate.percentage
           : undefined,
       },
-      callAlertType: "Test Alert",
-      emailAlertType: "Test Alert",
+      callAlertType: 'Test Alert',
+      emailAlertType: 'Test Alert',
       frequency: {
-        repeat: forUpdate ? forUpdate.frequency.repeat : "",
-        interval: forUpdate ? forUpdate.frequency.interval : "",
+        repeat: forUpdate ? forUpdate.frequency.repeat : '',
+        interval: forUpdate ? forUpdate.frequency.interval : '',
       },
     });
 
@@ -71,7 +71,7 @@ const AlertForm: FC<AlertFormProps> = ({
   const scrollDown = () => {
     modalContentRef.current?.scrollBy({
       top: 100,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
@@ -80,109 +80,92 @@ const AlertForm: FC<AlertFormProps> = ({
 
     if (!Number.isInteger(value)) {
       const convertValueToString = value.toString();
-      const dotIndex = convertValueToString.indexOf(".");
+      const dotIndex = convertValueToString.indexOf('.');
       if (dotIndex !== -1) {
         const slicedString = convertValueToString.slice(0, dotIndex + 3);
-        setCollateralBufferAlert((prev) => {
-          return {
-            ...prev,
-            currentCollateralBuffer: {
-              ...prev.currentCollateralBuffer,
-              percentage: parseFloat(slicedString),
-            },
-          };
-        });
+        setCollateralBufferAlert((prev) => ({
+          ...prev,
+          currentCollateralBuffer: {
+            ...prev.currentCollateralBuffer,
+            percentage: parseFloat(slicedString),
+          },
+        }));
       } else {
-        setCollateralBufferAlert((prev) => {
-          return {
-            ...prev,
-            currentCollateralBuffer: {
-              ...prev.currentCollateralBuffer,
-              percentage: value,
-            },
-          };
-        });
-      }
-    } else if (value < 0) {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          currentCollateralBuffer: {
-            ...prev.currentCollateralBuffer,
-            percentage: undefined,
-          },
-        };
-      });
-    } else if (alertFor==='APR' && value >= 100) {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          currentCollateralBuffer: {
-            ...prev.currentCollateralBuffer,
-            percentage: 100,
-          },
-        };
-      });
-    } else if (alertFor==='collateralBuffer' && value >= 500) {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          currentCollateralBuffer: {
-            ...prev.currentCollateralBuffer,
-            percentage: 500,
-          },
-        };
-      });
-    } else {
-      setCollateralBufferAlert((prev) => {
-        return {
+        setCollateralBufferAlert((prev) => ({
           ...prev,
           currentCollateralBuffer: {
             ...prev.currentCollateralBuffer,
             percentage: value,
           },
-        };
-      });
+        }));
+      }
+    } else if (value < 0) {
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        currentCollateralBuffer: {
+          ...prev.currentCollateralBuffer,
+          percentage: undefined,
+        },
+      }));
+    } else if (alertFor === 'APR' && value >= 100) {
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        currentCollateralBuffer: {
+          ...prev.currentCollateralBuffer,
+          percentage: 100,
+        },
+      }));
+    } else if (alertFor === 'collateralBuffer' && value >= 500) {
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        currentCollateralBuffer: {
+          ...prev.currentCollateralBuffer,
+          percentage: 500,
+        },
+      }));
+    } else {
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        currentCollateralBuffer: {
+          ...prev.currentCollateralBuffer,
+          percentage: value,
+        },
+      }));
     }
   };
 
   const handleCollateralRepeat = (e: any) => {
     const value = parseFloat(e.target.value);
     if (value > 100) {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          frequency: {
-            ...prev.frequency,
-            repeat: 100,
-          },
-        };
-      });
-      return;
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        frequency: {
+          ...prev.frequency,
+          repeat: 100,
+        },
+      }));
     } else {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          frequency: {
-            ...prev.frequency,
-            repeat: value,
-          },
-        };
-      });
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        frequency: {
+          ...prev.frequency,
+          repeat: value,
+        },
+      }));
     }
   };
 
   const handleCollateralForm = () => {
     console.log(collateralBufferAlert);
-    console.log("forupdate---", forUpdate);
+    console.log('forupdate---', forUpdate);
     // add alert to db
     if (!forUpdate) {
       addAlert(alertFor, loanId, collateralBufferAlert);
     } else {
-      updateAlert(forUpdate?.id, collateralBufferAlert, 1)
+      updateAlert(forUpdate?.id, collateralBufferAlert, 1);
     }
 
-    if (forUpdate && alertFor === "APR") {
+    if (forUpdate && alertFor === 'APR') {
       aprAlertDispatch({
         type: UPDATE_ALERT,
         index: updateIndex as number,
@@ -205,7 +188,8 @@ const AlertForm: FC<AlertFormProps> = ({
       });
       setNext(false);
       return;
-    } else if (forUpdate && alertFor === "collateralBuffer") {
+    }
+    if (forUpdate && alertFor === 'collateralBuffer') {
       bufferAlertDispatch({
         type: UPDATE_ALERT,
         index: updateIndex as number,
@@ -230,9 +214,9 @@ const AlertForm: FC<AlertFormProps> = ({
       return;
     }
 
-    if (alertFor === "APR") {
+    if (alertFor === 'APR') {
       aprAlertDispatch({
-        type: "ADD_ALERT",
+        type: 'ADD_ALERT',
         alert: {
           id: aprAlertState.length + 1,
           alertMethods: {
@@ -250,9 +234,9 @@ const AlertForm: FC<AlertFormProps> = ({
           },
         },
       });
-    } else if (alertFor === "collateralBuffer") {
+    } else if (alertFor === 'collateralBuffer') {
       bufferAlertDispatch({
-        type: "ADD_ALERT",
+        type: 'ADD_ALERT',
         alert: {
           id: bufferAlertState.length + 1,
           alertMethods: {
@@ -276,55 +260,47 @@ const AlertForm: FC<AlertFormProps> = ({
 
   // ! toggle alert and Sent!
   const handleToggleEmailAlertType = () => {
-    setCollateralBufferAlert((prev) => {
-      return {
-        ...prev,
-        emailAlertType:
-          prev.emailAlertType === "Test Alert" ? "Sent!" : "Test Alert",
-      };
-    });
+    setCollateralBufferAlert((prev) => ({
+      ...prev,
+      emailAlertType:
+        prev.emailAlertType === 'Test Alert' ? 'Sent!' : 'Test Alert',
+    }));
 
     // This should say, “Sent!”. Also, please have it change back to “Test Alert” after two seconds
     setTimeout(() => {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          emailAlertType:"Test Alert",
-        };
-      });
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        emailAlertType: 'Test Alert',
+      }));
     }, 2000);
   };
   // ! toggle alert and silent
   const handleToggleCallAlertType = () => {
-    setCollateralBufferAlert((prev) => {
-      return {
-        ...prev,
-        callAlertType:
-          prev.callAlertType === "Test Alert" ? "Sent!" : "Test Alert",
-      };
-    });
+    setCollateralBufferAlert((prev) => ({
+      ...prev,
+      callAlertType:
+        prev.callAlertType === 'Test Alert' ? 'Sent!' : 'Test Alert',
+    }));
     // This should say, “Sent!”. Also, please have it change back to “Test Alert” after two seconds
     setTimeout(() => {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          callAlertType: "Test Alert",
-        };
-      });
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        callAlertType: 'Test Alert',
+      }));
     }, 2000);
   };
 
   //! close the modal
   const handleCloseButton = () => {
     setToggleAlert(
-      alertFor === "APR" && aprAlertState.length > 0
+      alertFor === 'APR' && aprAlertState.length > 0
         ? true
-        : alertFor === "collateralBuffer" && bufferAlertState.length > 0
-        ? true
-        : undefined
+        : alertFor === 'collateralBuffer' && bufferAlertState.length > 0
+          ? true
+          : undefined,
     );
 
-    setOpenModalFor("");
+    setOpenModalFor('');
   };
 
   return (
@@ -367,7 +343,7 @@ const AlertForm: FC<AlertFormProps> = ({
             </div>
             <input
               type="email"
-              defaultValue={"email@rocko.com"}
+              defaultValue="email@rocko.com"
               required
               ref={collateralEmailRef}
               readOnly
@@ -385,30 +361,26 @@ const AlertForm: FC<AlertFormProps> = ({
               <MdCheckBoxOutlineBlank
                 className="h-6 w-6 cursor-pointer"
                 onClick={() => {
-                  setCollateralBufferAlert((prev) => {
-                    return {
-                      ...prev,
-                      alertMethods: {
-                        ...prev.alertMethods,
-                        email: collateralEmailRef.current.value,
-                      },
-                    };
-                  });
+                  setCollateralBufferAlert((prev) => ({
+                    ...prev,
+                    alertMethods: {
+                      ...prev.alertMethods,
+                      email: collateralEmailRef.current.value,
+                    },
+                  }));
                 }}
               />
             ) : (
               <IoIosCheckbox
                 className="h-6 w-6 cursor-pointer"
                 onClick={() => {
-                  setCollateralBufferAlert((prev) => {
-                    return {
-                      ...prev,
-                      alertMethods: {
-                        ...prev.alertMethods,
-                        email: "",
-                      },
-                    };
-                  });
+                  setCollateralBufferAlert((prev) => ({
+                    ...prev,
+                    alertMethods: {
+                      ...prev.alertMethods,
+                      email: '',
+                    },
+                  }));
                 }}
               />
             )}
@@ -424,7 +396,7 @@ const AlertForm: FC<AlertFormProps> = ({
             <input
               type="text"
               required
-              defaultValue={"555.555.5555"}
+              defaultValue="555.555.5555"
               ref={collateralCallRef}
               readOnly
               className="grow focus:outline-none cursor-default"
@@ -441,30 +413,26 @@ const AlertForm: FC<AlertFormProps> = ({
               <MdCheckBoxOutlineBlank
                 className="h-6 w-6 cursor-pointer"
                 onClick={() => {
-                  setCollateralBufferAlert((prev) => {
-                    return {
-                      ...prev,
-                      alertMethods: {
-                        ...prev.alertMethods,
-                        sms: collateralCallRef.current.value,
-                      },
-                    };
-                  });
+                  setCollateralBufferAlert((prev) => ({
+                    ...prev,
+                    alertMethods: {
+                      ...prev.alertMethods,
+                      sms: collateralCallRef.current.value,
+                    },
+                  }));
                 }}
               />
             ) : (
               <IoIosCheckbox
                 className="h-6 w-6 cursor-pointer"
                 onClick={() => {
-                  setCollateralBufferAlert((prev) => {
-                    return {
-                      ...prev,
-                      alertMethods: {
-                        ...prev.alertMethods,
-                        sms: "",
-                      },
-                    };
-                  });
+                  setCollateralBufferAlert((prev) => ({
+                    ...prev,
+                    alertMethods: {
+                      ...prev.alertMethods,
+                      sms: '',
+                    },
+                  }));
                 }}
               />
             )}
@@ -475,15 +443,15 @@ const AlertForm: FC<AlertFormProps> = ({
         <div className="flex flex-col md:flex-row items-center gap-y-4 md:gap-y-0 md:gap-x-2 justify-between mb-6">
           <div className="w-full">
             <p className="text-sm font-[500] mb-2">
-              {alertFor === "collateralBuffer"
-                ? "Collateral buffer is"
-                : "Interest rate is"}
+              {alertFor === 'collateralBuffer'
+                ? 'Collateral buffer is'
+                : 'Interest rate is'}
             </p>
             <SelectOptionOne
               setCollateralBufferAlert={setCollateralBufferAlert}
               alertFor={alertFor}
               userSelected={
-                alertFor === "collateralBuffer"
+                alertFor === 'collateralBuffer'
                   ? (forUpdate as BufferAlertType)?.currentCollateralBuffer
                       ?.position
                   : (forUpdate as AprAlertType)?.currentInterestRate?.position
@@ -499,7 +467,7 @@ const AlertForm: FC<AlertFormProps> = ({
                 type="number"
                 id="collateralPercent"
                 required
-                placeholder={alertFor === "APR" ? "7" : "25"}
+                placeholder={alertFor === 'APR' ? '7' : '25'}
                 name="collateralCall"
                 value={
                   collateralBufferAlert?.currentCollateralBuffer?.percentage &&
@@ -512,8 +480,8 @@ const AlertForm: FC<AlertFormProps> = ({
                 className={`absolute right-4 text-lg top-4 ${
                   collateralBufferAlert?.currentCollateralBuffer?.percentage !==
                   undefined
-                    ? "text-black"
-                    : "text-gray-400"
+                    ? 'text-black'
+                    : 'text-gray-400'
                 }`}
               >
                 %
@@ -536,12 +504,12 @@ const AlertForm: FC<AlertFormProps> = ({
                 const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
 
                 if (
-                  (!isDecimalDigit && !(event.key === "Backspace")) ||
+                  (!isDecimalDigit && !(event.key === 'Backspace')) ||
                   isAllowedHexChar
                 ) {
                   event.preventDefault();
                 }
-                if (event.key === "-") {
+                if (event.key === '-') {
                   event.preventDefault();
                 }
               }}
@@ -570,9 +538,9 @@ const AlertForm: FC<AlertFormProps> = ({
         <div className="bg-[#F9F9F9] rounded-2xl p-4 mb-[6px]">
           <p className="text-sm">
             {/* //todo: For now it doesn’t need to link anywhere */}
-            Your email and phone number can be updated via your{" "}
-            <Link href={"/profile"} className="underline">
-              profile page{" "}
+            Your email and phone number can be updated via your{' '}
+            <Link href="/profile" className="underline">
+              profile page{' '}
             </Link>
             which is located in the top right corner
           </p>
@@ -584,33 +552,33 @@ const AlertForm: FC<AlertFormProps> = ({
           // type="submit"
           onClick={handleCollateralForm}
           disabled={
-            collateralBufferAlert?.currentCollateralBuffer?.percentage !==
-              undefined &&
-            collateralBufferAlert?.frequency?.repeat !== "" &&
-            (collateralBufferAlert?.alertMethods?.email ||
-              collateralBufferAlert?.alertMethods?.sms) &&
-            collateralBufferAlert?.currentCollateralBuffer?.position !== "" &&
-            collateralBufferAlert?.frequency?.interval !== ""
-              ? false
-              : true
+            !(
+              collateralBufferAlert?.currentCollateralBuffer?.percentage !==
+                undefined &&
+              collateralBufferAlert?.frequency?.repeat !== '' &&
+              (collateralBufferAlert?.alertMethods?.email ||
+                collateralBufferAlert?.alertMethods?.sms) &&
+              collateralBufferAlert?.currentCollateralBuffer?.position !== '' &&
+              collateralBufferAlert?.frequency?.interval !== ''
+            )
           }
           className={`py-[10px] px-6 rounded-3xl text-white font-semibold ${
             collateralBufferAlert?.currentCollateralBuffer?.percentage !==
               undefined &&
-            collateralBufferAlert?.frequency?.repeat !== "" &&
+            collateralBufferAlert?.frequency?.repeat !== '' &&
             (collateralBufferAlert?.alertMethods?.email ||
               collateralBufferAlert?.alertMethods?.sms) &&
-            collateralBufferAlert?.currentCollateralBuffer?.position !== "" &&
-            collateralBufferAlert?.frequency?.interval !== ""
-              ? "bg-[#2C3B8D]"
-              : "bg-[#ABB1D1]"
+            collateralBufferAlert?.currentCollateralBuffer?.position !== '' &&
+            collateralBufferAlert?.frequency?.interval !== ''
+              ? 'bg-[#2C3B8D]'
+              : 'bg-[#ABB1D1]'
           }`}
         >
           Save
         </button>
         <button
           onClick={() => setNext(false)}
-          className={`py-[10px] px-6 rounded-3xl text-[#2C3B8D] bg-[#EEEEEE] font-semibold`}
+          className="py-[10px] px-6 rounded-3xl text-[#2C3B8D] bg-[#EEEEEE] font-semibold"
         >
           Cancel
         </button>

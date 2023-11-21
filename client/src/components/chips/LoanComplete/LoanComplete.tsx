@@ -1,9 +1,9 @@
-import ModalContent from "../ModalContent/ModalContent";
-import frameIcon from "@/assets/frame.svg";
-import Image from "next/image";
-import Link from "next/link";
+import frameIcon from '@/assets/frame.svg';
+import Image from 'next/image';
+import Link from 'next/link';
+import ModalContent from '../ModalContent/ModalContent';
 
-const LoanComplete = ({
+function LoanComplete({
   title,
   details,
   id,
@@ -11,7 +11,7 @@ const LoanComplete = ({
   title: string;
   details: string;
   id: number;
-}) => {
+}) {
   return (
     <ModalContent>
       <div className="w-16 h-16 rounded-full bg-[#EFF3FE] p-4">
@@ -33,7 +33,7 @@ const LoanComplete = ({
         {id === 0 ? (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
-            href={"/loan-dashboard"}
+            href="/loan-dashboard"
           >
             Okay
           </Link>
@@ -48,6 +48,6 @@ const LoanComplete = ({
       </div>
     </ModalContent>
   );
-};
+}
 
 export default LoanComplete;

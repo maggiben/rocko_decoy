@@ -1,13 +1,13 @@
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { FiChevronDown } from "react-icons/fi";
-import { BsCheckLg } from "react-icons/bs";
-import { BufferAlertType } from "@/types/type";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { FiChevronDown } from 'react-icons/fi';
+import { BsCheckLg } from 'react-icons/bs';
+import { BufferAlertType } from '@/types/type';
 
 const interval = [
-  { name: "Minute(s)" },
-  { name: "Hour(s)" },
-  { name: "Day(s)" },
+  { name: 'Minute(s)' },
+  { name: 'Hour(s)' },
+  { name: 'Day(s)' },
 ];
 
 export default function SelectOptionTwo({
@@ -20,27 +20,22 @@ export default function SelectOptionTwo({
   userSelected: string | undefined;
 }) {
   const [selected, setSelected] = useState(interval[1]);
-  const [click, setClick] = useState(userSelected ? true : false);
+  const [click, setClick] = useState(!!userSelected);
 
   useEffect(() => {
     if (click && setCollateralBufferAlert) {
-      setCollateralBufferAlert((prev) => {
-        return {
-          ...prev,
-          frequency: {
-            ...prev.frequency,
-            interval: selected.name,
-          },
-        };
-      });
+      setCollateralBufferAlert((prev) => ({
+        ...prev,
+        frequency: {
+          ...prev.frequency,
+          interval: selected.name,
+        },
+      }));
     }
   }, [setCollateralBufferAlert, click, selected]);
   return (
     <div className="w-full rounded-xl">
-      <Listbox
-        value={userSelected ? userSelected : selected}
-        onChange={setSelected}
-      >
+      <Listbox value={userSelected || selected} onChange={setSelected}>
         <div className="relative">
           <Listbox.Button
             className="relative w-full cursor-default rounded-lg bg-white text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-300 sm:text-sm p-4 form-border"
@@ -51,14 +46,14 @@ export default function SelectOptionTwo({
           >
             <span
               className={`block truncate ${
-                click ? "text-black" : "text-gray-400"
+                click ? 'text-black' : 'text-gray-400'
               }`}
             >
               {selected.name}
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <FiChevronDown
-                className={`h-5 w-5 ${click ? "text-black" : "text-gray-400"} `}
+                className={`h-5 w-5 ${click ? 'text-black' : 'text-gray-400'} `}
                 aria-hidden="true"
               />
             </span>
@@ -75,7 +70,7 @@ export default function SelectOptionTwo({
                   key={personIdx}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 md:py-[6px] pl-10 pr-4 ${
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-900"
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-900'
                     }`
                   }
                   value={person}
@@ -84,7 +79,7 @@ export default function SelectOptionTwo({
                     <>
                       <span
                         className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
+                          selected ? 'font-medium' : 'font-normal'
                         }`}
                       >
                         {person.name}

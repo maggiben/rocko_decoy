@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -16,14 +16,13 @@ const config: Config = {
         whiteSecondary: '#E6E6E6',
         whiteTertiary: '#F9F9F9',
         grayPrimary: '#EEEEEE',
-        blue:'#2C3B8D'
+        blue: '#2C3B8D',
       },
       fontFamily: {
-        inter: ['Inter var','sans-serif'],
+        inter: ['Inter var', 'sans-serif'],
       },
-
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;
