@@ -45,7 +45,7 @@ const AlreadyOpenModal = ({
         {/* select option */}
         <div className="space-y-3">
         <p className="font-medium text-[#141414]">
-            You can borrow more through your loan dashboard or by using the "Borrow more" button below.
+            You can borrow more through your loan dashboard or by using the &#34;Borrow more&#34; button below.
         </p>
         </div>
         {/* continue button */}

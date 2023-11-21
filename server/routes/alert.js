@@ -31,8 +31,6 @@ router.post(
       modified_time: new Date(),
     };
 
-    console.log(data)
-
     let sql = "INSERT INTO alerts SET ?";
     db.query(sql, data, (err, results) => {
         if (err) throw err;
