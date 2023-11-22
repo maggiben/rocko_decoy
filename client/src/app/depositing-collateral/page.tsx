@@ -21,7 +21,6 @@ import { etherscanLink } from '@/utility/utils';
 interface DoneTracker {
   step: string;
 }
-const gasFee = 0.001;
 
 function DepositingCollateral() {
   const retrievedData = sessionStorage.getItem('loanData');
@@ -93,7 +92,7 @@ function DepositingCollateral() {
 
     const depositResult = await depositZerodevAccount(
       wagmiAddress,
-      loanData?.collateralNeeded + gasFee,
+      loanData?.collateralNeeded,
       'ETH',
     );
     return depositResult;

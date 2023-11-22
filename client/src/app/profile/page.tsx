@@ -354,7 +354,7 @@ const Profile: React.FC = () => {
         <ModalContainer>
           <TransferFundModal
             setOpenModalFor={setOpenModalFor}
-            ethBalance={ETH_Balance?.formatted}
+            ethBalance={ETH_Balance?.value}
             wethBalance={WETH_Balance?.formatted}
             usdcBalance={USDC_Balance?.formatted}
           />

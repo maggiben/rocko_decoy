@@ -31,6 +31,10 @@ export const useGetLoan = (collateral: any, loan: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const bigint_collateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
+
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
@@ -40,9 +44,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
               abi: WETHABI,
               functionName: 'deposit',
               args: [],
-              value: BigInt(
-                Number(ethers.utils.parseEther(collateral.toString())),
-              ),
+              value: bigint_collateral,
             },
             {
               address: WETHContract[networkChainId],
@@ -159,6 +161,15 @@ export const useRepayFull = (
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const bigint_collateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
+
+  console.log(loan);
+  console.log(borrowBalanceOf);
+  console.log(getRoundDown(borrowBalanceOf + 0.01, 2));
+  console.log(loan - getRoundDown(borrowBalanceOf + 0.01, 2));
+
   const remaining =
     loan > borrowBalanceOf
       ? getRoundDown(loan - borrowBalanceOf, 6).toString()
@@ -180,15 +191,15 @@ export const useRepayFull = (
               functionName: 'supply',
               args: [
                 USDCContract[networkChainId],
-                parseBalance(borrowBalanceOf.toString(), 6),
+                parseBalance(loan.toString(), 6),
               ],
             },
-            {
-              address: USDCContract[networkChainId],
-              abi: USDCABI,
-              functionName: 'transfer',
-              args: [address, parseBalance(remaining, 6)],
-            },
+            // {
+            //   address: USDCContract[networkChainId],
+            //   abi: USDCABI,
+            //   functionName: 'transfer',
+            //   args: [address, parseBalance(remaining, 6)],
+            // },
             {
               address: CometContract[networkChainId],
               abi: COMETABI,
@@ -207,9 +218,7 @@ export const useRepayFull = (
             {
               to: address as `0x${string}`,
               data: '0x',
-              value: BigInt(
-                Number(ethers.utils.parseEther(collateral.toString())),
-              ),
+              value: bigint_collateral,
             },
             {
               address: CometRewardContract[networkChainId],
@@ -260,6 +269,10 @@ export const useAddCollateral = (collateral: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const bigInt_collateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
+
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
@@ -269,9 +282,7 @@ export const useAddCollateral = (collateral: any) => {
               abi: WETHABI,
               functionName: 'deposit',
               args: [],
-              value: BigInt(
-                Number(ethers.utils.parseEther(collateral.toString())),
-              ),
+              value: bigInt_collateral,
             },
             {
               address: WETHContract[networkChainId],
@@ -333,6 +344,10 @@ export const useBorrowCollateral = (collateral: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const bigInt_collateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
+
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress && address
       ? {
@@ -355,9 +370,7 @@ export const useBorrowCollateral = (collateral: any) => {
             {
               to: address as `0x${string}`,
               data: '0x',
-              value: BigInt(
-                Number(ethers.utils.parseEther(collateral.toString())),
-              ),
+              value: bigInt_collateral,
             },
           ],
           enabled: true,

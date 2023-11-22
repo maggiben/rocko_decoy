@@ -24,15 +24,12 @@ function TransferFundModal({
   usdcBalance,
 }: {
   setOpenModalFor: Function;
-  ethBalance: string | undefined;
+  ethBalance: bigint | undefined;
   wethBalance: string | undefined;
   usdcBalance: string | undefined;
 }) {
   const { address: wagmiAddress } = useAccount();
   const [destination, setDestination] = useState('');
-
-  const eth_balance =
-    ethBalance && Number(ethBalance) > 0.0001 ? Number(ethBalance) - 0.0001 : 0;
 
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress && ethers.utils.isAddress(destination)
@@ -41,9 +38,7 @@ function TransferFundModal({
             {
               to: destination as `0x${string}`,
               data: '0x',
-              value: BigInt(
-                Number(ethers.utils.parseEther(eth_balance.toString())),
-              ),
+              value: ethBalance,
             },
             {
               address: WETHContract[networkChainId],
