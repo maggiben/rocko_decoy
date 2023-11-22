@@ -7,7 +7,7 @@ export default function ToggleBtn() {
   const [enabled, setEnabled] = useState(true);
 
   return (
-    <div className="md:mt-1">
+    <div className="md:mt-1 flex items-center">
       <Switch
         checked={enabled}
         onChange={setEnabled}

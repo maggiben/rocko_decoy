@@ -36,7 +36,8 @@
     "react/no-array-index-key": "warn",
     "react/require-default-props": "warn",
     "react/jsx-no-constructed-context-values": "warn",
-    "no-plusplus": "warn" 
+    "no-plusplus": "warn",
+    "react/prop-types": 0
   }
 }
 

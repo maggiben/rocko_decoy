@@ -25,7 +25,7 @@ const gasFee = 0.001;
 
 function DepositingCollateral() {
   const retrievedData = sessionStorage.getItem('loanData');
-  const loanData: LoanData = JSON.parse(retrievedData || '');
+  const loanData: LoanData = JSON.parse(retrievedData || '{}');
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
   const [totalBorrowing, setTotalBorrowing] = useState<number>(

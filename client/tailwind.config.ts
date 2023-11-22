@@ -21,6 +21,9 @@ const config: Config = {
       fontFamily: {
         inter: ['Inter var', 'sans-serif'],
       },
+      margin: {
+        '-3px': '-3px',
+      },
     },
   },
   plugins: [],
