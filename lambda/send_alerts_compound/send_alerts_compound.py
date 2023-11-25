@@ -24,7 +24,7 @@ from modules import send_email
 
 LOGGER = logger.create_logger(level='INFO')
 
-for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASEB_PASSWORD', 'DATABASE_DB', 'SENDGRID_API_KEY']:
+for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASSWORD', 'DATABASE_DB', 'SENDGRID_API_KEY']:
   if not os.environ.get(v):
     LOGGER.error(f"Error, environment variable {v} is required.")
     sys.exit(255)
