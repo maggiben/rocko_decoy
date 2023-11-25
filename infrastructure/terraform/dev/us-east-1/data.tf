@@ -31,3 +31,7 @@ data "aws_secretsmanager_secret_version" "provider_url_prod" {
 data "aws_secretsmanager_secret_version" "vpnapi_key" {
   secret_id = "prod/vpn_api_key"
 }
+
+data "aws_secretsmanager_secret_version" "sendgrid_api_key" {
+  secret_id = "prod/sendgrid_key"
+}

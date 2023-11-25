@@ -20,8 +20,6 @@ resource "aws_lambda_function" "get_compound_usdc_data" {
   timeout       = 600
   memory_size   = 512
 
-  # TODO Update contract addresses to Sepolia
-
   environment {
     variables = {
       ROCKO_ENV           = local.environment
@@ -52,12 +50,6 @@ resource "aws_lambda_function" "get_compound_usdc_data" {
     Name      = "${local.environment}-get_compound_usdc_data"
     ManagedBy = "terraform"
   }
-}
-
-resource "aws_cloudwatch_event_rule" "lambda_every_5_minutes" {
-  name                = "lambda-every-5-minutes"
-  description         = "Fires every 5 minutes"
-  schedule_expression = "rate(5 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "trigger_lambda_on_schedule" {

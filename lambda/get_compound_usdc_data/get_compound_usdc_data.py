@@ -24,7 +24,7 @@ import web3
 
 logging.debug("magic")
 logger = logging.getLogger('log')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 for v in ['PROVIDER', 'PROVIDER_MAIN', 'COMET_CONTRACT', 'COMET_CONTRACT_MAIN', 'USDC_CONTRACT', 'COMP_CONTRACT', 'NETWORK', 'DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB']:
   if not os.environ.get(v):
@@ -156,6 +156,12 @@ def handler_inner(event, context):
   borrow_speed = comet_contract.functions.baseTrackingBorrowSpeed().call()
   logger.debug(f"BORROW SPEED: {borrow_speed}")
 
+  # Borrow collateral factor
+#  asset_info = comet_contract.functions.AssetInfo0i
+
+  borrow_collateral_factor = comet_contract.functions.getAssetInfo(2).call()[4] / factor_scale
+  logger.debug(f"BORROW COLLATERAL FACTOR: {borrow_collateral_factor}")
+
   # COMP to borrowers per day
   comp_to_borrowers_per_day = borrow_speed / base_index_scale * 86400
   logger.debug(f"BORROWERS PER DAY {comp_to_borrowers_per_day}")
@@ -189,8 +195,8 @@ def handler_inner(event, context):
   logger.debug("")
 
   # Put together SQL statement
-  sql = "INSERT INTO asset_data (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, utilization_percent, available, supply_rate, supply_apr, supply_total, comp_to_suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, comp_to_borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES ("
-  sql += f"'compound', '3', '{os.environ.get('NETWORK')}', 'USDC', {usdc_price}, {comp_price}, {utilization}, {utilization_percent}, {total_available}, {supply_rate}, {supply_apr}, {supply_total}, {comp_to_suppliers_per_day}, {supply_reward_rate}, {supply_net_rate}, {borrow_rate}, {borrow_apr}, {borrow_total}, {comp_to_borrowers_per_day}, {borrow_reward_rate}, {borrow_net_rate}, {borrow_min}, {borrow_reward_min})"
+  sql = "INSERT INTO asset_data (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, utilization_percent, available, supply_rate, supply_apr, supply_total, comp_to_suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, borrow_collateral_factor, comp_to_borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES ("
+  sql += f"'compound', '3', '{os.environ.get('NETWORK')}', 'USDC', {usdc_price}, {comp_price}, {utilization}, {utilization_percent}, {total_available}, {supply_rate}, {supply_apr}, {supply_total}, {comp_to_suppliers_per_day}, {supply_reward_rate}, {supply_net_rate}, {borrow_rate}, {borrow_apr}, {borrow_total}, {borrow_collateral_factor}, {comp_to_borrowers_per_day}, {borrow_reward_rate}, {borrow_net_rate}, {borrow_min}, {borrow_reward_min})"
 
   logger.debug(sql)
 
