@@ -4,16 +4,16 @@ import os
 import time
 
 DB_CONFIG = {
-    'host': os.environ.get('ROCKO_DB_HOST'),
-    'user': os.environ.get('ROCKO_DB_USER'),
-    'passwd': os.environ.get('ROCKO_DB_PASSWORD'),
+    'host': os.environ.get('DATABASE_HOST'),
+    'user': os.environ.get('DATABASE_USER'),
+    'passwd': os.environ.get('DATABASE_PASSWORD'),
     'database': 'rocko_develop'
 }
 
 DB_CONFIG_MAIN = {
-    'host': os.environ.get('ROCKO_DB_HOST'),
-    'user': os.environ.get('ROCKO_DB_USER'),
-    'passwd': os.environ.get('ROCKO_DB_PASSWORD'),
+    'host': os.environ.get('DATABASE_HOST'),
+    'user': os.environ.get('DATABASE_USER'),
+    'passwd': os.environ.get('DATABASE_PASSWORD'),
     'database': 'rocko_main'
 }
 

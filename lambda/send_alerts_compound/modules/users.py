@@ -4,10 +4,10 @@ import os
 import time
 
 DB_CONFIG = {
-    'host': os.environ.get('ROCKO_DB_HOST'),
-    'user': os.environ.get('ROCKO_DB_USER'),
-    'passwd': os.environ.get('ROCKO_DB_PASSWORD'),
-    'database': os.environ.get('ROCKO_DB_DATABASE')
+    'host': os.environ.get('DATABASE_HOST'),
+    'user': os.environ.get('DATABASE_USER'),
+    'passwd': os.environ.get('DATABASE_PASSWORD'),
+    'database': 'rocko_develop'
 }
 
 def get_user_email_from_loan_id(loan_id):
