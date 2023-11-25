@@ -37,3 +37,16 @@ resource "aws_ecr_repository" "get_pricing_cmc" {
   }
 }
 
+resource "aws_ecr_repository" "send_alerts_compound" {
+  name                 = "send_alerts_compound"
+  image_tag_mutability = "MUTABLE"
+
+  encryption_configuration {
+    encryption_type = "KMS"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
