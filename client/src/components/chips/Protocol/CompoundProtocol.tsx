@@ -4,8 +4,8 @@ import { ProtocolProps } from '@/types/type';
 import useLoanData from '@/hooks/useLoanData';
 import { useLoanDB } from '@/db/loanDb';
 import financial from '@/utility/currencyFormate';
-import HoverTooltip from '../HoverTooltip/HoverTooltip';
 import logger from '@/utility/logger';
+import HoverTooltip from '../HoverTooltip/HoverTooltip';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -84,7 +84,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
         }));
       }
     } catch (e) {
-      logger(`Cannot Update Loan Data: ${JSON.stringify(e, null, 2)}`)
+      logger(`Cannot Update Loan Data: ${JSON.stringify(e, null, 2)}`);
     }
   };
 

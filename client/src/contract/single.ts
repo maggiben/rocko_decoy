@@ -3,6 +3,7 @@ import { useAddress, useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { formatBalance, parseBalance } from '@/utility/utils';
+import logger from '@/utility/logger';
 import {
   USDCContract,
   CometContract,
@@ -12,7 +13,6 @@ import {
   networkChainId,
 } from '../constants';
 import { BLOCKCHAIN } from '../constants/env';
-import logger from '@/utility/logger';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');

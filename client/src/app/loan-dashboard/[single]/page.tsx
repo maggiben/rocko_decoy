@@ -18,8 +18,8 @@ import { useCompPrice } from '@/hooks/usePrice';
 import financial from '@/utility/currencyFormate';
 import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
-import ModifyWallet from './modifyWallet/modifyWallet';
 import logger from '@/utility/logger';
+import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 

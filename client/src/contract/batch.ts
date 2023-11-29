@@ -8,6 +8,7 @@ import {
   useContractBatchWrite,
 } from '@zerodev/wagmi';
 import { useAddress } from '@thirdweb-dev/react';
+import logger from '@/utility/logger';
 import {
   USDCContract,
   CometContract,
@@ -15,7 +16,6 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
-import logger from '@/utility/logger';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');

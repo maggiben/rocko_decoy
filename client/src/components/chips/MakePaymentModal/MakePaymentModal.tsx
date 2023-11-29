@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
-import ModalContent from '../ModalContent/ModalContent';
 import logger from '@/utility/logger';
+import ModalContent from '../ModalContent/ModalContent';
 
 function MakePaymentModal({
   setOpenModalFor,

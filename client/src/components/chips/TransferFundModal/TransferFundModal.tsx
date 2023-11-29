@@ -12,8 +12,8 @@ import {
   useContractBatchWrite,
 } from '@zerodev/wagmi';
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
-import ModalContent from '../ModalContent/ModalContent';
 import logger from '@/utility/logger';
+import ModalContent from '../ModalContent/ModalContent';
 
 const WETHABI = require('../../../constants/weth.json');
 const USDCABI = require('../../../constants/usdc.json');
@@ -68,7 +68,6 @@ function TransferFundModal({
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-
       if (data?.hash) {
         toast(() => (
           <div className="flex items-center underline gap-2">

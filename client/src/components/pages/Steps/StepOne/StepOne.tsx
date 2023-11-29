@@ -92,7 +92,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         }));
       }
     } catch (e) {
-      logger(`Cannot update loan data: ${JSON.stringify(e, null, 2)}`)
+      logger(`Cannot update loan data: ${JSON.stringify(e, null, 2)}`);
     }
   };
 
