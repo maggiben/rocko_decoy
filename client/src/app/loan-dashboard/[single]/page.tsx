@@ -19,6 +19,7 @@ import financial from '@/utility/currencyFormate';
 import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import ModifyWallet from './modifyWallet/modifyWallet';
+import logger from '@/utility/logger';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -92,7 +93,7 @@ function SinglePage() {
           setLoanData(active_loans[0]);
 
           const avg_val = await getAverageAPR(active_loans[0].create_time);
-          console.log(avg_val);
+
           if (avg_val) setAverageAPR(avg_val);
         }
 
@@ -109,47 +110,47 @@ function SinglePage() {
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBorrowAPR()
       .then((_apr) => setAPR(_apr))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getLTV()
       .then((_ltv) => setLTV(_ltv))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getThreshold()
       .then((_threshold) => setThreshold(_threshold))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getPenalty()
       .then((_penalty) => setPenalty(_penalty))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getRewardAmount()
       .then((_reward) => setRewardAmount(_reward))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getRewardRate()
       .then((_rate) => setRewardRate(_rate))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getLiquidationPrice(loanData?.outstanding_balance, collateralBalanceOf)
       .then((_price) => setLiquidationPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBuffer(loanData?.outstanding_balance, collateralBalanceOf)
       .then((_buffer) => setBuffer(_buffer))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBorrowBalanceOf()
       .then((_balance) => setBorrowBalanceOf(_balance))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getCollateralBalanceOf()
       .then((_balance) => setCollateralBalanceOf(_balance))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (

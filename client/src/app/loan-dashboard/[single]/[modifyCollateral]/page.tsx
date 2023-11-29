@@ -14,6 +14,7 @@ import { useAddress, ConnectWallet } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
+import logger from '@/utility/logger';
 
 interface InnerInfo {
   description: string;
@@ -102,15 +103,15 @@ const ModifyCollateral: React.FC = () => {
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getLiquidationPrice(currentBalance, new_collateral)
       .then((_price) => setLiquidationPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBuffer(currentBalance, new_collateral)
       .then((_buffer) => setBuffer(_buffer))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (

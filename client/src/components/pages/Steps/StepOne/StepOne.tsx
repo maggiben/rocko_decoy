@@ -10,6 +10,7 @@ import financial from '@/utility/currencyFormate';
 import { CurrencyStep } from '@/types/type';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
 import { useSingleLoan } from '@/contract/single';
+import logger from '@/utility/logger';
 
 interface FormData {
   numberInput: string;
@@ -91,7 +92,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         }));
       }
     } catch (e) {
-      console.log({ e }, 'Cannot update loan data');
+      logger(`Cannot update loan data: ${JSON.stringify(e, null, 2)}`)
     }
   };
 
@@ -111,7 +112,6 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   }, []);
 
   const handleSelect = (info: any) => {
-    console.log(info);
     setSelectedCoin(info.coinShortName);
     // when select coin then can type value
     setActiveInputField(true);

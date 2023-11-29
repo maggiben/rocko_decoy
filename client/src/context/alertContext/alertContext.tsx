@@ -37,7 +37,6 @@ function aprAlertReducer(
         }
         return alert;
       });
-      console.log(updatedState);
       return updatedState;
     }
 

@@ -10,7 +10,6 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
 
-    "no-console": "warn",
     "no-restricted-globals": "warn",
     "import/prefer-default-export": "warn",
     "jsx-a11y/label-has-associated-control": "warn",

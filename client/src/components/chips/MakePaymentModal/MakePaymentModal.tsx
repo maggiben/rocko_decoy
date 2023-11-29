@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
+import logger from '@/utility/logger';
 
 function MakePaymentModal({
   setOpenModalFor,
@@ -60,11 +61,11 @@ function MakePaymentModal({
   useEffect(() => {
     getLiquidationPrice(outstanding_balance, Number(collateral))
       .then((_price) => setLiquidationPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBuffer(outstanding_balance, Number(collateral))
       .then((_buffer) => setBuffer(_buffer))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (
@@ -108,7 +109,7 @@ function MakePaymentModal({
             const keyPressed = event.key;
             // const isDecimalDigit = /^\d+$/.test(keyPressed);
             const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
-            console.log(keyPressed);
+
             if (
               /* not allowing any character without number */
               isAllowedHexChar

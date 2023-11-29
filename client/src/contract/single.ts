@@ -12,6 +12,7 @@ import {
   networkChainId,
 } from '../constants';
 import { BLOCKCHAIN } from '../constants/env';
+import logger from '@/utility/logger';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -111,7 +112,6 @@ export const useSingleLoan = () => {
 
     const formattedValue = formatBalance(value, 6, 6);
 
-    console.log(formattedValue);
     return Number(formattedValue);
   };
 
@@ -140,9 +140,6 @@ export const useSingleLoan = () => {
       COMETABI,
     );
     const value = await contract.call('baseTrackingBorrowSpeed');
-
-    console.log(value);
-    console.log(Number(ethers.utils.formatEther(value)));
 
     const formattedValue =
       Number(ethers.utils.formatEther(value)) * 365 * 60 * 60 * 24;
@@ -240,7 +237,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -268,7 +265,7 @@ export const useSingleLoan = () => {
       );
       return txResult;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -288,7 +285,7 @@ export const useSingleLoan = () => {
       });
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -308,7 +305,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -329,7 +326,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -350,7 +347,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -371,7 +368,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -392,7 +389,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };
@@ -414,7 +411,7 @@ export const useSingleLoan = () => {
       ]);
       return tx;
     } catch (e) {
-      console.log(e);
+      logger(JSON.stringify(e, null, 2), 'error');
       return null;
     }
   };

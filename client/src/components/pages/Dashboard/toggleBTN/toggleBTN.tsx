@@ -50,7 +50,6 @@ const ToggleBTN: FC<Props> = ({
         checked={!!toggleAlert}
         onChange={setToggleAlert}
         onClick={() => {
-          console.log(toggleAlert, title);
           setOpenModalFor(!toggleAlert ? title : '');
         }}
         className={`${toggleAlert ? 'bg-black' : 'bg-gray-300'}
@@ -76,7 +75,6 @@ const ToggleBTN: FC<Props> = ({
                 <div>
                   <button
                     onClick={() => {
-                      // console.log(closeModalFor)
                       setToggleAlert(closeModalFor ? true : undefined);
                       setCloseModalFor('');
                     }}

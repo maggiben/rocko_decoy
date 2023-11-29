@@ -111,7 +111,6 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const handleCustomInputChange = async (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    console.log(event.target.value);
     if (event.target.value === '') {
       setCustomValue(undefined);
       return;

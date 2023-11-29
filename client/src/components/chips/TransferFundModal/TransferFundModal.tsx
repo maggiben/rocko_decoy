@@ -13,6 +13,7 @@ import {
 } from '@zerodev/wagmi';
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
 import ModalContent from '../ModalContent/ModalContent';
+import logger from '@/utility/logger';
 
 const WETHABI = require('../../../constants/weth.json');
 const USDCABI = require('../../../constants/usdc.json');
@@ -67,7 +68,7 @@ function TransferFundModal({
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+
       if (data?.hash) {
         toast(() => (
           <div className="flex items-center underline gap-2">
@@ -90,10 +91,9 @@ function TransferFundModal({
 
   const withdraw = () => {
     try {
-      console.log(config);
       if (batchWithdraw) batchWithdraw();
     } catch (e) {
-      console.error(e);
+      logger(JSON.stringify(e, null, 2), 'error');
     }
 
     setOpenModalFor('');

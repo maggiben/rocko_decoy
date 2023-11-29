@@ -17,6 +17,7 @@ import { useLoanDB } from '@/db/loanDb';
 import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
+import logger from '@/utility/logger';
 
 interface DoneTracker {
   step: string;
@@ -165,10 +166,9 @@ function DepositingCollateral() {
   }, [batchGetLoan, userInfo]);
 
   useEffect(() => {
-    if (error) console.log(error);
+    if (error) logger(JSON.stringify(error, null, 2));
 
     if (success) {
-      console.log('---transactionHash of batchTransactions---', txHash);
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />

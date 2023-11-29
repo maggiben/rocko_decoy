@@ -5,6 +5,7 @@ import useLoanData from '@/hooks/useLoanData';
 import { useLoanDB } from '@/db/loanDb';
 import financial from '@/utility/currencyFormate';
 import HoverTooltip from '../HoverTooltip/HoverTooltip';
+import logger from '@/utility/logger';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -83,7 +84,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
         }));
       }
     } catch (e) {
-      console.log({ e }, 'Cannot update loan data');
+      logger(`Cannot Update Loan Data: ${JSON.stringify(e, null, 2)}`)
     }
   };
 
@@ -92,15 +93,15 @@ const CompoundProtocol: FC<ProtocolProps> = ({
 
     getMonthAverageAPR()
       .then((_apr) => setMonthAvgAPR(_apr))
-      .catch((_err) => console.log(_err));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getYearAverageAPR()
       .then((_apr) => setYearAvgAPR(_apr))
-      .catch((_err) => console.log(_err));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getYearAvgRewardRate()
       .then((_rate) => setAvgRewardRate(_rate))
-      .catch((_err) => console.log(_err));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

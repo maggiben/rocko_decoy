@@ -11,6 +11,7 @@ import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useSingleLoan } from '@/contract/single';
+import logger from '@/utility/logger';
 
 function Dashboard() {
   const [active, setActive] = useState(true);
@@ -47,7 +48,7 @@ function Dashboard() {
   useEffect(() => {
     getBorrowAPR()
       .then((_apr) => setBorrowAPR(_apr))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (

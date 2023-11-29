@@ -16,6 +16,7 @@ import { useAccount } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import { PAYMENT_BUFFER } from '@/constants/env';
+import logger from '@/utility/logger';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -184,11 +185,11 @@ const MakePayment: FC = () => {
   useEffect(() => {
     getLiquidationPrice(currentBalance - payment, collateral)
       .then((_price) => setLiquidationPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBuffer(currentBalance - payment, collateral)
       .then((_buffer) => setBuffer(_buffer))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (

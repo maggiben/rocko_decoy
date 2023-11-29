@@ -28,8 +28,6 @@ function RangeInput() {
     if (valueDivRef.current) setValueDivWidth(valueDivRef.current.offsetWidth);
   }, [value]);
 
-  console.log({ value });
-
   return (
     <div className="flex items-center justify-between gap-1 md:gap-3 pb-[46px] pt-[70px]">
       <p className="text-sm md:text-base sm:block hidden">Higher Risk</p>

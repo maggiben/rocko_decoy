@@ -54,7 +54,6 @@ const CollateralBufferAlerts: FC<Props> = ({
   };
 
   const handleDelete = async (index: number, aprAlert: any) => {
-    console.log(index, alertFor);
     await deleteAlert(aprAlert?.id);
     if (alertFor === 'APR') {
       aprAlertDispatch({ type: DELETE_ALERT, index });
@@ -65,8 +64,6 @@ const CollateralBufferAlerts: FC<Props> = ({
 
   const sortArpAlertState = sortAprAlert(aprAlertState);
   const sortBufferAlertState = sortBufferAlert(bufferAlertState);
-
-  console.log(sortArpAlertState, sortBufferAlertState);
 
   const [forUpdate, setForUpdate] = useState<
     BufferAlertType | AprAlertType | undefined

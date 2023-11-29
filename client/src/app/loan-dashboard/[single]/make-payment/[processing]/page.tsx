@@ -80,7 +80,6 @@ function Processing() {
       const borrowBalance = await getBorrowBalanceOf();
       setBorrowBalanceOf(borrowBalance);
       if (originalborrowBalance === 0) {
-        console.log(borrowBalance);
         setOriginalBorrowBalance(borrowBalance);
       }
 
@@ -150,10 +149,6 @@ function Processing() {
   };
 
   const setAllDone = async (txHash: string) => {
-    console.log(collateral);
-    console.log(borrowBalanceOf);
-    console.log(originalborrowBalance);
-
     updateLoan(
       'repay',
       loanData?.id,
@@ -193,7 +188,6 @@ function Processing() {
   useEffect(() => {
     if (success || fullySuccess) {
       const tx = fullySuccess ? fullyTxHash : txHash;
-      console.log('---transactionHash of batchTransactions---', tx);
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />

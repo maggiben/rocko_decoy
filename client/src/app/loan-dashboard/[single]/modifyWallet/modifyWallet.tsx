@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
+import logger from '@/utility/logger';
 
 function ModifyWallet({
   setOpenModalFor,
@@ -56,15 +57,15 @@ function ModifyWallet({
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getLiquidationPrice(balanceFloat, new_collateral)
       .then((_price) => setLiquidationPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getBuffer(balanceFloat, new_collateral)
       .then((_buffer) => setBuffer(_buffer))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (
@@ -138,7 +139,7 @@ function ModifyWallet({
             const keyPressed = event.key;
             // const isDecimalDigit = /^\d+$/.test(keyPressed);
             const isAllowedHexChar = /^[a-eA-E]+$/.test(keyPressed);
-            console.log(keyPressed);
+
             if (
               /* not allowing any character without number */
               isAllowedHexChar

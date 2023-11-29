@@ -23,9 +23,7 @@ export const useLoanDB = () => {
       collateral,
       exist,
     };
-    axios.post(`${BACKEND_URL}/add`, loanObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/add`, loanObject);
   };
 
   const updateLoan = (
@@ -53,9 +51,7 @@ export const useLoanDB = () => {
             collateral,
             transaction_hash: txHash,
           };
-    axios.post(`${BACKEND_URL}/update`, updateObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/update`, updateObject);
   };
 
   const getLoanData = async (user: string) => {
@@ -80,9 +76,7 @@ export const useLoanDB = () => {
       wallet_address,
       active: Number(active),
     };
-    axios.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/addUser`, userObject);
   };
 
   const getUserData = async (email: string) => {

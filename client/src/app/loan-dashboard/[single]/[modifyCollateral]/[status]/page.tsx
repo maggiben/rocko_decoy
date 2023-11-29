@@ -19,6 +19,7 @@ import { useLoanDB } from '@/db/loanDb';
 import { useAddCollateral, useBorrowCollateral } from '@/contract/batch';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
+import logger from '@/utility/logger';
 
 interface DoneTracker {
   step: string;
@@ -152,7 +153,7 @@ function ModifyStatus() {
   useEffect(() => {
     getCollateralBalanceOf()
       .then((_value) => setCollateral(_value))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   useEffect(() => {
@@ -168,7 +169,6 @@ function ModifyStatus() {
 
   useEffect(() => {
     if (borrowSuccess) {
-      console.log('---transactionHash of batchTransactions---', borrowTxHash);
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
@@ -187,7 +187,6 @@ function ModifyStatus() {
     }
 
     if (success) {
-      console.log('---transactionHash of batchTransactions---', txHash);
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />

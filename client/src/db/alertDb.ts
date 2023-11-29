@@ -28,11 +28,7 @@ export const useAlertDB = () => {
       active: 1,
     };
 
-    console.log(alertObject);
-
-    axios.post(`${BACKEND_URL}/addAlert`, alertObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/addAlert`, alertObject);
   };
 
   const updateAlert = (alertId: number, alertData: any, active: number) => {
@@ -46,11 +42,7 @@ export const useAlertDB = () => {
       active,
     };
 
-    console.log(updateObject);
-
-    axios.post(`${BACKEND_URL}/updateAlert`, updateObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/updateAlert`, updateObject);
   };
 
   const getAlertData = async (loanId: number) => {
@@ -71,11 +63,7 @@ export const useAlertDB = () => {
       active: 0,
     };
 
-    console.log(deletedObject);
-
-    axios.post(`${BACKEND_URL}/deleteAlert`, deletedObject).then((res) => {
-      console.log(res.data);
-    });
+    axios.post(`${BACKEND_URL}/deleteAlert`, deletedObject);
   };
 
   return {

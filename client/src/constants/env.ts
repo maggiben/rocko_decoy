@@ -23,6 +23,7 @@ if (typeof window !== 'undefined') {
     demoMode = !!params.get('demo_mode');
     if (demoMode) {
       sessionStorage.setItem('IS_DEMO_MODE', 'true');
+      // eslint-disable-next-line no-console
       console.log('DEMO MODE ENABLED');
     }
   }

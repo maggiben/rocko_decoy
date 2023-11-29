@@ -15,6 +15,7 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
+import logger from '@/utility/logger';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -90,14 +91,13 @@ export const useGetLoan = (collateral: any, loan: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) setTxHash(data?.hash);
     },
   });
 
   const executeBatchGetLoan = () => {
-    console.log(batchGetLoan);
     if (batchGetLoan) batchGetLoan();
   };
 
@@ -136,14 +136,13 @@ export const useRepaySome = (loan: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) setTxHash(data?.hash);
     },
   });
 
   const executeBatchRepaySome = () => {
-    console.log(batchRepaySome);
     if (batchRepaySome) batchRepaySome();
   };
 
@@ -164,16 +163,6 @@ export const useRepayFull = (
   const bigint_collateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
-
-  console.log(loan);
-  console.log(borrowBalanceOf);
-  console.log(getRoundDown(borrowBalanceOf + 0.01, 2));
-  console.log(loan - getRoundDown(borrowBalanceOf + 0.01, 2));
-
-  const remaining =
-    loan > borrowBalanceOf
-      ? getRoundDown(loan - borrowBalanceOf, 6).toString()
-      : '0';
 
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
@@ -250,7 +239,7 @@ export const useRepayFull = (
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) setTxHash(data?.hash);
     },
@@ -318,14 +307,13 @@ export const useAddCollateral = (collateral: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) setTxHash(data?.hash);
     },
   });
 
   const executeBatchAddCollateral = () => {
-    console.log(batchAddCollateral);
     if (batchAddCollateral) batchAddCollateral();
   };
 
@@ -390,14 +378,13 @@ export const useBorrowCollateral = (collateral: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      console.log('Transaction was successful.');
+      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) setTxHash(data?.hash);
     },
   });
 
   const executeBatchBorrowCollateral = () => {
-    console.log(batchBorrowCollateral);
     if (batchBorrowCollateral) batchBorrowCollateral();
   };
 

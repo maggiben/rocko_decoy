@@ -29,8 +29,6 @@ function Header() {
     },
   });
 
-  console.log({ net, env: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID, chains });
-
   const loginRef: any = useRef();
   const router = useRouter();
   const pathName = usePathname();
@@ -47,7 +45,6 @@ function Header() {
   const [isUnavailable, setIsUnavailable] = useState(false);
 
   const OnLogin = async () => {
-    console.log({ auth0Connector });
     await connect({
       connector: auth0Connector,
     });
@@ -65,7 +62,6 @@ function Header() {
 
   const detectVPN = () => {
     if (sessionStorage.getItem('clientAllowed') !== 'true') {
-      console.log('Start to detect vpn:');
       isVPN().then((response) => {
         if (response.status === 200) {
           sessionStorage.setItem('clientAllowed', 'true');
@@ -100,7 +96,7 @@ function Header() {
           const active_loans = result.filter(
             (loan: any) => loan.loan_active === 1,
           );
-          console.log(pathName);
+
           if (active_loans?.length > 0 && pathName === '/') {
             /* if there is an active loan */
             setOpenModalFor('Already Open');
