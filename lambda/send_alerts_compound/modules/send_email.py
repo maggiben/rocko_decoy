@@ -5,8 +5,6 @@ import os
 
 def send_email_alert(email_to, email_message, logger):
 
-  email_to = "jason@rocko.co"
-
   message = Mail(
     from_email=From(email_message[0]),
     to_emails=To(email_to),
