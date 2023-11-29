@@ -7,24 +7,25 @@
 # Required env variables
 # DATABASE_HOST: Database host
 # DATABASE_USER: Database user
-# DATABASE_PASSWORD: Database password
+# DATABASE_PASS: Database password
 # DATABASE_DB:   Database database
 # SENDGRID_API_KEY: Sendgrid API Key
 
 import json
 import os
 import sys
+import traceback
 
 from modules import alerts
+from modules import common
 from modules import db
 from modules import logger
-from modules import users
 from modules import send_sms
 from modules import send_email
 
-LOGGER = logger.create_logger(level='INFO')
+LOGGER = logger.create_logger(level='DEBUG')
 
-for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASSWORD', 'DATABASE_DB', 'SENDGRID_API_KEY']:
+for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB', 'SENDGRID_API_KEY']:
   if not os.environ.get(v):
     LOGGER.error(f"Error, environment variable {v} is required.")
     sys.exit(255)
@@ -32,7 +33,7 @@ for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASSWORD', 'DATABASE_DB', 
 DB_CONFIG = {
     'host': os.environ.get('DATABASE_HOST'),
     'user': os.environ.get('DATABASE_USER'),
-    'passwd': os.environ.get('DATABASE_PASSWORD'),
+    'passwd': os.environ.get('DATABASE_PASS'),
     'database': os.environ.get('DATABASE_DB')
 }
 
@@ -41,11 +42,13 @@ def process_alert(row):
   # Is alert triggered
   if  row[2].lower() == "apr":
     LOGGER.info(f"Processing APR alert for alert id {row[0]}, loan id {row[1]}")
+    alert_template = "alert_apr"
     alert_message = "APR Alert: Threshold reached"
     alert_triggered = alerts.apr_alert_triggered(row[0], row[1], row[3], row[4], LOGGER)
     LOGGER.debug(f"Alert triggered: {alert_triggered}")
   elif row[2].lower() == "collateral":
     LOGGER.info(f"Processing Collateral alert for alert id {row[0]}, loan id {row[1]}")
+    alert_template = "alert_collateral_buffer"
     alert_message = "Collateral Alert: Threshold reached"
     alert_triggered = alerts.collateral_alert_triggered(DB_CONFIG, row[0], row[1], row[3], row[4], LOGGER)
     LOGGER.debug(f"Alert triggered: {alert_triggered}")
@@ -62,7 +65,7 @@ def process_alert(row):
     # Alert is triggered but we have not updated the database yet
 
     # Send alert
-    alerts.send_alert(f"[Rocko] {alert_message}", alert_message, row[5], row[6], row[1], LOGGER)
+    common.send_alert(common.parse_email_template(alert_template, row[3], {'THRESHOLD': str(row[4])}, LOGGER), row[5], row[6], row[1], LOGGER)
 
     # Update alerts that its triggered
     sql = "UPDATE alerts SET triggered=true, triggered_time=now() WHERE id=%s"
@@ -84,8 +87,7 @@ def process_alert(row):
 
     if fire_alert:
       # Retrigger an alert and log it
-      alerts.send_alert(f"[Rocko] {alert_message}", alert_message, row[5], row[6], row[1], LOGGER)
-
+      common.send_alert(common.parse_email_template(alert_template, row[3], {'THRESHOLD': str(row[4])}, LOGGER), row[5], row[6], row[1], LOGGER)
       # Update alerts that its triggered
       sql = "UPDATE alerts SET triggered_time=now() WHERE id=%s"
       db.insert_query(DB_CONFIG, sql, [ row[0] ])
@@ -133,7 +135,7 @@ def lambda_handler(event, context):
     try:
         return handler_inner(event, context)
     except Exception:
-        logger.error(
+        LOGGER.error(
             f"Lambda failed with exception: {traceback.format_exc()}, event: {event}")
     return True
 

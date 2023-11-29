@@ -1,14 +1,17 @@
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail, To, From, Cc, Bcc
 
 import os
 
-def send_email_alert(to_email, subject, message):
+def send_email_alert(email_to, email_message, logger):
+
+  email_to = "jason@rocko.co"
+
   message = Mail(
-    from_email='noreply@rocko.co',
-    to_emails=to_email,
-    subject=subject,
-    html_content=message)
+    from_email=From(email_message[0]),
+    to_emails=To(email_to),
+    subject=email_message[1],
+    html_content=email_message[2])
   try:
     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
     response = sg.send(message)

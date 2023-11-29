@@ -1,0 +1,7 @@
+email_template:
+  subject: "Interest Rate Alert: Your interest rate has exceeded [[THRESHOLD]]%"
+  from: "noreply@rocko.co"
+  body: |
+    Heads up - Your interest rate has exceeded [[THRESHOLD]]%. You can manage your loan via your Rocko dashboard. 
+
+    <a href="https://app.rocko.co/">Go to Dashboard</a>

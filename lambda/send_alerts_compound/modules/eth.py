@@ -6,14 +6,14 @@ import time
 DB_CONFIG = {
     'host': os.environ.get('DATABASE_HOST'),
     'user': os.environ.get('DATABASE_USER'),
-    'passwd': os.environ.get('DATABASE_PASSWORD'),
+    'passwd': os.environ.get('DATABASE_PASS'),
     'database': 'rocko_develop'
 }
 
 DB_CONFIG_MAIN = {
     'host': os.environ.get('DATABASE_HOST'),
     'user': os.environ.get('DATABASE_USER'),
-    'passwd': os.environ.get('DATABASE_PASSWORD'),
+    'passwd': os.environ.get('DATABASE_PASS'),
     'database': 'rocko_main'
 }
 

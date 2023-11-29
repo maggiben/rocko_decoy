@@ -12,7 +12,7 @@ import time
 DB_CONFIG = {
     'host': os.environ.get('DATABASE_HOST'),
     'user': os.environ.get('DATABASE_USER'),
-    'passwd': os.environ.get('DATABASE_PASSWORD'),
+    'passwd': os.environ.get('DATABASE_PASS'),
     'database': os.environ.get('DATABASE_DB')
 }
 
@@ -131,19 +131,4 @@ def check_database_for_trigger(alert_id, logger):
     return True
 
   return False
-
-
-def send_alert(subject, message, send_to_email, send_to_phone, loan_id, LOGGER):
-
-  if send_to_email:
-    alert_email = users.get_user_email_from_loan_id(loan_id)
-    LOGGER.debug(f"Sending alert to {alert_email}")
-    send_email.send_email_alert("jason@rocko.co", subject, message)
-
-  elif send_phone:
-    LOGGER.error("Sending to phone is currently not supported!")
-  else:
-    LOGGER.error("Invalid message alert type")
-
-  return True
 
