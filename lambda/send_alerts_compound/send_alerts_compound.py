@@ -23,7 +23,7 @@ from modules import logger
 from modules import send_sms
 from modules import send_email
 
-LOGGER = logger.create_logger(level='DEBUG')
+LOGGER = logger.create_logger(level='INFO')
 
 for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB', 'SENDGRID_API_KEY']:
   if not os.environ.get(v):
