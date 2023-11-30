@@ -8,12 +8,14 @@ import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { useAddress } from '@thirdweb-dev/react';
 import { useGetLoan } from '@/contract/batch';
 import { useSingleLoan } from '@/contract/single';
 import { BLOCKCHAIN } from '@/constants/env';
 import { useLoanDB } from '@/db/loanDb';
+import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
@@ -24,16 +26,25 @@ interface DoneTracker {
 }
 
 function DepositingCollateral() {
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const type = router.get('type') || '';
+
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
 
+  const anotherData = sessionStorage.getItem('borrowMoreData');
+  const borrowMoreData = JSON.parse(anotherData || '{}');
+
+  const borrowing =
+    type === 'add' ? borrowMoreData?.payment_loan : loanData?.borrowing;
+  const collateral =
+    type === 'add'
+      ? borrowMoreData?.payment_collateral
+      : loanData?.collateralNeeded;
+
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
-  const [totalBorrowing, setTotalBorrowing] = useState<number>(
-    loanData?.borrowing,
-  );
-  const [totalCollateral, setTotalCollateral] = useState<number>(
-    loanData?.collateralNeeded,
-  );
+  const [totalBorrowing, setTotalBorrowing] = useState<number>(0);
+  const [totalCollateral, setTotalCollateral] = useState<number>(0);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -44,12 +55,12 @@ function DepositingCollateral() {
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
   const [completeModal, setCompleteModal] = useState(false);
-  const [newLoanID, setNewLoanID] = useState<number>(0);
 
   // get User info
   const { userInfo } = useZeroDev();
   // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
+  const { getUserId } = useUserDB();
   // Thirdweb for EOA
   const address = useAddress();
   const { depositZerodevAccount } = useSingleLoan();
@@ -61,15 +72,15 @@ function DepositingCollateral() {
   });
   const { chain } = useNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
-    useGetLoan(loanData?.collateralNeeded, loanData?.borrowing);
+    useGetLoan(collateral || 0, borrowing || 0);
 
   const start = async () => {
-    if (!wagmiAddress || !address || !loanData) return;
+    if (!wagmiAddress || !address || !(loanData || borrowMoreData)) return;
     if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error('Invalid Network!');
       return;
     }
-    if (Number(data?.formatted) < loanData?.collateralNeeded) {
+    if (Number(data?.formatted) < collateral) {
       toast.error('Insufficient Collateral Balance!');
       return;
     }
@@ -89,11 +100,11 @@ function DepositingCollateral() {
   };
 
   const receiveCollateral = async (): Promise<any> => {
-    if (!wagmiAddress || !loanData) return null;
+    if (!wagmiAddress || !(loanData || borrowMoreData)) return null;
 
     const depositResult = await depositZerodevAccount(
       wagmiAddress,
-      loanData?.collateralNeeded,
+      collateral,
       'ETH',
     );
     return depositResult;
@@ -112,12 +123,13 @@ function DepositingCollateral() {
   };
 
   const setAllDone = async (txHash: string) => {
+    const user_id = await getUserId(userInfo?.email);
     finalizeLoan(
-      userInfo?.email,
+      user_id,
       txHash,
       'compound',
       true,
-      loanData?.cryptoName,
+      'ETH',
       totalBorrowing,
       totalCollateral,
       isExistLoan,
@@ -129,9 +141,11 @@ function DepositingCollateral() {
     setCompleteModal(true);
   };
 
-  const setInitialParams = () => {
+  const setInitialParams = async () => {
     if (userInfo) {
-      getLoanData(userInfo?.email).then((result) => {
+      const user_id = await getUserId(userInfo?.email);
+
+      getLoanData(user_id).then((result) => {
         if (result && result.length > 0) {
           // set isExistLoan
           const match_loan = result.filter(
@@ -140,18 +154,18 @@ function DepositingCollateral() {
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
             setTotalBorrowing(
-              loanData?.borrowing + match_loan[0].outstanding_balance,
+              match_loan[0].outstanding_balance +
+                (type === 'add'
+                  ? borrowMoreData.payment_loan
+                  : loanData?.borrowing),
             );
             setTotalCollateral(
-              loanData?.collateralNeeded + match_loan[0].collateral,
+              match_loan[0].collateral +
+                (type === 'add'
+                  ? borrowMoreData.payment_collateral
+                  : loanData?.collateralNeeded),
             );
           }
-
-          // set navigation id
-          const active_loans = result.filter(
-            (loan: any) => loan.loan_active === 1,
-          );
-          setNewLoanID(active_loans.length + 1);
         }
       });
     }
@@ -172,13 +186,14 @@ function DepositingCollateral() {
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-          <Link
+          <a
             className="hover:text-green-700"
+            target="_blank"
             href={etherscanLink(txHash)}
             rel="noopener noreferrer"
           >
             Loan successfully fulfilled!
-          </Link>
+          </a>
         </div>
       ));
 
@@ -373,17 +388,10 @@ function DepositingCollateral() {
       </section>
       {completeModal && (
         <ModalContainer>
-          {/* <LoanComplete
-            title={"Loan Complete"}
-            details={
-              "Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            }
-            id={newLoanID}
-          /> */}
           <LoanComplete
             title="Loan Complete"
             details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            id={newLoanID}
+            id={1}
           />
         </ModalContainer>
       )}

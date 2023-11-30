@@ -14,6 +14,7 @@ import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { NETWORK } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useLoanDB } from '@/db/loanDb';
+import { useUserDB } from '@/db/userDb';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
 
@@ -41,7 +42,8 @@ function Header() {
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
   const { userInfo } = useZeroDev();
-  const { getUserData, addUser, isVPN, getLoanData } = useLoanDB();
+  const { getLoanData } = useLoanDB();
+  const { getUserData, getUserId, addUser, isVPN } = useUserDB();
   const [isUnavailable, setIsUnavailable] = useState(false);
 
   const OnLogin = async () => {
@@ -63,23 +65,24 @@ function Header() {
   const detectVPN = () => {
     if (sessionStorage.getItem('clientAllowed') !== 'true') {
       isVPN().then((response) => {
-        if (response.status === 200) {
-          sessionStorage.setItem('clientAllowed', 'true');
-        } else {
-          setIsUnavailable(true);
-
-          if (response.data === 'Failed region/vpn test') {
-            router.push(`/unavailable?reason=region`);
+        if (response) {
+          if (response.status === 200) {
+            sessionStorage.setItem('clientAllowed', 'true');
           } else {
-            router.push(`/unavailable?reason=vpn`);
+            setIsUnavailable(true);
+
+            if (response.data === 'Failed region/vpn test') {
+              router.push(`/unavailable?reason=region`);
+            } else {
+              router.push(`/unavailable?reason=vpn`);
+            }
           }
         }
       });
     }
   };
 
-  /* search user in users table and add userInfo to table if nothing */
-  useEffect(() => {
+  const detectUserExist = async () => {
     if (userInfo) {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
@@ -92,18 +95,26 @@ function Header() {
           );
         } else {
           /* if user exist */
-          const result = await getLoanData(userInfo?.email);
-          const active_loans = result.filter(
-            (loan: any) => loan.loan_active === 1,
-          );
-
-          if (active_loans?.length > 0 && pathName === '/') {
-            /* if there is an active loan */
-            setOpenModalFor('Already Open');
+          const user_id = await getUserId(userInfo?.email);
+          const result = await getLoanData(user_id);
+          if (result) {
+            const active_loans = result.filter(
+              (loan: any) => loan.loan_active === 1,
+            );
+            console.log(pathName);
+            if (active_loans?.length > 0 && pathName === '/') {
+              /* if there is an active loan */
+              setOpenModalFor('Already Open');
+            }
           }
         }
       });
     }
+  };
+
+  /* search user in users table and add userInfo to table if nothing */
+  useEffect(() => {
+    detectUserExist();
 
     if (pathName === '/unavailable') {
       setIsUnavailable(true);

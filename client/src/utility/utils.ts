@@ -68,3 +68,28 @@ export const etherscanLink = (
   NETWORK === 'mainnet'
     ? `https://etherscan.io/${type}/${txHash}`
     : `https://${NETWORK}.etherscan.io/${type}/${txHash}`;
+
+export const getFrequencyObject = (repeat: number) => {
+  const secs_one_day = 60 * 60 * 24;
+  const secs_one_hour = 60 * 60;
+  const secs_one_min = 60;
+
+  if (repeat > secs_one_day) {
+    return {
+      interval: 'Day(s)',
+      repeat: repeat / secs_one_day,
+    };
+  }
+  if (repeat > secs_one_hour) {
+    return {
+      interval: 'Hour(s)',
+      repeat: repeat / secs_one_hour,
+    };
+  }
+  if (repeat > secs_one_min) {
+    return {
+      interval: 'Min(s)',
+      repeat: repeat / secs_one_min,
+    };
+  }
+};

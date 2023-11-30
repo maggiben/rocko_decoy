@@ -42,7 +42,7 @@ function AlreadyOpenModal({ setOpenModalFor }: { setOpenModalFor: Function }) {
       </div>
       {/* select option */}
       <div className="space-y-3">
-        <p className="font-medium text-[#141414]">
+        <p className="font-normal text-[#141414]">
           You can borrow more through your loan dashboard or by using the
           &#34;Borrow more&#34; button below.
         </p>

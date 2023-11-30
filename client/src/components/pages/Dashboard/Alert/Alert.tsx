@@ -2,6 +2,8 @@ import { Dispatch, FC, useEffect, useState } from 'react';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { useAlertDB } from '@/db/alertDb';
+import { getFrequencyObject } from '@/utility/utils';
+import { useZeroDev } from '@/hooks/useZeroDev';
 import CollateralBufferAlerts from './collateralBufferAlerts/collateralBufferAlerts';
 import ToggleBTN from '../toggleBTN/toggleBTN';
 
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
+  const { userInfo } = useZeroDev();
   const { getAlertData } = useAlertDB();
   const {
     aprAlertState,
@@ -29,31 +32,6 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
         : undefined,
   );
   const [openModalFor, setOpenModalFor] = useState('');
-
-  const getFrequencyObject = (repeat: number) => {
-    const secs_one_day = 60 * 60 * 24;
-    const secs_one_hour = 60 * 60;
-    const secs_one_min = 60;
-
-    if (repeat > secs_one_day) {
-      return {
-        interval: 'Day(s)',
-        repeat: repeat / secs_one_day,
-      };
-    }
-    if (repeat > secs_one_hour) {
-      return {
-        interval: 'Hour(s)',
-        repeat: repeat / secs_one_hour,
-      };
-    }
-    if (repeat > secs_one_min) {
-      return {
-        interval: 'Min(s)',
-        repeat: repeat / secs_one_min,
-      };
-    }
-  };
 
   const getAlerts = async () => {
     const result = await getAlertData(loanId);
@@ -89,7 +67,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
           });
         }
         /* for collateral buffer alert */
-        if (alert?.alert_type === 'Collateral')
+        if (alert?.alert_type === 'Collateral') {
           bufferAlertDispatch({
             type: 'ADD_ALERT',
             alert: {
@@ -109,6 +87,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
               },
             },
           });
+        }
       });
     }
   };
@@ -117,6 +96,20 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
     setOpenModalFor(`manage-${title}`);
     await getAlerts();
   };
+
+  useEffect(() => {
+    if (loanId) getAlerts();
+  }, [userInfo, loanId]);
+
+  useEffect(() => {
+    setToggleAlert(
+      alertFor === 'APR' && aprAlertState.length > 0
+        ? true
+        : alertFor === 'collateralBuffer' && bufferAlertState.length > 0
+          ? true
+          : undefined,
+    );
+  }, [aprAlertState, bufferAlertState]);
 
   return (
     <>

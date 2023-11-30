@@ -7,6 +7,7 @@ import comp from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
 import { useLoanDB } from '@/db/loanDb';
+import { useUserDB } from '@/db/userDb';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
@@ -17,6 +18,7 @@ function Dashboard() {
   const [active, setActive] = useState(true);
 
   const { getLoanData } = useLoanDB();
+  const { getUserId } = useUserDB();
   const { userInfo } = useZeroDev();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
@@ -26,7 +28,8 @@ function Dashboard() {
 
   const initialize = async () => {
     if (userInfo) {
-      const result = await getLoanData(userInfo?.email);
+      const user_id = await getUserId(userInfo?.email);
+      const result = await getLoanData(user_id);
       if (result) {
         const active_loans = result.filter(
           (loan: any) => loan.loan_active === 1,

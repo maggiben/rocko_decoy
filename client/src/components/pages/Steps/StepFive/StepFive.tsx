@@ -393,7 +393,7 @@ const StepFive: React.FC = () => {
           )}
 
           {modalStep === 1 && (
-            <LoanFinalized setOpenModalFor={setOpenModalFor} />
+            <LoanFinalized setOpenModalFor={setOpenModalFor} navType="start" />
           )}
         </ModalContainer>
       )}

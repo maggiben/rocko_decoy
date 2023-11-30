@@ -2,15 +2,14 @@
 
 import financial from '@/utility/currencyFormate';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StatusWarning from '@/assets/StatusWarning.svg';
-import { PAYMENT_BUFFER } from '@/constants/env';
 import { ConnectWallet } from '@thirdweb-dev/react';
+import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
-import HoverTooltip from './chips/HoverTooltip/HoverTooltip';
-import ModalContainer from './chips/ModalContainer/ModalContainer';
-import ChooseWallet from './chips/ChooseWallet/ChooseWallet';
-import LoanFinalized from './chips/LoanFinalized/LoanFinalized';
+import ModalContainer from '../ModalContainer/ModalContainer';
+import ChooseWallet from '../ChooseWallet/ChooseWallet';
+import LoanFinalized from '../LoanFinalized/LoanFinalized';
 
 type CATEGORY = 'borrow_more';
 
@@ -58,17 +57,28 @@ const summaryData = {
 };
 
 function SummaryComp(props: Props) {
+  const retrievedData = sessionStorage.getItem('borrowMoreData');
+  const borrowMoreData = JSON.parse(retrievedData || '{}');
+
+  console.log(borrowMoreData);
+
+  const loanPayment = borrowMoreData?.payment_loan || 0;
+  const collateralPayment = borrowMoreData?.payment_collateral || 0;
+  const outStandingBalance = borrowMoreData?.outstanding_balance || 0;
+  const totalCollateral = borrowMoreData?.total_collateral || 0;
+  const buffer = borrowMoreData?.buffer || 0;
+  const liquidationPrice = borrowMoreData?.liquidation_price || 0;
+
   const { title, subTitle, invoiceTitle, category } = props;
 
-  const payment: number = 200;
-  const currentBalance: number = 400;
-  const [liquidationPrice, setLiquidationPrice] = useState<any>();
-  const [buffer, setBuffer] = useState<any>();
   const [paymentMethod, setPaymentMethod] = useState('');
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);
   const { setLoanData } = useLoanData();
   const data = summaryData[category];
+
+  const { getETHPrice } = useSingleLoan();
+  const [collateralPrice, setCollateralPrice] = useState<number>(0);
 
   const invoice: any = [
     {
@@ -76,44 +86,24 @@ function SummaryComp(props: Props) {
       details: <span className="underline">Compound Finance</span>,
     },
     {
-      description: 'Payment Amount',
-      subDescription: [
-        {
-          description:
-            payment === currentBalance ? (
-              <p className="text-sm">Outstanding Balance</p>
-            ) : (
-              ''
-            ),
-          details:
-            payment === currentBalance ? `${financial(payment, 6)} USDC` : '',
-          subDetails:
-            payment === currentBalance ? `$${financial(payment, 6)}` : '',
-        },
-        {
-          description:
-            payment === currentBalance ? (
-              <div className="flex items-center gap-2">
-                <p className="text-sm">Payment Buffer</p>
-                <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
-              </div>
-            ) : (
-              ''
-            ),
-          details: payment === currentBalance ? `${PAYMENT_BUFFER} USDC` : '',
-          subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : '',
-        },
-      ],
+      description: 'Loan Amount',
       details: (
         <span className="font-semibold">{`${financial(
-          payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
+          loanPayment,
           6,
         )} USDC`}</span>
       ),
-      subDetails: `$${financial(
-        payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
-        6,
-      )}`,
+      subDetails: `$${financial(loanPayment, 2)}`,
+    },
+    {
+      description: 'Additional Collateral',
+      details: (
+        <span className="font-semibold">{`${financial(
+          collateralPayment,
+          18,
+        )} ETH`}</span>
+      ),
+      subDetails: `$${financial(collateralPayment * collateralPrice, 2)}`,
     },
     {
       description: 'Projected values after payment',
@@ -122,37 +112,25 @@ function SummaryComp(props: Props) {
           description: 'Outstanding Balance',
           details: (
             <span className="font-semibold text-sm">
-              {(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC
+              {financial(outStandingBalance, 6)} USDC
             </span>
           ),
-          subDetails: `~$${new Intl.NumberFormat('en-US', {
-            maximumFractionDigits: 6,
-          }).format(
-            parseFloat(
-              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
-            ),
-          )}`,
+          subDetails: `~$${financial(outStandingBalance, 2)}`,
         },
         {
           description: 'Collateral Posted',
           details: (
             <span className="font-semibold text-sm">
-              {buffer === 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}
+              {financial(totalCollateral, 18)} ETH
             </span>
           ),
-          subDetails: `~$${new Intl.NumberFormat('en-US', {
-            maximumFractionDigits: 6,
-          }).format(
-            parseFloat(
-              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
-            ),
-          )}`,
+          subDetails: `~$${financial(totalCollateral * collateralPrice, 2)}`,
         },
         {
           description: 'Collateral Buffer',
           details: (
             <span className="font-semibold text-sm">
-              {buffer === 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}
+              {buffer === 0 ? 'N/A' : `${financial(buffer * 100)}%`}
             </span>
           ),
         },
@@ -160,7 +138,7 @@ function SummaryComp(props: Props) {
           description: 'Liquidation Price (ETH)',
           details: (
             <span className="font-semibold text-sm">
-              {liquidationPrice === 'N/A'
+              {liquidationPrice === 0
                 ? 'N/A'
                 : `$${financial(liquidationPrice, 2)}`}
             </span>
@@ -169,6 +147,12 @@ function SummaryComp(props: Props) {
       ],
     },
   ];
+
+  useEffect(() => {
+    getETHPrice()
+      .then((_price) => setCollateralPrice(_price))
+      .catch((e) => console.log(e));
+  });
 
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -187,7 +171,7 @@ function SummaryComp(props: Props) {
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">{title}</h1>
-      {subTitle && <p>{subTitle}</p>}
+      {subTitle && <p className="my-4">{subTitle}</p>}
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -387,7 +371,7 @@ function SummaryComp(props: Props) {
           )}
 
           {modalStep === 1 && (
-            <LoanFinalized setOpenModalFor={setOpenModalFor} />
+            <LoanFinalized setOpenModalFor={setOpenModalFor} navType="add" />
           )}
         </ModalContainer>
       )}

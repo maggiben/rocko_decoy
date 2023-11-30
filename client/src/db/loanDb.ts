@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { BACKEND_URL } from '@/constants/env';
-import { publicIp } from 'public-ip';
 
 export const useLoanDB = () => {
   const finalizeLoan = (
@@ -57,31 +56,6 @@ export const useLoanDB = () => {
   const getLoanData = async (user: string) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/loans?user=${user}`);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };
-
-  const addUser = (
-    auth0_id: string,
-    email: string,
-    wallet_address: string,
-    active: boolean,
-  ) => {
-    const userObject = {
-      auth0_id,
-      email,
-      wallet_address,
-      active: Number(active),
-    };
-    axios.post(`${BACKEND_URL}/addUser`, userObject);
-  };
-
-  const getUserData = async (email: string) => {
-    try {
-      const response = await axios.get(`${BACKEND_URL}/users?email=${email}`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -151,28 +125,14 @@ export const useLoanDB = () => {
     }
   };
 
-  const isVPN = async () => {
-    try {
-      const ip = await publicIp();
-      const response = await axios.get(`${BACKEND_URL}/vpn?ip=${ip}`);
-
-      return response;
-    } catch (error: any) {
-      return error.response;
-    }
-  };
-
   return {
     finalizeLoan,
     updateLoan,
     getLoanData,
-    addUser,
-    getUserData,
     getAverageAPR,
     getMonthAverageAPR,
     getYearAverageAPR,
     getYearAvgRewardRate,
     getRewardRate,
-    isVPN,
   };
 };

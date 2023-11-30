@@ -16,6 +16,7 @@ import { useAddress } from '@thirdweb-dev/react';
 import { NETWORK } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
+import { useUserDB } from '@/db/userDb';
 import { useAddCollateral, useBorrowCollateral } from '@/contract/batch';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
@@ -42,6 +43,7 @@ function ModifyStatus() {
   // Wagmi for ZeroDev Smart wallet
   const { address: zerodevAccount } = useAccount();
   const { userInfo } = useZeroDev();
+  const { getUserId } = useUserDB();
   const { chain } = useNetwork();
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } =
     useAddCollateral(payment);
@@ -135,7 +137,8 @@ function ModifyStatus() {
 
   const initialize = async () => {
     if (userInfo) {
-      const result = await getLoanData(userInfo.email);
+      const user_id = await getUserId(userInfo?.email);
+      const result = await getLoanData(user_id);
       if (result) {
         const active_loans = result.filter(
           (loan: any) => loan.loan_active === 1,

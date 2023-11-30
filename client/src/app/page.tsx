@@ -156,7 +156,7 @@ export default function Home() {
 
       {isFinalized && (
         <ModalContainer>
-          <LoanFinalized setOpenModalFor={setOpenModalFor} />
+          <LoanFinalized setOpenModalFor={setOpenModalFor} navType="start" />
         </ModalContainer>
       )}
     </>

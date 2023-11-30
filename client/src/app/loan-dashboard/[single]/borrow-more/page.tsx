@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
-import SummaryComp from '@/components/SummaryComp';
+import SummaryComp from '@/components/chips/SummaryComp/SummaryComp';
 import Footer from '@/components/chips/Footer/Footer';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
@@ -22,7 +22,7 @@ const BorrowPayment: FC = () => {
       <Footer setIsFinalized={setIsFinalized} />
       {isFinalized && (
         <ModalContainer>
-          <LoanFinalized setOpenModalFor={() => {}} />
+          <LoanFinalized setOpenModalFor={() => {}} navType="add" />
         </ModalContainer>
       )}
     </>

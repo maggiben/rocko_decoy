@@ -4,7 +4,13 @@ import Image from 'next/image';
 import useLoanData from '@/hooks/useLoanData';
 import ModalContent from '../ModalContent/ModalContent';
 
-function LoanFinalized({ setOpenModalFor }: { setOpenModalFor: Function }) {
+function LoanFinalized({
+  setOpenModalFor,
+  navType,
+}: {
+  setOpenModalFor: Function;
+  navType: string;
+}) {
   const { loanData } = useLoanData();
 
   const onContinue = () => {
@@ -33,7 +39,7 @@ function LoanFinalized({ setOpenModalFor }: { setOpenModalFor: Function }) {
       {/* continue button */}
       <div className="my-6">
         <Link
-          href="/depositing-collateral"
+          href={`/depositing-collateral?type=${navType}`}
           onClick={onContinue}
           className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
         >

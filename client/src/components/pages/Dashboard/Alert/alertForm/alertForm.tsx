@@ -8,6 +8,7 @@ import { BiLeftArrowAlt } from 'react-icons/bi';
 import { AlertFormProps, AprAlertType, BufferAlertType } from '@/types/type';
 import { useAlertDB } from '@/db/alertDb';
 import { useAlert } from '@/context/alertContext/alertContext';
+import { useZeroDev } from '@/hooks/useZeroDev';
 import Link from 'next/link';
 import { UPDATE_ALERT } from '@/constant/constant';
 import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
@@ -29,6 +30,8 @@ const AlertForm: FC<AlertFormProps> = ({
   forUpdate,
   updateIndex,
 }) => {
+  const { userInfo } = useZeroDev();
+
   const { addAlert, updateAlert } = useAlertDB();
   const {
     aprAlertDispatch,
@@ -341,7 +344,7 @@ const AlertForm: FC<AlertFormProps> = ({
             </div>
             <input
               type="email"
-              defaultValue="email@rocko.com"
+              defaultValue={userInfo?.email}
               required
               ref={collateralEmailRef}
               readOnly
@@ -534,13 +537,13 @@ const AlertForm: FC<AlertFormProps> = ({
           </div>
         </div>
         <div className="bg-[#F9F9F9] rounded-2xl p-4 mb-[6px]">
-          <p className="text-sm">
+          <p className="text-sm text-[#545454]">
             {/* //todo: For now it doesn’t need to link anywhere */}
             Your email and phone number can be updated via your{' '}
             <Link href="/profile" className="underline">
-              profile page{' '}
-            </Link>
-            which is located in the top right corner
+              profile page
+            </Link>{' '}
+            which is located in the top right corner.
           </p>
         </div>
       </div>

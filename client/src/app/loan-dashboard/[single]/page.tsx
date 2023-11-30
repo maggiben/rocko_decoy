@@ -14,6 +14,7 @@ import BorrowMoreModal from '@/components/chips/BorrowMoreModal/BorrowMoreModal'
 import Alert from '@/components/pages/Dashboard/Alert/Alert';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
+import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
 import financial from '@/utility/currencyFormate';
 import { formatDate } from '@/utility/utils';
@@ -48,6 +49,7 @@ function SinglePage() {
   const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
   const { userInfo } = useZeroDev();
+  const { getUserId } = useUserDB();
 
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);
@@ -84,7 +86,8 @@ function SinglePage() {
 
   const initialize = async () => {
     if (userInfo) {
-      const result = await getLoanData(userInfo?.email);
+      const user_id = await getUserId(userInfo?.email);
+      const result = await getLoanData(user_id);
       if (result) {
         const active_loans = result.filter(
           (loan: any) => loan.loan_active === (isActive ? 1 : 0),
