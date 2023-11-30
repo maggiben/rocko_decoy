@@ -3,15 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSingleLoan } from '@/contract/single';
 
 function RangeInput({
-    buffer,
-    minCollateral
-} : {
-    buffer: number,
-    minCollateral: number
+  buffer,
+  minCollateral,
+}: {
+  buffer: number;
+  minCollateral: number;
 }) {
   const valueDivRef = useRef<HTMLDivElement | null>(null);
   const [thumbPosition, setThumbPosition] = useState<number>(0);
-//   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
+  //   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
 
   const { getETHPrice } = useSingleLoan();
   const [collateralPrice, setCollateralPrice] = useState(0);
@@ -22,18 +22,16 @@ function RangeInput({
 
   useEffect(() => {
     if (valueDivRef.current) {
-        // setValueDivWidth(valueDivRef.current.offsetWidth);
-        setThumbPosition(
-            (buffer - 10) / (400 - 10) * 100,
-        );    
+      // setValueDivWidth(valueDivRef.current.offsetWidth);
+      setThumbPosition(((buffer - 10) / (400 - 10)) * 100);
     }
   }, [buffer]);
 
   useEffect(() => {
     getETHPrice()
-    .then(_price => setCollateralPrice(_price))
-    .catch(e => console.log(e));
-  })
+      .then((_price) => setCollateralPrice(_price))
+      .catch((e) => console.log(e));
+  });
 
   return (
     <div className="flex items-center justify-between gap-1 md:gap-3 pb-[46px] pt-[70px]">

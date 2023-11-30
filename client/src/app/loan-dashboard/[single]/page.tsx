@@ -12,7 +12,6 @@ import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import MakePaymentModal from '@/components/chips/MakePaymentModal/MakePaymentModal';
 import BorrowMoreModal from '@/components/chips/BorrowMoreModal/BorrowMoreModal';
 import Alert from '@/components/pages/Dashboard/Alert/Alert';
-import ModifyWallet from './modifyWallet/modifyWallet';
 import RangeInput from '@/components/chips/RangeInput/RangeInput';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
@@ -22,6 +21,7 @@ import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
+import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -157,7 +157,7 @@ function SinglePage() {
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getMinCollateral(loanData?.outstanding_balance)
-      .then(_collateral => setMinCollateral(_collateral))
+      .then((_collateral) => setMinCollateral(_collateral))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
@@ -338,10 +338,10 @@ function SinglePage() {
         <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6">
           <h1 className="text-xl mb-4  font-medium">Collateral</h1>
           {/* --------------green bar-------------- */}
-          <RangeInput 
+          <RangeInput
             buffer={buffer === 'N/A' ? 0 : Number(financial(buffer * 100))}
             minCollateral={minCollateral}
-            />
+          />
           <div className="divide-y-2 space-y-3">
             <div />
             <div className="flex pt-3 gap-x-2">
