@@ -161,6 +161,22 @@ export const useSingleLoan = () => {
     return formattedValue;
   };
 
+  const getMinCollateral = async (
+    loan: string | number,
+  ): Promise<number | string> => {
+    if (
+      typeof loan === 'undefined' ||
+      Number(loan) === 0
+    )
+      return 'N/A';
+
+    const loanToValue = await getLTV();
+    const collateralPrice = await getETHPrice();
+    const min_collateral = Number(loan) / loanToValue / collateralPrice;
+
+    return min_collateral;
+  }
+
   const getLiquidationPrice = async (
     loan: string | number,
     collateral: string | number,
@@ -436,6 +452,7 @@ export const useSingleLoan = () => {
     getRewardRate,
     getLiquidationPrice,
     getBuffer,
+    getMinCollateral,
     claimReward,
     depositZerodevAccount,
   };

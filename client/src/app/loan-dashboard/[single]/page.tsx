@@ -12,15 +12,16 @@ import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import MakePaymentModal from '@/components/chips/MakePaymentModal/MakePaymentModal';
 import BorrowMoreModal from '@/components/chips/BorrowMoreModal/BorrowMoreModal';
 import Alert from '@/components/pages/Dashboard/Alert/Alert';
+import ModifyWallet from './modifyWallet/modifyWallet';
+import RangeInput from '@/components/chips/RangeInput/RangeInput';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
-import financial from '@/utility/currencyFormate';
 import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import logger from '@/utility/logger';
-import ModifyWallet from './modifyWallet/modifyWallet';
+import financial from '@/utility/currencyFormate';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -39,8 +40,6 @@ const headings = [
     text: 'ETH',
   },
 ];
-
-const allTimeHigh = 4872.19;
 
 function SinglePage() {
   const params = useParams();
@@ -70,6 +69,7 @@ function SinglePage() {
   const [averageAPR, setAverageAPR] = useState<any>(0);
   const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
   const [collateralBalanceOf, setCollateralBalanceOf] = useState<any>(0);
+  const [minCollateral, setMinCollateral] = useState<any>(0);
 
   const {
     getETHPrice,
@@ -80,6 +80,7 @@ function SinglePage() {
     getRewardAmount,
     getLiquidationPrice,
     getBuffer,
+    getMinCollateral,
     getBorrowBalanceOf,
     getCollateralBalanceOf,
   } = useSingleLoan();
@@ -153,6 +154,10 @@ function SinglePage() {
 
     getCollateralBalanceOf()
       .then((_balance) => setCollateralBalanceOf(_balance))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+
+    getMinCollateral(loanData?.outstanding_balance)
+      .then(_collateral => setMinCollateral(_collateral))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
@@ -333,54 +338,10 @@ function SinglePage() {
         <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6">
           <h1 className="text-xl mb-4  font-medium">Collateral</h1>
           {/* --------------green bar-------------- */}
-          <div className="pb-16 relative">
-            {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[10%] md:left-[18%] lg:left-[20%] text-xs  md:text-sm text-[#545454]"> */}
-            <p
-              className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"
-              style={{ left: `${(liquidationPrice / allTimeHigh) * 100 - 6}%` }}
-            >
-              Liquidation Price{' '}
-              <span className="block text-center text-[#141414]">
-                {liquidationPrice === 'N/A'
-                  ? 'N/A'
-                  : `$${financial(liquidationPrice, 2)}`}
-              </span>
-            </p>
-            {/* <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 left-[43%] md:left-[45%] text-xs   md:text-sm text-[#545454]"> */}
-            <p
-              className="absolute bottom-4 sm:bottom-2 md:bottom-0 text-xs  md:text-sm text-[#545454]"
-              style={{ left: `${(collateralPrice / allTimeHigh) * 100 - 5}%` }}
-            >
-              Current Price{' '}
-              <span className="block text-center  text-[#141414]">
-                ${financial(collateralPrice, 2)}
-              </span>
-            </p>
-            <p className="absolute bottom-4 sm:bottom-2 md:bottom-0 right-0 text-xs   md:text-sm text-[#545454]">
-              All-Time High{' '}
-              <span className="block text-center  text-[#141414]">
-                ${financial(allTimeHigh, 2)}
-              </span>
-            </p>
-            <div className="h-2 bg-gradient-to-r from-[#03703C] to-[#06C167] relative rounded-full">
-              <div
-                className="frame h-3 w-3 bg-[#03703C] rotate-180 absolute -top-2"
-                style={{ left: `${(liquidationPrice / allTimeHigh) * 100}%` }}
-              />
-              <div
-                className="frame h-3 w-3 bg-[#03703C] absolute top-1"
-                style={{ left: `${(liquidationPrice / allTimeHigh) * 100}%` }}
-              />
-              <div
-                className="frame h-3 w-3 bg-[#428564] rotate-180 absolute -top-2"
-                style={{ left: `${(collateralPrice / allTimeHigh) * 100}%` }}
-              />
-              <div
-                className="frame h-3 w-3 bg-[#428564] absolute top-1"
-                style={{ left: `${(collateralPrice / allTimeHigh) * 100}%` }}
-              />
-            </div>
-          </div>
+          <RangeInput 
+            buffer={buffer === 'N/A' ? 0 : Number(financial(buffer * 100))}
+            minCollateral={minCollateral}
+            />
           <div className="divide-y-2 space-y-3">
             <div />
             <div className="flex pt-3 gap-x-2">
