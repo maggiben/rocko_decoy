@@ -1,30 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-yarn dev
+- [install packages] yarn install
+- [start] yarn dev
+- [build] yarn build
+- [eslint fix] yarn eslint:fix
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+- [NEXT_PUBLIC_IS_DEMO_MODE] : if true, app will run in demo mode - otherwise(false), it will run in real mode
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [NEXT_PUBLIC_NETWORK] : Blockchain network which application will run on - if mainnet, it should be ethereum. if testnet, goerli
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [NEXT_PUBLIC_INFURA_APIKEY] : This is used to communicate with the Ethereum blockchain - infuraProvider will be used as wagmi provider
 
-## Deploy on Vercel
+- [NEXT_PUBLIC_THIRDWEB_CLIENTID] : Used to access the enabled thirdweb infrastructure services and identify your application using an app bundle ID
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js
+- [NEXT_PUBLIC_ZERODEV_PROJECT_ID] : This is for ZeroDev dashboard configuration. Auth0 settings, whitelisted domains and Gas policies will be included in ZeroDev dashboard configuration.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [NEXT_PUBLIC_BACKEND_URL] : Server URL
+
+- [NEXT_PUBLIC_PAYMENT_BUFFER] : This is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second.

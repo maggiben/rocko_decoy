@@ -43,7 +43,8 @@ function Header() {
   const { address, isConnected } = useAccount();
   const { userInfo } = useZeroDev();
   const { getLoanData } = useLoanDB();
-  const { getUserData, getUserId, addUser, isVPN } = useUserDB();
+  const { getUserData, getUserId, addUser, isVPN, isInActive, isReadOnly } =
+    useUserDB();
   const [isUnavailable, setIsUnavailable] = useState(false);
 
   const OnLogin = async () => {
@@ -60,6 +61,35 @@ function Header() {
     if (loginRef.current && !loginRef.current.contains(event.target)) {
       setToggleDown(false);
     }
+  };
+
+  const detectInActive = () => {
+    if (!userInfo) return;
+
+    if (sessionStorage.getItem('isActive') !== 'true') {
+      isInActive(userInfo.email).then((response) => {
+        if (response !== null) {
+          if (response === 0) {
+            sessionStorage.setItem('isActive', 'true');
+          } else {
+            setIsUnavailable(true);
+            router.push(`/unavailable?reason=inactive`);
+          }
+        }
+      });
+    }
+  };
+
+  const detectReadOnly = () => {
+    if (!userInfo) return;
+
+    isReadOnly(userInfo.email).then((response) => {
+      if (response !== null) {
+        response === 0
+          ? sessionStorage.setItem('isReadOnly', 'false')
+          : sessionStorage.setItem('isReadOnly', 'true');
+      }
+    });
   };
 
   const detectVPN = () => {
@@ -120,6 +150,8 @@ function Header() {
       setIsUnavailable(true);
     } else {
       detectVPN();
+      detectInActive();
+      detectReadOnly();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);

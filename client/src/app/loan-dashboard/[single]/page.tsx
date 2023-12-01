@@ -21,6 +21,7 @@ import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
+import toast from 'react-hot-toast';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -103,6 +104,16 @@ function SinglePage() {
 
         if (isBorrowMore) setOpenModalFor('Borrow More');
       }
+    }
+  };
+
+  const onClickBorrowMore = () => {
+    if (sessionStorage.getItem('isReadOnly') === 'true') {
+      toast.error(
+        'Your account is currently under review. You may manage existing loans but cannot create new loans. Please contact support@rocko.co if you need further assistance.',
+      );
+    } else {
+      setOpenModalFor('Borrow More');
     }
   };
 
@@ -284,7 +295,7 @@ function SinglePage() {
                 </button>
                 <div className="flex md:flex-row flex-col just-between items-center gap-6">
                   <button
-                    onClick={() => setOpenModalFor('Borrow More')}
+                    onClick={() => onClickBorrowMore()}
                     className="text-sm font-semibold bg-[#EEE] text-[#2C3B8D] rounded-3xl px-7 py-3 w-max mx-auto md:m-0 min-w-[167px]"
                   >
                     Borrow More

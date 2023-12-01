@@ -52,10 +52,34 @@ export const useUserDB = () => {
     }
   };
 
+  const isInActive = async (email: string) => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/users?email=${email}`);
+
+      return response.data.length > 0 ? response.data[0].inactive : null;
+    } catch (error: any) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const isReadOnly = async (email: string) => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/users?email=${email}`);
+
+      return response.data.length > 0 ? response.data[0].readonly : null;
+    } catch (error: any) {
+      console.error(error);
+      return null;
+    }
+  };
+
   return {
     addUser,
     getUserData,
     getUserId,
     isVPN,
+    isInActive,
+    isReadOnly,
   };
 };

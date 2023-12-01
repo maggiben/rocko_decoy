@@ -16,6 +16,7 @@ import { Auth0WalletConnector } from '@zerodev/wagmi';
 import * as blockchains from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { NETWORK } from '@/constants/env';
+import { useZeroDev } from '@/hooks/useZeroDev';
 
 const Steps = [StepOne, StepTwo, StepThree, StepFour, StepFive];
 const stepsName = [
@@ -30,6 +31,7 @@ const net = (blockchains as { [key: string]: any })[NETWORK];
 
 export default function Home() {
   const { address: zerodevAccount } = useAccount();
+  const { userInfo } = useZeroDev();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
   const [openModalFor, setOpenModalFor] = useState('');
@@ -89,6 +91,8 @@ export default function Home() {
   const currentData = loanSteps[currentStep];
 
   const isValidateNextButton = () => {
+    if (sessionStorage.getItem('isReadOnly') === 'true') return false;
+
     if (currentStep === loanSteps.length - 1) {
       const isValidate =
         loanData?.paymentMethod === 'ethereum'
@@ -105,6 +109,13 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') window.scrollTo(0, 0);
   }, [currentStep]);
+
+  useEffect(() => {
+    if (userInfo)
+      toast.error(
+        'Your account is currently under review. You may manage existing loans but cannot create new loans. Please contact support@rocko.co if you need further assistance.',
+      );
+  }, [userInfo]);
 
   return (
     <>

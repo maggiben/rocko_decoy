@@ -9,7 +9,7 @@ router.post(
         auth0_id: req.body.auth0_id,
         email: req.body.email,
         wallet_address: req.body.wallet_address,
-        active: req.body.active,
+        inactive: req.body.active,
         create_time: new Date(),
         modified_time: new Date(),
       };

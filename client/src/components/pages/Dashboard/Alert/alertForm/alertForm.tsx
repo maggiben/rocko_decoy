@@ -159,6 +159,8 @@ const AlertForm: FC<AlertFormProps> = ({
   };
 
   const handleCollateralForm = () => {
+    if (!loanId) return;
+
     // add alert to db
     if (!forUpdate) {
       addAlert(alertFor, loanId, collateralBufferAlert);
