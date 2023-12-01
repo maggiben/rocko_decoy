@@ -1,3 +1,27 @@
+# Dev Setup
+
+1. Clone this repo
+1. Initialize submodule `git submodule init && git submodule update --remote`
+1. yarn install
+1. yarn start
+
+## Editor Setup
+
+Install VSCode Extensions
+
+- ESlint 
+- Prettier
+
+## Environment Config Sample
+
+`.env.development`
+
+```
+GATSBY_BLOCKCHAIN_NETWORK=mainnet
+GATSBY_FEATURE_FLAG_SHOW_BLOG=true
+GATSBY_EXPERIMENTAL_CONCURRENT_FEATURES=true
+```
+
 <!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
 <p align="center">
   <a href="https://www.gatsbyjs.com">
