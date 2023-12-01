@@ -141,3 +141,17 @@ exports.createSchemaCustomization = ({ actions }) => {
     }
   `)
 }
+
+exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    },
+  })
+  // https://github.com/gatsbyjs/gatsby/discussions/32478#discussioncomment-6803626
+  const config = getConfig()
+  if (config.externals && config.externals[0]) {
+    config.externals[0]['node:crypto'] = require.resolve('crypto-browserify')
+  }
+  actions.replaceWebpackConfig(config)
+}

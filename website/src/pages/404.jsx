@@ -3,6 +3,7 @@ import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import Seo from '../components/seo'
+
 import getBorrowApr from '../utils/getBorrowApr.ts'
 
 function NotFoundPage() {

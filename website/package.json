@@ -12,7 +12,7 @@
     "@fontsource-variable/montserrat": "^5.0.4",
     "@fontsource/merriweather": "^5.0.3",
     "@sindresorhus/slugify": "^2.2.1",
-    "@thirdweb-dev/sdk": "^4.0.18",
+    "@thirdweb-dev/sdk": "^3.10.66",
     "bootstrap": "^5.3.1",
     "dotenv": "^16.3.1",
     "ethers": "5.7.2",
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",
+    "crypto-browserify": "^3.12.0",
     "eslint": "^8.54.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
