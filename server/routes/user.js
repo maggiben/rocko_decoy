@@ -23,7 +23,7 @@ router.post(
   
 // Get all users
 
-router.get('/users', (req, res) => {
+router.post('/users', (req, res) => {
     let sql = `SELECT * FROM users WHERE email = '${req.query.email}'`;
     db.query(sql, (err, results) => {
         if (err) throw err;
@@ -33,7 +33,7 @@ router.get('/users', (req, res) => {
 
 // Get user id
 
-router.get('/userid', (req, res) => {
+router.post('/userid', (req, res) => {
     let sql = `SELECT id FROM users WHERE email = '${req.query.email}'`;
     db.query(sql, (err, results) => {
         if (err) throw err;
@@ -46,7 +46,7 @@ const VPNAPI_URL = 'https://vpnapi.io/api';
 const VPNAPI_KEY = process.env.VPNAPI_KEY;
 const blacklist_country_code = ['CU', 'IR', 'KP', 'RU', 'SY', 'UA'];
 
-router.get('/vpn', async (req, res) => {
+router.post('/vpn', async (req, res) => {
   try {
     const ip = req.query.ip;
     const response = await axios.get(`${VPNAPI_URL}/${ip}?key=${VPNAPI_KEY}`);

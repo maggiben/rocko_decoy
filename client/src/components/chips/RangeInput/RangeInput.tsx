@@ -1,6 +1,7 @@
 import financial from '@/utility/currencyFormate';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSingleLoan } from '@/contract/single';
+import logger from '@/utility/logger';
 
 function RangeInput({
   buffer,
@@ -11,7 +12,6 @@ function RangeInput({
 }) {
   const valueDivRef = useRef<HTMLDivElement | null>(null);
   const [thumbPosition, setThumbPosition] = useState<number>(0);
-  //   const [valueDivWidth, setValueDivWidth] = useState<number>(0);
 
   const { getETHPrice } = useSingleLoan();
   const [collateralPrice, setCollateralPrice] = useState(0);
@@ -21,16 +21,14 @@ function RangeInput({
   };
 
   useEffect(() => {
-    if (valueDivRef.current) {
-      // setValueDivWidth(valueDivRef.current.offsetWidth);
+    if (valueDivRef.current)
       setThumbPosition(((buffer - 10) / (400 - 10)) * 100);
-    }
   }, [buffer]);
 
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
-      .catch((e) => console.log(e));
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
   return (
