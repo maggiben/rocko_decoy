@@ -354,9 +354,7 @@ function SummaryComp(props: Props) {
             />
           )}
 
-          {modalStep === 1 && (
-            <LoanFinalized setOpenModalFor={setOpenModalFor} navType="add" />
-          )}
+          {modalStep === 1 && <LoanFinalized navType="add" />}
         </ModalContainer>
       )}
       {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}

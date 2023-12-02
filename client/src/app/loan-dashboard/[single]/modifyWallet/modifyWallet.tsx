@@ -10,13 +10,10 @@ import logger from '@/utility/logger';
 
 function ModifyWallet({
   setOpenModalFor,
-  // eslint-disable-next-line no-unused-vars
-  setModalStep,
   currentBalance,
   collateral,
 }: {
   setOpenModalFor: Function;
-  setModalStep: Function;
   currentBalance: string;
   collateral: string;
 }) {

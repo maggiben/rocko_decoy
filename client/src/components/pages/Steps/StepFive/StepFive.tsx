@@ -380,9 +380,7 @@ const StepFive: React.FC = () => {
             />
           )}
 
-          {modalStep === 1 && (
-            <LoanFinalized setOpenModalFor={setOpenModalFor} navType="start" />
-          )}
+          {modalStep === 1 && <LoanFinalized navType="start" />}
         </ModalContainer>
       )}
       {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}

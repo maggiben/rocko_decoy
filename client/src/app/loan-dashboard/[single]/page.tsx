@@ -49,7 +49,6 @@ function SinglePage() {
   const { getUserId } = useUserDB();
 
   const [openModalFor, setOpenModalFor] = useState('');
-  const [modalStep, setModalStep] = useState(0);
 
   const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
   const { compPrice } = useCompPrice();
@@ -437,37 +436,29 @@ function SinglePage() {
       {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
       {openModalFor && openModalFor === 'Make Payment' && (
         <ModalContainer>
-          {modalStep === 0 && (
-            <MakePaymentModal
-              setOpenModalFor={setOpenModalFor}
-              currentBalance={financial(borrowBalanceOf, 6)}
-              collateral={collateralBalanceOf}
-            />
-          )}
+          <MakePaymentModal
+            setOpenModalFor={setOpenModalFor}
+            currentBalance={financial(borrowBalanceOf, 6)}
+            collateral={collateralBalanceOf}
+          />
         </ModalContainer>
       )}
       {openModalFor && openModalFor === 'Modify Collateral' && (
         <ModalContainer>
-          {modalStep === 0 && (
-            <ModifyWallet
-              setModalStep={setModalStep}
-              setOpenModalFor={setOpenModalFor}
-              currentBalance={financial(loanData?.outstanding_balance)}
-              collateral={collateralBalanceOf}
-            />
-          )}
+          <ModifyWallet
+            setOpenModalFor={setOpenModalFor}
+            currentBalance={financial(loanData?.outstanding_balance)}
+            collateral={collateralBalanceOf}
+          />
         </ModalContainer>
       )}
       {openModalFor && openModalFor === 'Borrow More' && (
         <ModalContainer>
-          {modalStep === 0 && (
-            <BorrowMoreModal
-              // setModalStep={setModalStep}
-              setOpenModalFor={setOpenModalFor}
-              currentBalance={financial(loanData?.outstanding_balance)}
-              collateral={collateralBalanceOf}
-            />
-          )}
+          <BorrowMoreModal
+            setOpenModalFor={setOpenModalFor}
+            currentBalance={financial(loanData?.outstanding_balance)}
+            collateral={collateralBalanceOf}
+          />
         </ModalContainer>
       )}
       {/* ---------------------- when choose Coinbase or Gemini Account End ------------------------ */}

@@ -4,14 +4,7 @@ import frameIcon from '@/assets/frame.svg';
 import useLoanData from '@/hooks/useLoanData';
 import ModalContent from '../ModalContent/ModalContent';
 
-function LoanFinalized({
-  // eslint-disable-next-line no-unused-vars
-  setOpenModalFor,
-  navType,
-}: {
-  setOpenModalFor: Function;
-  navType: string;
-}) {
+function LoanFinalized({ navType }: { navType: string }) {
   const { loanData } = useLoanData();
 
   const onContinue = () => {

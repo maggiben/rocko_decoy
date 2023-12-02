@@ -22,7 +22,7 @@ const BorrowPayment: FC = () => {
       <Footer setIsFinalized={setIsFinalized} />
       {isFinalized && (
         <ModalContainer>
-          <LoanFinalized setOpenModalFor={() => {}} navType="add" />
+          <LoanFinalized navType="add" />
         </ModalContainer>
       )}
     </>
