@@ -111,7 +111,7 @@ export default function Home() {
   }, [currentStep]);
 
   useEffect(() => {
-    if (userInfo)
+    if (userInfo && sessionStorage.getItem('isReadOnly') === 'true')
       toast.error(
         'Your account is currently under review. You may manage existing loans but cannot create new loans. Please contact support@rocko.co if you need further assistance.',
       );
