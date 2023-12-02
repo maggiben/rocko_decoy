@@ -24,7 +24,7 @@ export const useUserDB = () => {
   const getUserData = async (email: string) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/users`, {
-        email: email
+        email,
       });
       return response.data;
     } catch (error) {
@@ -36,7 +36,7 @@ export const useUserDB = () => {
   const getUserId = async (email: string) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/userid`, {
-        email: email
+        email,
       });
 
       return response.data.length > 0 ? response.data[0].id : -1;
@@ -50,7 +50,7 @@ export const useUserDB = () => {
     try {
       const ip = await publicIp();
       const response = await axios.post(`${BACKEND_URL}/vpn`, {
-        ip: ip
+        ip,
       });
 
       return response;
@@ -62,7 +62,7 @@ export const useUserDB = () => {
   const isInActive = async (email: string) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/users`, {
-        email: email
+        email,
       });
 
       return response.data.length > 0 ? response.data[0].inactive : null;
@@ -75,10 +75,10 @@ export const useUserDB = () => {
   const isReadOnly = async (email: string) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/users`, {
-        email: email
+        email,
       });
 
-      console.log(response)
+      console.log(response);
 
       return response.data.length > 0 ? response.data[0].readonly : null;
     } catch (error: any) {
