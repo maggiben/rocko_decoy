@@ -7,7 +7,7 @@ import ModalContent from '@/components/chips/ModalContent/ModalContent';
 import Image from 'next/image';
 import closeIcon from '@/assets/Close.svg';
 import { useAlert } from '@/context/alertContext/alertContext';
-import { ALERT_OFF } from '@/constant/constant';
+import { ALERT_OFF } from '@/constants/alertType';
 
 interface Props {
   toggleAlert: boolean | undefined;

@@ -1,16 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useSearchParams } from 'next/navigation';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
-import { useAddress } from '@thirdweb-dev/react';
 import { useGetLoan } from '@/contract/batch';
 import { useSingleLoan } from '@/contract/single';
 import { BLOCKCHAIN } from '@/constants/env';
@@ -67,9 +66,7 @@ function DepositingCollateral() {
   // Wagmi for ZeroDev Smart wallet
   const { address: wagmiAddress } = useAccount();
   const { data } = useBalance({ address: address as `0x${string}` });
-  const { data: wagmiData } = useBalance({
-    address: wagmiAddress as `0x${string}`,
-  });
+
   const { chain } = useNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
     useGetLoan(collateral || 0, borrowing || 0);

@@ -5,7 +5,6 @@ import HoverTooltip from '../HoverTooltip/HoverTooltip';
 
 const Protocol: FC<ProtocolProps> = ({
   interestRate,
-  id,
   name,
   protocolInfos,
   symbol,

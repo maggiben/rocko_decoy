@@ -10,7 +10,6 @@ import HoverTooltip from '../HoverTooltip/HoverTooltip';
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
 const CompoundProtocol: FC<ProtocolProps> = ({
-  interestRate,
   name,
   symbol,
   selectProtocol,

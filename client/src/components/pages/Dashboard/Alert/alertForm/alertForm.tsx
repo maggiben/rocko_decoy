@@ -1,27 +1,21 @@
-import closeIcon from '@/assets/Close.svg';
 import { FC, useRef, useState } from 'react';
 import { IoIosCheckbox, IoMdCall } from 'react-icons/io';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { AiOutlineMail } from 'react-icons/ai';
 import Image from 'next/image';
 import { BiLeftArrowAlt } from 'react-icons/bi';
+import Link from 'next/link';
 import { AlertFormProps, AprAlertType, BufferAlertType } from '@/types/type';
 import { useAlertDB } from '@/db/alertDb';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { useZeroDev } from '@/hooks/useZeroDev';
-import Link from 'next/link';
-import { UPDATE_ALERT } from '@/constant/constant';
+import closeIcon from '@/assets/Close.svg';
+import { UPDATE_ALERT } from '@/constants/alertType';
 import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
 import SelectOptionOne from '../collateralBufferAlerts/selectOption/SelectOptionOne';
 
-interface Checked {
-  email: boolean;
-  call: boolean;
-}
-
 const AlertForm: FC<AlertFormProps> = ({
   loanId,
-  description,
   setOpenModalFor,
   title,
   setNext,

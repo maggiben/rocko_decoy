@@ -4,9 +4,6 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
-// import google from "@/assets/google-icon 1.svg";
-import Image from 'next/image';
-
 interface ShowPass {
   pass: boolean;
   confirmPass: boolean;

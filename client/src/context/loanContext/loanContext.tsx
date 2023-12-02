@@ -48,9 +48,11 @@ export const loneContext = createContext<ContextValues>({
   },
   loanSteps: [],
   currentStep: 0,
+  // eslint-disable-next-line no-unused-vars
   setLoanData(value: SetStateAction<{}>) {
     throw new Error('Function not implemented.');
   },
+  // eslint-disable-next-line no-unused-vars
   setCurrentStep(value: SetStateAction<number>) {
     throw new Error('Function not implemented.');
   },

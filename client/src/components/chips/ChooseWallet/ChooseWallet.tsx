@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import closeIcon from '@/assets/Close.svg';
 import ModalContent from '../ModalContent/ModalContent';
-import CoinbaseLoginBtn from '../CoinbaseLoginBtn/CoinbaseLoginBtn';
 
 function ChooseWallet({
   setOpenModalFor,
@@ -11,9 +10,9 @@ function ChooseWallet({
 }: {
   setOpenModalFor: Function; //! if openModalFor's value is empty string then popup modal is closed if it's not empty string
   setModalStep: Function; //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
+  // eslint-disable-next-line no-unused-vars
   setConnect?: (value: boolean) => void; //! setConnect is only passed from modify-collateral page that's why it's optional
 }) {
-  const [selectedWallet, setSelectedWallet] = useState('');
   const [activeBtn, setActiveBtn] = useState<boolean>(false); //! on clicking any radio button the value will be true and continue btn will be activated
   const handleContinueBtn = () => {
     if (setConnect) {
@@ -64,7 +63,6 @@ function ChooseWallet({
             value="Coinbase"
             className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
             onClick={() => setActiveBtn(true)}
-            onChange={(e) => setSelectedWallet(e.target.value)}
           />
           <label htmlFor="Coinbase" className="pl-4">
             <p className="font-semibold">Coinbase</p>
@@ -78,7 +76,6 @@ function ChooseWallet({
             value="Gemini"
             className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
             onClick={() => setActiveBtn(true)}
-            onChange={(e) => setSelectedWallet(e.target.value)}
           />
           <label htmlFor="Gemini" className="pl-4">
             <p className="font-semibold">Gemini</p>

@@ -3,14 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import toast from 'react-hot-toast';
-import logo from '@/assets/logo.png';
-import user from '@/assets/images/user.png';
 import { useEffect, useState, useRef } from 'react';
 import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import * as chains from 'wagmi/chains';
 import { Auth0WalletConnector } from '@zerodev/wagmi';
+import user from '@/assets/images/user.png';
+import logo from '@/assets/logo.png';
 import { NETWORK } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useLoanDB } from '@/db/loanDb';
@@ -158,7 +157,7 @@ function Header() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.addEventListener('resize', (e) => {
+      window.addEventListener('resize', () => {
         if (window.innerWidth > 1023) setToggle(false);
       });
     }

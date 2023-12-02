@@ -7,12 +7,12 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
-import { useAddress } from '@thirdweb-dev/react';
 import { NETWORK } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
@@ -37,8 +37,7 @@ function ModifyStatus() {
   const [collateral, setCollateral] = useState<number>(0);
   // Thirdweb for EOA
   const address = useAddress();
-  const { wethToETH, depositZerodevAccount, getCollateralBalanceOf } =
-    useSingleLoan();
+  const { depositZerodevAccount, getCollateralBalanceOf } = useSingleLoan();
   const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address: zerodevAccount } = useAccount();

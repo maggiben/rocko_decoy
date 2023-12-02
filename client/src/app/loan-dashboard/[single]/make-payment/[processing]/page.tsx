@@ -7,12 +7,12 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
-import { useAddress } from '@thirdweb-dev/react';
 import { BLOCKCHAIN, PAYMENT_BUFFER } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
@@ -27,7 +27,7 @@ interface DoneTracker {
 }
 
 function Processing() {
-  const { processing, single: loanIndex } = useParams(); //! by using this hook get the URL parameter
+  const { single: loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   let currentBalance = parseFloat(router.get('balance') || '0');
@@ -41,7 +41,6 @@ function Processing() {
   const [loanData, setLoanData] = useState<any>();
   const [collateral, setCollateral] = useState<number>(0);
   const [outStandingBalance, setOutStandingBalance] = useState<number>(0);
-  const [borrowBalanceOf, setBorrowBalanceOf] = useState<number>(0);
   const [originalborrowBalance, setOriginalBorrowBalance] = useState<number>(0);
 
   // Thirdweb for EOA
@@ -64,7 +63,7 @@ function Processing() {
     batchRepayFull,
     success: fullySuccess,
     txHash: fullyTxHash,
-  } = useRepayFull(collateral, payment, borrowBalanceOf);
+  } = useRepayFull(collateral, payment);
 
   const [activeDoing, setActiveDoing] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
   const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
@@ -80,7 +79,6 @@ function Processing() {
   const initialize = async () => {
     if (userInfo) {
       const borrowBalance = await getBorrowBalanceOf();
-      setBorrowBalanceOf(borrowBalance);
       if (originalborrowBalance === 0) {
         setOriginalBorrowBalance(borrowBalance);
       }

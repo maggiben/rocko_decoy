@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import StatusWarning from '@/assets/StatusWarning.svg';
 import { ConnectWallet } from '@thirdweb-dev/react';
+import StatusWarning from '@/assets/StatusWarning.svg';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
@@ -10,24 +10,11 @@ import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
 import useLoanData from '@/hooks/useLoanData';
 import financial from '@/utility/currencyFormate';
 
-interface InnerInfo {
-  description: string | JSX.Element;
-  details?: string | number | JSX.Element;
-  subDetails?: string;
-}
-
-interface Info {
-  description: string | JSX.Element;
-  details?: string | number | JSX.Element;
-  subDetails?: string;
-  subDescription?: InnerInfo[];
-}
-
 interface Term {
   rule: JSX.Element;
 }
 
-const terms = [
+const terms: Term[] = [
   {
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
@@ -49,8 +36,9 @@ const terms = [
   {
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        Rocko’s service fee will be taken out of the initial amount transferred
-        to your Rocko wallet. More info on Rocko’s service fee can be found{' '}
+        Rocko&apos;s service fee will be taken out of the initial amount
+        transferred to your Rocko wallet. More info on Rocko&apos;s service fee
+        can be found{' '}
         <Link href="/" className="underline">
           here
         </Link>

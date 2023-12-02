@@ -12,7 +12,6 @@ import toast from 'react-hot-toast';
 interface Props {
   steps?: number;
   currentStep?: number;
-  stepNames?: Array<string>;
   onBack?: () => void;
   setIsFinalized: React.Dispatch<any>;
 }
@@ -20,13 +19,7 @@ interface Props {
 const net = (blockchains as { [key: string]: any })[NETWORK];
 
 function Footer(props: Props) {
-  const {
-    steps = 1,
-    currentStep = 1,
-    stepNames = [],
-    onBack,
-    setIsFinalized,
-  } = props;
+  const { steps = 1, currentStep = 1, onBack, setIsFinalized } = props;
   const { loanSteps, setCurrentStep, loanData, setLoanData } = useLoanData();
   const address = useAddress();
   const { address: zerodevAccount } = useAccount();

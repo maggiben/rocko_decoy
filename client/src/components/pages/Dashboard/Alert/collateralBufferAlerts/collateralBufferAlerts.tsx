@@ -8,7 +8,7 @@ import { IoMdCall } from 'react-icons/io';
 import notification from '@/assets/notifications_active.svg';
 import remove from '@/assets/delete.svg';
 import { useAlert } from '@/context/alertContext/alertContext';
-import { DELETE_ALERT } from '@/constant/constant';
+import { DELETE_ALERT } from '@/constants/alertType';
 import { AprAlertType, BufferAlertType } from '@/types/type';
 import { sortAprAlert, sortBufferAlert } from '@/utility/sortAlert';
 import { useAlertDB } from '@/db/alertDb';

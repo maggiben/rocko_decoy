@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import frameIcon from '@/assets/frame.svg';
 import Image from 'next/image';
+import frameIcon from '@/assets/frame.svg';
 import useLoanData from '@/hooks/useLoanData';
 import ModalContent from '../ModalContent/ModalContent';
 
 function LoanFinalized({
+  // eslint-disable-next-line no-unused-vars
   setOpenModalFor,
   navType,
 }: {

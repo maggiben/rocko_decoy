@@ -1,7 +1,7 @@
-import closeIcon from '@/assets/Close.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import closeIcon from '@/assets/Close.svg';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';

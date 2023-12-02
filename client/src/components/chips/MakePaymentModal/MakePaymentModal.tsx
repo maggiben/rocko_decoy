@@ -128,7 +128,7 @@ function MakePaymentModal({
             setInputNumber(valueWithoutCommas);
             setChangeInputType('number');
           }}
-          onBlur={(event) => {
+          onBlur={() => {
             /* on onBlur set the number */
             if (
               parseFloat(inputNumber?.replace(/,/g, '') || '0') < 0.000001 &&

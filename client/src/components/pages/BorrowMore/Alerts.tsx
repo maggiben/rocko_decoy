@@ -1,6 +1,5 @@
 import React from 'react';
 import alert from '@/assets/alert.svg';
-import { FiAlertCircle } from 'react-icons/fi';
 import ToggleBtn from '@/components/chips/ToggleBtn/ToogleBtn';
 import Image from 'next/image';
 import Button from '@/components/Button';

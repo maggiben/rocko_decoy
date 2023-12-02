@@ -9,7 +9,7 @@ import {
   // UPDATE_FREQUENCY,
   // UPDATE_INTEREST_RATE,
   CLEAR_ALERT,
-} from '@/constant/constant';
+} from '@/constants/alertType';
 
 export interface CoinCardProps {
   coinIcon: string;

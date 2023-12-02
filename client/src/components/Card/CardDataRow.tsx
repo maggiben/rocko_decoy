@@ -1,17 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
-import Divider from '../Divider';
 import HoverTooltip from '../chips/HoverTooltip/HoverTooltip';
-
-type Props = {
-  items: Item[];
-};
 
 type Item = {
   title: string;
   value: string;
   infoText?: string;
   classes?: { title?: string; value?: string };
+};
+type Props = {
+  items: Item[];
 };
 
 type RowProps = { data: Item };

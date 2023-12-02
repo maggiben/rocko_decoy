@@ -3,7 +3,6 @@ import closeIcon from '@/assets/Close.svg';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
@@ -11,6 +10,7 @@ import logger from '@/utility/logger';
 
 function ModifyWallet({
   setOpenModalFor,
+  // eslint-disable-next-line no-unused-vars
   setModalStep,
   currentBalance,
   collateral,
@@ -159,7 +159,7 @@ function ModifyWallet({
             setInputNumber(valueWithoutCommas);
             setChangeInputType('number');
           }}
-          onBlur={(event) => {
+          onBlur={() => {
             /* on onBlur set the number */
             // const valueWithoutCommas = parseFloat(
             //   inputNumber?.replace(/,/g, "") || "0"

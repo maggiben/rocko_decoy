@@ -1,13 +1,13 @@
 /* global BigInt */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAccount, useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
-import { parseBalance, getRoundDown } from '@/utility/utils';
 import {
   usePrepareContractBatchWrite,
   useContractBatchWrite,
 } from '@zerodev/wagmi';
 import { useAddress } from '@thirdweb-dev/react';
+import { parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
 import {
   USDCContract,
@@ -149,11 +149,7 @@ export const useRepaySome = (loan: any) => {
   return { executeBatchRepaySome, batchRepaySome, success, txHash, error };
 };
 
-export const useRepayFull = (
-  collateral: any,
-  loan: any,
-  borrowBalanceOf: any,
-) => {
+export const useRepayFull = (collateral: any, loan: any) => {
   const { address: wagmiAddress } = useAccount();
   const address = useAddress();
 

@@ -21,7 +21,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const [activeInputField, setActiveInputField] = useState(true);
   const {
     register,
-    formState: { errors, isLoading, isValid, isValidating },
+    formState: { errors, isValid },
     setValue,
     getValues,
     // TODO figure out why onBlur isnt working

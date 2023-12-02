@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import compound from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
-import ToggleBtn from '@/components/chips/ToggleBtn/ToogleBtn';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import MakePaymentModal from '@/components/chips/MakePaymentModal/MakePaymentModal';
@@ -43,9 +42,7 @@ const headings = [
 ];
 
 function SinglePage() {
-  const params = useParams();
   const searchParams = useSearchParams();
-  const loanIndex = Number(params.single);
   const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
   const { userInfo } = useZeroDev();

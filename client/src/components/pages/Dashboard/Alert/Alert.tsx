@@ -1,4 +1,4 @@
-import { Dispatch, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { useAlertDB } from '@/db/alertDb';

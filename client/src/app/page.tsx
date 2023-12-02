@@ -34,6 +34,7 @@ export default function Home() {
   const { userInfo } = useZeroDev();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [openModalFor, setOpenModalFor] = useState('');
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();

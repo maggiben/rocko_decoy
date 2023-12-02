@@ -14,7 +14,7 @@
     "@headlessui/react": "^1.7.17",
     "@thirdweb-dev/react": "^3.16.4",
     "@thirdweb-dev/sdk": "^3.10.66",
-    "@types/node": "20.5.0",
+    "@types/node": "^20.10.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@zerodev/sdk": "^4.3.4",

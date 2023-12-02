@@ -17,7 +17,6 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
-  const [valueDivWidth, setValueDivWidth] = useState<number>(0);
 
   const [minimum, setMinimum] = useState<number>(0);
   const { loanData, setLoanData } = useLoanData();
@@ -132,11 +131,6 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     if (setLoanData) await updateLoanData(newValue > 1000 ? 1000 : newValue);
   };
 
-  const isEnd = thumbPosition === 100;
-  const adjustedThumbPosition = isEnd
-    ? thumbPosition - valueDivWidth / 2 // Subtract half of value div width
-    : thumbPosition;
-
   const valueDivStyle = {
     left: `calc(${thumbPosition}% - ${80 / 2}px)`,
   };
@@ -145,10 +139,6 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (valueDivRef.current) setValueDivWidth(valueDivRef.current.offsetWidth);
-  }, [value]);
 
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">

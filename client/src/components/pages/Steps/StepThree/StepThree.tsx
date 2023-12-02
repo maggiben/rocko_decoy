@@ -37,7 +37,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
       }));
     }
   };
-  const handleFilterOption = (name: string, isChecked: boolean) => {
+  const handleFilterOption = (name: string) => {
     const index = filterOptions.indexOf(name);
 
     if (index === -1) {

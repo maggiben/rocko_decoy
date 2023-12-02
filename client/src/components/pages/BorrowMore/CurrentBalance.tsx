@@ -2,7 +2,6 @@ import Card from '@/components/Card';
 import CardDataRow from '@/components/Card/CardDataRow';
 import Divider from '@/components/Divider';
 import React from 'react';
-import Image from 'next/image';
 import CardHeader from '@/components/pages/BorrowMore/CardHeader';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
 import Button from '@/components/Button';

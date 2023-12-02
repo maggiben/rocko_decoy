@@ -20,22 +20,6 @@ interface Props {
   category: CATEGORY;
 }
 
-interface Term {
-  rule: JSX.Element;
-}
-
-const terms: Term[] = [
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm">
-        You will need to authorize the transfer to your Rocko wallet for the
-        Payment Amount above. If your Rocko wallet does not receive the Payment
-        Amount, no payment will be made.
-      </li>
-    ),
-  },
-];
-
 const summaryData = {
   borrow_more: {
     title: 'Where do you want to receive your loan increase?',

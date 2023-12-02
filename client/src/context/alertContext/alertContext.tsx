@@ -6,7 +6,7 @@ import {
   DELETE_ALERT,
   UPDATE_ALERT,
   CLEAR_ALERT,
-} from '@/constant/constant';
+} from '@/constants/alertType';
 import {
   AlertContextValues,
   AprAlertAction,

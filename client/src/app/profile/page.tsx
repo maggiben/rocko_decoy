@@ -1,28 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { useAccount, useBalance } from 'wagmi';
+import Image from 'next/image';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useZeroDev } from '@/hooks/useZeroDev';
-import { useAccount, useBalance, useContractWrite } from 'wagmi';
 import { USDCContract, WETHContract, networkChainId } from '@/constants';
-import useLoanData from '@/hooks/useLoanData';
 import financial from '@/utility/currencyFormate';
-import { etherscanLink, parseBalance } from '@/utility/utils';
-import Image from 'next/image';
-
-const WETHABI = require('../../constants/weth.json');
-const USDCABI = require('../../constants/usdc.json');
-
-const uintMax =
-  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-
-interface InnerInfo {
-  description: string | JSX.Element;
-  details?: string | number | JSX.Element;
-  subDetails?: string;
-}
+import { etherscanLink } from '@/utility/utils';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState('');
@@ -150,25 +136,6 @@ const Profile: React.FC = () => {
           ),
         },
       ],
-    },
-  ];
-
-  const invoice3 = [
-    {
-      description: 'Password',
-      details: 'Change Password',
-    },
-    {
-      description: 'Two-Factor Authentication',
-      details: 'Text Message (SMS)',
-    },
-    {
-      description: 'Devices',
-      details: '',
-    },
-    {
-      description: 'Linked Apps',
-      details: '',
     },
   ];
 
