@@ -42,8 +42,8 @@ function DepositingCollateral() {
       : loanData?.collateralNeeded;
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
-  const [totalBorrowing, setTotalBorrowing] = useState<number>(0);
-  const [totalCollateral, setTotalCollateral] = useState<number>(0);
+  const [totalBorrowing, setTotalBorrowing] = useState<number>(borrowing);
+  const [totalCollateral, setTotalCollateral] = useState<number>(collateral);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -151,16 +151,10 @@ function DepositingCollateral() {
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
             setTotalBorrowing(
-              match_loan[0].outstanding_balance +
-                (type === 'add'
-                  ? borrowMoreData.payment_loan
-                  : loanData?.borrowing),
+              match_loan[0].outstanding_balance + borrowing
             );
             setTotalCollateral(
-              match_loan[0].collateral +
-                (type === 'add'
-                  ? borrowMoreData.payment_collateral
-                  : loanData?.collateralNeeded),
+              match_loan[0].collateral + collateral
             );
           }
         }
