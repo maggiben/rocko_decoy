@@ -38,14 +38,14 @@ function CryptoHolding() {
           <DataCard
             className="max-w-[660px]"
             heading="DeFi borrowing made easy — for everyone"
-            content="Rocko provides a simple-to-use and secure interface to borrow from Compound, a popular Decentralized Finance (DeFi) lending platform. Set up your custom loan in minutes, no matter your level of DeFi experience! "
+            content="Decentralized Finance (DeFi) lending protocols are applications that run on blockchain networks like Ethereum and allow users to borrow or lend crypto assets. Rocko’s simple-to-use platform reduces the time and complexity so consumers of all levels can easily borrow cash1 or USDC from popular DeFi protocols — starting with Compound."
           />
         </div>
         <div className="flex justify-between items-center border-b lg:gap-20 lg:py-[64px] py-[30px] gap-y-[20px]  sm:flex-wrap lg:flex-nowrap">
           <DataCard
             className="ms:order-last lg:order-first"
-            heading="DeFi borrowing made easy — for everyone"
-            content="Rocko provides a simple-to-use and secure interface to borrow from Compound, a popular Decentralized Finance (DeFi) lending platform. Set up your custom loan in minutes, no matter your level of DeFi experience! "
+            heading="Borrow up to 82% of the value of your Ether — with flexible loan terms2"
+            content="Use Rocko to access better loan-to-value ratios, more competitive rates, and more flexible loan terms than offered by many traditional lenders. Take out your loan for as little or as long as you like.3 And, with no monthly minimum payments!"
           />
           <PictureCard className="min-h-[300px] sm:min-h-[250px] flex justify-between items-center className='max-w-[100%]' lg:order-last sm:order-first ">
             <img src={coinGroup} alt="" height={104} />
@@ -66,8 +66,8 @@ function CryptoHolding() {
             </div>
           </PictureCard>
           <DataCard
-            heading="DeFi borrowing made easy — for everyone"
-            content="Rocko provides a simple-to-use and secure interface to borrow from Compound, a popular Decentralized Finance (DeFi) lending platform. Set up your custom loan in minutes, no matter your level of DeFi experience! "
+            heading="Use your loan how you want "
+            content="With Rocko, you can quickly get funds with no credit check required. Use your loan to purchase real estate, pay down higher-rate debt, make other investments, and much more."
           />
         </div>
         <p className="text-[#141414] text-[10px] ">

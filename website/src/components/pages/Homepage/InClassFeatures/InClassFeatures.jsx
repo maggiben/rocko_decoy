@@ -23,7 +23,7 @@ function InClassFeatures() {
             <div className="max-w-[462px] m-auto">
               <img src={group} alt="group" />
             </div>
-            <h2 className="lg:text-[40px] text-[25px] text-white font-medium mb-[12px] mt-[24px] text-center tracking-normal">
+            <h2 className="lg:text-[28px] text-[25px] text-white font-medium mb-[12px] mt-[24px] text-center tracking-normal">
               Quick Loan Process
             </h2>
             <p className="text-center text-[20px] text-[#FFFFFF99] max-w-[675px] m-auto">
@@ -32,7 +32,7 @@ function InClassFeatures() {
             </p>
           </div>
           <div className="relative flex flex-col  gap-4 sm:gap-auto items-start gap-y-[40px] lg:flex-now-wrap sm:flex-wrap">
-            <div className="flex  gap-4  sm:gap-x-10 justify-between w-full lg:flex-nowrap sm:flex-wrap">
+            <div className="flex  gap-4  sm:gap-x-10 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap">
               <FeatureCard
                 title="Receive USD* or USDC"
                 description="If you're a U.S Coinbase or Gemini user, choose to automatically receive your loan in USD so it can be used for many more use cases such as paying down higher-rate debt, buying a car, and more."
@@ -53,7 +53,7 @@ function InClassFeatures() {
                       selectedCoin=""
                     />
                   </div>
-                  <p className="text-[#0F2E35] lg:text-[40px] md:text-[25px] text-[18px] font-medium my-[40px]">
+                  <p className="text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[40px]">
                     Receive USD1 or USDC
                   </p>
                 </div>
@@ -68,7 +68,7 @@ function InClassFeatures() {
                     <GUSDIcon height={80} width={80} />
                     <GUSDIconV2 height={80} width={80} />
                   </div>
-                  <div className="text-[#0F2E35] lg:text-[40px] md:text-[25px] text-[18px] font-medium my-[40px]">
+                  <div className="text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[40px]">
                     Coinbase & Gemini Integrations
                   </div>
                 </div>
@@ -79,14 +79,14 @@ function InClassFeatures() {
                 className="bg-[#E5F0FF]"
               >
                 <div>
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[40px] md:text-[25px] text-[18px] font-medium mb-[40px]">
+                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mb-[40px]">
                     Powerful Loan Management Tools
                   </p>
                   <RangeIcon className="mb-[40px] w-full" height={91} />
                 </div>
               </FeatureCard>
             </div>
-            <div className="flex flex-col md:flex-row gap-4  sm:gap-x-10 justify-between w-full">
+            <div className="flex  gap-4  sm:gap-x-10 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap justify">
               <FeatureCard
                 title="Audited DeFi Protocols Only"
                 description="Only lending protocols that have undergone third-party security audits are available through Rocko’s interface."
@@ -99,7 +99,7 @@ function InClassFeatures() {
                     height={80}
                     alt=""
                   />
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[40px] md:text-[25px] text-[18px] font-medium my-[82px]">
+                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[82px]">
                     Audited DeFi Protocols Only
                   </p>
                 </div>
@@ -110,7 +110,7 @@ function InClassFeatures() {
                 className="bg-[#F9F9F9]"
               >
                 <div>
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[40px] md:text-[25px] text-[18px] font-medium mb-[40px]">
+                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mb-[40px]">
                     Two-Factor Authentication
                   </p>
                   <div className="h-[80px] flex gap-4 mb-[124px]">
@@ -135,17 +135,17 @@ function InClassFeatures() {
                 className="bg-[#0F2E35]"
               >
                 <div>
-                  <div className="mb-[40px] gap-4 sm:gap-auto flex p-6 justify-between items-center rounded-full max-w-xs bg-[#1C373C]">
+                  <div className="mb-[40px] gap-2 sm:gap-auto flex p-3 max-w-[180px] w-full items-center rounded-full max-w-xs bg-[#1C373C]">
                     <CloseBtn
-                      icon={<CloseIcon fill="#E11900" height={24} width={24} />}
+                      icon={<CloseIcon fill="#E11900" height={20} width={20} />}
                       className="bg-[#FED7D2]"
                     />
-                    <p className="text-[20px] sm:text-[32px] text-[#FFF] font-600 leading-6">
+                    <p className="text-[16px]  text-[#FFF] font-semibold">
                       Network Fees
                     </p>
                   </div>
                   <div className="mb-[124px]">
-                    <p className="leading-[48px] text-[#FFF] lg:text-[40px] md:text-[25px] text-[18px] font-medium">
+                    <p className="leading-[48px] text-[#FFF] lg:text-[28px] md:text-[25px] text-[18px] font-medium">
                       Covered Network Fees
                     </p>
                     <span className="text-xs text-[#545454]">(gas costs*)</span>

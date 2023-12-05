@@ -24,7 +24,14 @@ function FAQ(props) {
           Frequently Asked Questions
         </h2>
         {items.map(({ id, ques, answer }) => (
-          <div key={id} className="border-b-[1px] border-[#E2E2E2] py-[24px]">
+          <div
+            key={id}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            role="button"
+            className="border-b-[1px] border-[#E2E2E2] py-[24px] cursor-pointer"
+            onClick={() => handleClick(id)}
+          >
             <div className="flex justify-between items-center relative bg-[#F9F9F9]">
               <h4 className="text-[#141414] w-4/5 text-[16px] sm:text-[20px] font-normal leading-7">
                 {ques}
@@ -34,7 +41,6 @@ function FAQ(props) {
                 onKeyDown={() => {}}
                 tabIndex={0}
                 role="button"
-                onClick={() => handleClick(id)}
               >
                 {active[id] ? (
                   <MinusIcon height={24} width={24} />
@@ -44,7 +50,11 @@ function FAQ(props) {
               </div>
             </div>
             <div>
-              <Collapse isOpened={active[id]}>
+              <Collapse
+                isOpened={active[id]}
+                className={active === 'transition duration-500 '}
+                style={{ transition: 'all 0.5s ease 0s' }}
+              >
                 <p className="text-[#545454] text-[16px] pt-[16px] leading-6 font-normal">
                   {answer}{' '}
                 </p>
@@ -52,7 +62,7 @@ function FAQ(props) {
             </div>
           </div>
         ))}
-        <div className="text-[18px] font-400 leading-6 ">
+        <div className="text-[18px] font-400 leading-6">
           See more frequently asked questions{' '}
           <Link to="/" className="text-[#006AFF] underline-offset-4">
             here

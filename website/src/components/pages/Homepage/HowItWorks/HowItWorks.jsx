@@ -28,6 +28,7 @@ function HowItWorks() {
                 description="Transfer the crypto collateral for your loan to your Rocko smart wallet and it will automatically withdraw your loan from Compound and transfer it to your specified account or wallet!"
               />
               <DataCard
+                className="pb-0"
                 title="Receive Loan"
                 description="Receive your crypto loan and use it how you want! You can then manage and repay your loan at any time using the Rocko loan dashboard."
                 isNext={false}

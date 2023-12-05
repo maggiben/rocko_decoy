@@ -2,11 +2,12 @@ import clsx from 'clsx'
 import React from 'react'
 
 function DataCard(props) {
-  const { title, description, isNext = true } = props
+  const { title, description, className, isNext = true } = props
   return (
     <div
       className={clsx(
-        'pb-[60px] pl-[16px] lg:max-w-[520px] relative last-child-pb-0',
+        className,
+        'pb-[60px] pl-[16px] lg:max-w-[520px] relative ',
         isNext
           ? 'after:w-[1px] after:h-[92.5%] after:absolute after:top-[20px] after:bg-[#0E2A30] after:left-[0]'
           : '',

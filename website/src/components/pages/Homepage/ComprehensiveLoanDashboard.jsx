@@ -24,8 +24,8 @@ function ComprehensiveLoanDashboard() {
               />
               <DataIconCard
                 className="md:max-w-[330px]"
-                cardHeading="Payment & Collateral Options"
-                CardContent="Make partial or full repayments, or modify your collateral at anytime."
+                cardHeading="Manage Your Loan"
+                CardContent="Borrow more, make payments, or modify your collateral at anytime."
                 icon={PaymentIcon}
               />
               <DataIconCard

@@ -13,7 +13,7 @@ function Header(props) {
       <Link
         to="/waitlist"
         variant="custom"
-        className="lg:mb-[32px] mb-[20px] uppercase text-[#006AFF] bg-white"
+        className="lg:mb-[32px] mb-[20px] uppercase text-[#006AFF] bg-white py-[11px] px-[24.6px] text-sm font-semibold rounded-full"
       >
         Join the waitlist
       </Link>

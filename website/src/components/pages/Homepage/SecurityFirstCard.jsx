@@ -17,7 +17,7 @@ function SecurityFirstCard() {
           <div className="flex justify-between items-start lg:gap-[30px] gap-[20px] sm:flex-wrap md:flex-nowrap ">
             <DataIconCard
               className="sm:max-w-[272px]  max-w-[100%] w-full"
-              cardHeading="Audited DeFi protocols only"
+              cardHeading="Audited DeFi Protocols Only"
               CardContent="Rocko only supports lending protocols that have undergone third-party security audits."
               icon={VerifiedIcon}
             />

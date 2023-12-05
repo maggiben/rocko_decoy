@@ -17,7 +17,7 @@ function FeatureCard(props) {
       style={{ transform: `rotateY(${active ? '180' : '0'}deg)` }}
       className={clsx(
         className,
-        'perceptive-[1000px] transform-style-3d md:max-w-[427px] min-h-[300px] sm:min-h-[460px] w-full md:p-[40px] p-[16px] rounded-[16px] transition duration-500 ease-in-out',
+        'perceptive-[1000px] transform-style-3d md:max-w-[427px] min-h-[300px] sm:min-h-[460px] w-full md:p-[20px] p-[16px] rounded-[16px] transition duration-500 ease-in-out',
       )}
     >
       <div className="relative transform-style-3d">
