@@ -16,7 +16,13 @@ function StepBtn(props) {
     >
       <span className="absolute left-[-2px] top-0 h-[42px] bg-[#0E2A30] w-[2px]" />
       <p className="text-[18px] text-[#141414] font-medium">{title}</p>
-      <p className="text-[#545454] text-[16px]">{subTitle}</p>
+      <p
+        className={`text-[#545454] text-[16px] transition-all ${
+          active ? '' : 'hidden'
+        }`}
+      >
+        {subTitle}
+      </p>
     </div>
   )
 }

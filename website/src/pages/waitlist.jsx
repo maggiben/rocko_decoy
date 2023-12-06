@@ -57,13 +57,13 @@ function LandingPage() {
                             name="EMAIL"
                             id="EMAIL"
                             type="email"
-                            className="form-control"
+                            className="form-control "
                             placeholder="Type your email here"
                           />
                         </div>
                         <button
                           type="submit"
-                          className="btn btn-primary !text-white !bg-[#293991] notify_button"
+                          className="btn btn-primary !text-white !bg-[#293991] p-[15px] 2xl:px-[31px] 2xl:py-[19px] "
                         >
                           NOTIFY ME
                         </button>

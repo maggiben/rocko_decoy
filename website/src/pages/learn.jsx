@@ -11,7 +11,7 @@ import CryptoDeFi from '../components/HomeBlogs/CryptoDeFi'
 import Faq from '../components/HomeBlogs/Faq'
 import HeroBlog from '../components/HeroBlog/HeroBlog'
 import SortedComponent from '../components/Sorted/SortedComponent'
-import Layout from '../components/layout'
+import Layout from '../layout'
 
 const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
 

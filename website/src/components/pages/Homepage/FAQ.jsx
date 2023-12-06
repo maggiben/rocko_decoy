@@ -56,13 +56,13 @@ function FAQ(props) {
                 style={{ transition: 'all 0.5s ease 0s' }}
               >
                 <p className="text-[#545454] text-[16px] pt-[16px] leading-6 font-normal">
-                  {answer}{' '}
+                  {React.createElement(answer)}{' '}
                 </p>
               </Collapse>
             </div>
           </div>
         ))}
-        <div className="text-[18px] font-400 leading-6">
+        <div className="text-[18px] font-400 leading-6 mt-[4px]">
           See more frequently asked questions{' '}
           <Link to="/" className="text-[#006AFF] underline-offset-4">
             here

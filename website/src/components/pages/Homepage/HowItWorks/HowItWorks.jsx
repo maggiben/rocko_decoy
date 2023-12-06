@@ -17,20 +17,20 @@ function HowItWorks() {
             <div className="lg:shrink-0 lg:grow">
               <DataCard
                 title="Set Up Your Loan"
-                description="Set up your loan to your preferences. Choose how much to borrow, which type of crypto asset to use as collateral, and where to receive the loan amount."
+                description="Choose how much to borrow, which type of crypto asset to use as collateral, how much collateral to post, and where to receive the loan amount."
               />
               <DataCard
                 title="Receive a Rocko Smart Wallet"
-                description="Upon finalizing your loan, you'll automatically receive a Rocko smart wallet. It's programmed to automatically fulfill your loan based on the loan specifications you set."
+                description="Upon finalizing your loan, you’ll receive a Rocko smart wallet which will automatically fulfill your loan based on your specifications."
               />
               <DataCard
                 title="Transfer Collateral for Automatic Loan Fulfillment"
-                description="Transfer the crypto collateral for your loan to your Rocko smart wallet and it will automatically withdraw your loan from Compound and transfer it to your specified account or wallet!"
+                description="Once you transfer the crypto collateral to your Rocko smart wallet, it will automatically deposit the collateral in Compound and transfer your loan to your specified account or wallet."
               />
               <DataCard
                 className="pb-0"
                 title="Receive Loan"
-                description="Receive your crypto loan and use it how you want! You can then manage and repay your loan at any time using the Rocko loan dashboard."
+                description="You can manage and repay your loan at any time using the Rocko loan dashboard. Upon fully repaying your loan, you’ll automatically receive your collateral back."
                 isNext={false}
               />
             </div>

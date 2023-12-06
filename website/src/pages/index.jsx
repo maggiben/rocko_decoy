@@ -9,7 +9,7 @@ import SecurityFirstCard from '../components/pages/Homepage/SecurityFirstCard'
 import Header from '../components/pages/Homepage/Header'
 import CollateralAssets from '../components/pages/Homepage/CollateralAssets/CollateralAssets'
 import Layout from '../layout'
-import { faqs } from '../mock/data' // eslint-disable-line
+import faqs from '../mock/data'
 import getBorrowApr from '../utils/getBorrowApr.ts'
 
 export default function Homepage() {
@@ -24,7 +24,8 @@ export default function Homepage() {
         subTitle="Receive USD² or USDC using your crypto holdings as collateral."
         description="¹Interest rates are offered by Compound lending protocol and fluctuate
         in real-time based on market forces. The rate displayed may delayed by
-        up to 5 minutes. ²USD is only available to U.S. Coinbase or Gemini
+        up to 5 minutes."
+        content="²USD is only available to U.S. Coinbase or Gemini
         users at this time. All users can convert their USDC loan into USD or
         other fiat via crypto exchanges."
       />
@@ -49,7 +50,7 @@ export default function Homepage() {
         title="Be one of the first to get crypto-backed loan through Rocko"
         description="*USD only available to U.S. Coinbase or Gemini users at this time. All users can convert their USDC loan into USD or other fiat via crypto exchanges."
       />
-      <div className="bg-[#081D21] text-center text-[#ffffff66]">
+      <div className="bg-[#081D21] text-center text-[#ffffff66] py-5">
         <Link
           to="/terms"
           variant="custom"

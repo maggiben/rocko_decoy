@@ -17,24 +17,28 @@ function ComprehensiveLoanDashboard() {
             </h2>
             <div className="flex justify-between items-start lg:gap-[30px] gap-[16px] flex-wrap">
               <DataIconCard
+                iconClassName="!w-[48px] !h-[48px]"
                 className="md:max-w-[330px]"
                 cardHeading="View Key Information"
                 CardContent="View key information such as your current balance, interest rate, and collateral buffer."
                 icon={PercentIcon}
               />
               <DataIconCard
+                iconClassName="!w-[48px] !h-[48px]"
                 className="md:max-w-[330px]"
                 cardHeading="Manage Your Loan"
                 CardContent="Borrow more, make payments, or modify your collateral at anytime."
                 icon={PaymentIcon}
               />
               <DataIconCard
+                iconClassName="!w-[48px] !h-[48px]"
                 className="md:max-w-[330px]"
                 cardHeading="Projected Values Calculator"
                 CardContent="Before committing to a payment or collateral modification, see how it would impact your loan with Rocko’s projected values calculator."
                 icon={VectorIcon}
               />
               <DataIconCard
+                iconClassName="!w-[48px] !h-[48px]"
                 className="md:max-w-[330px]"
                 cardHeading="Track Rewards"
                 CardContent="Track any rewards earned from lending protocols like Compound."

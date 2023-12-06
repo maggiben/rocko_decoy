@@ -68,7 +68,7 @@ function Navbar() {
                 </div>
               </div>
               <Link
-                  to="/waitlist"
+                to="/waitlist"
                 className="bg-[#006AFF] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase hidden lg:flex"
               >
                 Join the waitlist
@@ -105,7 +105,7 @@ function Navbar() {
           <div className="responsive-navContainer fade-in w-full">
             <div className="mx-auto  p-[24px]  bg-white w-full text-center">
               <div className="">
-                <div className="flex flex-col items-center pt-8 gap-y-[16px]">
+                <div className="flex flex-col items-center pt-8 gap-y-[16px] mb-8">
                   {menuItems.map(navItems =>
                     navItems.location ? (
                       <Link
@@ -120,7 +120,7 @@ function Navbar() {
                 </div>
                 <Link
                   to="/waitlist"
-                  className="bg-[#006AFF] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase mt-8"
+                  className="bg-[#006AFF] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase "
                 >
                   Join the waitlist
                 </Link>

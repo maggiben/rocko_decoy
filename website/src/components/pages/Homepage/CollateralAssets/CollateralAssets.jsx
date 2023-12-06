@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import EmailIcon from '../../../../assets/svg-icons/email.svg'
 import PhoneIcon from '../../../../assets/svg-icons/phone.svg'
 import StepBtn from './StepBtn'
@@ -10,11 +10,41 @@ function CollateralAssets() {
   const [tabIndex, setTabIndex] = useState(1)
 
   const CollateralBufferOptions = [{ value: 'Below', label: 'Below' }]
+  const [containerRef, secondRef, thirdRef] = [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+  ]
+
+  const handleActiveTab = (ratio = 0.4, isIntersecting = false) => {
+    const activeTab = (() => {
+      if (ratio <= 0.8 && ratio >= 0.1) return 2
+      if (isIntersecting) return 1
+      return 3
+    })()
+    setTabIndex(activeTab)
+  }
+
+  useEffect(() => {
+    if (containerRef.current) {
+      return () => {}
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        handleActiveTab(entry.intersectionRatio, entry.isIntersecting)
+      },
+      { threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
+    )
+    observer.observe(containerRef.current)
+
+    return () => observer.unobserve(containerRef.current)
+  }, [containerRef])
 
   return (
     <section className="lg:py-[80px] py-[50px] border-b border-[#E2E2E2] bg-[#FCFCFC]">
       <div className="container mx-auto px-4">
-        <div className="lg:mb-[80px] mb-[50px]">
+        <div className="lg:mb-[80px] mb-[50px]" ref={containerRef}>
           <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[891px] mb-[48px]">
             Set up text and email alerts to help manage your loan and collateral
             assets
@@ -22,27 +52,33 @@ function CollateralAssets() {
         </div>
         <div className="flex justify-between items-center lg:flex-nowrap flex-wrap gap-8 lg:gap-0">
           <div className="flex flex-col gap-8">
-            <StepBtn
-              title="Set up alerts"
-              subTitle="Set up alerts to monitor your collateral assets and interest rate."
-              tab={1}
-              active={tabIndex === 1}
-              onPress={setTabIndex}
-            />
-            <StepBtn
-              title="Choose alert type"
-              subTitle="Receive alerts by text, email, or both."
-              tab={2}
-              active={tabIndex === 2}
-              onPress={setTabIndex}
-            />
-            <StepBtn
-              title="Set alert parameters"
-              subTitle="Choose how often to receive them and set up multiple at different levels"
-              tab={3}
-              active={tabIndex === 3}
-              onPress={setTabIndex}
-            />
+            <div>
+              <StepBtn
+                title="Set up alerts"
+                subTitle="Set up alerts to monitor your collateral assets and interest rate."
+                tab={1}
+                active={tabIndex === 1}
+                onPress={setTabIndex}
+              />
+            </div>
+            <div ref={secondRef}>
+              <StepBtn
+                title="Choose alert type"
+                subTitle="Receive alerts by text, email, or both."
+                tab={2}
+                active={tabIndex === 2}
+                onPress={setTabIndex}
+              />
+            </div>
+            <div ref={thirdRef}>
+              <StepBtn
+                title="Set alert parameters"
+                subTitle="Choose how often to receive them and set up multiple at different levels"
+                tab={3}
+                active={tabIndex === 3}
+                onPress={setTabIndex}
+              />
+            </div>
           </div>
           {tabIndex === 1 && (
             <PictureCard

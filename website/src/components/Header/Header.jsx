@@ -89,7 +89,7 @@ function Header() {
                 type="button"
                 className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
               >
-                Login
+                Join the waitlist
               </button>
             </div>
           </div>
