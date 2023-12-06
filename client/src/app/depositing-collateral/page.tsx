@@ -150,12 +150,8 @@ function DepositingCollateral() {
           );
           if (match_loan && match_loan.length > 0) {
             setIsExistLoan(true);
-            setTotalBorrowing(
-              match_loan[0].outstanding_balance + borrowing
-            );
-            setTotalCollateral(
-              match_loan[0].collateral + collateral
-            );
+            setTotalBorrowing(match_loan[0].outstanding_balance + borrowing);
+            setTotalCollateral(match_loan[0].collateral + collateral);
           }
         }
       });

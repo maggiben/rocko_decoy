@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { writeContract, waitForTransaction, fetchBalance } from 'wagmi/actions';
 import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
@@ -20,7 +21,9 @@ import { useUserDB } from '@/db/userDb';
 import { useRepayFull, useRepaySome } from '@/contract/batch';
 import { USDCContract, networkChainId } from '@/constants';
 import { useZeroDev } from '@/hooks/useZeroDev';
-import { etherscanLink } from '@/utility/utils';
+import { etherscanLink, parseBalance } from '@/utility/utils';
+
+const USDCABI = require('../../../../../constants/usdc.json');
 
 interface DoneTracker {
   step: string;
@@ -63,7 +66,7 @@ function Processing() {
     batchRepayFull,
     success: fullySuccess,
     txHash: fullyTxHash,
-  } = useRepayFull(collateral, payment);
+  } = useRepayFull(collateral);
 
   const [activeDoing, setActiveDoing] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
   const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
@@ -166,6 +169,38 @@ function Processing() {
     setCompleteModal(true);
   };
 
+  const withdrawUSDC = async () => {
+    const balance = await fetchBalance({
+      address: zerodevAccount as `0x${string}`,
+      token: USDCContract[networkChainId] as `0x${string}`,
+    });
+
+    const { hash } = await writeContract({
+      address: USDCContract[networkChainId] as `0x${string}`,
+      abi: USDCABI,
+      functionName: 'transfer',
+      args: [address, parseBalance(balance?.formatted, 6)],
+    });
+
+    await waitForTransaction({ hash });
+
+    toast(() => (
+      <div className="flex items-center underline gap-2">
+        <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+        <Link
+          className="hover:text-green-700"
+          href={etherscanLink(fullyTxHash)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Loan successfully repaid!
+        </Link>
+      </div>
+    ));
+
+    setAllDone(fullyTxHash);
+  };
+
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -187,14 +222,17 @@ function Processing() {
   }, [userInfo, loanData, batchRepayFull, batchRepaySome]);
 
   useEffect(() => {
-    if (success || fullySuccess) {
-      const tx = fullySuccess ? fullyTxHash : txHash;
+    if (fullySuccess) {
+      withdrawUSDC();
+    }
+
+    if (success) {
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
           <Link
             className="hover:text-green-700"
-            href={etherscanLink(tx)}
+            href={etherscanLink(txHash)}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -203,7 +241,7 @@ function Processing() {
         </div>
       ));
 
-      setAllDone(tx);
+      setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullySuccess, success, fullyTxHash, txHash]);

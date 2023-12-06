@@ -149,7 +149,7 @@ export const useRepaySome = (loan: any) => {
   return { executeBatchRepaySome, batchRepaySome, success, txHash, error };
 };
 
-export const useRepayFull = (collateral: any, loan: any) => {
+export const useRepayFull = (collateral: any) => {
   const { address: wagmiAddress } = useAccount();
   const address = useAddress();
 
@@ -174,17 +174,8 @@ export const useRepayFull = (collateral: any, loan: any) => {
               address: CometContract[networkChainId],
               abi: COMETABI,
               functionName: 'supply',
-              args: [
-                USDCContract[networkChainId],
-                parseBalance(loan.toString(), 6),
-              ],
+              args: [USDCContract[networkChainId], ethers.constants.MaxUint256],
             },
-            // {
-            //   address: USDCContract[networkChainId],
-            //   abi: USDCABI,
-            //   functionName: 'transfer',
-            //   args: [address, parseBalance(remaining, 6)],
-            // },
             {
               address: CometContract[networkChainId],
               abi: COMETABI,
