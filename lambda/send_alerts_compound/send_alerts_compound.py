@@ -5,11 +5,14 @@
 # This script deals with compound alerts only
 
 # Required env variables
-# DATABASE_HOST: Database host
-# DATABASE_USER: Database user
-# DATABASE_PASS: Database password
-# DATABASE_DB:   Database database
+# DATABASE_HOST:    Database host
+# DATABASE_USER:    Database user
+# DATABASE_PASS:    Database password
+# DATABASE_DB:      Database database
 # SENDGRID_API_KEY: Sendgrid API Key
+# PROVIDER:         quicknode url
+# COMET_CONTRACT:   Comet contract for COMP
+# WETH_CONTRACT:    wETH contract for COMP
 
 import json
 import os
@@ -25,7 +28,7 @@ from modules import send_email
 
 LOGGER = logger.create_logger(level='INFO')
 
-for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB', 'SENDGRID_API_KEY']:
+for v in ['DATABASE_HOST', 'DATABASE_USER', 'DATABASE_PASS', 'DATABASE_DB', 'SENDGRID_API_KEY', 'PROVIDER', 'COMET_CONTRACT', 'WETH_CONTRACT']:
   if not os.environ.get(v):
     LOGGER.error(f"Error, environment variable {v} is required.")
     sys.exit(255)

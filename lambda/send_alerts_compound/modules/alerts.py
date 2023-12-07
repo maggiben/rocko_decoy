@@ -2,7 +2,6 @@ from datetime import datetime
 
 from modules import db
 from modules import eth
-from modules import users
 from modules import send_email
 from modules import send_sms
 
@@ -62,40 +61,50 @@ def apr_alert_triggered(alert_id, loan_id, metric, threshold, logger):
 
 def collateral_alert_triggered(db_config, alert_id, loan_id, metric, threshold, logger):
   # Get the current loan information
-  sql = "SELECT transaction_hash, lending_protocol, collateral, outstanding_balance FROM loans WHERE id=%s"
+  sql = "SELECT user, lending_protocol, collateral, outstanding_balance FROM loans WHERE id=%s"
   logger.debug(f"{sql} - [ {loan_id} ]")
   row = db.get_query_data_single(db_config, sql, [ loan_id ])
 
-  # Get the current ETH price
-  eth_price = eth.get_eth_price()
-  borrow_collateral_factor = eth.get_collateral_factor()
-  collateral = row[2]
+  if row[1].lower() == "compound":
+    # Get the users wallet address
+    sql = "SELECT wallet_address FROM users WHERE id=%s"
+    row2 = db.get_query_data_single(db_config, sql, [ row[0] ])
+    user_wallet = row2[0]
 
-  # Get the loan amount in USD
-  usd_loan_amount = row[3]
+    # Get the current ETH price
+    eth_price = eth.get_eth_price()
+    borrow_collateral_factor = eth.get_collateral_factor()
+    collateral = eth.get_collateral_from_transaction(user_wallet)
 
-  # Calculate the collateral buffer percentage
-  min_collateral = float(usd_loan_amount) / borrow_collateral_factor / eth_price
-  collateral_buffer_percentage = (collateral - min_collateral) / min_collateral * 100
+    # Get the loan amount in USD
+    usd_loan_amount = row[3]
 
-  logger.debug(f"Metric     : {metric}")
-  logger.debug(f"ETH Price  : {eth_price}")
-  logger.debug(f"ETH Amount : {collateral}")
-  logger.debug(f"ETH Total  : {eth_price * collateral}")
-  logger.debug(f"USDC Total : {usd_loan_amount}")
-  logger.debug(f"Min Collateral : {min_collateral}")
-  logger.debug(f"Collateral Percentage : {collateral_buffer_percentage}")
-  logger.debug(f"Threshold: {threshold}")
+    if not usd_loan_amount:
+      # There is nothing owed on this loan
+      return False
 
-  # See if we're within threshold of the alert
-  if metric.lower() == "below":
-    if float(threshold) > float(collateral_buffer_percentage):
-      return True
-  elif metric.lower() == "above":
-    if float(threshold) < float(collateral_buffer_percentage):
-      return True
-  else:
-    logger.error("Error, metric is not expected value")
+    # Calculate the collateral buffer percentage
+    min_collateral = float(usd_loan_amount) / borrow_collateral_factor / eth_price
+    collateral_buffer_percentage = (collateral - min_collateral) / min_collateral * 100
+
+    logger.debug(f"Metric     : {metric}")
+    logger.debug(f"ETH Price  : {eth_price}")
+    logger.debug(f"ETH Amount : {collateral}")
+    logger.debug(f"ETH Total  : {eth_price * collateral}")
+    logger.debug(f"USDC Total : {usd_loan_amount}")
+    logger.debug(f"Min Collateral : {min_collateral}")
+    logger.debug(f"Collateral Percentage : {collateral_buffer_percentage}")
+    logger.debug(f"Threshold: {threshold}")
+
+    # See if we're within threshold of the alert
+    if metric.lower() == "below":
+      if float(threshold) > float(collateral_buffer_percentage):
+        return True
+    elif metric.lower() == "above":
+      if float(threshold) < float(collateral_buffer_percentage):
+        return True
+    else:
+      logger.error("Error, metric is not expected value")
 
   return False
 
