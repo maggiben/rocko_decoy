@@ -86,8 +86,25 @@ router.post("/deleteAlert", (req, res, next) => {
       }
       res.send("Alert successfully removed");
   });
-
-
 })
+
+router.post("/deleteAlertByType", (req, res, next) => {
+  let data = {
+    alertType : req.body.alertType,   
+    active: 0,     
+    modified_time: new Date(),
+  };
+
+  let sql = "UPDATE alerts SET active = ?, modified_time = ? WHERE alert_type = ?";
+
+  db.query(sql, [data.active, data.modified_time, data.alertType], (err, results) => {
+      if (err) {
+        console.error(err);
+        return next(new Error('Database query failed'));
+      }
+      res.send("Alerts successfully removed");
+  });
+})
+
 
 module.exports = router;

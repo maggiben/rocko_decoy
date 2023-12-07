@@ -63,13 +63,19 @@ export const useAlertDB = () => {
       active: 0,
     };
 
-    axios.post(`${BACKEND_URL}/deleteAlert`, deletedObject);
+    await axios.post(`${BACKEND_URL}/deleteAlert`, deletedObject);
+  };
+
+  const deleteAlertByType = async (alertType: string) => {
+    console.log('alertType', alertType);
+    await axios.post(`${BACKEND_URL}/deleteAlertByType`, { alertType });
   };
 
   return {
     addAlert,
+    getAlertData,
     updateAlert,
     deleteAlert,
-    getAlertData,
+    deleteAlertByType,
   };
 };

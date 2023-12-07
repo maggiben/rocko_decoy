@@ -8,6 +8,7 @@ import Image from 'next/image';
 import closeIcon from '@/assets/Close.svg';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { ALERT_OFF } from '@/constants/alertType';
+import { useAlertDB } from '@/db/alertDb';
 
 interface Props {
   toggleAlert: boolean | undefined;
@@ -25,6 +26,8 @@ const ToggleBTN: FC<Props> = ({
   setOpenModalFor,
   alertFor,
 }) => {
+  const { deleteAlertByType } = useAlertDB();
+
   const [closeModalFor, setCloseModalFor] = useState('');
   const { aprAlertDispatch, bufferAlertDispatch } = useAlert();
 
@@ -34,10 +37,12 @@ const ToggleBTN: FC<Props> = ({
     }
   }, [toggleAlert, title]);
 
-  const handleAlertOff = () => {
+  const handleAlertOff = async () => {
     if (alertFor === 'APR') {
+      await deleteAlertByType('APR');
       aprAlertDispatch({ type: ALERT_OFF });
     } else {
+      await deleteAlertByType('Collateral');
       bufferAlertDispatch({ type: ALERT_OFF });
     }
     setCloseModalFor('');

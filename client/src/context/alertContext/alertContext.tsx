@@ -31,8 +31,8 @@ function aprAlertReducer(
     case UPDATE_ALERT: {
       // Clone the state to ensure immutability
       const newState = [...state];
-      const updatedState = newState.map((alert, index) => {
-        if (index === action.index) {
+      const updatedState = newState.map((alert) => {
+        if (alert.id === action.alert.id) {
           return action.alert;
         }
         return alert;
@@ -73,8 +73,8 @@ function bufferAlertReducer(
       // Clone the state to ensure immutability
       const newState = [...state];
 
-      const updatedState = newState.map((alert, index) => {
-        if (index === action.index) {
+      const updatedState = newState.map((alert) => {
+        if (alert.id === action.alert.id) {
           return action.alert;
         }
         return alert;

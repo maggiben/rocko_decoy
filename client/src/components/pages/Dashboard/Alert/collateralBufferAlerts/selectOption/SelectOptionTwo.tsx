@@ -33,6 +33,12 @@ export default function SelectOptionTwo({
       }));
     }
   }, [setCollateralBufferAlert, click, selected]);
+
+  useEffect(() => {
+    if (userSelected === 'Day(s)') setSelected(interval[2]);
+    if (userSelected === 'Hour(s') setSelected(interval[1]);
+    if (userSelected === 'Min(s)') setSelected(interval[0]);
+  }, [userSelected]);
   return (
     <div className="w-full rounded-xl">
       <Listbox value={userSelected || selected} onChange={setSelected}>
