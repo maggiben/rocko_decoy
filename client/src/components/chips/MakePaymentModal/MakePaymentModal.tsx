@@ -19,7 +19,7 @@ function MakePaymentModal({
 }) {
   const basicRouter = useParams();
   const loanIndex = parseFloat(basicRouter.single.toString() || '0');
-  const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
+  const [activeInputField, setActiveInputField] = useState<boolean>(true);
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>('text'); //! to show value with commas & without commas n inputfiled on onBlur handler
   const { getBuffer, getLiquidationPrice } = useSingleLoan();
@@ -39,23 +39,20 @@ function MakePaymentModal({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const inputValue = event.target.value;
-    if (
-      parseFloat(inputValue?.replace(/,/g, '') || '0') >
-      parseFloat(currentBalance.replace(/,/g, '') || '0')
-    ) {
-      setInputNumber(handleDecimalsOnValue(currentBalance.replace(/,/g, '')));
 
-      return;
-    }
+    const isValid =
+      parseFloat(inputValue?.replace(/,/g, '') || '0') <=
+      parseFloat(currentBalance.replace(/,/g, '') || '0');
+    setActiveInputField(isValid);
 
     setInputNumber(handleDecimalsOnValue(inputValue));
 
     setChangeInputType('number'); /* show number without commas */
-    setActiveInputField(true);
   };
 
   const handleRepayBtn = () => {
     setInputNumber(currentBalance);
+    setActiveInputField(true);
   };
 
   useEffect(() => {
@@ -151,11 +148,7 @@ function MakePaymentModal({
           }}
           onChange={handleBorrowValueChange}
         />
-        <p
-          className={`text-right mr-5 -mt-10 ${
-            activeInputField ? 'text-black' : 'text-black'
-          }`}
-        >
+        <p className="text-right mr-5 -mt-10 text-black">
           {' '}
           {/* active text on selecting radion button */}
           USDC
@@ -163,7 +156,11 @@ function MakePaymentModal({
       </div>
       {/* input field with react form hook end
        */}
-
+      {!activeInputField && (
+        <p className="text-red-500 text-sm ml-2 p-0.5">
+          You cannot input a payment amount greater than your current balance.
+        </p>
+      )}
       <div className="flex items-center justify-between">
         <button
           onClick={handleRepayBtn}
@@ -225,11 +222,17 @@ function MakePaymentModal({
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button
           className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
-            parseFloat(inputNumber?.replace(/,/g, '') || '0') > 0
+            parseFloat(inputNumber?.replace(/,/g, '') || '0') > 0 &&
+            activeInputField
               ? 'bg-[#2C3B8D] text-white'
               : 'text-gray-100 bg-[#ABB1D1]'
           }`}
-          disabled={!(parseFloat(inputNumber?.replace(/,/g, '') || '0') > 0)}
+          disabled={
+            !(
+              parseFloat(inputNumber?.replace(/,/g, '') || '0') > 0 &&
+              activeInputField
+            )
+          }
         >
           Continue
         </button>
