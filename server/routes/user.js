@@ -4,7 +4,7 @@ const {db} = require('../db')
 const axios = require('axios');
 
 router.post(
-    '/addUser', (req, res) => {
+    '/addUser', (req, res, next) => {
       let data = {
         auth0_id: req.body.auth0_id,
         email: req.body.email,
@@ -15,7 +15,10 @@ router.post(
       };
       let sql = "INSERT INTO users SET ?";
       db.query(sql, data, (err, results) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
         res.send("Data successfully saved in users table!");
       });
     }
@@ -23,20 +26,26 @@ router.post(
   
 // Get all users
 
-router.post('/users', (req, res) => {
+router.post('/users', (req, res, next) => {
     let sql = `SELECT * FROM users WHERE email = '${req.body.email}'`;
     db.query(sql, (err, results) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
         res.status(200).json(results);
     })
 })
 
 // Get user id
 
-router.post('/userid', (req, res) => {
+router.post('/userid', (req, res, next) => {
     let sql = `SELECT id FROM users WHERE email = '${req.body.email}'`;
     db.query(sql, (err, results) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
         res.status(200).json(results);
     })
 })

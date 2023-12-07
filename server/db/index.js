@@ -11,8 +11,11 @@ const db = mysql.createConnection({
   const connectDB = async () => {
     try {
         db.connect((err) => {
-        if (err) throw err;
-        console.log("MySQL Connected...");
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          console.log("MySQL Connected...");
         });
     } catch (err) {
       console.error(err.message);
