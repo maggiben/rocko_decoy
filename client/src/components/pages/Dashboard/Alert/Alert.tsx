@@ -51,7 +51,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
             alert: {
               id: alert.id,
               alertMethods: {
-                email: alert?.alert_email === 1 ? 'email@rocko.com' : '',
+                email: alert?.alert_email === 1 ? userInfo?.email : '',
                 sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
               },
               currentInterestRate: {
@@ -73,7 +73,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
             alert: {
               id: alert.id,
               alertMethods: {
-                email: alert?.alert_email === 1 ? 'email@rocko.com' : '',
+                email: alert?.alert_email === 1 ? userInfo?.email : '',
                 sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
               },
               currentCollateralBuffer: {

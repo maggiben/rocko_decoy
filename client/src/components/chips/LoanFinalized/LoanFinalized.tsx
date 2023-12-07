@@ -1,15 +1,18 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import frameIcon from '@/assets/frame.svg';
 import useLoanData from '@/hooks/useLoanData';
+import { useRouter } from 'next/navigation';
 import ModalContent from '../ModalContent/ModalContent';
 
 function LoanFinalized({ navType }: { navType: string }) {
+  const router = useRouter();
   const { loanData } = useLoanData();
 
   const onContinue = () => {
     const { sessionStorage } = window;
     if (loanData) sessionStorage.setItem('loanData', JSON.stringify(loanData));
+
+    router.push(`/depositing-collateral?type=${navType}`);
   };
 
   return (
@@ -32,13 +35,12 @@ function LoanFinalized({ navType }: { navType: string }) {
 
       {/* continue button */}
       <div className="my-6">
-        <Link
-          href={`/depositing-collateral?type=${navType}`}
+        <button
           onClick={onContinue}
           className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
         >
           Continue
-        </Link>
+        </button>
       </div>
     </ModalContent>
   );
