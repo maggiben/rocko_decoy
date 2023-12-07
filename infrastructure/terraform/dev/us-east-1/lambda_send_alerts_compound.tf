@@ -50,7 +50,7 @@ resource "aws_lambda_function" "send_alerts_compound" {
 }
 
 resource "aws_cloudwatch_event_target" "send_alerts_compound_event_target" {
-  rule      = aws_cloudwatch_event_rule.lambda_every_5_minutes.name
+  rule      = aws_cloudwatch_event_rule.lambda_every_1_minute.name
   target_id = "${local.environment}-send_alerts_compound"
   arn       = aws_lambda_function.send_alerts_compound.arn
 }
@@ -60,6 +60,6 @@ resource "aws_lambda_permission" "send_alerts_compound_allow" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.send_alerts_compound.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.lambda_every_5_minutes.arn
+  source_arn    = aws_cloudwatch_event_rule.lambda_every_1_minute.arn
 }
 
