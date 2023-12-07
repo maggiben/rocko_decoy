@@ -14,14 +14,14 @@ function HowItWorks() {
             <div className=" lg:max-w-[543px] lg:max-h-[731px] lg:shrink-0 lg:grow w-full">
               <img src={howWork} alt="how to work" className="w-full" />
             </div>
-            <div className="lg:shrink-0 lg:grow">
+            <div className="lg:shrink-0 lg:grow [&>*:nth-child(3)]:before:top-[41px] [&>*:nth-child(3)]:-mt-[40px] [&>*:nth-child(4)]:-mt-[40px] [&>*:nth-child(2)]:pb-[100px] [&>*:nth-child(3)]:pb-[100px] [&>*:nth-child(4)]:before:top-[40px]">
               <DataCard
                 title="Set Up Your Loan"
                 description="Choose how much to borrow, which type of crypto asset to use as collateral, how much collateral to post, and where to receive the loan amount."
               />
               <DataCard
                 title="Receive a Rocko Smart Wallet"
-                description="Upon finalizing your loan, you’ll receive a Rocko smart wallet which will automatically fulfill your loan based on your specifications."
+                description="Upon finalizing your loan, you'll receive a Rocko smart wallet which will automatically fulfill your loan based on your specifications."
               />
               <DataCard
                 title="Transfer Collateral for Automatic Loan Fulfillment"
@@ -29,8 +29,8 @@ function HowItWorks() {
               />
               <DataCard
                 className="pb-0"
-                title="Receive Loan"
-                description="You can manage and repay your loan at any time using the Rocko loan dashboard. Upon fully repaying your loan, you’ll automatically receive your collateral back."
+                title="Receive Your Loan!"
+                description="You can manage and repay your loan at any time using the Rocko loan dashboard. Upon fully repaying your loan, you'll automatically receive your collateral back."
                 isNext={false}
               />
             </div>
