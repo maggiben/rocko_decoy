@@ -64,7 +64,10 @@ function FAQ(props) {
         ))}
         <div className="text-[18px] font-400 leading-6 mt-[4px]">
           See more frequently asked questions{' '}
-          <Link to="/" className="text-[#006AFF] underline-offset-4">
+          <Link
+            to="https://rocko.co/why-defi"
+            className="text-[#006AFF] underline-offset-4"
+          >
             here
           </Link>
           .

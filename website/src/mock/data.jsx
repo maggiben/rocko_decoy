@@ -12,20 +12,18 @@ const faqs = [
     id: '2',
     ques: 'What is Compound?',
     answer: () =>
-      'Compound is a lending protocol built on the Ethereum network. It allows users to borrow and lend crypto assets in permissionelss and transparent manner.',
+      ' Compound is a lending protocol built on the Ethereum network. It allows users to borrow and lend crypto assets in a permissionless and transparent manner.',
   },
   {
     id: '3',
     ques: 'Does Rocko charge a fee?',
     answer: () => (
       <>
-        Yes, Rocko charges a service fee on all loans facilitated by Rocko
-        wallets. The service fee is based on the loan amount and helps Rocko
-        cover operational costs as well as network fees from facilitating your
-        loan. More info on fees can be found{' '}
-        <Link to="/" className="text-[#006AFF]">
+        Yes, there will be a fee to use the Rocko platform. More info on fees
+        will be shared closer to launch.
+        {/* <Link to="https://rocko.co/why-defi" className="text-[#006AFF] underline decoration-1">
           here
-        </Link>
+        </Link> */}
         .
       </>
     ),
@@ -43,9 +41,13 @@ const faqs = [
       <>
         Generally, DeFi protocols can offer greater transparency, more flexible
         loan terms, and lower rates than many traditional lenders. However,
-        users can suffer from loss of funds in the event of software bugs or
-        exploits. Learn more about the benefits and risks of DeFi borrowing{' '}
-        <Link to="/" className="text-[#006AFF]">
+        users can experience loss of funds in the event of software bugs or
+        exploits. Learn more about the benefits and risks of DeFi borrowing
+        <Link
+          to="https://rocko.co/why-defi"
+          className="text-[#006AFF] underline decoration-1"
+        >
+          {' '}
           here
         </Link>
         .

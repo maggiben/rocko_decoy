@@ -14,9 +14,16 @@ import getBorrowApr from '../utils/getBorrowApr.ts'
 
 export default function Homepage() {
   const [borrowApr, setBorrowApr] = React.useState('...')
-  useEffect(async () => {
-    setBorrowApr(`${(await getBorrowApr()).toFixed(2)}%`)
+
+  const handleGetBorrowerApr = async () => {
+    const apr = await getBorrowApr()
+    setBorrowApr(`${apr.toFixed(2)}%`)
+  }
+
+  useEffect(() => {
+    handleGetBorrowerApr()
   }, [])
+
   return (
     <Layout>
       <Header
@@ -47,7 +54,7 @@ export default function Homepage() {
       <InClassFeatures />
       <FAQ items={faqs} />
       <Header
-        title="Be one of the first to get crypto-backed loan through Rocko"
+        title="Be one of the first to get a crypto-backed loan using Rocko"
         description="*USD only available to U.S. Coinbase or Gemini users at this time. All users can convert their USDC loan into USD or other fiat via crypto exchanges."
       />
       <div className="bg-[#081D21] text-center text-[#ffffff66] py-5">

@@ -10,11 +10,7 @@ function CollateralAssets() {
   const [tabIndex, setTabIndex] = useState(1)
 
   const CollateralBufferOptions = [{ value: 'Below', label: 'Below' }]
-  const [containerRef, secondRef, thirdRef] = [
-    useRef(null),
-    useRef(null),
-    useRef(null),
-  ]
+  const containerRef = useRef(null)
 
   const handleActiveTab = (ratio = 0.4, isIntersecting = false) => {
     const activeTab = (() => {
@@ -25,20 +21,34 @@ function CollateralAssets() {
     setTabIndex(activeTab)
   }
 
+  const autoScrollTabs = () =>
+    setInterval(() => {
+      setTabIndex(index => {
+        if (index === 3) return 1
+        return index + 1
+      })
+    }, 2000)
+
   useEffect(() => {
-    if (containerRef.current) {
+    let timer = autoScrollTabs()
+    if (!containerRef.current) {
       return () => {}
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        clearInterval(timer)
+        timer = autoScrollTabs()
         handleActiveTab(entry.intersectionRatio, entry.isIntersecting)
       },
       { threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
     )
     observer.observe(containerRef.current)
 
-    return () => observer.unobserve(containerRef.current)
+    return () => {
+      clearInterval(timer)
+      observer.unobserve(containerRef.current)
+    }
   }, [containerRef])
 
   return (
@@ -61,7 +71,7 @@ function CollateralAssets() {
                 onPress={setTabIndex}
               />
             </div>
-            <div ref={secondRef}>
+            <div>
               <StepBtn
                 title="Choose alert type"
                 subTitle="Receive alerts by text, email, or both."
@@ -70,7 +80,7 @@ function CollateralAssets() {
                 onPress={setTabIndex}
               />
             </div>
-            <div ref={thirdRef}>
+            <div>
               <StepBtn
                 title="Set alert parameters"
                 subTitle="Choose how often to receive them and set up multiple at different levels"

@@ -1,13 +1,12 @@
 import React from 'react'
 import group from '../../../../assets/images/coin-group.png'
-import USDCIcon from '../../../../assets/coins/USDC.svg'
-import USDIcon from '../../../../assets/coins/USD.svg'
-import GUSDIcon from '../../../../assets/coins/GUSD.svg'
-import GUSDIconV2 from '../../../../assets/coins/GUSD2.svg'
-import RangeIcon from '../../../../assets/svg-icons/range.svg'
-import coinOverlap from '../../../../assets/coins/coin-overlap.png'
+import GUSDIcon from '../../../../assets/coins/GUSD2.svg'
+import Receive from '../../../../assets/svg-icons/receive.svg'
+import Coinbase from '../../../../assets/svg-icons/coinbase-svg.png'
+import Powerful from '../../../../assets/svg-icons/powerful.svg'
+import Audited from '../../../../assets/svg-icons/audited.svg'
+import Helpful from '../../../../assets/svg-icons/helpful.svg'
 import CloseBtn from '../CloseBtn'
-import CoinCard from './CoinCard'
 import FeatureCard from './FeatureCard'
 import CloseIcon from '../CloseIcon'
 
@@ -32,110 +31,52 @@ function InClassFeatures() {
             </p>
           </div>
           <div className="relative flex flex-col  gap-4 sm:gap-auto items-start gap-y-[40px] lg:flex-now-wrap sm:flex-wrap">
-            <div className="flex  gap-4  sm:gap-x-10 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap">
+            <div className="flex  gap-4  sm:gap-x-8 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap">
               <FeatureCard
                 title="Receive USD* or USDC"
-                description="If you're a U.S Coinbase or Gemini user, choose to automatically receive your loan in USD so it can be used for many more use cases such as paying down higher-rate debt, buying a car, and more."
+                description="If you’re a U.S Coinbase or Gemini user, choose to automatically receive your loan in USD so it can be more easily used for real estate, paying down higher-rate debt, buying a car, and more."
                 className="bg-[#F9F9F9]"
-              >
-                <div>
-                  <div className="flip-card-front flex  items-start gap-x-[24px]">
-                    <CoinCard
-                      coinIcon={USDIcon}
-                      coinShortName="USD"
-                      coinName="US Dollar"
-                      selectedCoin=""
-                    />
-                    <CoinCard
-                      coinIcon={USDCIcon}
-                      coinShortName="USDC"
-                      coinName="USD Coin"
-                      selectedCoin=""
-                    />
-                  </div>
-                  <p className="text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[40px]">
-                    Receive USD1 or USDC
-                  </p>
-                </div>
-              </FeatureCard>
+                image={<Receive />}
+              />
               <FeatureCard
                 title="Coinbase & Gemini Integrations"
                 description="Link your Coinbase or Gemini account to further simplify getting your crypto loan or to receive it in USD. "
                 className="bg-[#F5FCFC]"
-              >
-                <div>
-                  <div className="flip-card-front  flex  items-start gap-x-[24px]">
-                    <GUSDIcon height={80} width={80} />
-                    <GUSDIconV2 height={80} width={80} />
+                image={
+                  <div>
+                    <img src={Coinbase} alt="" />
+                    <img src={GUSDIcon} alt="" />
                   </div>
-                  <div className="text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[40px]">
-                    Coinbase & Gemini Integrations
-                  </div>
-                </div>
-              </FeatureCard>
+                }
+
+                // pngimage={'Coinbase'}
+              />
               <FeatureCard
                 title="Powerful Loan Management Tools"
                 description="Manage risk with powerful loan management tools like collateral and APR alerts"
                 className="bg-[#E5F0FF]"
-              >
-                <div>
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mb-[40px]">
-                    Powerful Loan Management Tools
-                  </p>
-                  <RangeIcon className="mb-[40px] w-full" height={91} />
-                </div>
-              </FeatureCard>
+                image={<Powerful />}
+              />
             </div>
             <div className="flex  gap-4  sm:gap-x-10 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap justify">
               <FeatureCard
                 title="Audited DeFi Protocols Only"
                 description="Only lending protocols that have undergone third-party security audits are available through Rocko’s interface."
                 className="bg-[#F5FCFC]"
-              >
-                <div>
-                  <img
-                    className="mb-[40px]"
-                    src={coinOverlap}
-                    height={80}
-                    alt=""
-                  />
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium my-[82px]">
-                    Audited DeFi Protocols Only
-                  </p>
-                </div>
-              </FeatureCard>
+                image={<Audited />}
+              />
               <FeatureCard
-                title="Two-Factor Authentication"
-                description="Set up two-factor authentication to increase the security of your account."
+                title="Helpful Customer Support"
+                description="Rocko’s customer support team is here to answer your critical questions and help in "
                 className="bg-[#F9F9F9]"
-              >
-                <div>
-                  <p className="leading-[48px] text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mb-[40px]">
-                    Two-Factor Authentication
-                  </p>
-                  <div className="h-[80px] flex gap-4 mb-[124px]">
-                    <span className="w-full text-[40px] bg-white flex justify-center items-inherit">
-                      .
-                    </span>
-                    <span className="w-full text-[40px] bg-white flex justify-center items-inherit">
-                      .
-                    </span>
-                    <span className="w-full text-[40px] bg-white flex justify-center items-inherit">
-                      .
-                    </span>
-                    <span className="w-full text-[40px] bg-white flex justify-center items-inherit">
-                      3
-                    </span>
-                  </div>
-                </div>
-              </FeatureCard>
+                image={<Helpful />}
+              />
               <FeatureCard
                 title="Covered Network Fees"
-                description="Rocko will pay gas fees necessary to deploy your wallet and fulfill your loan**"
-                className="bg-[#0F2E35]"
-              >
-                <div>
-                  <div className="mb-[40px] gap-2 sm:gap-auto flex p-3 max-w-[180px] w-full items-center rounded-full max-w-xs bg-[#1C373C]">
+                description="Rocko will pay gas fees necessary to deploy your wallet and fulfill your loan²"
+                className="bg-[#0F2E35] text-[#fff]"
+                image={
+                  <div className="mb-[40px] gap-2 sm:gap-auto flex p-3 max-w-[186px] w-full items-center  rounded-full max-w-xs bg-[#1C373C]">
                     <CloseBtn
                       icon={<CloseIcon fill="#E11900" height={20} width={20} />}
                       className="bg-[#FED7D2]"
@@ -144,21 +85,19 @@ function InClassFeatures() {
                       Network Fees
                     </p>
                   </div>
-                  <div className="mb-[124px]">
-                    <p className="leading-[48px] text-[#FFF] lg:text-[28px] md:text-[25px] text-[18px] font-medium">
-                      Covered Network Fees
-                    </p>
-                    <span className="text-xs text-[#545454]">(gas costs*)</span>
-                  </div>
-                </div>
-              </FeatureCard>
+                }
+              />
             </div>
-            <p className="text-[10px] font-400">
-              1USD is only available to U.S. Coinbase or Gemini users at this
-              time. All users can convert their USDC loan into USD or other fiat
-              via crypto exchanges.
-            </p>
           </div>
+          <p className="text-[10px] font-400 lg:mt-[40px] mt-[20px]">
+            <sup>1</sup>USD is only available to U.S. Coinbase or Gemini users
+            at this time. All users can convert their USDC loan into USD or
+            other fiat via crypto exchanges.
+          </p>
+          <p className="text-[10px] font-400">
+            <sup>2</sup>Up to $100. Users will be responsible for covering any
+            fees in excess of $100.
+          </p>
         </div>
       </div>
     </section>
