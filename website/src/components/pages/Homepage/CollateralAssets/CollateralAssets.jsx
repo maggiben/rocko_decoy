@@ -30,11 +30,13 @@ function CollateralAssets() {
     }, 2000)
 
   useEffect(() => {
-    let timer = autoScrollTabs()
-    if (!containerRef.current) {
+    const container = containerRef.current
+
+    if (!container) {
       return () => {}
     }
 
+    let timer = autoScrollTabs()
     const observer = new IntersectionObserver(
       ([entry]) => {
         clearInterval(timer)
@@ -43,11 +45,11 @@ function CollateralAssets() {
       },
       { threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
     )
-    observer.observe(containerRef.current)
+    observer.observe(container)
 
     return () => {
       clearInterval(timer)
-      observer.unobserve(containerRef.current)
+      if (container) observer.unobserve(container)
     }
   }, [containerRef])
 
