@@ -11,7 +11,10 @@ function Header(props) {
       <p className="text-center text-white lg:text-[20px] md:text-[18px] text-[16px] font-medium leading-7 lg:my-[32px] my-[20px] md:max-w-[630px] mx-[auto]">
         {subTitle}
       </p>
-      <Input placeholder={'Type your email here'} className='!bg-[#fff] mb-[40px] max-w-[500px] w-full outline-0 mx-[auto]'/>
+      <Input
+        placeholder="Type your email here"
+        className="!bg-[#fff] mb-[40px] max-w-[500px] w-full outline-0 mx-[auto]"
+      />
       <Link
         to="/waitlist"
         variant="custom"
