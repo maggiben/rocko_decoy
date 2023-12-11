@@ -32,6 +32,10 @@ export default function SelectOptionOne({
     }
   }, [setCollateralBufferAlert, click, selected, userSelected]);
 
+  useEffect(() => {
+    if (userSelected === 'Below') setSelected(repeat[0]);
+    else setSelected(repeat[1]);
+  }, [userSelected]);
   return (
     <div className="w-full rounded-xl">
       <Listbox value={userSelected || selected} onChange={setSelected}>
