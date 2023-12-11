@@ -261,7 +261,10 @@ function ModifyStatus() {
             : 'Depositing Collateral'
           : 'Withdrawing Collateral'}
       </h1>
-      <p className="text-black mt-1">Please do not close your browser until all of the steps below are completed.</p>
+      <p className="text-black mt-1">
+        Please do not close your browser until all of the steps below are
+        completed.
+      </p>
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <p className="text-black">Estimated time remaining</p>
