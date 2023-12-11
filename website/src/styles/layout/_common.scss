@@ -160,7 +160,9 @@ body {
 .text-section table p {
   margin: 0;
 }
-
+::placeholder{
+  color: #000;
+}
 @media (max-width: 767px) {
   .text-section {
     padding-top: 40px;

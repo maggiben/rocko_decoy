@@ -33,7 +33,7 @@ function InClassFeatures() {
           <div className="relative flex flex-col  gap-4 sm:gap-auto items-start gap-y-[40px] lg:flex-now-wrap sm:flex-wrap">
             <div className="flex  gap-4  sm:gap-x-8 lg:justify-between justify-center w-full lg:flex-nowrap sm:flex-wrap">
               <FeatureCard
-                title="Receive USD* or USDC"
+                title="Receive USD¹ or USDC"
                 description="If you’re a U.S Coinbase or Gemini user, choose to automatically receive your loan in USD so it can be more easily used for real estate, paying down higher-rate debt, buying a car, and more."
                 className="bg-[#F9F9F9]"
                 image={<Receive />}

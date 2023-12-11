@@ -28,7 +28,7 @@ export default function Homepage() {
     <Layout>
       <Header
         title={`Crypto-backed loans as low as ${borrowApr}¹`}
-        subTitle="Receive USD² or USDC using your crypto holdings as collateral."
+        subTitle="Receive USD² or USDC using your crypto holdings as collateral. Be one of the first to get early access."
         description="¹Interest rates are offered by Compound lending protocol and fluctuate
         in real-time based on market forces. The rate displayed may delayed by
         up to 5 minutes."
@@ -55,7 +55,7 @@ export default function Homepage() {
       <FAQ items={faqs} />
       <Header
         title="Be one of the first to get a crypto-backed loan using Rocko"
-        description="*USD only available to U.S. Coinbase or Gemini users at this time. All users can convert their USDC loan into USD or other fiat via crypto exchanges."
+        // description="*USD only available to U.S. Coinbase or Gemini users at this time. All users can convert their USDC loan into USD or other fiat via crypto exchanges."
       />
       <div className="bg-[#081D21] text-center text-[#ffffff66] py-5">
         <Link

@@ -27,12 +27,15 @@ function Navbar() {
   const menuItems = [
     {
       labelText: ' WHY DEFI?',
+      location: '/',
     },
     {
       labelText: 'ABOUT US',
+      location: '/',
     },
     {
       labelText: 'FAQ',
+      location: '/',
     },
     {
       labelText: 'CONTACT',

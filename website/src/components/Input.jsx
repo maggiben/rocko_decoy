@@ -1,7 +1,8 @@
+import clsx from 'clsx'
 import React from 'react'
 
 function Input(props) {
-  const { label, value, type, onChange } = props
+  const { label, value, type, onChange, placeholder, className } = props
   return (
     <div className="w-full">
       {label && (
@@ -15,9 +16,10 @@ function Input(props) {
       <input
         type={type}
         id="input"
-        className="block w-full rounded-[10px] border border-[#E6E6E6]  bg-transparent py-[10px] px-[16px]"
+        className={clsx(className,"block w-full rounded-[10px] border border-[#E6E6E6]  bg-transparent py-[16px] px-[16px] outline-0 text-[16px] font-normal ::placeholder-[#000]")}
         onChange={onChange}
         value={value}
+        placeholder={placeholder}
       />
     </div>
   )

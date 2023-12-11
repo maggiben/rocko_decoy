@@ -46,7 +46,7 @@ function CryptoHolding() {
         <div className="flex justify-between items-center border-b lg:gap-20 lg:py-[64px] py-[30px] gap-y-[20px]  sm:flex-wrap lg:flex-nowrap">
           <DataCard
             className="ms:order-last lg:order-first"
-            heading="Borrow up to 82% of the value of your Ether — with flexible loan terms²"
+            heading="Borrow up to 83% of the value of your Ether — with flexible loan terms²"
             content={
               <p>
                 Use Rocko to access better loan-to-value ratios, more

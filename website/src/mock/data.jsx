@@ -24,7 +24,7 @@ const faqs = [
         {/* <Link to="https://rocko.co/why-defi" className="text-[#006AFF] underline decoration-1">
           here
         </Link> */}
-        .
+        
       </>
     ),
   },
@@ -42,14 +42,7 @@ const faqs = [
         Generally, DeFi protocols can offer greater transparency, more flexible
         loan terms, and lower rates than many traditional lenders. However,
         users can experience loss of funds in the event of software bugs or
-        exploits. Learn more about the benefits and risks of DeFi borrowing
-        <Link
-          to="https://rocko.co/why-defi"
-          className="text-[#006AFF] underline decoration-1"
-        >
-          {' '}
-          here
-        </Link>
+        exploits. Learn more about the benefits and risks of DeFi borrowing <Link to="https://rocko.co/why-defi" className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline">here</Link>
         .
       </>
     ),
