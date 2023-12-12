@@ -1,7 +1,8 @@
 import React from 'react'
 import group from '../../../../assets/images/coin-group.png'
 import GUSDIcon from '../../../../assets/coins/GUSD2.svg'
-import Receive from '../../../../assets/svg-icons/receive.svg'
+import UsdIcon from '../../../../assets/coins/USD.svg'
+import USDC from '../../../../assets/coins/USDC.svg'
 import Coinbase from '../../../../assets/svg-icons/coinbase-svg.png'
 import Powerful from '../../../../assets/svg-icons/powerful.svg'
 import Audited from '../../../../assets/svg-icons/audited.svg'
@@ -36,7 +37,12 @@ function InClassFeatures() {
                 title="Receive USD¹ or USDC"
                 description="If you’re a U.S Coinbase or Gemini user, choose to automatically receive your loan in USD so it can be more easily used for real estate, paying down higher-rate debt, buying a car, and more."
                 className="bg-[#F9F9F9]"
-                image={<Receive />}
+                image={
+                  <div className="flex items-center ">
+                    <UsdIcon className="relative z-10" />
+                    <USDC height={40} width={40} className="ml-[-5px]" />
+                  </div>
+                }
               />
               <FeatureCard
                 title="Coinbase & Gemini Integrations"

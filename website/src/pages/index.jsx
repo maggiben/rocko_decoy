@@ -36,16 +36,38 @@ export default function Homepage() {
         users at this time. All users can convert their USDC loan into USD or
         other fiat via crypto exchanges."
       />
-      <div className="flex justify-center items-center bg-[#FCFCFC] lg:py-[100px] py-[50px] border-b border-[#E2E2E2]">
-        <div>
-          <span className="text-[#141414] lg:text-[64px] md:text-[40px] text-[25px] font-normal">
-            $15M+
-          </span>
-          <p className="text-[#141414] text-[16px] font-normal">
-            loans fulfilled through Rocko
-          </p>
+      <section className="bg-[#FCFCFC] lg:py-[100px] py-[50px] border-b border-[#E2E2E2]">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center items-center gap-x-[8px] md:!flex-nowrap flex-wrap  ">
+            <div className="md:border-l-[1px] border-[#E2E2E2] lg:pl-[40px] md:pl-[16px] md:max-w-[330px] w-full mb-[20px] md:mb-[0]">
+              <span className="text-[#141414] lg:text-[64px] md:text-[40px] text-[25px] font-normal leading-7 md:leading-[64px]">
+                $15
+                <span className="lg:text-[40px] md-[25px] text-[16px]">M</span>
+              </span>
+              <p className="text-[#141414] text-[16px] font-normal leading-7">
+                loans fulfilled through Rocko
+              </p>
+            </div>
+            <div className="md:border-l-[1px] border-[#E2E2E2] lg:pl-[40px] md:pl-[16px] md:max-w-[330px] w-full mb-[20px] md:mb-[0]">
+              <span className="text-[#141414] lg:text-[64px] md:text-[40px] text-[25px] font-normal leading-7 md:leading-[64px]">
+                5.45%
+              </span>
+              <p className="text-[#141414] text-[16px] font-normal leading-7">
+                average APR since launch
+              </p>
+            </div>
+            <div className="md:border-l-[1px] border-[#E2E2E2] lg:pl-[40px] md:pl-[16px] md:max-w-[330px] w-full ">
+              <span className="text-[#141414] lg:text-[64px] md:text-[40px] text-[25px] font-normal leading-7 md:leading-[64px]">
+                $18,000
+              </span>
+              <p className="text-[#141414] text-[16px] font-normal leading-7">
+                Average loan size
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
       <CryptoHolding />
       <SecurityFirstCard />
       <ComprehensiveLoanDashboard />

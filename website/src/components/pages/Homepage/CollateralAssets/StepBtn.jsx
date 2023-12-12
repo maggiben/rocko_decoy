@@ -10,6 +10,7 @@ function StepBtn(props) {
       tabIndex={0}
       role="button"
       onClick={() => onPress(tab)}
+      onMouseEnter={() => onPress(tab)}
     >
       <span
         className={clsx(

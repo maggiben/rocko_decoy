@@ -18,7 +18,7 @@ function FAQ(props) {
   }
 
   return (
-    <section className="bg-[#F9F9F9] lg:py-[80px] py-[50px] mt-4">
+    <section className="bg-[#F9F9F9] lg:py-[80px] py-[50px]">
       <div className="mx-auto container">
         <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[426px] mb-[40px]">
           Frequently Asked Questions
@@ -66,7 +66,7 @@ function FAQ(props) {
           See more frequently asked questions
           <Link
             to="https://rocko.co/faq"
-            className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline"
+            className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline pl-[3px]"
           >
             here
           </Link>

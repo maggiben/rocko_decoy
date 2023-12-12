@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'gatsby'
 import Title from '../../Title'
 import Input from '../../Input'
+import FormWrapper from '../../shared/FormWrapper'
 
 function Header(props) {
   const { title, subTitle = '', description, content } = props
@@ -11,21 +11,25 @@ function Header(props) {
       <p className="text-center text-white lg:text-[20px] md:text-[18px] text-[16px] font-medium leading-7 lg:my-[32px] my-[20px] md:max-w-[630px] mx-[auto]">
         {subTitle}
       </p>
-      <Input
-        placeholder="Type your email here"
-        className="!bg-[#fff] mb-[40px] max-w-[500px] w-full outline-0 mx-[auto]"
-      />
-      <Link
-        to="/waitlist"
-        variant="custom"
-        className=" uppercase text-[#006AFF] bg-white py-[11px] px-[24.6px] text-sm font-semibold rounded-full"
-      >
-        Join the waitlist
-      </Link>
-      <p className="text-[#ffffff66] mx-[auto]  max-w-[410px] text-[10px] font-normal lg:mt-[32px] mt-[20px]">
+      <FormWrapper>
+        <Input
+          placeholder="Type your email here"
+          name="EMAIL"
+          id="EMAIL"
+          type="email"
+          className="!bg-[#fff] mb-[40px] max-w-[500px] w-full outline-0 mx-[auto] text-[#141414]"
+        />
+        <button
+          type="submit"
+          className=" uppercase text-[#006AFF] bg-white py-[11px] px-[24.6px] text-sm font-semibold rounded-full"
+        >
+          Join the waitlist
+        </button>
+      </FormWrapper>
+      <p className="text-[#ffffff66] mx-[auto] text-[10px] font-normal lg:mt-[32px] mt-[20px]">
         {description}
       </p>
-      <p className="text-[#ffffff66] mx-[auto]  max-w-[410px] text-[10px] font-normal">
+      <p className="text-[#ffffff66] mx-[auto] text-[10px] font-normal">
         {content}
       </p>
     </div>
