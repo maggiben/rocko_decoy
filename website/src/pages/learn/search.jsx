@@ -69,7 +69,7 @@ function SearchPage({ data, location }) {
       </section>
       <section className="!py-16">
         <div className="category_blogs_container space-y-5">
-          {results.length > 0
+          {!!results && results.length > 0
             ? results.map(({ node }) => (
                 <Link
                   to={`/learn/${node.fields.slug}`}
