@@ -10,15 +10,15 @@ import {
   WhatsappShareButton,
   TelegramShareButton,
 } from 'react-share'
-import fbIcon from '../../images/fb-icon.svg'
-import xIcon from '../../images/x-icon.svg'
-import linkedinIcon from '../../images/linkedin-icon.svg'
-import whatsappIcon from '../../images/whatsapp-icon.svg'
-import telegramIcon from '../../images/telegram-svgrepo-com.svg'
+import FbIcon from '../../images/fb-icon.svg'
+import XIcon from '../../images/x-icon.svg'
+import LinkedinIcon from '../../images/linkedin-icon.svg'
+import WhatsappIcon from '../../images/whatsapp-icon.svg'
+import TelegramIcon from '../../images/telegram-svgrepo-com.svg'
 
 import LatestPosts from '../../components/HomeBlogs/LatestPosts'
 import Subscribe from '../../components/Subscribe/Subscribe'
-import Layout from '../../components/layout'
+import Layout from '../../layout'
 
 function SingleBlog({ data }) {
   // console.log("SingleBlog", data)
@@ -35,7 +35,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <FacebookShareButton url={shareUrl}>
-            <img src={fbIcon} alt="social-icon" height={16} width={16} />
+            <FbIcon alt="social-icon" height={16} width={16} />
           </FacebookShareButton>
         </div>
       ),
@@ -44,7 +44,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <TwitterShareButton url={shareUrl}>
-            <img src={xIcon} alt="social-icon" height={16} width={16} />
+            <XIcon alt="social-icon" height={16} width={16} />
           </TwitterShareButton>
         </div>
       ),
@@ -53,7 +53,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <LinkedinShareButton url={shareUrl}>
-            <img src={linkedinIcon} alt="social-icon" height={16} width={16} />
+            <LinkedinIcon alt="social-icon" height={16} width={16} />
           </LinkedinShareButton>
         </div>
       ),
@@ -62,7 +62,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className="!h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center">
           <TelegramShareButton url={shareUrl}>
-            <img src={telegramIcon} alt="social-icon" height={16} width={16} />
+            <TelegramIcon alt="social-icon" height={16} width={16} />
           </TelegramShareButton>
         </div>
       ),
@@ -71,7 +71,7 @@ function SingleBlog({ data }) {
       Icon: (
         <div className=" md:!hidden  !h-8 !w-8 !rounded-full !bg-[#EEE] !flex !justify-center !items-center ">
           <WhatsappShareButton url={shareUrl}>
-            <img src={whatsappIcon} alt="social-icon" height={16} width={16} />
+            <WhatsappIcon alt="social-icon" height={16} width={16} />
           </WhatsappShareButton>
         </div>
       ),
