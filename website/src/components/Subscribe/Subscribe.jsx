@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import emailImg from '../../images/email.svg'
+import EmailImg from '../../images/email.svg'
 import FormWrapper from '../shared/FormWrapper'
 
 function Subscribe({ singleBlog }) {
@@ -20,8 +20,7 @@ function Subscribe({ singleBlog }) {
         } subscribe_container`}
       >
         <div className="subscribe_container_image_container">
-          <img
-            src={emailImg}
+          <EmailImg
             alt="blog2"
             height={40}
             width={40}
