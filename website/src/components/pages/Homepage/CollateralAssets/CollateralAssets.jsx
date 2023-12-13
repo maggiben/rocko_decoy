@@ -18,8 +18,8 @@ function CollateralAssets() {
       <div className="container mx-auto px-4">
         <div className="lg:mb-[80px] mb-[50px]">
           <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[891px] mb-[48px]">
-            Set up text and email alerts to help manage your loan and collateral
-            assets
+            Set up text and email alerts to monitor changes in your collateral
+            value and interest rate
           </h2>
         </div>
         <div className="flex justify-between items-center lg:flex-nowrap flex-wrap gap-8 lg:gap-0">
@@ -27,7 +27,7 @@ function CollateralAssets() {
             <div>
               <StepBtn
                 title="Set up alerts"
-                subTitle="Set up alerts to monitor your collateral assets and interest rate."
+                subTitle="Be notified of changes in your collateral value or interest rate."
                 tab={1}
                 active={tabIndex === 1}
                 onPress={setTabIndex}
@@ -35,7 +35,7 @@ function CollateralAssets() {
             </div>
             <div>
               <StepBtn
-                title="Choose alert type"
+                title="Choose alert method"
                 subTitle="Receive alerts by text, email, or both."
                 tab={2}
                 active={tabIndex === 2}
@@ -44,8 +44,8 @@ function CollateralAssets() {
             </div>
             <div>
               <StepBtn
-                title="Set alert parameters"
-                subTitle="Choose how often to receive them and set up multiple at different levels"
+                title="Customize the frequency and trigger"
+                subTitle="Choose how often to receive alerts and set up multiple with different triggers"
                 tab={3}
                 active={tabIndex === 3}
                 onPress={setTabIndex}
