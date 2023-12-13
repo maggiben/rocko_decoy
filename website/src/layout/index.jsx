@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import LogoIcon from '../assets/svg-icons/logo.svg'
+import LogoIcon from '../assets/images/logo.png'
 // import logo from '../../images/logo.svg'
 
 function Layout({ children }) {
@@ -49,7 +49,12 @@ function Navbar() {
         <div className="container mx-auto px-[15px] bg-white ">
           <div className="flex justify-between  py-[10px] items-center">
             <Link to="/" className="w-64 h-52 inline-block">
-              <LogoIcon className="sm-w-[100px] md:w-[auto]" />
+              <img
+                src={LogoIcon}
+                alt="Rocko logo"
+                className="sm-w-[100px] md:w-[100px]"
+                style={{ maxWidth: '100px' }}
+              />
             </Link>
             <div className="flex items-center gap-12 justify-end">
               <div className="hidden  lg:flex items-center gap-8 justify-end">
