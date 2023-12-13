@@ -62,7 +62,7 @@ function FAQ(props) {
             </div>
           </div>
         ))}
-        <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454]">
+        {/* <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454]">
           See more frequently asked questions
           <Link
             to="https://rocko.co/faq"
@@ -71,7 +71,7 @@ function FAQ(props) {
             here
           </Link>
           .
-        </div>
+        </div> */}
       </div>
     </section>
   )
