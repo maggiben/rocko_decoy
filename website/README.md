@@ -1,16 +1,11 @@
 # Dev Setup
 
+## Repo Setup 
+
 1. Clone this repo
 1. Initialize submodule `git submodule init && git submodule update --remote`
 1. yarn install
 1. yarn start
-
-## Editor Setup
-
-Install VSCode Extensions
-
-- ESlint 
-- Prettier
 
 ## Environment Config Sample
 

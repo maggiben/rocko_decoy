@@ -1,25 +1,10 @@
 ## Getting Started
 
-First, run the development server:
-
-```bash
-- [install packages] yarn install
-- [start] yarn dev
-- [build] yarn build
-- [eslint fix] yarn eslint:fix
-
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-
 ## Environment variables
 
 - [NEXT_PUBLIC_IS_DEMO_MODE] : if true, app will run in demo mode - otherwise(false), it will run in real mode
 
-- [NEXT_PUBLIC_NETWORK] : Blockchain network which application will run on. 
+- [NEXT_PUBLIC_NETWORK] : Blockchain network which application will run on. `goerli, mainnet, etc`
 
 - [NEXT_PUBLIC_INFURA_APIKEY] : This is used to communicate with the Ethereum blockchain - infuraProvider will be used as wagmi provider
 
@@ -28,3 +13,38 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - [NEXT_PUBLIC_ZERODEV_PROJECT_ID] : This is for ZeroDev dashboard configuration. Auth0 settings, whitelisted domains and Gas policies will be included in ZeroDev dashboard configuration.
 
 - [NEXT_PUBLIC_BACKEND_URL] : Server URL
+
+- [NEXT_PUBLIC_COINBASE_CLIENT_ID] : Coinbase client ID for Coinbase wallet integration
+
+- [NEXT_PUBLIC_PAYMENT_BUFFER] : Payment buffer for interest accrual
+
+- [SLACK_WEBHOOK_URL] : Slack webhook URL for error logging
+
+Create your own .env.local file in the root directory of the project and add the following environment variables:
+
+```
+NEXT_PUBLIC_IS_DEMO_MODE=false
+NEXT_PUBLIC_NETWORK=goerli
+NEXT_PUBLIC_INFURA_APIKEY=ask_for_it
+NEXT_PUBLIC_THIRDWEB_CLIENTID=ask_for_it
+NEXT_PUBLIC_ZERODEV_PROJECT_ID=ask_for_it
+NEXT_PUBLIC_BACKEND_URL=https://backend.dev.rocko.cloud
+NEXT_PUBLIC_COINBASE_CLIENT_ID=ask_for_it
+NEXT_PUBLIC_PAYMENT_BUFFER=5
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/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
+```
+
+## Running the app
+
+First, run the development server:
+
+```bash
+- [install packages] yarn install
+- [start] yarn dev
+- [build] yarn build
+- [eslint fix] yarn eslint:fix
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
