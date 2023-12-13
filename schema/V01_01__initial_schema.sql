@@ -6,9 +6,8 @@ create table loans(
   loan_active bool default false,
   loan_asset varchar(10),
   outstanding_balance decimal default 0,
-  liquidation_price decimal default 0,
-  collateral_buffer decimal default 0,
-
+  collateral float(10,6) DEFAULT '0.000000',
+  interest float(10,6) DEFAULT '0.000000',
   create_time timestamp default now(),
   modified_time timestamp default now(),
 

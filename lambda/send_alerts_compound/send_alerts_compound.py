@@ -70,6 +70,11 @@ def process_alert(row):
     # Send alert
     common.send_alert(common.parse_email_template(alert_template, row[3], {'THRESHOLD': str(row[4])}, LOGGER), row[5], row[6], row[1], LOGGER)
 
+    # Set alert to inactive if its set to only fire once
+    if row[8]:
+      sql = "UPDATE alerts SET active=0 WHERE id=%s"
+      db.insert_query(DB_CONFIG, sql, [ row[0] ])
+
     # Update alerts that its triggered
     sql = "UPDATE alerts SET triggered=true, triggered_time=now() WHERE id=%s"
     db.insert_query(DB_CONFIG, sql, [ row[0] ])
@@ -124,7 +129,7 @@ def process_alert(row):
 def handler_inner(event, context):
   # Get all alerts that are turned on (active) and loop through
   # and gauge which alerts should fire
-  sql = "SELECT id, loan_id, alert_type, alert_metric, alert_threshold, alert_email, alert_phone, alert_repeat_secs FROM alerts WHERE active=1 ORDER BY id desc"
+  sql = "SELECT id, loan_id, alert_type, alert_metric, alert_threshold, alert_email, alert_phone, alert_repeat_secs, alert_once FROM alerts WHERE active=1 ORDER BY id desc"
   LOGGER.debug(sql)
   rows = db.get_query_data(DB_CONFIG, sql, [])
 
