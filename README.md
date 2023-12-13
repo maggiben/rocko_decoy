@@ -20,3 +20,4 @@ Rocko Site: [![Netlify Status](https://api.netlify.com/api/v1/badges/610f0a49-b8
     - Install asdf version manager `brew install asdf`
     - Install asdf nodejs plugin `asdf plugin add nodejs`
     - Install nodejs 18.19.0 `asdf install nodejs 18.19.0`
+    - Install oh my zsh `https://ohmyz.sh/`
