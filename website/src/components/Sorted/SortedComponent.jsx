@@ -1,4 +1,5 @@
 import React from 'react'
+import Subscribe from '../Subscribe/Subscribe'
 import HeroBlogDiFi from './Hero/HeroBlogDiFi'
 import HeroBlogFaq from './Hero/HeroBlogFaq'
 import HeroBlogCryptoDeFi from './Hero/HeroBlogCryptoDeFi'
@@ -15,11 +16,13 @@ import CategoryBlogsBorrowing from './CategoryBlogs/CategoryBlogsBorrowing'
 const hero = {
   'de-fi-borrowing-and-lending': {
     Component: <HeroBlogDiFi />,
+    Subscribe: <Subscribe />,
     ThreeTitle: <ThreeTitleDeFi />,
     CategoryBlogs: <CategoryBlogsDeFi />,
   },
   borrowing: {
     Component: <HeroBlogBorrowing />,
+    Subscribe: <Subscribe />,
     ThreeTitle: <ThreeTitleBorrowing />,
     CategoryBlogs: <CategoryBlogsBorrowing />,
   },
@@ -30,6 +33,7 @@ const hero = {
   },
   'crypto-and-de-fi': {
     Component: <HeroBlogCryptoDeFi />,
+    Subscribe: <Subscribe />,
     ThreeTitle: <ThreeTitleCryptoDeFi />,
     CategoryBlogs: <CategoryBlogsCryptoDeFi />,
   },
@@ -41,6 +45,10 @@ function SortedComponent({ selectCategory }) {
     <>
       {/* //! hero start */}
       {hero[tag]?.Component}
+      {/* //! hero end */}
+
+      {/* //! hero start */}
+      {hero[tag]?.Subscribe}
       {/* //! hero end */}
 
       {/* //! Three Title start */}

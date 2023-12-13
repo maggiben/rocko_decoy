@@ -8,7 +8,7 @@ import LatestPosts from '../components/HomeBlogs/LatestPosts'
 import TopPosts from '../components/HomeBlogs/TopPosts'
 import Category from '../components/HomeBlogs/Category'
 import CryptoDeFi from '../components/HomeBlogs/CryptoDeFi'
-import Faq from '../components/HomeBlogs/Faq'
+// import Faq from '../components/HomeBlogs/Faq'
 import HeroBlog from '../components/HeroBlog/HeroBlog'
 import SortedComponent from '../components/Sorted/SortedComponent'
 import Layout from '../layout'
@@ -76,7 +76,7 @@ function Index() {
             {/* //! ------Category 1-Post Container Start----- */}
             <Category />
             <CryptoDeFi />
-            <Faq />
+            {/* TODO turn back on when content ready <Faq /> */}
             {/* //! ------Category 1-Post Container End----- */}
           </>
         ) : (

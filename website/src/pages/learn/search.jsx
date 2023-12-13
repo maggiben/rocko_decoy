@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, graphql, navigate } from 'gatsby'
 import { BiChevronRight } from 'react-icons/bi'
 import SearchField from '../../components/SearchField/SearchField'
-import Layout from '../../components/layout'
+import Layout from '../../layout'
 
 const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
 
@@ -69,7 +69,7 @@ function SearchPage({ data, location }) {
       </section>
       <section className="!py-16">
         <div className="category_blogs_container space-y-5">
-          {results.length > 0 &&
+          {results.length > 0 ? (
             results.map(({ node }) => (
               <Link
                 to={`/learn/${node.fields.slug}`}
@@ -99,7 +99,17 @@ function SearchPage({ data, location }) {
                   </div>
                 </article>
               </Link>
-            ))}
+            ))
+          ) : (
+            <h1 className="text-center">
+              We can&apos;t find what you&apos;re looking for. Try another
+              search or{' '}
+              <a style={{ textDecoration: 'underline' }} href="/">
+                go back
+              </a>
+              ?
+            </h1>
+          )}
         </div>
       </section>
     </Layout>
