@@ -35,7 +35,6 @@ function Navbar() {
     },
     {
       labelText: 'FAQ',
-      location: '/',
     },
     {
       labelText: 'CONTACT',

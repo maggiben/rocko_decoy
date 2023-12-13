@@ -3,7 +3,7 @@ import group from '../../../../assets/images/coin-group.png'
 import GUSDIcon from '../../../../assets/coins/GUSD2.svg'
 import UsdIcon from '../../../../assets/coins/USD.svg'
 import USDC from '../../../../assets/coins/USDC.svg'
-import Coinbase from '../../../../assets/svg-icons/coinbase-svg.png'
+import Coinbase from '../../../../assets/coins/GUSD.svg'
 import Powerful from '../../../../assets/svg-icons/powerful.svg'
 import Audited from '../../../../assets/svg-icons/audited.svg'
 import Helpful from '../../../../assets/svg-icons/helpful.svg'
@@ -49,9 +49,9 @@ function InClassFeatures() {
                 description="Link your Coinbase or Gemini account to further simplify getting your crypto loan or to receive it in USD. "
                 className="bg-[#F5FCFC]"
                 image={
-                  <div>
-                    <img src={Coinbase} alt="" />
-                    <img src={GUSDIcon} alt="" />
+                  <div className="flex items-center gap-[8px]">
+                    <Coinbase />
+                    <GUSDIcon height={40} width={40} />
                   </div>
                 }
 
