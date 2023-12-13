@@ -70,9 +70,9 @@ def process_alert(row):
     # Send alert
     common.send_alert(common.parse_email_template(alert_template, row[3], {'THRESHOLD': str(row[4])}, LOGGER), row[5], row[6], row[1], LOGGER)
 
-    # Set alert to inactive if its set to only fire once
+    # Delete alert to if its set to only fire once
     if row[8]:
-      sql = "UPDATE alerts SET active=0 WHERE id=%s"
+      sql = "DELETE FROM alerts WHERE id=%s"
       db.insert_query(DB_CONFIG, sql, [ row[0] ])
 
     # Update alerts that its triggered
