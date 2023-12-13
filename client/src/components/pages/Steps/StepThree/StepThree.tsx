@@ -59,8 +59,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
         <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
           Customize Your Loan
         </h1>
-        <div className="flex items-center justify-start max-[368px]:gap-1 min-[368px]:gap-4">
-          {/* filter btn */}
+        {/* <div className="flex items-center justify-start max-[368px]:gap-1 min-[368px]:gap-4">
           <div className="py-2 md:py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group">
             <p className="text-[#2C3B8D] font-medium max-[355px]:text-sm ">
               Filter
@@ -71,10 +70,8 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
               </p>
             )}
 
-            {/* filter options */}
             <FilterOptions handleFilterOption={handleFilterOption} />
           </div>
-          {/* sort btn */}
           <div className="py-2 md:py-[10px] px-4 flex items-center justify-start gap-2 bg-[#EEE] rounded-full relative group min-w-[150px]">
             <p className="text-[#2C3B8D] font-medium max-[355px]:text-sm ">
               Sort by: {sortOption}
@@ -96,13 +93,12 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
               </svg>
             </div>
 
-            {/* sort options */}
             <SortOptions
               setSortOption={setSortOption}
               sortOption={sortOption}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       {/* title end  */}
 
