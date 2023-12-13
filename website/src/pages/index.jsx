@@ -15,14 +15,16 @@ import getBorrowApr from '../utils/getBorrowApr.ts'
 
 export default function Homepage() {
   const [borrowApr, setBorrowApr] = React.useState('...')
-
+  const inBrowser = typeof window !== 'undefined' 
   const handleGetBorrowerApr = async () => {
-    const apr = new Intl.NumberFormat('en-US', {
-      style: 'percent',
-      minimumFractionDigits: 2,
-    }).format((await getBorrowApr()) / 100)
-    sessionStorage.setItem('borrowApr', apr)
-    setBorrowApr(apr)
+    if (inBrowser) {
+      const apr = new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+      }).format((await getBorrowApr()) / 100)
+      sessionStorage.setItem('borrowApr', apr)
+      setBorrowApr(apr)
+    }
   }
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function Homepage() {
     <Layout>
       <Header
         title={`Crypto-backed loans as low as ${
-          sessionStorage.getItem('borrowApr') || borrowApr
+          (inBrowser && sessionStorage.getItem('borrowApr')) || borrowApr
         }¹`}
         subTitle="Receive USD² or USDC using your crypto holdings as collateral. Be one of the first to get early access."
         description="¹Interest rates are offered by Compound lending protocol and fluctuate
