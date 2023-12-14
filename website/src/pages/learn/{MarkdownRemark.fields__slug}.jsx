@@ -258,6 +258,7 @@ function SingleBlog({ data }) {
             </Link>{' '}
             to learn more about DeFi borrowing.
           </p>
+          <Subscribe singleBlog />
           <p className="single_blog_p">
             Join{' '}
             <Link to="https://rocko.co" className="underline italic">

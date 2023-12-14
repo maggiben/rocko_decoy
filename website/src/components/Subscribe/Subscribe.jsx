@@ -3,7 +3,10 @@ import * as React from 'react'
 import EmailImg from '../../images/email.svg'
 import FormWrapper from '../shared/FormWrapper'
 
-function Subscribe({ singleBlog }) {
+function Subscribe({
+  singleBlog,
+  tagline = 'Get the latest from Rocko in your inbox.',
+}) {
   return (
     <section
       className={`subscribe_container_parent ${
@@ -35,7 +38,7 @@ function Subscribe({ singleBlog }) {
                 : 'subscribe_container_info_h1_singleblog_false'
             } subscribe_container_info_h1`}
           >
-            Get the latest from Rocko in your inbox.
+            {tagline}
           </h1>
           <FormWrapper className="subscribe_container_info_input_container">
             <input
