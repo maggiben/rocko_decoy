@@ -37,7 +37,7 @@ export default function Home() {
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
-  const { connect } = useConnect();
+  const { connect, isSuccess } = useConnect();
   const { chains } = configureChains([net], [publicProvider()]);
   const auth0Connector = new Auth0WalletConnector({
     chains,
@@ -115,6 +115,16 @@ export default function Home() {
         'Your account is currently under review. You may manage existing loans but cannot create new loans. Please contact support@rocko.co if you need further assistance.',
       );
   }, [userInfo]);
+
+  useEffect(() => {
+    if (isSuccess && setCurrentStep && setLoanData && currentStep === 2) {
+      setCurrentStep(currentStep + 1);
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        activeNextButton: false,
+      }));
+    }
+  }, [isSuccess]);
 
   return (
     <>
