@@ -149,9 +149,9 @@ function SingleBlog({ data }) {
               <p className="!text-[#2C3B8D] !text-sm">
                 {post?.frontmatter?.tags}
               </p>
-              <h2 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px]">
+              <h1 className="!text-[48px] !leading-[56px] !py-2 !tracking-[0px]">
                 {post?.frontmatter?.title}
-              </h2>
+              </h1>
 
               <p className="!text-xs !text-[#545454]">
                 {post?.frontmatter.date}

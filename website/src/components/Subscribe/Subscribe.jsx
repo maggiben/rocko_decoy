@@ -5,7 +5,9 @@ import FormWrapper from '../shared/FormWrapper'
 
 function Subscribe({
   singleBlog,
-  tagline = 'Get the latest from Rocko in your inbox.',
+  tagline = 'Get cash without having to sell your crypto',
+  subheading = 'Be one of the first to get early access to Rocko',
+  cta = 'Subscribe',
 }) {
   return (
     <section
@@ -40,6 +42,7 @@ function Subscribe({
           >
             {tagline}
           </h1>
+          <p className="mb-20">{subheading}</p>
           <FormWrapper className="subscribe_container_info_input_container">
             <input
               name="EMAIL"
@@ -50,7 +53,7 @@ function Subscribe({
               className="subscribe_container_info_input"
             />
             <button type="submit" className="subscribe_container_info_button">
-              Subscribe
+              {cta}
             </button>
           </FormWrapper>
         </div>
