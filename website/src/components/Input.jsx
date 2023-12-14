@@ -16,7 +16,7 @@ function Input(props) {
       <input
         className={clsx(
           className,
-          'block w-full rounded-[10px] border border-[#E6E6E6] bg-transparent py-[16px] px-[16px] outline-0 text-[14px] font-normal ::placeholder-[#000]',
+          'block w-full rounded-[10px] border border-[#E6E6E6] bg-transparent md:py-[16px]   md:px-[16px] p-[10px] outline-0 text-[14px] font-normal ::placeholder-[#000]',
         )}
         {...rest}
       />

@@ -11,7 +11,7 @@ import Header from '../components/pages/Homepage/Header'
 import CollateralAssets from '../components/pages/Homepage/CollateralAssets/CollateralAssets'
 import Seo from '../components/seo'
 import Layout from '../layout'
-import faqs from '../mock/data'
+import { faqs } from '../mock/data'
 import getBorrowApr from '../utils/getBorrowApr.ts'
 
 export function Head() {

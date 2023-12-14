@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-
-import { Collapse } from 'react-collapse'
 import { Link } from 'gatsby'
+import { Collapse } from 'react-collapse'
+import clsx from 'clsx'
 import MinusIcon from '../../../assets/svg-icons/minus.svg'
 import PlusIcon from '../../../assets/svg-icons/plus.svg'
 
 function FAQ(props) {
-  const { items = [] } = props
+  const { className, items = [] } = props
 
   const [active, setActive] = useState({})
 
@@ -18,7 +18,7 @@ function FAQ(props) {
   }
 
   return (
-    <section className="bg-[#F9F9F9] lg:py-[80px] py-[50px]">
+    <section className={clsx(className, 'bg-[#F9F9F9] lg:py-[80px] py-[50px]')}>
       <div className="mx-auto container">
         <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[426px] mb-[40px]">
           Frequently Asked Questions
@@ -29,11 +29,11 @@ function FAQ(props) {
             onKeyDown={() => {}}
             tabIndex={0}
             role="button"
-            className="border-b-[1px] border-[#E2E2E2] py-[24px] cursor-pointer"
+            className="border-b-[1px] border-[#E2E2E2] lg:py-[24px] py-[16px] cursor-pointer"
             onClick={() => handleClick(id)}
           >
-            <div className="flex justify-between items-center relative bg-[#F9F9F9]">
-              <h4 className="text-[#141414] w-4/5 text-[16px] sm:text-[20px] font-normal leading-7">
+            <div className="flex justify-between items-center relative bg-[#F9F9F9] faq">
+              <h4 className="text-[#141414] w-4/5 text-[16px] sm:text-[20px] font-normal leading-7 lg:max-w-[775px]">
                 {ques}
               </h4>
               <div
@@ -55,23 +55,23 @@ function FAQ(props) {
                 className={active === 'transition duration-500 '}
                 style={{ transition: 'all 0.5s ease 0s' }}
               >
-                <p className="text-[#545454] text-[16px] pt-[16px] leading-6 font-normal">
+                <p className="text-[#545454] text-[16px] pt-[16px] leading-6 font-normal lg:max-w-[775px] ">
                   {React.createElement(answer)}{' '}
                 </p>
               </Collapse>
             </div>
           </div>
         ))}
-        {/* <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454]">
+        <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454]">
           See more frequently asked questions
           <Link
-            to="https://rocko.co/faq"
+            to="/faq"
             className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline pl-[3px]"
           >
             here
           </Link>
           .
-        </div> */}
+        </div>
       </div>
     </section>
   )

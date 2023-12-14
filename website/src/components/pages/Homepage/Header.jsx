@@ -6,7 +6,7 @@ import FormWrapper from '../../shared/FormWrapper'
 function Header(props) {
   const { title, subTitle = '', description, content } = props
   return (
-    <div className="banner bg-[#081D21] lg:pt-[114px] py-[50px] px-[16px]  lg:pb-[90px]  text-center">
+    <div className="banner bg-[#081D21] lg:pt-[114px] pt-[50px] px-[16px]  lg:pb-[32px] pb-[32px]  text-center">
       <Title title={title} />
       <p className="text-center text-white lg:text-[20px] md:text-[18px] text-[16px] font-medium leading-7 lg:my-[32px] my-[20px] md:max-w-[630px] mx-[auto]">
         {subTitle}

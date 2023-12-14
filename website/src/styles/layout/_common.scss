@@ -2,9 +2,15 @@
 body {
   background-color: $white;
   color: $gray-2;
+  font-family: 'Inter', sans-serif !important;
+}
+p{
   font-family: 'Inter', sans-serif;
 }
-
+.defi{
+  font-family: 'Inter', sans-serif;
+  letter-spacing: normal;
+}
 .wrapper {
   width: 100%;
   position: relative;
@@ -160,11 +166,17 @@ body {
 .text-section table p {
   margin: 0;
 }
-::placeholder{
-  color: #141414;
+input::placeholder{
+  color: #141414 !important;
 }
 .waitlist{
   background-color: #006AFF;
+}
+.more-faq .faq{
+  background-color: transparent ;
+}
+.more-faq h2 {
+margin-bottom: 16px;
 }
 @media (max-width: 767px) {
   .text-section {
@@ -175,5 +187,8 @@ body {
   .text-section table td {
     border: 1px solid #000;
     padding: 5px 5px;
+  }
+  p{
+    font-size: 16px;
   }
 }

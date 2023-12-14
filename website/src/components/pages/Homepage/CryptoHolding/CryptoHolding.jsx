@@ -18,15 +18,15 @@ function CryptoHolding() {
           {' '}
           Get cash without having to sell your crypto holdings
         </h2>
-        {/* <p className="text-blackSecondary lg:text-[18px] text-[16px]">
+        <p className="text-blackSecondary lg:text-[18px] text-[16px]">
           Learn more about the benefits and risks of DeFi borrowing{' '}
           <Link
-            to="/"
+            to="/why-defi"
             className="text-[#006AFF] text-[18px] underline-offset-1"
           >
             here.
           </Link>
-        </p> */}
+        </p>
         <div className="flex justify-between items-center border-b lg:py-[64px] py-[30px] lg:gap-20 gap-y-[20px]  sm:flex-wrap lg:flex-nowrap ">
           <PictureCard className="min-h-[300px] sm:min-h-[250px] max-w-[100%]">
             <img
@@ -38,8 +38,8 @@ function CryptoHolding() {
           <DataCard
             className="max-w-[660px]"
             heading="DeFi borrowing made easy — for everyone"
-            // label="Learn more about the benefits and risks of DeFi borrowing"
-            // link="here."
+            label="Learn more about the benefits and risks of DeFi borrowing"
+            link="here."
             content="Decentralized Finance (DeFi) lending protocols are applications that run on blockchain networks like Ethereum and allow users to borrow or lend crypto assets. Rocko’s simple-to-use platform reduces the time and complexity so consumers of all levels can easily borrow cash¹ or USDC from popular DeFi protocols — starting with Compound."
           />
         </div>
@@ -88,29 +88,27 @@ function CryptoHolding() {
         <p className="text-[#141414] text-[10px]">
           <sup>2</sup>The max loan-to-value ratio is set by Compound. Interest
           rates are offered by Compound lending protocol and fluctuate in
-          real-time based on market forces.{' '}
-          {/* Learn more about floating interest
+          real-time based on market forces. Learn more about floating interest
           rates{' '}
           <Link
-            to="https://rocko.co/why-defi"
+            to="/learn/what-is-a-floating-interest-rate-in-defi/"
             className="text-[#141414] underline decoration-1"
           >
             here
           </Link>
-          . */}
+          .
         </p>
         <p className="text-[#141414] text-[10px]">
           <sup>3</sup>Loans offered by Compound are open-ended meaning borrowers
           can repay at any time as long as the loan-to-value ratio for their
-          loan remains below the liquidation threshold.{' '}
-          {/* Learn more{' '}
+          loan remains below the liquidation threshold. Learn more{' '}
           <Link
-            to="https://rocko.co/why-defi"
+            to="/why-defi"
             className="text-[#141414] underline decoration-1"
           >
             here
           </Link>
-          . */}
+          .
         </p>
       </div>
     </section>

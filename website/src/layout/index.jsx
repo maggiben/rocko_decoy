@@ -27,12 +27,15 @@ function Navbar() {
   const menuItems = [
     {
       labelText: ' WHY DEFI?',
+      location: '/why-defi',
     },
     {
       labelText: 'ABOUT US',
+      location: '/about',
     },
     {
       labelText: 'FAQ',
+      location: '/faq',
     },
     {
       labelText: 'CONTACT',
@@ -64,6 +67,7 @@ function Navbar() {
                       <Link
                         to={navItems.location}
                         key={navItems.labelText}
+                        activeClassName="underline hover:underline"
                         className="text-[#141414] font-semibold hover:text-[#6b3493] duration-200 text-sm  px-[16px]"
                       >
                         {navItems.labelText}
@@ -114,6 +118,7 @@ function Navbar() {
                   {menuItems.map(navItems =>
                     navItems.location ? (
                       <Link
+                        activeClassName="underline hover:underline"
                         to={navItems.location}
                         key={navItems.labelText}
                         className="text-[#141414] font-semibold hover:text-[#6b3493] duration-200 text-sm  px-[16px]"
