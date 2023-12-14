@@ -16,5 +16,5 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "prettier.requireConfig": true // Optional: Only format if a Prettier config file is found
+  "prettier.requireConfig": true
 }
