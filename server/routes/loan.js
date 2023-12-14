@@ -6,7 +6,7 @@ const axios = require('axios');
 /////////////////// Get loans
 
 router.get('/loans', (req, res, next) => {
-    let sql = `SELECT * FROM loans WHERE user = '${req.query.user}'`;
+    let sql = `SELECT * FROM loans WHERE user_id = '${req.query.user}'`;
     db.query(sql, (err, results) => {
       if (err) {
         console.error(err);
@@ -22,7 +22,7 @@ router.get('/loans', (req, res, next) => {
 router.post(
   '/add', (req, res, next) => {
     let data = {
-      user: req.body.user,
+      user_id: req.body.user,
       transaction_hash: req.body.transaction_hash,
       lending_protocol: req.body.lending_protocol,
       loan_active: req.body.loan_active,
@@ -44,9 +44,9 @@ router.post(
         res.send("Data successfully saved");
       });
     } else { // update loan (add borrowing and collateral)
-      let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user = ?";
+      let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user_id = ?";
 
-      db.query(sql, [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user], (err, results) => {
+      db.query(sql, [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user_id], (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));
