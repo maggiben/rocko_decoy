@@ -28,6 +28,7 @@ function HeroBlogBorrowing() {
               author
               authorImg
               authorByline
+              authorTwitter
               coverUrl
             }
             fields {

@@ -28,6 +28,7 @@ function HeroBlogCryptoDeFi() {
               author
               authorImg
               authorByline
+              authorTwitter
               coverUrl
             }
             fields {

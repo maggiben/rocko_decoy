@@ -9,13 +9,18 @@ import InClassFeatures from '../components/pages/Homepage/InClassFeatures/InClas
 import SecurityFirstCard from '../components/pages/Homepage/SecurityFirstCard'
 import Header from '../components/pages/Homepage/Header'
 import CollateralAssets from '../components/pages/Homepage/CollateralAssets/CollateralAssets'
+import Seo from '../components/seo'
 import Layout from '../layout'
 import faqs from '../mock/data'
 import getBorrowApr from '../utils/getBorrowApr.ts'
 
+export function Head() {
+  return <Seo />
+}
+
 export default function Homepage() {
   const [borrowApr, setBorrowApr] = React.useState('...')
-  const inBrowser = typeof window !== 'undefined' 
+  const inBrowser = typeof window !== 'undefined'
   const handleGetBorrowerApr = async () => {
     if (inBrowser) {
       const apr = new Intl.NumberFormat('en-US', {

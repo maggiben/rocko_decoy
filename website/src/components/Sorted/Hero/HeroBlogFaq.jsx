@@ -28,6 +28,7 @@ function HeroBlogFaq() {
               author
               authorImg
               authorByline
+              authorTwitter
               coverUrl
             }
             fields {

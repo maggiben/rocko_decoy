@@ -20,15 +20,16 @@ const sitemap =
 
 module.exports = {
   siteMetadata: {
-    title: `Rocko: Learn DeFi`,
+    title: `Rocko: DeFi Made Simple for Everyone`,
     author: {
       name: `Rocko`,
       summary: `DeFi made simple`,
     },
     description: `Rocko: DeFi for everyone`,
+    copyright: `© ${new Date().getFullYear()} Rocko, Inc.`,
     siteUrl,
     social: {
-      twitter: `rockodefi`,
+      twitter: `@rockodefi`,
     },
   },
   plugins: [

@@ -23,6 +23,7 @@ function HeroBlog() {
               author
               authorImg
               authorByline
+              authorTwitter
             }
             fields {
               slug

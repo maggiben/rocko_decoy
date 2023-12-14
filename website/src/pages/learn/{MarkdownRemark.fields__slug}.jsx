@@ -15,10 +15,22 @@ import XIcon from '../../images/x-icon.svg'
 import LinkedinIcon from '../../images/linkedin-icon.svg'
 import WhatsappIcon from '../../images/whatsapp-icon.svg'
 import TelegramIcon from '../../images/telegram-svgrepo-com.svg'
-
+import Seo from '../../components/seo'
 import LatestPosts from '../../components/HomeBlogs/LatestPosts'
 import Subscribe from '../../components/Subscribe/Subscribe'
 import Layout from '../../layout'
+
+export function Head({ data }) {
+  const post = data.allMarkdownRemark.edges[0]?.node
+  return (
+    <Seo
+      authorTwitter={post?.frontmatter?.authorTwitter}
+      image={post?.frontmatter?.coverUrl}
+      title={post?.frontmatter?.title}
+      description={post?.frontmatter?.description}
+    />
+  )
+}
 
 function SingleBlog({ data }) {
   // console.log("SingleBlog", data)
@@ -145,27 +157,37 @@ function SingleBlog({ data }) {
                 {post?.frontmatter.date}
               </p>
               <div className="!flex !space-x-3 !items-center !pt-6">
-                <div
-                  className={`!w-10 !h-10 !rounded-full ${
-                    !post?.frontmatter.authorImg && 'border-2 !border-blue-700'
-                  }`}
+                <a
+                  href={
+                    post?.frontmatter?.authorTwitter
+                      ? `https://x.com/${post?.frontmatter?.authorTwitter}`
+                      : '#'
+                  }
                 >
-                  {post?.frontmatter.authorImg && (
-                    <img
-                      src={post?.frontmatter.authorImg}
-                      alt="user"
-                      height={40}
-                      width={40}
-                      className="!rounded-full !object-cover !w-full !h-full"
-                    />
-                  )}
-                </div>
-                <p className="!text-sm">
-                  {post?.frontmatter?.author}
-                  <span className="!text-xs !text-[#545454] !block">
-                    {post?.frontmatter?.authorByline}
-                  </span>
-                </p>
+                  <div
+                    className={`!w-10 !h-10 !rounded-full ${
+                      !post?.frontmatter.authorImg &&
+                      'border-2 !border-blue-700'
+                    }`}
+                  >
+                    {post?.frontmatter.authorImg && (
+                      <img
+                        src={post?.frontmatter.authorImg}
+                        alt="user"
+                        height={40}
+                        width={40}
+                        className="!rounded-full !object-cover !w-full !h-full"
+                      />
+                    )}
+                  </div>
+
+                  <p className="!text-sm">
+                    {post?.frontmatter?.author}
+                    <span className="!text-xs !text-[#545454] !block">
+                      {post?.frontmatter?.authorByline}
+                    </span>
+                  </p>
+                </a>
               </div>
             </article>
             <img
@@ -269,6 +291,7 @@ export const pageQuery = graphql`
             author
             authorImg
             authorByline
+            authorTwitter
           }
           fields {
             slug

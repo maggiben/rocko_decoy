@@ -28,6 +28,7 @@ function HeroBlogDiFi() {
               author
               authorImg
               authorByline
+              authorTwitter
               coverUrl
             }
             fields {

@@ -12,7 +12,11 @@ import CryptoDeFi from '../components/HomeBlogs/CryptoDeFi'
 import HeroBlog from '../components/HeroBlog/HeroBlog'
 import SortedComponent from '../components/Sorted/SortedComponent'
 import Layout from '../layout'
+import Seo from '../components/seo'
 
+export function Head() {
+  return <Seo title="Learn DeFi with Rocko" />
+}
 const SHOW_BLOG = process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
 
 function Index() {

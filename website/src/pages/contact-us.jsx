@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import Layout from '../layout'
+import Seo from '../components/seo'
 
+export function Head() {
+  return <Seo title="Contact Us" />
+}
 function ContactForm() {
   const FORM_ENDPOINT =
     'https://public.herotofu.com/v1/30422220-8d73-11ee-87e8-6d2ee9752960'
