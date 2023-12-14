@@ -19,8 +19,7 @@ const faqs = [
     ques: 'Does Rocko charge a fee?',
     answer: () => (
       <>
-        Yes, there will be a fee to use the Rocko platform. More info on fees
-        will be shared closer to launch.
+        More info on any fees will be shared closer to launch.
         {/* <Link to="https://rocko.co/why-defi" className="text-[#006AFF] underline decoration-1">
           here
         </Link> */}

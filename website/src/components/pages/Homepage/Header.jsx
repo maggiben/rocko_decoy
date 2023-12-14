@@ -17,7 +17,7 @@ function Header(props) {
           name="EMAIL"
           id="EMAIL"
           type="email"
-          className="!bg-[#fff] mb-[40px] max-w-[500px] w-full outline-0 mx-[auto] text-[#141414]"
+          className="!bg-[#fff] mb-[40px] !py-[12px] !px-[15px] max-w-[380px] w-full outline-0 mx-[auto] text-[#141414]"
         />
         <button
           type="submit"

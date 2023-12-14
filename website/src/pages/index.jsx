@@ -43,9 +43,8 @@ export default function Homepage() {
           (inBrowser && sessionStorage.getItem('borrowApr')) || borrowApr
         }¹`}
         subTitle="Receive USD² or USDC using your crypto holdings as collateral. Be one of the first to get early access."
-        description="¹Interest rates are offered by Compound lending protocol and fluctuate
-        in real-time based on market forces. The rate displayed may delayed by
-        up to 5 minutes."
+        description="¹Interest rates are offered by Compound III lending protocol and fluctuate
+        in real-time based on market forces. The rate displayed may be delayed."
         content="²USD is only available to U.S. Coinbase or Gemini
         users at this time. All users can convert their USDC loan into USD or
         other fiat via crypto exchanges."

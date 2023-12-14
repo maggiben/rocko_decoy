@@ -17,7 +17,7 @@ function CollateralAssets() {
     <section className="lg:py-[80px] py-[50px] border-b border-[#E2E2E2] bg-[#FCFCFC]">
       <div className="container mx-auto px-4">
         <div className="lg:mb-[80px] mb-[50px]">
-          <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[891px] mb-[48px]">
+          <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[1260px] mb-[48px]">
             Set up text and email alerts to monitor changes in your collateral
             value and interest rate
           </h2>
@@ -45,7 +45,7 @@ function CollateralAssets() {
             <div>
               <StepBtn
                 title="Customize the frequency and trigger"
-                subTitle="Choose how often to receive alerts and set up multiple with different triggers"
+                subTitle="Choose how often to receive alerts and set up multiple with different triggers."
                 tab={3}
                 active={tabIndex === 3}
                 onPress={setTabIndex}
