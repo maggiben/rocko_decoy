@@ -252,7 +252,7 @@ function SingleBlog({ data }) {
               Twitter account
             </Link>
             , or visit our{' '}
-            <Link to="https://rocko.co/learn" className="underline italic">
+            <Link to="/learn" className="underline italic">
               {' '}
               resource center
             </Link>{' '}
@@ -261,7 +261,7 @@ function SingleBlog({ data }) {
           <Subscribe singleBlog />
           <p className="single_blog_p">
             Join{' '}
-            <Link to="https://rocko.co" className="underline italic">
+            <Link to="/" className="underline italic">
               Rocko&apos;s waitlist
             </Link>{' '}
             today and be the first to be notified when they launch! You can also

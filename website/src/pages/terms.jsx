@@ -62,11 +62,7 @@ const Index = () => {
                       <span>
                         <span>
                           We operate&nbsp;the website&nbsp;
-                          <a
-                            href="https://rocko.co/"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                          >
+                          <a href="/">
                             <span>https://rocko.co</span>
                           </a>
                           (the&nbsp;"<strong>Site</strong>"),&nbsp;the mobile

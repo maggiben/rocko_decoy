@@ -35,14 +35,8 @@ const Index = () => {
                 <ul>
                   <li>
                     Visit our website&nbsp;at&nbsp;
-                    <a
-                      href="https://rocko.co/"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      https://rocko.co
-                    </a>
-                    , or any website of ours that links to this privacy notice
+                    <a href="/">https://rocko.co</a>, or any website of ours
+                    that links to this privacy notice
                   </li>
                   <li>
                     Download and use&nbsp;our mobile

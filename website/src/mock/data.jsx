@@ -40,7 +40,7 @@ const faqs = [
         users can experience loss of funds in the event of software bugs or
         exploits. Learn more about the benefits and risks of DeFi borrowing{' '}
         <Link
-          to="https://rocko.co/why-defi"
+          to="/why-defi"
           className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline"
         >
           here
@@ -85,7 +85,7 @@ const faqPageData = [
         users can experience loss of funds in the event of software bugs or
         exploits. Learn more about the benefits and risks of DeFi borrowing{' '}
         <Link
-          to="https://rocko.co/why-defi"
+          to="/why-defi"
           className="!text-[#2C3B8D] hover:!text-[#2C3B8D] underline decoration-1 hover:decoration-1 hover:underline"
         >
           here

@@ -15,7 +15,7 @@ function DataCard(props) {
         {label}{' '}
         <Link
           className="font-normal lg:text-[18px] text-[16px] text-[#545454] leading-8 underline decoration-1"
-          to="https://rocko.co/why-defi"
+          to="/why-defi"
         >
           {link}
         </Link>
