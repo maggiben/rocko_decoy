@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { graphql } from 'gatsby'
 
-import Layout from '../components/layout'
+import Layout from '../layout'
 import Seo from '../components/seo'
 
 import getBorrowApr from '../utils/getBorrowApr.ts'
@@ -13,14 +13,22 @@ function NotFoundPage() {
   }, [])
   return (
     <Layout>
-      <h1>404: Can&apos;t find what you&apos;re looking for</h1>
-      <a href="/">
-        {currentApr
-          ? `Perhaps youre interested in a crypto loan as low as ${currentApr.toFixed(
-              2,
-            )}% APR?`
-          : null}
-      </a>
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-6xl font-bold">
+          404: Can&apos;t find what you&apos;re looking for
+        </h1>
+        <a
+          className="text-3xl"
+          style={{ textDecoration: 'underline' }}
+          href="/"
+        >
+          {currentApr
+            ? `Perhaps youre interested in a crypto loan as low as ${currentApr.toFixed(
+                2,
+              )}% APR?`
+            : null}
+        </a>
+      </div>
     </Layout>
   )
 }
