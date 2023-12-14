@@ -20,6 +20,7 @@ function BorrowMoreModal({
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! for loan
   const [inputCollateral, setInputCollateral] = useState<string | undefined>(); //! for collateral
   const [changeInputType, setChangeInputType] = useState<string>('text'); //! to show value with commas & without commas n inputfiled on onBlur handler
+  const [isAlertShow, setIsAlertShow] = useState<boolean>(false);
   const { getBuffer, getLiquidationPrice, getETHPrice } = useSingleLoan();
   const [buffer, setBuffer] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
@@ -41,6 +42,8 @@ function BorrowMoreModal({
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    setIsAlertShow(false);
+
     const inputValue = event.target.value;
 
     setInputNumber(handleDecimalsOnValue(inputValue));
@@ -50,6 +53,8 @@ function BorrowMoreModal({
   const handleCollateralValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    setIsAlertShow(false);
+
     const inputValue = event.target.value;
 
     setInputCollateral(handleDecimalsOnValue(inputValue));
@@ -57,6 +62,11 @@ function BorrowMoreModal({
   };
 
   const onClickContinue = () => {
+    if (collateralFloat === 0) {
+      setIsAlertShow(true);
+      return;
+    }
+
     const borrowMoreObj = {
       payment_loan: inputFloat,
       payment_collateral: collateralFloat,
@@ -155,10 +165,11 @@ function BorrowMoreModal({
           USDC
         </p>
       </div>
-      {buffer < 0 && (
+      {(isAlertShow || (buffer < 0 && inputCollateral)) && (
         <p className="text-red-500 text-sm mt-2 p-0.5">
-          You cannot borrow this loan amount as it would reduce your collateral
-          value below the required threshold.
+          You cannot borrow this amount as it would reduce your collateral value
+          below the required LTV threshold. Please add additional collateral or
+          reduce the borrow amount.
         </p>
       )}
       {/* input field with react form hook end
@@ -247,7 +258,7 @@ function BorrowMoreModal({
       {/* continue button */}
       {/* passing the user's intention like "add" or "withdraw" throuth query */}
       <button
-        className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
+        className={`py-[10px] px-6  rounded-full text-sm font-semibold max-w-[25%] ${
           (inputNumber || inputCollateral) && buffer > 0
             ? 'bg-[#2C3B8D] text-white'
             : 'text-gray-100 bg-[#ABB1D1]'
