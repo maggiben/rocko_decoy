@@ -37,13 +37,10 @@ const Index = () => {
                           We are&nbsp;Rocko Inc.&nbsp;("<strong>Company</strong>
                           ," "<strong>we</strong>," "<strong>us</strong>," "
                           <strong>our</strong>"), a company registered
-                          in&nbsp;New York,&nbsp;United States
+                          in&nbsp;Delaware,&nbsp;United States
                         </span>
                         <span>
-                          <span>
-                            &nbsp;at&nbsp;525 E 13th St apt 3e, New York, NY
-                            10009, USA,&nbsp;New York
-                          </span>
+                          <span>&nbsp;at&nbsp; 10009, USA,&nbsp;New York</span>
                         </span>
                         <span>
                           <span>,&nbsp;NY&nbsp;10009</span>
@@ -83,8 +80,8 @@ const Index = () => {
                       <span>
                         <span>
                           You can contact us by&nbsp;email
-                          at&nbsp;hello@rocko.co,&nbsp;or by mail to&nbsp;525 E
-                          13th St apt 3e, New York, NY 10009, USA,&nbsp;New
+                          at&nbsp;hello@rocko.co,&nbsp;or by mail
+                          to&nbsp;,&nbsp;New
                           York,&nbsp;NY&nbsp;10009,&nbsp;United States.
                         </span>
                       </span>
@@ -3317,9 +3314,7 @@ const Index = () => {
                       <span>
                         <strong>
                           <span>
-                            <span>
-                              525 E 13th St apt 3e, New York, NY 10009, USA
-                            </span>
+                            <span></span>
                           </span>
                         </strong>
                       </span>
