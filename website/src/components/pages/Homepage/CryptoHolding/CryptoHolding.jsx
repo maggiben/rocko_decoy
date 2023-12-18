@@ -4,7 +4,7 @@ import DataCard from './DataCard'
 import VectorIcon from '../../../../assets/svg-icons/vector.svg'
 import CreditCardIcon from '../../../../assets/svg-icons/credit_card.svg'
 import HomeIcon from '../../../../assets/svg-icons/home.svg'
-import loanAmountPage from '../../../../assets/images/loan-amt-page.png'
+import LoanAmount from '../../../../assets/images/loan-amount.svg'
 import coinGroup from '../../../../assets/images/coin-group.png'
 
 import TextCard from './TextCard'
@@ -18,7 +18,7 @@ function CryptoHolding() {
           {' '}
           Get cash without having to sell your crypto holdings
         </h2>
-        <p className="text-blackSecondary lg:text-[18px] text-[16px]">
+        {/* <p className="text-blackSecondary lg:text-[18px] text-[16px]">
           Learn more about the benefits and risks of DeFi borrowing{' '}
           <Link
             to="/why-defi"
@@ -26,14 +26,15 @@ function CryptoHolding() {
           >
             here.
           </Link>
-        </p>
+        </p> */}
         <div className="flex justify-between items-center border-b lg:py-[64px] py-[30px] lg:gap-20 gap-y-[20px]  sm:flex-wrap lg:flex-nowrap ">
           <PictureCard className="min-h-[300px] sm:min-h-[250px] max-w-[100%]">
-            <img
+            {/* <img
               src={loanAmountPage}
               alt=""
               className="absolute right-0 bottom-0"
-            />
+            /> */}
+            <LoanAmount className="absolute  xl:right-[-163px] xl:!bottom-[-100px] w-full h-full md:w-[600px] md:h-[514px]" />
           </PictureCard>
           <DataCard
             className="max-w-[660px]"

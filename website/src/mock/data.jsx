@@ -126,14 +126,38 @@ const faqPageData = [
   {
     id: '11',
     ques: 'How is the interest rate determined?',
-    answer: () =>
-      'Lending protocols like Compound use formulas based on supply and demand to calculate interest rates. Learn more here.',
+    answer: () => (
+      <>
+        Lending protocols like Compound use formulas based on supply and demand
+        to calculate interest rates. Learn more{' '}
+        <Link
+          to="https://rocko.co/learn/what-is-a-floating-interest-rate-in-defi"
+          className="!text-[#2C3B8D] hover:!text-[#2C3B8D] underline decoration-1 hover:decoration-1 hover:underline"
+        >
+          here
+        </Link>
+        .
+      </>
+    ),
   },
   {
     id: '12',
     ques: 'What happens if I don’t repay my loan?',
-    answer: () =>
-      'If your loan exceeds the maximum allotted loan-to-value ratio, whether through not repaying it or another reason, your collateral will be liquidated (i.e. sold for USDC) and Compound will take a fee. To learn more about liquidation and how to avoid it, read more here.',
+    answer: () => (
+      <>
+        If your loan exceeds the maximum allotted loan-to-value ratio, whether
+        through not repaying it or another reason, your collateral will be
+        liquidated (i.e. sold for USDC) and Compound will take a fee. To learn
+        more about liquidation and how to avoid it, read more{' '}
+        <Link
+          to="https://rocko.co/learn/defi-loans-what-is-collateral-liquidation/"
+          className="!text-[#2C3B8D] hover:!text-[#2C3B8D] underline decoration-1 hover:decoration-1 hover:underline"
+        >
+          here
+        </Link>{' '}
+        .
+      </>
+    ),
   },
   {
     id: '13',

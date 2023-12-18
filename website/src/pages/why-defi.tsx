@@ -112,7 +112,7 @@ export default function WhyDefi() {
               </>
             )
           })}
-          <p className="text-[#141414] lg:text-[18px] text-[16px leading-6 mf:leading-8 font-normal">
+          <p className="text-[#141414] lg:text-[18px] text-[16px leading-6 md:leading-8 font-normal">
             Simply put, DeFi is an incredible innovation that has the power to
             transform all of our financial lives. While there are many benefits,
             it’s important to understand the risks before interacting with DeFi.

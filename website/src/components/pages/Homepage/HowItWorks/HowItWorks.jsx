@@ -1,5 +1,5 @@
 import React from 'react'
-import howWork from '../../../../assets/images/how-work.png'
+import HowWork from '../../../../assets/images/how-work.svg'
 import DataCard from './DataCard'
 
 function HowItWorks() {
@@ -10,9 +10,10 @@ function HowItWorks() {
           <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[891px] mb-[48px]">
             How it Works
           </h2>
-          <div className="flex justify-between items-center  lg:gap-x-[100px] gap-y-[30px] flex-wrap lg:flex-wrap rounded-[24px] bg-[#FCFCFC]">
+          <div className="flex justify-between items-center  xl:gap-x-[100px] md:gap-x-[30px] gap-y-[30px] flex-wrap xl:!flex-nowrap rounded-[24px] bg-[#FCFCFC]">
             <div className=" lg:max-w-[543px] lg:max-h-[731px] lg:shrink-0 lg:grow w-full">
-              <img src={howWork} alt="how to work" className="w-full" />
+              {/* <img src={howWork} alt="how to work" className="w-full" /> */}
+              <HowWork className="w-full" />
             </div>
             <div className="lg:shrink-0 lg:grow [&>*:nth-child(3)]:before:top-[41px] [&>*:nth-child(3)]:-mt-[40px] [&>*:nth-child(4)]:-mt-[40px] [&>*:nth-child(2)]:pb-[100px] [&>*:nth-child(3)]:pb-[100px] [&>*:nth-child(4)]:before:top-[40px]">
               <DataCard

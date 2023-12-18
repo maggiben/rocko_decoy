@@ -62,11 +62,11 @@ function FAQ(props) {
             </div>
           </div>
         ))}
-        <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454]">
+        <div className="text-[18px] font-400 leading-6 mt-[4px] text-[#545454] see-more">
           See more frequently asked questions
           <Link
             to="/faq"
-            className="text-[#545454] hover:text-[#545454] underline decoration-1 hover:decoration-1 hover:underline pl-[3px]"
+            className="!text-[#2C3B8D] hover:!text-[#2C3B8D] underline decoration-1 hover:decoration-1 hover:underline ml-[3px]"
           >
             here
           </Link>

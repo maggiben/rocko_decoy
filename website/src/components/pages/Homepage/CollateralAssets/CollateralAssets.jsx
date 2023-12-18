@@ -22,7 +22,7 @@ function CollateralAssets() {
             value and interest rate
           </h2>
         </div>
-        <div className="flex justify-between items-center lg:flex-nowrap flex-wrap gap-8 lg:gap-0">
+        <div className="flex justify-between items-center lg:!flex-nowrap flex-wrap gap-8 lg:gap-0">
           <div className="flex flex-col gap-8">
             <div>
               <StepBtn
@@ -57,7 +57,7 @@ function CollateralAssets() {
               noPadding
               className="flex justify-center items-center h-[500px]"
             >
-              <div className="h-[84px] flex items-center gap-[12px] p-[12px] bg-white rounded-[16px] w-full mt-[121px] mb-[143px] mx-4 sm:mx-12">
+              <div className="h-[84px] flex items-center gap-[12px] p-[12px] bg-white rounded-[16px] w-full mt-[121px] mb-[143px] mx-4 sm:mx-[16px]">
                 <div className="p-[8px] w-[40px] h-[40px] bg-[#EEE] rounded-full flex justify-center items-center">
                   <ClosePlusIcon height={24} width={24} />
                 </div>
@@ -72,7 +72,7 @@ function CollateralAssets() {
               noPadding
               className="flex justify-center items-center h-[500px]"
             >
-              <div className="w-full bg-white rounded-[16px] mt-[91px] mb-[107px] mx-4 sm:mx-12">
+              <div className="w-full bg-white rounded-[16px] mt-[91px] mb-[107px] mx-4 sm:mx-[16px]">
                 <div className="flex justify-between items-center py-[20px] mx-[16px] border-b-[1px]">
                   <div className="text-[#141414] text-[16px] gap-x-[12px] flex items-center">
                     <EmailIcon />

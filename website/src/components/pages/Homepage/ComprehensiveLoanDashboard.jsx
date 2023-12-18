@@ -3,16 +3,16 @@ import EyeIcon from '../../../assets/svg-icons/eye.svg'
 import PaymentIcon from '../../../assets/svg-icons/payment.svg'
 import PercentIcon from '../../../assets/svg-icons/percent.svg'
 import VectorIcon from '../../../assets/svg-icons/vector.svg'
-import loanAmount from '../../../assets/images/loan_amount.png'
+import LoanAmount from '../../../assets/images/loan_amount.svg'
 import DataIconCard from './DataIconCard'
 
 function ComprehensiveLoanDashboard() {
   return (
-    <div className="relative lg:py-[72px] py-[50px] border-b border-[#E2E2E2]">
+    <div className="relative lg:pb-[72px] lg-pt-[36px] py-[50px] border-b border-[#E2E2E2]">
       <div className="container mx-auto px-4  ">
         <div className="flex justify-between items-center flex-wrap lg:flex-nowrap lg:gap-x-[40px] gap-y-[30px] lg:gap-y-[0] ">
           <div className="lg:max-w-[699px] w-full">
-            <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[426px]  mb-[48px]">
+            <h2 className="tracking-normal text-[#141414] lg:text-[48px] md:text-[35px] text-[22px] lg:max-w-[426px] lg:pt-[38px] pt-[0] mb-[48px]">
               Comprehensive Loan Dashboard
             </h2>
             <div className="flex justify-between items-start lg:gap-[30px] gap-[16px] flex-wrap">
@@ -46,8 +46,9 @@ function ComprehensiveLoanDashboard() {
               />
             </div>
           </div>
-          <div className="lg:max-w-[560px] w-full  lg:absolute lg:right-0 ">
-            <img src={loanAmount} alt="" className="w-full lg:h-full h-auto" />
+          <div className="lg:max-w-[350px] xl:max-w-[560px] w-full  lg:absolute lg:right-0 ">
+            <LoanAmount className="w-full lg:h-full h-auto" />
+            {/* <img src={loanAmount} alt="" className="w-full lg:h-full h-auto" /> */}
           </div>
         </div>
       </div>
