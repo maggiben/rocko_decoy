@@ -66,7 +66,7 @@ function ContactForm() {
       <div className="container mx-auto px-6 lg:w-800 lg:px-24 mt-12">
         <h1 className="text-6xl">Contact Us</h1>
         <div className="text-lg mb-8">
-          Please reach out with any questions, feature requests, or support
+          Please reach out with any questions or feature requests.
         </div>
         <form action={FORM_ENDPOINT} onSubmit={handleSubmit} method="POST">
           <div className="pt-0 mb-3">

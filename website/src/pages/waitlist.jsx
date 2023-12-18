@@ -45,10 +45,9 @@ function LandingPage() {
                       <h1 className="launching-h1">Launching Soon!</h1>
                       <div className="banner__text">
                         <p>
-                          Rocko enables crypto owners to easily borrow USDC or
-                          cash using their crypto as collateral. Access low-rate
-                          loans from trusted DeFi protocols in minutes! Sign up
-                          below to be notified as soon as we launch!
+                          Be one of the first to use Rocko and get cash without
+                          selling your crypto! Sign up below to be notified as
+                          soon as we launch!
                         </p>
                       </div>
                       <FormWrapper className="form form--banner">
@@ -65,7 +64,7 @@ function LandingPage() {
                           type="submit"
                           className="btn btn-primary !text-white !bg-[#293991] p-[15px] 2xl:px-[31px] 2xl:py-[19px] "
                         >
-                          NOTIFY ME
+                          Notify Me
                         </button>
 
                         <div
