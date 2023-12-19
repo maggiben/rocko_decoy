@@ -44,9 +44,7 @@ def parse_email_template(template_file, threshold, vars_to_replace, LOGGER):
 
 def get_user_email_from_loan_id(loan_id):
   # This method gets the user email from the loan id number
-  # This shoudl be a user_id, not the email so fix when the table
-  # structure is fixed.
-  sql = "SELECT user FROM loans WHERE id=%s"
+  sql = "SELECT user_id FROM loans WHERE id=%s"
   loan_row = db.get_query_data_single(DB_CONFIG, sql, [ loan_id ])
 
   if loan_row:

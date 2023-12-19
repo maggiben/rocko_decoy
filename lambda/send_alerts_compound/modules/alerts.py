@@ -61,7 +61,7 @@ def apr_alert_triggered(alert_id, loan_id, metric, threshold, logger):
 
 def collateral_alert_triggered(db_config, alert_id, loan_id, metric, threshold, logger):
   # Get the current loan information
-  sql = "SELECT user, lending_protocol, collateral, outstanding_balance FROM loans WHERE id=%s"
+  sql = "SELECT user_id, lending_protocol, collateral, outstanding_balance FROM loans WHERE id=%s"
   logger.debug(f"{sql} - [ {loan_id} ]")
   row = db.get_query_data_single(db_config, sql, [ loan_id ])
 
