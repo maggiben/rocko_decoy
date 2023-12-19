@@ -73,12 +73,12 @@ function CryptoHolding() {
                 text="Paying Down Higher-Rate Debt"
                 icon={CreditCardIcon}
               />
-              <TextCard text="Other Investments" icon={VectorIcon} />
+              <TextCard text="And Much More" icon={VectorIcon} />
             </div>
           </PictureCard>
           <DataCard
             heading="Use your loan how you want "
-            content="With Rocko, you can quickly get funds with no credit check required. Use your loan to purchase real estate, pay down higher-rate debt, make other investments, and much more."
+            content="With Rocko, you can quickly get funds with no credit check required. Use your loan to purchase real estate, pay down higher-rate debt, make everyday purchases, and much more."
           />
         </div>
         <p className="text-[#141414] text-[10px] ">
