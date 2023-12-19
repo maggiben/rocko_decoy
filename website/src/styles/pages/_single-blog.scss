@@ -1,0 +1,31 @@
+.single_blog_container_parent {
+
+    h1, h2, h3, h4, h5, h6 {
+        letter-spacing: 0px;
+    }
+
+    .blog-content {
+        h2 {
+            font-size: 1.75em;
+        }
+        h3 {
+            font-size: 1.5em;
+        }
+        h4 {
+            font-size: 1.25em;
+        }
+        p {
+            margin-bottom: 0.83em;
+        }
+        ul {
+            margin: auto 3em;
+            list-style-type: square;
+        }
+        ol {
+            margin: auto 3em;
+            list-style-type: decimal;
+        }
+       
+    }
+
+}
