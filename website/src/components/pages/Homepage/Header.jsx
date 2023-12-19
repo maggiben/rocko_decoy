@@ -21,7 +21,7 @@ function Header(props) {
         />
         <button
           type="submit"
-          className=" uppercase text-[#006AFF] bg-white py-[11px] px-[24.6px] text-sm font-semibold rounded-full"
+          className="gradient-button uppercase text-[#006AFF] py-[18px] px-[32px] text-sm font-semibold rounded-full"
         >
           Join the waitlist
         </button>

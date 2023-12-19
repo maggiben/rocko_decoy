@@ -78,7 +78,7 @@ function Navbar() {
               </div>
               <Link
                 to="/waitlist"
-                className="waitlist py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase hidden lg:flex"
+                className="gradient-button waitlist py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase hidden lg:flex"
               >
                 Join the waitlist
               </Link>

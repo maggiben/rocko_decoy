@@ -2,6 +2,27 @@
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
 
+.gradient-button {
+  background-image: linear-gradient(144deg,#053b88, #006AFF 50%,#37cdd7) !important;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(77, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #FFFFFF !important;
+  line-height: 1em;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gradient-button:active,
+.gradient-button:hover {
+  outline: 0;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

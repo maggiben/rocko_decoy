@@ -1,6 +1,9 @@
 .banner {
   padding: 20px 0;
   overflow: hidden;
+  background: -webkit-linear-gradient(360deg, #021229 10%, #0091ff 360%); /* Chrome 10+, Saf5.1+ */ 
+  background: -moz-linear-gradient(360deg, #021229 10%, #0090ff 360%); /* FF3.6+ */ 
+  background: linear-gradient(360deg, #021229 10%, #0090ff 360%); /* W3C */
 
   @include media-breakpoint-up(lg) {
     padding: 30px 0;

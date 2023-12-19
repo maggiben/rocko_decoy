@@ -63,7 +63,7 @@ function ContactForm() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-6 lg:w-800 lg:px-24 mt-12">
+      <div className="max-w-[675px] w-full container mx-auto px-6 lg:w-800 lg:px-24 mt-12">
         <h1 className="text-6xl">Contact Us</h1>
         <div className="text-lg mb-8">
           Please reach out with any questions or feature requests.
