@@ -258,13 +258,29 @@ function SingleBlog({ data }) {
             </Link>{' '}
             to learn more about DeFi borrowing.
           </p>
-          <p className="single_blog_p">
+          <p className="single_blog_p !mb-4">
             Join{' '}
             <Link to="/" className="underline italic">
               Rocko&apos;s waitlist
             </Link>{' '}
             today and be the first to be notified when they launch! You can also
             learn more on Rocko&apos;s homepage.
+          </p>
+          <p className="single_blog_p">
+            <small>
+              <i>
+                Rocko does not guarantee the reliability of the Site content and
+                shall not be held liable for any errors, omissions, or
+                inaccuracies. The opinions and views expressed in any articles
+                on <a href="/">rocko.co</a> are solely those of the author(s)
+                and do not reflect the opinions of Rocko. The information
+                provided on the Site is for informational purposes only, and it
+                does not constitute an endorsement of any of the products and
+                services discussed or investment, financial, or trading advice.
+                A qualified professional should be consulted prior to making
+                financial decisions.
+              </i>
+            </small>
           </p>
         </main>
         {/* //!Blog section -- end */}
