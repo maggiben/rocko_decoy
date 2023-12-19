@@ -78,17 +78,17 @@ function InClassFeatures() {
                 image={<Helpful />}
               />
               <FeatureCard
-                title="Covered Network Fees"
-                description="Rocko will pay gas fees necessary to deploy your wallet and fulfill your loan²"
-                className="bg-[#0F2E35] text-[#fff]"
+                title="Automated loan fulfillment"
+                description="Your Rocko wallet is programmed to fulfill your loan for you — saving you time and complexity"
+                className="bg-[#D5F7FF80] text-[#141414]"
                 image={
-                  <div className="mb-[40px] gap-2 sm:gap-auto flex p-3 max-w-[186px] w-full items-center  rounded-full max-w-xs bg-[#1C373C]">
+                  <div className="mb-[24px] gap-2 sm:gap-auto flex px-3 py-[7.5px] max-w-[211px] w-full items-center  rounded-full  bg-[#BCF2FF]">
                     <CloseBtn
-                      icon={<CloseIcon fill="#E11900" height={20} width={20} />}
-                      className="bg-[#FED7D2]"
+                      className="p-0 h-[20px] w-[20px]"
+                      icon={<CloseIcon fill="#05944F" height={20} width={20} />}
                     />
-                    <p className="text-[16px]  text-[#FFF] font-semibold">
-                      Network Fees
+                    <p className="text-[16.046px]  text-[#141414] font-semibold">
+                      Reduced complexity
                     </p>
                   </div>
                 }

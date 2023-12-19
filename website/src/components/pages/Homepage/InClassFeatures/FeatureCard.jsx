@@ -17,7 +17,7 @@ function FeatureCard(props) {
           <p
             className={clsx(
               className,
-              'text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mt-[24px] mb-[16px]',
+              'text-[#0F2E35] lg:text-[28px] md:text-[25px] text-[18px] font-medium mt-[24px] mb-[16px] bg-transparent',
             )}
           >
             {title}
@@ -25,7 +25,7 @@ function FeatureCard(props) {
           <p
             className={clsx(
               className,
-              'text-[16] text-[#141414] sm:text-[20px] font-400 leading-[20px] sm:leading-[32px]',
+              'text-[16] text-[#141414] sm:text-[20px] font-400 leading-[20px] sm:leading-[32px] bg-transparent',
             )}
           >
             {description}
