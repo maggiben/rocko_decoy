@@ -325,9 +325,10 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     // Choose how much collateral buffer you want.
     {
       id: 4,
-      title: 'Choose how much collateral buffer you want',
-      subTitle:
-        'Maintaining a Collateral Buffer of 50% or more at all times is recommended to avoid collateral liquidation.',
+      // title: 'Choose how much collateral buffer you want',
+      title: 'Choose how much additional collateral to post for your loan',
+      // subTitle:'Maintaining a Collateral Buffer of 50% or more at all times is recommended to avoid collateral liquidation.',
+      subTitle: 'You can add or withdraw collateral for your loan at anytime',
       risk: {
         minRisk: 0,
         maxRisk: 200,

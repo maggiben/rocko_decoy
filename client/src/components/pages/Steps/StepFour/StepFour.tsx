@@ -1,32 +1,24 @@
 /* eslint-disable import/order */
-import {
-  FC,
-  ChangeEvent,
-  FocusEvent,
-  useState,
-  useEffect,
-  useRef,
-} from 'react';
+import { FC, ChangeEvent, FocusEvent, useState, useEffect } from 'react';
 import { RiskStep } from '@/types/type';
 import Link from 'next/link';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
 import useLoanData from '@/hooks/useLoanData';
-import financial from '@/utility/currencyFormate';
+import CoinCard from '@/components/chips/CoinCard/CoinCard';
+import extrabitcoin from '@/assets/coins/extrabitcoin.svg';
+import extra from '@/assets/coins/extrabitcoin-se.svg';
+import etherIcon from '@/assets/coins/Extra(ETH).svg';
+import RadioInput from '@/components/RadioInput';
 
 const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
 
-  const [minimum, setMinimum] = useState<number>(0);
   const { loanData, setLoanData } = useLoanData();
-
-  const valueDivRef = useRef<HTMLDivElement | null>(null);
+  const [hasOther, setHasOther] = useState(0);
 
   const initialize = () => {
-    // for start
-    setMinimum(loanData?.collateralNeeded / (1 + loanData?.buffer / 100));
-
     // for keeping status
     if (loanData?.buffer !== 0 && loanData?.buffer) {
       setValue(loanData?.buffer);
@@ -68,6 +60,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     }
   };
 
+  /* eslint-disable */
   const handleInputChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -131,6 +124,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     if (setLoanData) await updateLoanData(newValue > 1000 ? 1000 : newValue);
   };
 
+  /* eslint-disable */
   const valueDivStyle = {
     left: `calc(${thumbPosition}% - ${80 / 2}px)`,
   };
@@ -139,7 +133,37 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handlePaymentMethodChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const inputValue = event.target.value;
+    setHasOther(parseInt(inputValue) === 0 ? 1 : 0);
 
+    setLoanData?.((prevLoanData) => ({
+      ...prevLoanData,
+      paymentMethod: inputValue || '',
+    }));
+  };
+  const collateralCard = [
+    {
+      id: 1,
+      icon: etherIcon,
+      title: '150% extra',
+      description: 'Lower risk of liquidation',
+    },
+    {
+      id: 2,
+      icon: extra,
+      title: '100% extra',
+      description: '',
+    },
+    {
+      id: 3,
+      icon: extrabitcoin,
+      title: '50% extra',
+      description: 'Higher risk of liquidation',
+    },
+  ];
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -158,61 +182,41 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
             <p className=" text-sm font-medium mt-1 text-blackPrimary lg:text-start text-center">
               {subTitle}
             </p>
-
-            <div className="flex items-center justify-between gap-1 md:gap-3 mt-20 md:mt-[144px]  py-4">
-              <p className="text-sm md:text-base">Higher Risk</p>
-
-              <div className="flex-1 flex items-start">
-                <div className="w-10 md:w-20 h-[6px]" />
-
-                {/* fake bar space of right */}
-                <div className=" flex-1">
-                  {/* rang slider container */}
-                  <div className="relative w-full">
-                    {/* fake bar start */}
-                    <div className="w-10 md:w-20 h-[6px] rounded-full bg-[#2C3B8D] mt-[3px] absolute top-1/2 -translate-y-1/2 right-[calc(100%-4px)]">
-                      <div className="frame h-3 w-3 bg-[#2C3B8D] rotate-180 absolute -top-2  -right-3" />
-                      <div className="frame h-3 w-3 bg-[#2C3B8D] absolute top-[2px] -right-3" />
-                    </div>
-                    {/* fake bar end */}
-                    {/* initial fix value start */}
-                    <div className="flex items-center justify-between w-fit absolute  top-10 -left-14 ">
-                      <div className="text-center ">
-                        <p className="text-[#545454] text-xs whitespace-nowrap">
-                          Minimum collateral required:
-                        </p>
-                        <p className="text-[#141414] text-xs whitespace-nowrap">
-                          {financial(minimum, 4)} ETH ($
-                          {financial(loanData?.collateralPrice * minimum, 2)})
-                        </p>
-                      </div>
-                    </div>
-                    {/* initial fix value end */}
-                    <input
-                      type="range"
-                      className="range w-full "
-                      min="10"
-                      max="400"
-                      value={value}
-                      onChange={handleInputChange}
-                      data-value={value}
-                      style={{
-                        background: `linear-gradient(to right, #2C3B8D 0%, #2C3B8D ${thumbPosition}%, #E2E2E2 ${thumbPosition}%, #E2E2E2 100%)`,
-                      }}
-                    />{' '}
-                    <div
-                      ref={valueDivRef}
-                      className="absolute w-20 h-12 left-0 -top-16 text-center text-white bg-[#2C3B8D] rounded-full py-3 px-4"
-                      style={valueDivStyle}
-                    >
-                      <p className="">{value}%</p>
-                      {/*  <div className="w-1 h-10 bg-[#2C3B8D] absolute top-full left-1/2 -translate-x-1/2"></div> */}
-                    </div>
-                  </div>
+            <div className="my-4 py-4 grid grid-cols-2 lg:grid-cols-3 gap-6">
+              {collateralCard.map((card) => (
+                <CoinCard
+                  key={card.id}
+                  coinIcon={card.icon}
+                  coinShortName={card.title}
+                  coinName={card.description}
+                  selectedCoin=""
+                  handleSelect={() => {}}
+                  currentAPR={1}
+                  isComingSoon={false}
+                />
+              ))}
+            </div>
+            <RadioInput
+              id="wallet3"
+              name="paymentMethod"
+              checked={Boolean(hasOther)}
+              value={hasOther}
+              onChange={handlePaymentMethodChange}
+              label="Input other value"
+            />
+            {hasOther === 1 && (
+              <div className="mt-[16px]">
+                <div className="max-w-[284px] w-full relative">
+                  <label className="-translate-y-1/2 text-[#141414] text-[16px] top-[50%]  right-[16px] absolute">
+                    %
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full py-[8px] px-[16px] border border-[#E6E6E6] rounded-[10px] block focus:outline-none w-full"
+                  />
                 </div>
               </div>
-              <p className="text-sm md:text-base">Lower Risk</p>
-            </div>
+            )}
             {/* custom field */}
             {value >= 400 ? (
               <div className="ml-auto w-fit space-y-1 mt-10 mb-4 md:mt-0">
@@ -246,15 +250,14 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                     }}
                     className="focus:outline-none border-none max-w-[136px] w-full number-input"
                   />
-                  <p className="text-[#141414] ">%</p>
+                  <p className="text-[#141414]">%</p>
                 </div>
               </div>
             ) : (
-              <div className="h-12 w-full" />
+              <div className="w-full" />
             )}
             {/* ${value >= 400 ? ' pt-6 ' : 'pt-12'} */}
-
-            <p className="text-sm text-blackSecondary">
+            <p className="text-sm text-blackSecondary bg-[#F9F9F9] text-[#545454] text-[14px] leading-5 rounded-[16px] md:p-[24px] p-[16px]  mt-[24px]">
               {description}{' '}
               <Link href="/" className="underline">
                 Learn more.

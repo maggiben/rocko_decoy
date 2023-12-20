@@ -54,7 +54,7 @@ const CoinCard: FC<CoinCardProps> = ({
       <p className="text-xl font-medium text-blackPrimary mt-8">
         {coinShortName}
       </p>
-      <p className="text-sm text-blackSecondary">{coinName}</p>
+      <p className="text-sm text-blackSecondary min-h-[20px]">{coinName}</p>
     </div>
   </div>
 );

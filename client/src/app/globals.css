@@ -73,7 +73,25 @@ input[type='checkbox']:checked {
 input[type='checkbox'] {
     background-color: transparent;
 }
-
+.rounded-label {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.custom-checkbox:checked ~ .rounded-label:before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 7px solid #000;
+  position: absolute;
+  left: -2px;
+  top: -2px
+}
 /* Add your custom styles here */
 .radio {
   appearance: none;
