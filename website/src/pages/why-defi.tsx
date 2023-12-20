@@ -21,9 +21,9 @@ export default function WhyDefi() {
     },
     {
       id: '3.',
-      title: 'Lower Cost',
+      title: 'Lower Operational Costs',
       descriptions:
-        'DeFi protocols operate through smart contracts which are self-executing agreements that enforce the logic in their code. This means that essentially all functions are automated which significantly reduces the operational costs — allowing protocols to pass on cost savings to their users.',
+        'DeFi protocols operate through smart contracts which are self-executing agreements that enforce the logic in their code. This means that essentially all functions are automated which can significantly reduce the operational costs — allowing protocols to pass on cost savings to their users.',
     },
     {
       id: '4.',
@@ -119,10 +119,22 @@ export default function WhyDefi() {
             Our mission is to help consumers access DeFi in a secure and simple
             manner, and get the most value from their crypto assets.
           </p>
+          <p className="text-[#545454]  text-[14px leading-6 font-normal md:mt-[24px] mt-[18px]">
+            Rocko does not guarantee the reliability of the Site content and
+            shall not be held liable for any errors, omissions, or inaccuracies.
+            The opinions and views expressed in any articles on Rocko.co are
+            solely those of the author(s) and do not reflect the opinions of
+            Rocko. The information provided on the Site is for informational
+            purposes only, and it does not constitute an endorsement of any of
+            the products and services discussed or investment, financial, or
+            trading advice. A qualified professional should be consulted prior
+            to making financial decisions.
+          </p>
         </div>
         <div className="px-[24px] py-[32px] bg-[#F9F9F9] border border-[#E2E2E2] rounded-[20px] mt-[56px]  md:gap-[24px] md:flex items-center w-full">
-            <div className="h-[96px] w-[96px] mx-[auto] mb-[16px] md:mb-[0]" ><Envelope />
-</div>
+          <div className="h-[96px] w-[96px] mx-[auto] mb-[16px] md:mb-[0]">
+            <Envelope />
+          </div>
           <div className="">
             <h4 className="text-[24px] font-normal leading-8 text-[#141414] mb-[16px]  md:!text-left text-center">
               Be one of the first to get a crypto-backed loan from Rocko

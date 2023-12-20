@@ -84,7 +84,7 @@ function InClassFeatures() {
                 image={
                   <div className="mb-[24px] gap-2 sm:gap-auto flex px-3 py-[7.5px] max-w-[211px] w-full items-center  rounded-full  bg-[#BCF2FF]">
                     <CloseBtn
-                      className="p-0 h-[20px] w-[20px]"
+                      className="p-0 !h-[20px] !w-[20px]"
                       icon={<CloseIcon fill="#05944F" height={20} width={20} />}
                     />
                     <p className="text-[16.046px]  text-[#141414] font-semibold">
