@@ -24,14 +24,6 @@ resource "aws_route53_record" "rocko_co_www" {
   records = ["rocko.co."]
 }
 
-resource "aws_route53_record" "rocko_co_dev" {
-  zone_id = aws_route53_zone.rocko_co.id
-  name    = "dev"
-  type    = "A"
-  ttl     = 60
-  records = ["208.113.168.153"]
-}
-
 resource "aws_route53_record" "rocko_co_app" {
   zone_id = aws_route53_zone.rocko_co.id
   name    = "app"
