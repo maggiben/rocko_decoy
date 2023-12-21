@@ -228,7 +228,7 @@ function SingleBlog({ data }) {
             Rocko is a soon-to-launch platform that enables crypto owners to
             easily and securely borrow from popular DeFi protocols like Compound
             and get funds in minutes — no experience needed! Use the loan to
-            purchase real estate, pay down higher-rate debt, make investments,
+            purchase real estate, pay down higher-rate debt, make everyday purchases,
             and much more.
           </p>
           <p className="single_blog_p">
