@@ -32,14 +32,18 @@ function LandingPage() {
         </header>
         <div className="page-holder">
           <main className="main" id="main">
-            <section className="banner">
+            <section style={{ background: 'white' }} className="banner">
               <div className="container">
                 <div className="row align-items-center justify-content-center">
                   <div className="col-md-8 col-lg-6">
                     <div className="banner__content text-center">
                       <div className="banner__logo">
                         <a href="/">
-                          <img src={rockoLogo} alt="rocko.co" />
+                          <img
+                            style={{ margin: '0 auto' }}
+                            src={rockoLogo}
+                            alt="rocko.co"
+                          />
                         </a>
                       </div>
                       <h1 className="launching-h1">Launching Soon!</h1>
