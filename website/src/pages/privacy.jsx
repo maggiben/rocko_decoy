@@ -18,7 +18,7 @@ const Index = () => {
                 <h1>PRIVACY POLICY</h1>
 
                 <p>
-                  <strong>Last updated&nbsp;July 29, 2023</strong>
+                  <strong>Last updated&nbsp;Dec 21, 2023</strong>
                 </p>
 
                 <p>
@@ -1047,7 +1047,7 @@ const Index = () => {
                         </p>
                       </td>
                       <td>
-                        <p>NO</p>
+                        <p>YES</p>
                       </td>
                     </tr>
                     <tr>
@@ -1064,7 +1064,7 @@ const Index = () => {
                         </p>
                       </td>
                       <td>
-                        <p>NO</p>
+                        <p>YES</p>
                       </td>
                     </tr>
                     <tr>
@@ -1130,7 +1130,7 @@ const Index = () => {
                         <p>Device location</p>
                       </td>
                       <td>
-                        <p>NO</p>
+                        <p>YES</p>
                       </td>
                     </tr>
                     <tr>
@@ -1698,9 +1698,9 @@ const Index = () => {
                 <p>
                   Rocko Inc.
                   <br />
-                  525 E 13th St apt 3e, New York, NY 10009, USA
+                  767 Broadway #1294
                   <br />
-                  New York,&nbsp;NY&nbsp;10009
+                  Manhattan,&nbsp;NY&nbsp;10003
                   <br />
                   United States
                   <br />

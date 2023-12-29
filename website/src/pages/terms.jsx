@@ -37,13 +37,15 @@ const Index = () => {
                           We are&nbsp;Rocko Inc.&nbsp;("<strong>Company</strong>
                           ," "<strong>we</strong>," "<strong>us</strong>," "
                           <strong>our</strong>"), a company registered
-                          in&nbsp;Delaware,&nbsp;United States
+                          in&nbsp;New York,&nbsp;United States
                         </span>
                         <span>
-                          <span>&nbsp;at&nbsp; 10009, USA,&nbsp;New York</span>
+                          <span>
+                            &nbsp;at&nbsp;767 Broadway #1294,&nbsp;Manhattan
+                          </span>
                         </span>
                         <span>
-                          <span>,&nbsp;NY&nbsp;10009</span>
+                          <span>,&nbsp;NY&nbsp;10003</span>
                         </span>
                         <span>
                           <span>.</span>
@@ -80,9 +82,10 @@ const Index = () => {
                       <span>
                         <span>
                           You can contact us by&nbsp;email
-                          at&nbsp;hello@rocko.co,&nbsp;or by mail
-                          to&nbsp;,&nbsp;New
-                          York,&nbsp;NY&nbsp;10009,&nbsp;United States.
+                          at&nbsp;hello@rocko.co,&nbsp;or by mail to&nbsp;767
+                          Broadway
+                          #1294,&nbsp;Manhattan,&nbsp;NY&nbsp;10003,&nbsp;United
+                          States.
                         </span>
                       </span>
                     </span>
@@ -3314,7 +3317,7 @@ const Index = () => {
                       <span>
                         <strong>
                           <span>
-                            <span></span>
+                            <span>767 Broadway #1294</span>
                           </span>
                         </strong>
                       </span>
@@ -3326,7 +3329,7 @@ const Index = () => {
                       <span>
                         <strong>
                           <span>
-                            <span>New York,&nbsp;NY&nbsp;10009</span>
+                            <span>Manhattan,&nbsp;NY&nbsp;10003</span>
                           </span>
                         </strong>
                       </span>
