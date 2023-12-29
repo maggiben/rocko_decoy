@@ -1,4 +1,5 @@
 import { CoinCardProps } from '@/types/type';
+import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -17,6 +18,7 @@ const CoinCard: FC<CoinCardProps> = ({
   liquidationPrice,
   subLiquidationPrice,
   isComingSoon,
+  className,
 }) => (
   <div
     style={isComingSoon ? { pointerEvents: 'none' } : {}}
@@ -36,11 +38,14 @@ const CoinCard: FC<CoinCardProps> = ({
         subLiquidationPrice,
       })
     }
-    className={`px-1 py-6 md:px-6 md:py-6 flex flex-col  gap-2 w-full mx-auto border-2  rounded-[20px] cursor-pointer items-center lg:items-start text-center lg:text-start justify-between ${
-      coinShortName === selectedCoin
-        ? 'border-[#2C3B8D] bg-whiteTertiary'
-        : 'border-whiteSecondary bg-white '
-    }`}
+    className={clsx(
+      `px-1 py-6 md:px-6 md:py-6 flex flex-col  gap-2 w-full mx-auto border-2  rounded-[20px] cursor-pointer items-center lg:items-start text-center lg:text-start justify-between`,
+      {
+        'border-[#2C3B8D] bg-whiteTertiary': coinShortName === selectedCoin,
+        'border-whiteSecondary bg-white ': coinShortName !== selectedCoin,
+      },
+      className,
+    )}
   >
     <div className="flex items-center flex-col md:flex-row gap-2 justify-start">
       <Image width={40} height={40} src={coinIcon} alt="Ether" className="" />

@@ -6,6 +6,7 @@ import Protocol from '@/components/chips/Protocol/Protocol';
 import CompoundProtocol from '@/components/chips/Protocol/CompoundProtocol';
 import useLoanData from '@/hooks/useLoanData';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
+import ProtocolBanner from '@/components/ProtocolsBanner';
 
 // type FilterOptionsProps = string;
 
@@ -129,6 +130,10 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
                   selectProtocol={selectProtocol}
                 />
               ))}
+              <ProtocolBanner
+                label="Audited protocols only"
+                title="More protocol s coming soon!"
+              />
             </div>
           </div>
         </div>

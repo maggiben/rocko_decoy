@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import { FC, ChangeEvent, FocusEvent, useState, useEffect } from 'react';
-import { RiskStep } from '@/types/type';
+import { CoinCardProps, RiskStep } from '@/types/type';
 import Link from 'next/link';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
 import useLoanData from '@/hooks/useLoanData';
@@ -14,7 +14,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [value, setValue] = useState<number>(10);
   const [customValue, setCustomValue] = useState<number>();
   const [thumbPosition, setThumbPosition] = useState<number>(0);
-
+  const [selectedCoin, setSelectedCoin] = useState('');
   const { loanData, setLoanData } = useLoanData();
   const [hasOther, setHasOther] = useState(0);
 
@@ -164,6 +164,9 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       description: 'Higher risk of liquidation',
     },
   ];
+  const handleSelect =({ coinShortName }: CoinCardProps) => {
+    setSelectedCoin(coinShortName);
+  }
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -189,10 +192,13 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                   coinIcon={card.icon}
                   coinShortName={card.title}
                   coinName={card.description}
-                  selectedCoin=""
-                  handleSelect={() => {}}
+                  selectedCoin={selectedCoin}
+                  handleSelect={handleSelect}
                   currentAPR={1}
                   isComingSoon={false}
+                  className={card.title === selectedCoin
+                    ? 'border-[#2C3B8D] !bg-grayPrimary'
+                    : 'border-whiteSecondary bg-white '}
                 />
               ))}
             </div>

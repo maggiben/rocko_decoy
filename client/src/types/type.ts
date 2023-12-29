@@ -26,6 +26,7 @@ export interface CoinCardProps {
   liquidationPrice?: number;
   subLiquidationPrice?: number;
   isComingSoon?: boolean;
+  className?: string;
 }
 
 export interface AssetParameterProps {
