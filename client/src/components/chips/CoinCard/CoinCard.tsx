@@ -1,7 +1,8 @@
-import { CoinCardProps } from '@/types/type';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
+import { CoinCardProps } from '@/types/type';
+import { FLAG_USD_LOANS } from '@/constants/featureFlags';
 
 const CoinCard: FC<CoinCardProps> = ({
   coinIcon,
@@ -48,10 +49,26 @@ const CoinCard: FC<CoinCardProps> = ({
     )}
   >
     <div className="flex items-center flex-col md:flex-row gap-2 justify-start">
-      <Image width={40} height={40} src={coinIcon} alt="Ether" className="" />
+      <Image
+        width={40}
+        height={40}
+        src={coinIcon}
+        alt="Ether"
+        style={
+          {}
+          // (coinShortName === 'USD' && !FLAG_USD_LOANS) ||
+          // (!FLAG_MULTI_COLLATERAL &&
+          //   coinShortName !== 'ETH' &&
+          //   coinShortName !== 'USDC')
+          //   ? { filter: 'grayscale(1)' }
+          //   : {}
+        }
+      />
       {isComingSoon && (
         <div className="px-2 py-[2px] bg-[#EEE] rounded-[5px] text-[#545454] font-medium  text-[11px]">
-          {coinShortName === 'USD' ? 'U.S. Coinbase users only' : 'Coming Soon'}
+          {coinShortName === 'USD' && FLAG_USD_LOANS
+            ? 'U.S. Coinbase users only'
+            : 'Coming Soon'}
         </div>
       )}
     </div>

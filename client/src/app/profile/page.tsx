@@ -309,10 +309,10 @@ const Profile: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
+        {/* <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <h3 className="text-xl font-medium mb-4">Security</h3>
           <div className="divide-y-2" />
-        </div>
+        </div> */}
       </section>
       {/* ---------------------- First Section End ------------------------ */}
 

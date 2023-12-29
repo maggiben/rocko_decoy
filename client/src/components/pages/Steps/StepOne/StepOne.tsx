@@ -11,6 +11,7 @@ import { CurrencyStep } from '@/types/type';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
+import { FLAG_USD_LOANS } from '@/constants/featureFlags';
 
 interface FormData {
   numberInput: string;
@@ -220,17 +221,19 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
                 </div>
               )}
             </div>
-            <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
-              <p className="text-sm text-blackSecondary">
-                USD is only available for U.S. Coinbase users at this time. If
-                you do not have a Coinbase account, you can receive USDC (a
-                USD-backed stablecoin with a 1:1 value) and convert it into USD
-                on many U.S. crypto exchanges.{' '}
-                <Link href="/" className="underline">
-                  Learn more.
-                </Link>
-              </p>
-            </div>
+            {FLAG_USD_LOANS && (
+              <div className=" p-4 lg:p-6 space-y-6 lg:space-y-10 bg-whiteTertiary rounded-2xl">
+                <p className="text-sm text-blackSecondary">
+                  USD is only available for U.S. Coinbase users at this time. If
+                  you do not have a Coinbase account, you can receive USDC (a
+                  USD-backed stablecoin with a 1:1 value) and convert it into
+                  USD on many U.S. crypto exchanges.{' '}
+                  <Link href="/" className="underline">
+                    Learn more.
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div className="p-6 border border-[#E2E2E2] flex-1 rounded-2xl">

@@ -15,6 +15,10 @@ import { useAccount } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
+import {
+  FLAG_COINBASE_FUNDING,
+  FLAG_OTHER_EXCHANGE_FUNDING,
+} from '@/constants/featureFlags';
 
 interface InnerInfo {
   description: string;
@@ -180,51 +184,53 @@ const ModifyCollateral: React.FC = () => {
               : 'Where do you want to receive your collateral?'}
           </h3>
           {/* radio btn - 1 Container */}
-          <div className="md:flex justify-between mb-7">
-            {/* radio btn - 1 */}
-            <div className="flex md:items-center">
-              <input
-                type="radio"
-                id="wallet1"
-                name="contact"
-                value="default"
-                className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />
-              <label htmlFor="wallet1" className="pl-4">
-                <p className="font-medium">
-                  Coinbase or Gemini Account{' '}
-                  <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
-                    Recommended
-                  </span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Minimize risk of funds being sent to an incorrect address
-                </p>
-              </label>
+          {FLAG_COINBASE_FUNDING && (
+            <div className="md:flex justify-between mb-7">
+              {/* radio btn - 1 */}
+              <div className="flex md:items-center">
+                <input
+                  type="radio"
+                  id="wallet1"
+                  name="contact"
+                  value="default"
+                  className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <label htmlFor="wallet1" className="pl-4">
+                  <p className="font-medium">
+                    Coinbase or Gemini Account{' '}
+                    <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
+                      Recommended
+                    </span>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Minimize risk of funds being sent to an incorrect address
+                  </p>
+                </label>
+              </div>
+              <div className="text-center md:text-left mt-1 lg:mt-0">
+                {/* based on the connect value toggling the buttons */}
+                {connect ? (
+                  <button
+                    onClick={() => setOpenModalFor('Coinbase or Gemini')}
+                    disabled={paymentMethod !== 'default'}
+                    className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
+                      paymentMethod === 'default'
+                        ? 'text-[#eee] bg-[#2C3B8D]'
+                        : 'bg-[#eee] text-[#2C3B8D]'
+                    }`}
+                  >
+                    Sign in
+                  </button>
+                ) : (
+                  <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium">
+                    <Image src={correct} alt="Correct Image" />
+                    <p>Connected</p>
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="text-center md:text-left mt-1 lg:mt-0">
-              {/* based on the connect value toggling the buttons */}
-              {connect ? (
-                <button
-                  onClick={() => setOpenModalFor('Coinbase or Gemini')}
-                  disabled={paymentMethod !== 'default'}
-                  className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
-                    paymentMethod === 'default'
-                      ? 'text-[#eee] bg-[#2C3B8D]'
-                      : 'bg-[#eee] text-[#2C3B8D]'
-                  }`}
-                >
-                  Sign in
-                </button>
-              ) : (
-                <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium">
-                  <Image src={correct} alt="Correct Image" />
-                  <p>Connected</p>
-                </button>
-              )}
-            </div>
-          </div>
+          )}
           {/* radio btn - 2 Container */}
           <div className="md:flex justify-between mb-7">
             {/* radio btn - 2 */}
@@ -258,54 +264,56 @@ const ModifyCollateral: React.FC = () => {
             </div>
           </div>
           {/* radio btn - 3 */}
-          <div className="flex items-start mb-7">
-            <input
-              type="radio"
-              id="wallet3"
-              name="contact"
-              value="other"
-              className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-              onChange={(e) => {
-                setPaymentMethod(e.target.value);
-                setConnect(true);
-              }}
-            />
-            <div className="pl-4">
-              <label htmlFor="wallet3" className="">
-                <p className="font-medium mb-6">
-                  Other Exchange or Wallet Address
-                </p>
-              </label>
-
-              {/* if select other address then it will be active -- start */}
-              {paymentMethod === 'other' && (
-                <div className="">
-                  <p className="text-sm font-semibold font-inter mb-2">
-                    Enter Wallet Address
+          {FLAG_OTHER_EXCHANGE_FUNDING && (
+            <div className="flex items-start mb-7">
+              <input
+                type="radio"
+                id="wallet3"
+                name="contact"
+                value="other"
+                className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
+                onChange={(e) => {
+                  setPaymentMethod(e.target.value);
+                  setConnect(true);
+                }}
+              />
+              <div className="pl-4">
+                <label htmlFor="wallet3" className="">
+                  <p className="font-medium mb-6">
+                    Other Exchange or Wallet Address
                   </p>
-                  <div className="max-w-[426px] w-full">
-                    <input
-                      type="text"
-                      className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                    />
-                  </div>
-                  <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
-                    <Image
-                      src={StatusWarning}
-                      width={24}
-                      height={24}
-                      alt="warning"
-                    />
-                    <p className="text-sm font-inter text-[#010304]">
-                      Caution: Please ensure this address is correct as
-                      inputting an incorrect address could lead to lost funds.
+                </label>
+
+                {/* if select other address then it will be active -- start */}
+                {paymentMethod === 'other' && (
+                  <div className="">
+                    <p className="text-sm font-semibold font-inter mb-2">
+                      Enter Wallet Address
                     </p>
+                    <div className="max-w-[426px] w-full">
+                      <input
+                        type="text"
+                        className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                      />
+                    </div>
+                    <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
+                      <Image
+                        src={StatusWarning}
+                        width={24}
+                        height={24}
+                        alt="warning"
+                      />
+                      <p className="text-sm font-inter text-[#010304]">
+                        Caution: Please ensure this address is correct as
+                        inputting an incorrect address could lead to lost funds.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {/* if select other address then it will be active -- end */}
+                )}
+                {/* if select other address then it will be active -- end */}
+              </div>
             </div>
-          </div>
+          )}
           {amount === 'add' && (
             <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
               <ul className="list-disc">

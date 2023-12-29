@@ -17,6 +17,140 @@ import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
 import wrappedIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
 import { FC, ReactNode, SetStateAction, createContext, useState } from 'react';
+import { FLAG_MULTI_PROTOCOL } from '@/constants/featureFlags';
+
+const protocols = !FLAG_MULTI_PROTOCOL
+  ? []
+  : [
+      {
+        id: 'protocol-2',
+        name: 'Aave',
+        symbol: '/icons/Aave (AAVE).svg',
+        interestRate: 4.02,
+        protocolInfos: [
+          {
+            id: 'protocol-info-1',
+            title: 'Trailing APRs',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: '30 Day',
+                value: '4.01%', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: '365 Day',
+                value: '3.76%', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-2',
+            title: 'Collateral Parameters (ETH)',
+            tooltip: '',
+            options: [
+              {
+                name: 'Max Loan-to-Value',
+                value: '82.5%', // value will percentage
+                subInfo: 'Max Loan-to-Value tooltip',
+              },
+              {
+                name: 'Liquidation Threshold',
+                value: '86%', // value will percentage
+                subInfo: 'Liquidation Threshold tooltip',
+              },
+              {
+                name: 'Liquidation Penalty',
+                value: '5%', // value will percentage
+                subInfo: 'Liquidation Penalty',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-3',
+            title: 'Rewards',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: 'Current Rate',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: 'Trailing 365 average',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'protocol-3',
+        name: 'Notional Finance',
+        symbol: '/icons/image 18.png',
+        interestRate: 5.64,
+        protocolInfos: [
+          {
+            id: 'protocol-info-1',
+            title: 'Trailing APRs',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: '30 Day',
+                value: '5.87%', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: '365 Day',
+                value: '6.2%', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-2',
+            title: 'Collateral Parameters (ETH)',
+            tooltip: '',
+            options: [
+              {
+                name: 'Max Loan-to-Value',
+                value: '70%', // value will percentage
+                subInfo: 'Max Loan-to-Value tooltip',
+              },
+              {
+                name: 'Liquidation Threshold',
+                value: '82%', // value will percentage
+                subInfo: 'Liquidation Threshold tooltip',
+              },
+              {
+                name: 'Liquidation Penalty',
+                value: '5%', // value will percentage
+                subInfo: 'Liquidation Penalty',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-3',
+            title: 'Rewards',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: 'Current Rate',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: 'Trailing 365 average',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+        ],
+      },
+    ];
 
 export const loneContext = createContext<ContextValues>({
   loanData: {
@@ -190,137 +324,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     {
       id: 3,
       title: 'Choose a lender and loan offer.',
-      protocols: [
-        {
-          id: 'protocol-2',
-          name: 'Aave',
-          symbol: '/icons/Aave (AAVE).svg',
-          interestRate: 4.02,
-
-          protocolInfos: [
-            {
-              id: 'protocol-info-1',
-              title: 'Trailing APRs',
-              tooltip: 'tooltip information',
-              options: [
-                {
-                  name: '30 Day',
-                  value: '4.01%', // value will percentage
-                  subInfo: '',
-                },
-                {
-                  name: '365 Day',
-                  value: '3.76%', // value will percentage
-                  subInfo: '',
-                },
-              ],
-            },
-            {
-              id: 'protocol-info-2',
-              title: 'Collateral Parameters (ETH)',
-              tooltip: '',
-              options: [
-                {
-                  name: 'Max Loan-to-Value',
-                  value: '82.5%', // value will percentage
-                  subInfo: 'Max Loan-to-Value tooltip',
-                },
-                {
-                  name: 'Liquidation Threshold',
-                  value: '86%', // value will percentage
-                  subInfo: 'Liquidation Threshold tooltip',
-                },
-                {
-                  name: 'Liquidation Penalty',
-                  value: '5%', // value will percentage
-                  subInfo: 'Liquidation Penalty',
-                },
-              ],
-            },
-            {
-              id: 'protocol-info-3',
-              title: 'Rewards',
-              tooltip: 'tooltip information',
-              options: [
-                {
-                  name: 'Current Rate',
-                  value: 'N/A', // value will percentage
-                  subInfo: '',
-                },
-                {
-                  name: 'Trailing 365 average',
-                  value: 'N/A', // value will percentage
-                  subInfo: '',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 'protocol-3',
-          name: 'Notional Finance',
-          symbol: '/icons/image 18.png',
-          interestRate: 5.64,
-          protocolInfos: [
-            {
-              id: 'protocol-info-1',
-              title: 'Trailing APRs',
-              tooltip: 'tooltip information',
-              options: [
-                {
-                  name: '30 Day',
-                  value: '5.87%', // value will percentage
-                  subInfo: '',
-                },
-                {
-                  name: '365 Day',
-                  value: '6.2%', // value will percentage
-                  subInfo: '',
-                },
-              ],
-            },
-            {
-              id: 'protocol-info-2',
-              title: 'Collateral Parameters (ETH)',
-              tooltip: '',
-              options: [
-                {
-                  name: 'Max Loan-to-Value',
-                  value: '70%', // value will percentage
-                  subInfo: 'Max Loan-to-Value tooltip',
-                },
-                {
-                  name: 'Liquidation Threshold',
-                  value: '82%', // value will percentage
-                  subInfo: 'Liquidation Threshold tooltip',
-                },
-                {
-                  name: 'Liquidation Penalty',
-                  value: '5%', // value will percentage
-                  subInfo: 'Liquidation Penalty',
-                },
-              ],
-            },
-            {
-              id: 'protocol-info-3',
-              title: 'Rewards',
-              tooltip: 'tooltip information',
-              options: [
-                {
-                  name: 'Current Rate',
-                  value: 'N/A', // value will percentage
-                  subInfo: '',
-                },
-                {
-                  name: 'Trailing 365 average',
-                  value: 'N/A', // value will percentage
-                  subInfo: '',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      protocols,
     },
     // Choose how much collateral buffer you want.
     {

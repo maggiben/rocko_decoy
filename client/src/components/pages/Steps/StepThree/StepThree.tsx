@@ -132,7 +132,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
               ))}
               <ProtocolBanner
                 label="Audited protocols only"
-                title="More protocol s coming soon!"
+                title="More protocols coming soon!"
               />
             </div>
           </div>
