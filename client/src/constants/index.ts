@@ -1,6 +1,8 @@
 import * as chains from 'wagmi/chains';
 import { NETWORK } from './env';
 
+export const ROCKO_WEBSITE_URL = 'https://rocko.co';
+
 // See https://developers.circle.com/stablecoins/docs/usdc-on-testing-networks
 export const USDCContract: { [key: number]: string } = {
   // See https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48

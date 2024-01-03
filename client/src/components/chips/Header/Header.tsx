@@ -16,6 +16,7 @@ import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
+import { ROCKO_WEBSITE_URL } from '@/constants';
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
@@ -197,7 +198,7 @@ function Header() {
                 />
               </div>
             </button>
-            <a href="/">
+            <a href={ROCKO_WEBSITE_URL}>
               <Image
                 className="w-[56px] lg:w-[97px] inline-block pb-2"
                 src={logo}
@@ -221,28 +222,34 @@ function Header() {
                   BORROWING
                 </Link>
                 <Link
-                  href="/"
+                  href={`${ROCKO_WEBSITE_URL}/why-defi/`}
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
                   WHY DEFI?
                 </Link>
                 <Link
-                  href="/"
+                  href={`${ROCKO_WEBSITE_URL}/about/`}
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
                   ABOUT US
                 </Link>
                 <Link
-                  href="/"
+                  href={`${ROCKO_WEBSITE_URL}/faq/`}
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
                   FAQ
                 </Link>
                 <Link
-                  href="/"
+                  href={`${ROCKO_WEBSITE_URL}/contact-us/`}
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
                   CONTACT
+                </Link>
+                <Link
+                  href={`${ROCKO_WEBSITE_URL}/learn/`}
+                  className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
+                >
+                  LEARN
                 </Link>
               </div>
 
