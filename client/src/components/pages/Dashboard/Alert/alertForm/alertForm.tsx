@@ -11,6 +11,7 @@ import { useAlert } from '@/context/alertContext/alertContext';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import closeIcon from '@/assets/Close.svg';
 import { UPDATE_ALERT } from '@/constants/alertType';
+import { FLAG_SMS_ALERTS } from '@/constants/featureFlags';
 import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
 import SelectOptionOne from '../collateralBufferAlerts/selectOption/SelectOptionOne';
 
@@ -383,57 +384,60 @@ const AlertForm: FC<AlertFormProps> = ({
             )}
           </div>
           {/* //!email-alert-end */}
-          <hr className="my-4" />
           {/* //!Call-alert-start */}
-
-          <div className="flex items-center gap-x-3">
-            <div className="rounded-full bg-[#EEE] p-2 w-max">
-              <IoMdCall className="h-5 w-5 text-[#323232]" />
-            </div>
-            <input
-              type="text"
-              required
-              defaultValue="555.555.5555"
-              ref={collateralCallRef}
-              readOnly
-              className="grow focus:outline-none cursor-default"
-            />
-            {collateralBufferAlert.alertMethods.sms && (
-              <button
-                onClick={handleToggleCallAlertType}
-                className=" bg-[#EEE] text-[#2C3B8D] rounded-full border border-[#2C3B8D] px-3 py-2 font-semibold text-xs"
-              >
-                {collateralBufferAlert.callAlertType}
-              </button>
-            )}
-            {!collateralBufferAlert.alertMethods.sms ? (
-              <MdCheckBoxOutlineBlank
-                className="h-6 w-6 cursor-pointer"
-                onClick={() => {
-                  setCollateralBufferAlert((prev) => ({
-                    ...prev,
-                    alertMethods: {
-                      ...prev.alertMethods,
-                      sms: collateralCallRef.current.value,
-                    },
-                  }));
-                }}
-              />
-            ) : (
-              <IoIosCheckbox
-                className="h-6 w-6 cursor-pointer"
-                onClick={() => {
-                  setCollateralBufferAlert((prev) => ({
-                    ...prev,
-                    alertMethods: {
-                      ...prev.alertMethods,
-                      sms: '',
-                    },
-                  }));
-                }}
-              />
-            )}
-          </div>
+          {FLAG_SMS_ALERTS && (
+            <>
+              <hr className="my-4" />
+              <div className="flex items-center gap-x-3">
+                <div className="rounded-full bg-[#EEE] p-2 w-max">
+                  <IoMdCall className="h-5 w-5 text-[#323232]" />
+                </div>
+                <input
+                  type="text"
+                  required
+                  defaultValue="555.555.5555"
+                  ref={collateralCallRef}
+                  readOnly
+                  className="grow focus:outline-none cursor-default"
+                />
+                {collateralBufferAlert.alertMethods.sms && (
+                  <button
+                    onClick={handleToggleCallAlertType}
+                    className=" bg-[#EEE] text-[#2C3B8D] rounded-full border border-[#2C3B8D] px-3 py-2 font-semibold text-xs"
+                  >
+                    {collateralBufferAlert.callAlertType}
+                  </button>
+                )}
+                {!collateralBufferAlert.alertMethods.sms ? (
+                  <MdCheckBoxOutlineBlank
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => {
+                      setCollateralBufferAlert((prev) => ({
+                        ...prev,
+                        alertMethods: {
+                          ...prev.alertMethods,
+                          sms: collateralCallRef.current.value,
+                        },
+                      }));
+                    }}
+                  />
+                ) : (
+                  <IoIosCheckbox
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => {
+                      setCollateralBufferAlert((prev) => ({
+                        ...prev,
+                        alertMethods: {
+                          ...prev.alertMethods,
+                          sms: '',
+                        },
+                      }));
+                    }}
+                  />
+                )}
+              </div>
+            </>
+          )}
           {/* //!Call-alert-end */}
         </div>
         <p className="font-semibold mb-4">Alert when</p>

@@ -11,3 +11,9 @@ export const FLAG_COINBASE_FUNDING =
 
 export const FLAG_OTHER_EXCHANGE_FUNDING =
   process.env.NEXT_PUBLIC_FLAG_OTHER_EXCHANGE_FUNDING === 'true';
+
+export const FLAG_SMS_ALERTS =
+  process.env.NEXT_PUBLIC_FLAG_SMS_ALERTS === 'true';
+
+export const PHONE_EMAIL_PASS_SETTINGS =
+  process.env.NEXT_PUBLIC_FLAG_PHONE_EMAIL_PASS_SETTINGS === 'true';

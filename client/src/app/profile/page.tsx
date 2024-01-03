@@ -9,6 +9,7 @@ import { useZeroDev } from '@/hooks/useZeroDev';
 import { USDCContract, WETHContract, networkChainId } from '@/constants';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink } from '@/utility/utils';
+import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState('');
@@ -38,23 +39,29 @@ const Profile: React.FC = () => {
   const [contactNumber, setContactNumber] = useState('');
   const [inputContactNumber, setInputContactNumber] = useState('');
 
+  const phoneEmailPass = PHONE_EMAIL_PASS_SETTINGS
+    ? [
+        {
+          description: 'Contact Email',
+          details: contactEmail,
+        },
+        {
+          description: 'Contact Number',
+          details: contactNumber,
+        },
+        {
+          description: 'Password',
+          details: <button className="underline">Reset Password</button>,
+        },
+      ]
+    : [];
+
   const invoice1 = [
     {
       description: 'Wallet Login',
       details: userInfo ? userInfo.email : '',
     },
-    {
-      description: 'Contact Email',
-      details: contactEmail,
-    },
-    {
-      description: 'Contact Number',
-      details: contactNumber,
-    },
-    {
-      description: 'Password',
-      details: <button className="underline">Reset Password</button>,
-    },
+    ...phoneEmailPass,
   ];
 
   const invoice2 = [
