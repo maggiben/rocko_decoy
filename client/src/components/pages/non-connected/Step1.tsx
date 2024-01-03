@@ -19,6 +19,8 @@ import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
+import contentCopy from '@/assets/content_copy.svg';
+import checkmark from '@/assets/correct.svg';
 
 interface DoneTracker {
   step: string;
@@ -243,10 +245,10 @@ function DepositingCollateral() {
             ? 'Waiting for Collateral'
             : 'Depositing Collateral'}
       </h1>
-      <p className="text-blackPrimary text-[14px] mt-1">
+      {/* <p className="text-blackPrimary text-[14px] mt-1">
         Please do not close your browser until all of the steps below are
         completed.
-      </p>
+      </p> */}
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <p className="text-blackPrimary">Estimated time remaining</p>
@@ -254,12 +256,12 @@ function DepositingCollateral() {
             {' '}
             {`${activeDone ? 'Complete!' : `${counter} minutes`}`}{' '}
           </h1>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
+          <div className="px-4 py-6 rounded-[16px] bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
                 progressTracker === 0 || doneTracker[0]?.step === 'one'
-                  ? 'text-black'
-                  : 'text-gray-400'
+                  ? 'text-blackPrimary'
+                  : 'text-[#757575]'
               }`}
             >
               Collateral Received
@@ -293,12 +295,12 @@ function DepositingCollateral() {
               />
             )}
           </div>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
+          <div className="px-4 py-6 rounded-[16px] bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
                 progressTracker === 1 || doneTracker[1]?.step === 'two'
-                  ? 'text-black'
-                  : 'text-gray-400'
+                  ? 'text-blackPrimary'
+                  : 'text-[#757575]'
               }`}
             >
               Collateral Deposited in Lending Protocol
@@ -333,13 +335,13 @@ function DepositingCollateral() {
               />
             )}
           </div>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
+          <div className="px-4 py-6 rounded-[16px] bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
                 progressTracker === 1 || doneTracker[1]?.step === 'two'
                   ? // progressTracker === 2 || doneTracker[2]?.step === "three"
-                    'text-black'
-                  : 'text-gray-400'
+                    'text-blackPrimary'
+                  : 'text-[#757575]'
               }`}
             >
               Loan Delivered to Your Account
@@ -374,6 +376,56 @@ function DepositingCollateral() {
                 strokeWidth={2}
               />
             )}
+          </div>
+        </div>
+        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6 mt-[16px] md:mt-[24px]">
+          <h4 className="text-blackPrimary font-medium	text-[20px]">
+            Collateral Instructions
+          </h4>
+          <p className="text-blackPrimary font-normal mt-[8px]	text-[14px]">
+            Please send the Amount Required to your Rocko wallet. Your loan will
+            not be fulfilled until this amount is received.
+          </p>
+          <div className="border-b-2 py-[16px] flex justify-between items-center">
+            <div>
+              <p className="font-normal	text-blackSecondary text-[14px]">
+                Amount Received
+              </p>
+              <p className="font-normal	text-blackPrimary text-[16px]">0 ETH</p>
+            </div>
+            <div className="flex items-center gap-x-[4px] bg-[#E6F2ED] rounded-[5px] py-[3px] ps-[4px] pe-[8px] cursor-pointer">
+              <Image
+                src={checkmark}
+                alt="contentCopy"
+                className="cursor-pointer"
+              />
+              <p className="text-[#05944F] text-[12px] font-medium leading-4">
+                Amount Received
+              </p>
+            </div>
+          </div>
+          <div className="border-b-2 py-[16px] flex justify-between items-center">
+            <p className="font-normal	text-blackSecondary text-[14px]">
+              Amount Required
+            </p>
+            <p className="font-normal	text-blackPrimary text-[16px]">
+              14.7341 ETH
+            </p>
+          </div>
+          <div className="flex justify-between items-center pt-[16px]">
+            <div>
+              <p className="font-normal	text-blackSecondary text-[14px]">
+                Rocko Wallet Address
+              </p>
+              <p className="font-normal	text-blackPrimary text-[16px]">
+                0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+              </p>
+            </div>
+            <Image
+              src={contentCopy}
+              alt="contentCopy"
+              className="cursor-pointer"
+            />
           </div>
         </div>
       </section>
