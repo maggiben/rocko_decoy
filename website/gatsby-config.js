@@ -13,11 +13,6 @@ require('dotenv').config({
 
 const siteUrl = `https://rocko.co/`
 
-const sitemap =
-  process.env.GATSBY_FEATURE_FLAG_SHOW_BLOG === 'true'
-    ? [`gatsby-plugin-sitemap`]
-    : []
-
 module.exports = {
   siteMetadata: {
     title: `Rocko: DeFi Made Simple for Everyone`,
@@ -33,7 +28,7 @@ module.exports = {
     },
   },
   plugins: [
-    ...sitemap,
+    `gatsby-plugin-sitemap`,
     `gatsby-plugin-image`,
     `gatsby-plugin-sass`,
     'gatsby-plugin-postcss',
@@ -95,8 +90,8 @@ module.exports = {
                 ...node.frontmatter,
                 description: node.excerpt,
                 date: node.frontmatter.date,
-                url: site.siteMetadata.siteUrl + node.fields.slug,
-                guid: site.siteMetadata.siteUrl + node.fields.slug,
+                url: `${site.siteMetadata.siteUrl}/learn/${node.fields.slug}`,
+                guid: `${site.siteMetadata.siteUrl}/learn/${node.fields.slug}`,
                 custom_elements: [{ 'content:encoded': node.html }],
               })),
             query: `{
