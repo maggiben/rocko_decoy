@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import React from 'react';
 import errorOutline from '@/assets/error_outline.svg';
+import clsx from 'clsx';
 
 interface HoverTooltipProps {
   text: string;
+  className?: string;
 }
 
-const HoverTooltip: React.FC<HoverTooltipProps> = ({ text }) => (
-  <div className="relative group">
+const HoverTooltip: React.FC<HoverTooltipProps> = ({ text, className }) => (
+  <div className={clsx(className, 'relative group')}>
     <Image width={16} height={16} src={errorOutline} alt="" className="" />
 
     {/* tooltip text */}

@@ -140,6 +140,7 @@ export interface ContextValues {
   loanData: LoanData;
   setLoanData?: Dispatch<SetStateAction<LoanData>>;
   loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[];
+  loanStepsNonConnected: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[];
   currentStep: number;
   setCurrentStep?: Dispatch<SetStateAction<number>>;
 }

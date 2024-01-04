@@ -181,6 +181,7 @@ export const loneContext = createContext<ContextValues>({
     nextValidation: '',
   },
   loanSteps: [],
+  loanStepsNonConnected: [],
   currentStep: 0,
   // eslint-disable-next-line no-unused-vars
   setLoanData(value: SetStateAction<{}>) {
@@ -224,6 +225,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     nextValidation: '',
   });
   const [currentStep, setCurrentStep] = useState(0);
+
   const loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[] = [
     // step-1 need to select currencies usdc or usd.
     {
@@ -357,6 +359,41 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     },
   ];
 
+  const loanStepsNonConnected: (
+    | CurrencyStep
+    | AssetStep
+    | ProtocolStep
+    | RiskStep
+  )[] = [
+    {
+      id: 1,
+      title: 'What do you want to borrow?',
+      currency: [
+        {
+          id: 'currency-1',
+          name: 'USDC',
+          fullName: 'USD Coin',
+          symbol: usdcIcon,
+          currentAPR: 0, // apr is  calculated in percentage
+          comingSoon: false,
+        },
+        {
+          id: 'currency-2',
+          name: 'USD',
+          fullName: 'US Dollar',
+          symbol: usdIcon,
+          currentAPR: 2.56, // apr is calculated in percent
+          comingSoon: true,
+        },
+      ],
+    },
+
+    {
+      id: 5,
+      title: 'Loan Summary',
+    },
+  ];
+
   return (
     <loneContext.Provider
       value={{
@@ -365,6 +402,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
         loanSteps,
         currentStep,
         setCurrentStep,
+        loanStepsNonConnected,
       }}
     >
       {children}

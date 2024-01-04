@@ -216,3 +216,6 @@ input[type='checkbox'] {
 .alert-container::-webkit-scrollbar-thumb:active {
   background-color: transparent;
 }
+.tool-tip img {
+  transform: rotate(180deg);
+}

@@ -6,9 +6,9 @@ import toast from 'react-hot-toast';
 import { useSearchParams } from 'next/navigation';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { useAddress } from '@thirdweb-dev/react';
-import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
+// import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
-import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+// import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
 import { useGetLoan } from '@/contract/batch';
 import { useSingleLoan } from '@/contract/single';
@@ -26,7 +26,7 @@ interface DoneTracker {
   step: string;
 }
 
-function DepositingCollateral() {
+function StepTwo() {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const type = router.get('type') || '';
 
@@ -55,7 +55,7 @@ function DepositingCollateral() {
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
-  const [completeModal, setCompleteModal] = useState(false);
+  // const [completeModal,  setCompleteModal] = useState(false);
 
   // get User info
   const { userInfo } = useZeroDev();
@@ -137,7 +137,6 @@ function DepositingCollateral() {
     setDoneTracker([...doneTracker, { step: 'two' }]);
     setStartB(false);
     setActiveDone(true);
-    setCompleteModal(true);
   };
 
   const setInitialParams = async () => {
@@ -407,9 +406,9 @@ function DepositingCollateral() {
           <div className="border-b-2 py-[16px] flex justify-between items-center">
             <p className="font-normal	text-blackSecondary text-[14px]">
               Amount Required
-            </p>
-            <p className="font-normal	text-blackPrimary text-[16px]">
-              14.7341 ETH
+              <p className="font-normal	text-blackPrimary text-[16px]">
+                14.7341 ETH
+              </p>
             </p>
           </div>
           <div className="flex justify-between items-center pt-[16px]">
@@ -429,15 +428,6 @@ function DepositingCollateral() {
           </div>
         </div>
       </section>
-      {completeModal && (
-        <ModalContainer>
-          <LoanComplete
-            title="Loan Complete"
-            details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
-            id={1}
-          />
-        </ModalContainer>
-      )}
 
       {/* footer */}
       <div className="h-20 w-full" />
@@ -460,7 +450,7 @@ function DepositingCollateral() {
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
-                onClick={() => setCompleteModal(true)}
+                // onClick={() => setCompleteModal(true)}
                 className={`font-semibold  text-xs md:text-sm ${
                   !activeDone ? 'bg-blue/40' : 'bg-blue'
                 } py-[10px] px-6 rounded-full text-white`}
@@ -476,4 +466,4 @@ function DepositingCollateral() {
   );
 }
 
-export default DepositingCollateral;
+export default StepTwo;
