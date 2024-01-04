@@ -8,6 +8,7 @@ import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import * as chains from 'wagmi/chains';
 import { Auth0WalletConnector } from '@zerodev/wagmi';
+import { ROCKO_WEBSITE_URL } from '@/constants';
 import user from '@/assets/images/user.png';
 import logo from '@/assets/logo.png';
 import { NETWORK } from '@/constants/env';
@@ -16,7 +17,6 @@ import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
-import { ROCKO_WEBSITE_URL } from '@/constants';
 
 const net = (chains as { [key: string]: any })[NETWORK];
 
