@@ -17,12 +17,7 @@ const faqs = [
   {
     id: '3',
     ques: 'Does Rocko charge a fee?',
-    answer: () => (
-      <>
-        Yes, there will be a fee to use the Rocko platform. More info on fees
-        will be shared closer to launch.
-      </>
-    ),
+    answer: () => <>More info on fees will be shared closer to launch.</>,
   },
   {
     id: '4',
@@ -62,12 +57,7 @@ const faqPageData = [
   {
     id: '3',
     ques: 'Does Rocko charge a fee?',
-    answer: () => (
-      <>
-        Yes, there will be a fee to use the Rocko platform. More info on fees
-        will be shared closer to launch.
-      </>
-    ),
+    answer: () => <>More info on fees will be shared closer to launch.</>,
   },
   {
     id: '4',
@@ -121,7 +111,7 @@ const faqPageData = [
     id: '10',
     ques: 'Was it the maximum amount I can borrow?',
     answer: () =>
-      'The maximum amount you can borrow is determined by Compound’s available liquidity for the loan asset. Generally, this amount is in the millions of dollars.',
+      'The maximum amount you can borrow is determined by the value of your collateral and Compound’s available liquidity for the loan asset. Generally, the amount of available liquidity for USDC is in the millions of dollars.',
   },
   {
     id: '11',
