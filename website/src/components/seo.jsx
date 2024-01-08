@@ -60,7 +60,7 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
       ) : null}
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={window ? `${window.location.origin}${image}` : image} />
 
       {children}
     </>
