@@ -16,6 +16,7 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
           title
           description
           copyright
+          siteUrl
           social {
             twitter
           }
@@ -38,7 +39,7 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
         name="keywords"
         content="crypto loans, crypto loan, bitcoin loan, bitcoin loans, crypto backed loans"
       />
-      <meta name="image" content={window ? `${window.location.origin}${image}` : image} />
+      <meta name="image" content={`${site.siteMetadata?.siteUrl}${image}`} />
       <meta name="author" content={authorTwitter || site.siteMetadata?.title} />
       <meta name="copyright" content={site.siteMetadata.copyright} />
       <meta name="application-name" content={site.siteMetadata?.title} />
@@ -49,7 +50,10 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
         property="og:type"
         content={authorTwitter ? 'article' : 'website'}
       />
-      <meta property="og:image" content={window ? `${window.location.origin}${image}` : image} />
+      <meta
+        property="og:image"
+        content={`${site.siteMetadata?.siteUrl}${image}`}
+      />
       <meta property="og:description" content={metaDescription} />
 
       {/* <!-- For Twitter --> */}
@@ -60,7 +64,10 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
       ) : null}
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
-      <meta name="twitter:image" content={window ? `${window.location.origin}${image}` : image} />
+      <meta
+        name="twitter:image"
+        content={`${site.siteMetadata?.siteUrl}${image}`}
+      />
 
       {children}
     </>

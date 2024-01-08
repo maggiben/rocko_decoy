@@ -11,7 +11,7 @@ require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-const siteUrl = `https://rocko.co/`
+const siteUrl = `https://rocko.co`
 
 module.exports = {
   siteMetadata: {
