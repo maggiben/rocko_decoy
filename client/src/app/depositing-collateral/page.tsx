@@ -19,6 +19,7 @@ import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
+import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
 
 interface DoneTracker {
   step: string;
@@ -54,6 +55,7 @@ function DepositingCollateral() {
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
   const [completeModal, setCompleteModal] = useState(false);
+  const [showFinalModal, setShowFinalModal] = useState(false);
 
   // get User info
   const { userInfo } = useZeroDev();
@@ -233,7 +235,21 @@ function DepositingCollateral() {
     }
   }, [startA, startB, progress]);
 
-  //
+  useEffect(() => {
+    if (type === 'start') {
+      setStartA(true);
+    }
+  }, [type]);
+
+  const onBack = () => {
+    setCompleteModal(false);
+  };
+
+  const proceedAnyway = () => {
+    setCompleteModal(false);
+    setShowFinalModal(true);
+  };
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
@@ -378,6 +394,9 @@ function DepositingCollateral() {
         </div>
       </section>
       {completeModal && (
+        <TransferCollateral lowAmount onCancel={onBack} onOk={proceedAnyway} />
+      )}
+      {showFinalModal && (
         <ModalContainer>
           <LoanComplete
             title="Loan Complete"
@@ -412,7 +431,7 @@ function DepositingCollateral() {
                 className={`font-semibold  text-xs md:text-sm ${
                   !activeDone ? 'bg-blue/40' : 'bg-blue'
                 } py-[10px] px-6 rounded-full text-white`}
-                disabled={!activeDone}
+                // disabled={activeDone}
               >
                 Done
               </button>

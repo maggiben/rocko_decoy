@@ -13,6 +13,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { NETWORK } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
+import { useRouter } from 'next/navigation';
 import TransferCollateral from './chips/TransferCollateral/TransferCollateral';
 
 const net = (blockchains as { [key: string]: any })[NETWORK];
@@ -29,43 +30,19 @@ export type Step = {
 
 type Props = {
   steps: Step[];
-  type?: 'NON_CONNECTED' | 'LOAN';
 };
 
 export default function Stepper(props: Props) {
-  const { steps, type } = props;
-
-  const loanFinalizeProps =
-    type === 'NON_CONNECTED'
-      ? {
-          title: 'Loan Complete',
-          description:
-            'Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided.',
-          buttonText: 'Okay',
-          url: '/non-connected',
-        }
-      : {};
+  const { steps } = props;
 
   const { address: zerodevAccount } = useAccount();
   const { userInfo } = useZeroDev();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
   const [showQR, setShowQR] = useState(false);
-
-  const [amountRequired] = useState(10);
-  const {
-    loanSteps: loanStepsDefault,
-    loanStepsNonConnected,
-    currentStep,
-    setCurrentStep,
-    loanData,
-    setLoanData,
-  } = useLoanData();
-
-  const lowAmount = loanData.loanToValue < amountRequired;
-
-  const loanSteps =
-    type === 'NON_CONNECTED' ? loanStepsNonConnected : loanStepsDefault;
+  const router = useRouter();
+  const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
+    useLoanData();
 
   const { connect, isSuccess } = useConnect();
   const { chains } = configureChains([net], [publicProvider()]);
@@ -96,17 +73,10 @@ export default function Stepper(props: Props) {
     });
   };
 
-  const proceedAnyway = () => {
+  const handleOnOk = () => {
+    router.push('/depositing-collateral?type=start');
+    setIsFinalized(false);
     setShowQR(false);
-    nextStep();
-  };
-
-  const handleNextStep = async () => {
-    if (type === 'NON_CONNECTED' && currentStep === 0) {
-      setShowQR(true);
-    } else {
-      nextStep();
-    }
   };
 
   const nextStep = async () => {
@@ -124,8 +94,8 @@ export default function Stepper(props: Props) {
       return;
     }
 
-    if (currentStep === loanSteps.length - 1) setIsFinalized(true);
-
+    setIsFinalized(currentStep === loanSteps.length - 1);
+    setShowQR(loanData.paymentMethod === 'other' && currentStep === 4);
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
       setCurrentStep(currentStep + 1);
       if (setLoanData) {
@@ -182,10 +152,6 @@ export default function Stepper(props: Props) {
       }));
     }
   }, [isSuccess]);
-
-  const closePopUp = () => {
-    setShowQR(false);
-  };
   return (
     <>
       <CurrentStepComponent {...currentData} />
@@ -219,11 +185,11 @@ export default function Stepper(props: Props) {
                 Back
               </button>
               <button
-                onClick={handleNextStep}
+                onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
                   isValidateNextButton() ? 'bg-blue' : 'bg-blue/40'
                 } py-[10px]  px-6 rounded-full text-white`}
-                disabled={!isValidateNextButton()}
+                disabled={!isValidateNextButton() && !isFinalized}
               >
                 {currentStep === loanSteps.length - 1
                   ? 'Finalize Loan'
@@ -233,17 +199,19 @@ export default function Stepper(props: Props) {
           </div>
         </div>
       </div>
-      {showQR && (
+      {isFinalized && showQR && (
         <TransferCollateral
-          lowAmount={lowAmount}
-          onOk={proceedAnyway}
-          close={closePopUp}
-          onCancel={() => setShowQR(false)}
+          lowAmount={false}
+          onOk={handleOnOk}
+          onCancel={() => {
+            setShowQR(false);
+            setIsFinalized(false);
+          }}
         />
       )}
-      {isFinalized && (
+      {isFinalized && !showQR && (
         <ModalContainer>
-          <LoanFinalized navType="start" {...loanFinalizeProps} />
+          <LoanFinalized navType="start" />
         </ModalContainer>
       )}
     </>

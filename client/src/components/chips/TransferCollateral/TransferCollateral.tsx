@@ -12,11 +12,10 @@ type Props = {
   lowAmount: boolean;
   onOk: () => void;
   onCancel: () => void;
-  close: () => void;
 };
 
 function TransferCollateral(props: Props) {
-  const { lowAmount, onCancel, onOk, close } = props;
+  const { lowAmount, onCancel, onOk } = props;
   const [warning, setWarning] = useState(false);
 
   if (warning) {
@@ -25,7 +24,6 @@ function TransferCollateral(props: Props) {
         <Warning
           goBack={() => setWarning(false)}
           proceedAnyway={() => {
-            setWarning(false);
             onOk();
           }}
         />
@@ -48,7 +46,7 @@ function TransferCollateral(props: Props) {
           </div>
           <div className="">
             <button
-              onClick={close}
+              onClick={onCancel}
               className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
             >
               <Image
