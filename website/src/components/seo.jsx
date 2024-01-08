@@ -38,7 +38,7 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
         name="keywords"
         content="crypto loans, crypto loan, bitcoin loan, bitcoin loans, crypto backed loans"
       />
-      <meta name="image" content={image} />
+      <meta name="image" content={window ? `${window.location.origin}${image}` : image} />
       <meta name="author" content={authorTwitter || site.siteMetadata?.title} />
       <meta name="copyright" content={site.siteMetadata.copyright} />
       <meta name="application-name" content={site.siteMetadata?.title} />
@@ -49,7 +49,7 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
         property="og:type"
         content={authorTwitter ? 'article' : 'website'}
       />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={window ? `${window.location.origin}${image}` : image} />
       <meta property="og:description" content={metaDescription} />
 
       {/* <!-- For Twitter --> */}
