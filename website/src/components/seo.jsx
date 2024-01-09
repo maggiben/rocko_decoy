@@ -39,7 +39,12 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
         name="keywords"
         content="crypto loans, crypto loan, bitcoin loan, bitcoin loans, crypto backed loans"
       />
-      <meta name="image" content={`${site.siteMetadata?.siteUrl}${image}`} />
+      <meta
+        name="image"
+        content={`${site.siteMetadata?.siteUrl}${
+          image || '/learn/mountain.jpg'
+        }`}
+      />
       <meta name="author" content={authorTwitter || site.siteMetadata?.title} />
       <meta name="copyright" content={site.siteMetadata.copyright} />
       <meta name="application-name" content={site.siteMetadata?.title} />
@@ -52,7 +57,9 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
       />
       <meta
         property="og:image"
-        content={`${site.siteMetadata?.siteUrl}${image}`}
+        content={`${site.siteMetadata?.siteUrl}${
+          image || '/learn/mountain.jpg'
+        }`}
       />
       <meta property="og:description" content={metaDescription} />
 
@@ -66,7 +73,9 @@ function Seo({ description, title, children, authorTwitter = '', image = '' }) {
       <meta name="twitter:description" content={metaDescription} />
       <meta
         name="twitter:image"
-        content={`${site.siteMetadata?.siteUrl}${image}`}
+        content={`${site.siteMetadata?.siteUrl}${
+          image || '/learn/mountain.jpg'
+        }`}
       />
 
       {children}
