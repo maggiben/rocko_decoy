@@ -19,6 +19,7 @@ import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
+import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
 
 interface DoneTracker {
@@ -390,6 +391,49 @@ function DepositingCollateral() {
                 strokeWidth={2}
               />
             )}
+          </div>
+        </div>
+        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:pt-6 lg:px-6 lg:mt-6 mt-4">
+          <h6 className="text-blackPrimary lg:text-[20px] text-[16px] font-medium	leading-8">
+            Collateral Instructions
+          </h6>
+          <p className="font-normal text-blackPrimary text-[14px] mt-2 leading-5">
+            Please send the Amount Required to your Rocko wallet. Your loan will
+            not be fulfilled until this amount is received.
+          </p>
+          <div className="flex justify-between items-center py-[16px]">
+            <div>
+              <p className="font-normal	text-blackSecondary text-[14px] leading-5	">
+                Amount Received
+              </p>
+              <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
+                0 ETH{' '}
+              </p>
+            </div>
+            {/* <p className='bg-[#E6F2ED] rounded-[5px] flex items-center gap-x-1 py-0.5 ps-1 pe-2'></p> */}
+          </div>
+          <div className="py-[16px]  border-y	">
+            <p className="font-normal	text-blackSecondary text-[14px] leading-5	">
+              Amount Required
+            </p>
+            <p className="font-normal	text-blackPrimary text-[16px] leading-6">
+              14.7341 ETH{' '}
+            </p>
+          </div>
+          <div className="flex justify-between items-center pt-[16px] ">
+            <div>
+              <p className="font-normal	text-blackSecondary text-[14px] leading-5">
+                Rocko Wallet Address
+              </p>
+              <p className="font-normal	text-blackPrimary text-[16px] leading-6 text-wrap">
+                0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+              </p>
+            </div>
+            <Image
+              src={contentCopy}
+              alt="contentCopy"
+              className="cursor-pointer"
+            />
           </div>
         </div>
       </section>
