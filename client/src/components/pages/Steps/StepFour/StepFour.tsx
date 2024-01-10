@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import { FC, ChangeEvent, FocusEvent, useState, useEffect } from 'react';
+import { FC, FocusEvent, useState, useEffect } from 'react';
 import { CoinCardProps, RiskStep } from '@/types/type';
 import Link from 'next/link';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
@@ -11,9 +11,8 @@ import etherIcon from '@/assets/coins/Extra(ETH).svg';
 import RadioInput from '@/components/RadioInput';
 
 const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
+  const [selectedValue, setSelectedValue] = useState<number>(150);
   const [value, setValue] = useState<number>(10);
-  const [customValue, setCustomValue] = useState<number>();
-  const [thumbPosition, setThumbPosition] = useState<number>(0);
   const [selectedCoin, setSelectedCoin] = useState('');
   const { loanData, setLoanData } = useLoanData();
   const [hasOther, setHasOther] = useState(0);
@@ -22,7 +21,6 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
     // for keeping status
     if (loanData?.buffer !== 0 && loanData?.buffer) {
       setValue(loanData?.buffer);
-      setThumbPosition((loanData?.buffer / 400) * 100);
 
       if (setLoanData) {
         setLoanData((prevLoanData) => ({
@@ -66,84 +64,34 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   ) => {
     const newValue = parseInt(event.target.value, 10);
     setValue(newValue);
-    setCustomValue(newValue);
-    setThumbPosition(
-      ((newValue - parseInt(event.target.min, 10)) /
-        (parseInt(event.target.max, 10) - parseInt(event.target.min, 10))) *
-        100,
-    );
 
     if (setLoanData) await updateLoanData(newValue);
   };
 
-  const handleCustomInputBlur = (event: FocusEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value || '0', 10);
-    if (newValue <= 1000) {
-      setValue(newValue);
-    }
-    if (newValue > 1000) {
-      setCustomValue(1000);
-      setValue(1000);
-      return;
-    }
-    if (setLoanData) {
-      setLoanData((prevLoanData) => ({
-        ...prevLoanData,
-        activeNextButton: true,
-      }));
-    }
+  const handleInputBlur = (event: FocusEvent<HTMLInputElement>) => {
+    let newValue = parseInt(event.target.value, 10);
 
-    if (newValue > 400) return;
-    setThumbPosition(
-      ((newValue - parseInt(event.target.min, 10)) /
-        (400 - parseInt(event.target.min, 10))) *
-        100,
-    );
-  };
-  const handleCustomInputChange = async (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (event.target.value === '') {
-      setCustomValue(undefined);
-      return;
-    }
-    const newValue = parseInt(event.target.value, 10);
-    if (newValue <= 1000) {
-      setCustomValue(newValue);
-    }
+    if (newValue < 10) newValue = 10;
+    if (newValue > 1000) newValue = 1000;
 
-    if (newValue > 1000) {
-      setCustomValue(1000);
-      setValue(1000);
-    }
-
-    if (newValue >= 400 && newValue <= 1000) {
-      setValue(newValue);
-    }
-
-    if (setLoanData) await updateLoanData(newValue > 1000 ? 1000 : newValue);
+    setValue(newValue);
+    if (setLoanData) updateLoanData(newValue);
   };
 
-  /* eslint-disable */
-  const valueDivStyle = {
-    left: `calc(${thumbPosition}% - ${80 / 2}px)`,
-  };
-
-  useEffect(() => {
-    initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    if (hasOther) {
+      updateLoanData(selectedValue);
+    } else {
+      setSelectedCoin('');
+      updateLoanData(value);
+    }
+
     const inputValue = event.target.value;
     setHasOther(parseInt(inputValue) === 0 ? 1 : 0);
-
-    setLoanData?.((prevLoanData) => ({
-      ...prevLoanData,
-      paymentMethod: inputValue || '',
-    }));
   };
+
   const collateralCard = [
     {
       id: 1,
@@ -164,9 +112,35 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       description: 'Higher risk of liquidation',
     },
   ];
-  const handleSelect =({ coinShortName }: CoinCardProps) => {
+
+  const handleSelect = ({ coinShortName }: CoinCardProps) => {
+    let buffer = 0;
+    switch (coinShortName) {
+      case collateralCard[0].title:
+        buffer = 150;
+        break;
+      case collateralCard[1].title:
+        buffer = 100;
+        break;
+      case collateralCard[2].title:
+        buffer = 50;
+        break;
+      default:
+        break;
+    }
+
+    setHasOther(0);
     setSelectedCoin(coinShortName);
-  }
+    setSelectedValue(buffer);
+
+    updateLoanData(buffer);
+  };
+
+  useEffect(() => {
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       {/* title start  */}
@@ -196,9 +170,11 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                   handleSelect={handleSelect}
                   currentAPR={1}
                   isComingSoon={false}
-                  className={card.title === selectedCoin
-                    ? 'border-[#2C3B8D] !bg-grayPrimary'
-                    : 'border-whiteSecondary bg-white '}
+                  className={
+                    card.title === selectedCoin
+                      ? 'border-[#2C3B8D] !bg-grayPrimary'
+                      : 'border-whiteSecondary bg-white '
+                  }
                 />
               ))}
             </div>
@@ -217,28 +193,13 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                     %
                   </label>
                   <input
-                    type="text"
-                    className="w-full py-[8px] px-[16px] border border-[#E6E6E6] rounded-[10px] block focus:outline-none w-full"
-                  />
-                </div>
-              </div>
-            )}
-            {/* custom field */}
-            {value >= 400 ? (
-              <div className="ml-auto w-fit space-y-1 mt-10 mb-4 md:mt-0">
-                <p className="text-[#141414] font-medium text-xs ">
-                  Enter custom amount
-                </p>
-                <div className="flex items-center gap-2 border border-[#E6E6E6] rounded-[10px] py-2 px-4 w-fit ">
-                  <input
                     type="number"
-                    name=""
-                    id=""
+                    className="w-full py-[8px] px-[16px] border border-[#E6E6E6] rounded-[10px] block focus:outline-none w-full number-input"
                     min="10"
                     max="1000"
-                    value={customValue}
-                    onBlur={handleCustomInputBlur}
-                    onChange={handleCustomInputChange}
+                    value={value}
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
                     onKeyDown={(event) => {
                       const keyPressed = event.key;
                       const isDecimalDigit = /^\d+$/.test(keyPressed);
@@ -254,13 +215,9 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
                         event.preventDefault();
                       }
                     }}
-                    className="focus:outline-none border-none max-w-[136px] w-full number-input"
                   />
-                  <p className="text-[#141414]">%</p>
                 </div>
               </div>
-            ) : (
-              <div className="w-full" />
             )}
             {/* ${value >= 400 ? ' pt-6 ' : 'pt-12'} */}
             <p className="text-sm text-blackSecondary bg-[#F9F9F9] text-[#545454] text-[14px] leading-5 rounded-[16px] md:p-[24px] p-[16px]  mt-[24px]">
