@@ -1,12 +1,13 @@
-#from twilio.rest import Client
 import json
 import os
 import requests
 import sys
 
-API_BASE = "https://api-app2.simpletexting.com/v2/api"
-PHONE_SEND = "2067048713"
-API_KEY=os.environ.get('ROCKO_SIMPLETEXTING_API_KEY')
+API_KEY=os.environ.get('ROCKO_MESSAGEBIRD_API_KEY')
+
+CHANNEL_ID = "bca1c70c-bf08-4832-b821-459cc85e8fcc"
+WORKSPACE_ID = "18c67992-c7ba-470d-9189-da495ab636a6"
+API_BASE = "https://nest.messagebird.com"
 
 def send_sms(phone_number, message):
 
@@ -15,32 +16,32 @@ def send_sms(phone_number, message):
     sys.exit(1)
 
 
+  url = f"https://nest.messagebird.com/workspaces/{WORKSPACE_ID}/channels/{CHANNEL_ID}/messages"
+
   headers = {
-    "Authorization": "Bearer {os.environ.get('ROCKO_SIMPLETEXTING_API_KEY')}",
-    "Content-type": "application/json"
+      'Authorization': f'AccessKey {API_KEY}',
+      'Content-Type': 'application/json'
   }
 
-  # Get a contact with this number
-  response = requests.get(f"{API_BASE}/contacts/{phone_number}", headers=headers)
-  print("GETTING CONTACT")
-  print(response.status_code)
-  print(response.text)
-
-  if response.status_code == 404:
-    # The contact is not in simpletexting, add them
-    print("ADDING CONTACT")
-    post_data = {}
-    post_data['contactPhone'] = phone_number
-    post_data['listIds'] = ['Rocko']
-
-    response = requests.post(f"{API_BASE}/contacts", headers=headers, data=json.dumps(post_data))
-
   # Send message
-  post_data = {}
-  post_data['accountPhone'] = PHONE_SEND
-  post_data['contactPhone'] = phone_number
-  post_data['text'] = message
+  data = {
+    "body": {
+        "type": "text",
+        "text": {
+            "text": message
+        }
+    },
+    "receiver": {
+        "contacts": [
+            {
+                "identifierValue": phone_number,
+                "identifierKey": "phonenumber"
+            }
+        ]
+    }
+}
 
-  response = requests.post(f"{API_BASE}/messages", headers=headers, data=json.dumps(post_data))
+  response = requests.post(url, headers=headers, data=json.dumps(data))
 
+  print(response)
   return True
