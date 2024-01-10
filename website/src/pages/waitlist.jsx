@@ -1,9 +1,13 @@
 import React from 'react'
+import { navigate } from 'gatsby'
 import rockoLogo from '../assets/images/logo.png'
 import Footer from '../../../ui-lib/Footer/Footer'
-import FormWrapper from '../components/shared/FormWrapper'
 
 function LandingPage() {
+  const handleNotifyMe = () => {
+    navigate(`/waitlist-confirmation/`)
+  }
+
   return (
     <>
       <a className="accessibility" href="#main">
@@ -54,7 +58,7 @@ function LandingPage() {
                           soon as we launch!
                         </p>
                       </div>
-                      <FormWrapper className="form form--banner">
+                      <div className="form form--banner">
                         <div className="input-holder">
                           <input
                             name="EMAIL"
@@ -67,6 +71,7 @@ function LandingPage() {
                         <button
                           type="submit"
                           className="btn btn-primary !text-white !bg-[#293991] p-[15px] 2xl:px-[31px] 2xl:py-[19px] "
+                          onClick={handleNotifyMe}
                         >
                           Notify Me
                         </button>
@@ -82,7 +87,7 @@ function LandingPage() {
                             value=""
                           />
                         </div>
-                      </FormWrapper>
+                      </div>
                       <div className="banner__social">
                         <ul className="d-flex justify-content-center align-items-center">
                           <li>
