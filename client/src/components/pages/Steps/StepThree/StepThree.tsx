@@ -118,7 +118,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
                 handleProtocol={handleProtocol}
                 selectProtocol={selectProtocol}
               />
-              {protocols?.map((protocol) => (
+              {/* {protocols?.map((protocol) => (
                 <Protocol
                   key={protocol.id}
                   interestRate={protocol.interestRate}
@@ -129,7 +129,7 @@ const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
                   handleProtocol={handleProtocol}
                   selectProtocol={selectProtocol}
                 />
-              ))}
+              ))} */}
               <ProtocolBanner
                 label="Audited protocols only"
                 title="More protocols coming soon!"
