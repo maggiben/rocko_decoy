@@ -8,12 +8,15 @@ import { Link, navigate } from 'gatsby';
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from 'react-share';
 import copy from "copy-to-clipboard";
 import Layout from '../layout';
+import { ClipLoader } from 'react-spinners';
 
 function WaitListConfirmation() {
     const url = "https://rocko.co";
+    const [count, setCount] = useState(Number);
+    const [loading, setLoading] = useState(true);
 
     const openThread = () => {
-        window.open(`https://www.threads.guide?url=${encodeURIComponent(url)}&thread=true`, '_blank');
+        window.open(`https://threads.net?url=${encodeURIComponent(url)}`, '_blank');
     };
 
     const copyToClipboard = () => {
@@ -24,49 +27,41 @@ function WaitListConfirmation() {
         navigate(`/`)
     }
 
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/marketing/follower-count');
+          const apiData = await response.json();
+          setCount(apiData?.email);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
 
-    // const apiKey = 'e4b651595b7c12bbb8d1b49837846283-us21'
-    // const url = 'https://mailchimp.com/developer/marketing/api/list-members/list-members-info/lists/d64d1776bc/members'
-    // const audienceId = 'd64d1776bc'; // Replace with your Mailchimp audience ID
+      };
 
-    // const [state, setState] = useState([]);
-    // const [audienceData, setAudienceData] = useState(null);
-
-    // useEffect(() => {
-    //   const fetchAudienceData = async () => {
-    //     try {
-  
-    //       const response = await fetch(`https://us21.api.mailchimp.com/3.0/lists/${audienceId}`, {
-    //         method: 'GET',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           'Authorization': `Basic ${btoa(`apikey:${apiKey}`)}`,
-    //         },
-    //       });
-  
-    //       if (!response.ok) {
-    //         throw new Error(`HTTP error! Status: ${response.status}`);
-    //       }
-  
-    //       const result = await response.json();
-    //       setAudienceData(result);
-    //     } catch (error) {
-    //       console.error('Error fetching Mailchimp audience data:', error);
-    //     }
-    //   };
-  
-    //   fetchAudienceData();
-    // }, []);
+      fetchData();
+    }, []);
 
   return (
     <>
+ 
+      
     <Layout>
     <div className="max-w-[675px] w-full lg:py-[80px] py-[40px] m-[auto] px-[15px]">
       <h2 className="defi lg:text-[48px] md:text-[30px] text-[20px] text-[#141414] lg:leading-[56px] font-normal lg:mb-[40px] mb-[16px]">You’re on the waitlist!</h2>
       <div className='bg-[#0E2A32] rounded-[20px] lg:pt-[70px] md:pt-[40px] pt-[24px] md:pb-[32px] pb-[24px] flex items-center justify-center flex-wrap'>
         <div className='w-full text-center'>
             <p className='text-[#F9F9F9] text-[12px] leading-5	font-medium	tracking-tighter uppercase mb-[8px]'>Your Position</p>
-            <b className='text-[#FFF] lg:text-[80px] md:text-[50px] sm:text-[35px] text-[30px] lg:mb-[57px] md:mb-[30px] mb-[20px] block'>80</b>
+            <b className='text-[#FFF] lg:text-[80px] md:text-[50px] sm:text-[35px] text-[30px] lg:mb-[57px] md:mb-[30px] mb-[20px] block'>{loading ? (<div className=' flex items-center justify-center'>
+                <ClipLoader
+                    size={40}
+                    color='white'
+                    loading={loading}
+                />
+            </div>) : count}
+            </b>
         </div>
         <div className='w-full text-center'>
             <p className='text-[#FFF] text-[16px] lg:text-[20px] !mb-[11px]'>Help spread the word!</p>
@@ -115,7 +110,6 @@ function WaitListConfirmation() {
       </div>
     </div>
     </Layout>
-    
     </>
   )
 }
