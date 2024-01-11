@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
@@ -29,6 +29,8 @@ interface DoneTracker {
 function DepositingCollateral() {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const type = router.get('type') || '';
+
+  const navRouter = useRouter();
 
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
@@ -96,6 +98,8 @@ function DepositingCollateral() {
       setStartB(true);
     } else {
       setAError();
+
+      navRouter.push('/');
     }
   };
 
