@@ -3,7 +3,7 @@ from sendgrid.helpers.mail import Mail, To, From, Cc, Bcc
 
 import os
 
-def send_email_alert(email_to, email_message, logger):
+def send_email_alert(email_to, email_message):
 
   message = Mail(
     from_email=From(email_message[0]),
