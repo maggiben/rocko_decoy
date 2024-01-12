@@ -15,8 +15,7 @@ def send_sms_alert(phone_number, message):
     print("Error, API_KEY is not set")
     sys.exit(1)
 
-
-  url = f"https://nest.messagebird.com/workspaces/{WORKSPACE_ID}/channels/{CHANNEL_ID}/messages"
+  url = f"{API_BASE}/workspaces/{WORKSPACE_ID}/channels/{CHANNEL_ID}/messages"
 
   headers = {
       'Authorization': f'AccessKey {API_KEY}',
