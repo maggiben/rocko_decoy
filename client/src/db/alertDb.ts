@@ -17,6 +17,8 @@ export const useAlertDB = () => {
   };
 
   const addAlert = (alertFor: string, loanId: number, alertData: any) => {
+    if (!alertData.currentCollateralBuffer.percentage || !alertData.frequency)
+      return 0;
     const alertObject = {
       loan_id: loanId,
       alert_type: alertFor === 'collateralBuffer' ? 'Collateral' : alertFor,
@@ -25,6 +27,7 @@ export const useAlertDB = () => {
       alert_email: alertData.alertMethods.email === '' ? 0 : 1,
       alert_phone: alertData.alertMethods.sms === '' ? 0 : 1,
       alert_repeat_secs: getSeconds(alertData.frequency),
+      alert_once: alertData.emailAlertType === 'Sent!' ? 1 : 0,
       active: 1,
     };
 
@@ -32,6 +35,8 @@ export const useAlertDB = () => {
   };
 
   const updateAlert = (alertId: number, alertData: any, active: number) => {
+    if (!alertData.currentCollateralBuffer.percentage || !alertData.frequency)
+      return 0;
     const updateObject = {
       id: alertId,
       alert_metric: alertData.currentCollateralBuffer.position,
@@ -39,6 +44,7 @@ export const useAlertDB = () => {
       alert_email: alertData.alertMethods.email === '' ? 0 : 1,
       alert_phone: alertData.alertMethods.sms === '' ? 0 : 1,
       alert_repeat_secs: getSeconds(alertData.frequency),
+      alert_once: alertData.emailAlertType === 'Sent!' ? 1 : 0,
       active,
     };
 

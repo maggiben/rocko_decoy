@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useRef, useState, useEffect } from 'react';
 import { IoIosCheckbox, IoMdCall } from 'react-icons/io';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { AiOutlineMail } from 'react-icons/ai';
@@ -272,6 +272,16 @@ const AlertForm: FC<AlertFormProps> = ({
       }));
     }, 2000);
   };
+
+  useEffect(() => {
+    if (collateralBufferAlert.emailAlertType === 'Sent!')
+      if (!forUpdate) {
+        addAlert(alertFor, loanId, collateralBufferAlert);
+      } else {
+        updateAlert(forUpdate?.id, collateralBufferAlert, 1);
+      }
+  }, [collateralBufferAlert]);
+
   // ! toggle alert and silent
   const handleToggleCallAlertType = () => {
     setCollateralBufferAlert((prev) => ({

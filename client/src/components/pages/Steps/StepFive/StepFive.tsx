@@ -1,6 +1,7 @@
 import React, { JSX, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import correct from '@/assets/correct.svg';
 import { ConnectWallet } from '@thirdweb-dev/react';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
@@ -13,6 +14,9 @@ import {
   FLAG_COINBASE_FUNDING,
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
+import { useAccount } from 'wagmi';
+
+const TOOLTIPS = require('../../../../locales/en_tooltips');
 
 interface Term {
   rule: JSX.Element;
@@ -54,6 +58,7 @@ const terms: Term[] = [
 
 const StepFive: React.FC = () => {
   const { loanData, setLoanData } = useLoanData();
+  const { address: zerodevAccount } = useAccount();
 
   const invoice = [
     {
@@ -65,6 +70,15 @@ const StepFive: React.FC = () => {
       description: 'Loan Amount',
       details: `~$${financial(loanData?.borrowing)} USDC`,
       subDetails: `~$${financial(loanData?.borrowing)}`,
+    },
+    {
+      description: 'Interest Rate Type',
+      details: (
+        <div className="flex items-center gap-2 text-blackPrimary">
+          Floating
+          <HoverTooltip text={TOOLTIPS.FLOATING} />
+        </div>
+      ),
     },
     {
       description: 'Current APR',
@@ -169,6 +183,7 @@ const StepFive: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);
+  const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -182,6 +197,28 @@ const StepFive: React.FC = () => {
         paymentMethod: inputValue || '',
       }));
     }
+  };
+
+  const OnSignIn = () => {
+    setOpenModalFor('Coinbase or Gemini');
+    setPaymentMethod('default');
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        paymentMethod: 'default',
+      }));
+    }
+
+    const { sessionStorage } = window;
+    sessionStorage.setItem(
+      'coinbasePayment',
+      JSON.stringify({
+        currency: 'ETH',
+        amount: loanData?.collateralNeeded,
+        account: zerodevAccount?.toString(),
+      }),
+    );
   };
 
   return (
@@ -280,15 +317,19 @@ const StepFive: React.FC = () => {
                 </label>
               </div>
               <div className="text-center md:text-left mt-1 lg:mt-0">
-                <button
-                  onClick={() => {
-                    setOpenModalFor('Coinbase or Gemini');
-                    setPaymentMethod('default');
-                  }}
-                  className="w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]"
-                >
-                  Sign in
-                </button>
+                {connect ? (
+                  <button
+                    onClick={OnSignIn}
+                    className="w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]"
+                  >
+                    Sign in
+                  </button>
+                ) : (
+                  <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md">
+                    <Image src={correct} alt="Correct Image" />
+                    <p>Connected</p>
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -299,7 +340,10 @@ const StepFive: React.FC = () => {
                 id="wallet2"
                 name="contact"
                 value="ethereum"
-                onChange={(e) => handlePaymentMethodChange(e)}
+                onChange={(e) => {
+                  handlePaymentMethodChange(e);
+                  setConnect(true);
+                }}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
               <label htmlFor="wallet2" className="pl-4">
@@ -327,7 +371,10 @@ const StepFive: React.FC = () => {
                 name="contact"
                 value="other"
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-                onChange={(e) => handlePaymentMethodChange(e)}
+                onChange={(e) => {
+                  handlePaymentMethodChange(e);
+                  setConnect(true);
+                }}
               />
               <div className="pl-4">
                 <label htmlFor="wallet3" className="">
@@ -385,6 +432,7 @@ const StepFive: React.FC = () => {
             <ChooseWallet
               setModalStep={setModalStep}
               setOpenModalFor={setOpenModalFor}
+              setConnect={setConnect}
             />
           )}
 

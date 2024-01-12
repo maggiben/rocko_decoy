@@ -186,6 +186,21 @@ const MakePayment: FC = () => {
     },
   ];
 
+  const OnSignIn = () => {
+    setOpenModalFor('Coinbase or Gemini');
+    setPaymentMethod('default');
+
+    const { sessionStorage } = window;
+    sessionStorage.setItem(
+      'coinbasePayment',
+      JSON.stringify({
+        currency: 'USDC',
+        amount: payment,
+        account: zerodevAccount?.toString(),
+      }),
+    );
+  };
+
   useEffect(() => {
     getLiquidationPrice(currentBalance - payment, collateral)
       .then((_price) => setLiquidationPrice(_price))
@@ -286,7 +301,7 @@ const MakePayment: FC = () => {
                 {/* based on the connect value toggling the buttons */}
                 {connect ? (
                   <button
-                    onClick={() => setOpenModalFor('Coinbase or Gemini')}
+                    onClick={OnSignIn}
                     disabled={paymentMethod !== 'default'}
                     className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${
                       paymentMethod === 'default'

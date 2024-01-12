@@ -29,6 +29,7 @@ router.post(
       alert_email: req.body.alert_email,
       alert_phone: req.body.alert_phone,
       alert_repeat_secs: req.body.alert_repeat_secs,
+      alert_once:req.body.alert_once,
       active: req.body.active,        
       create_time: new Date(),
       modified_time: new Date(),
@@ -48,6 +49,7 @@ router.post(
 //////////////////// Update alert
 
 router.post("/updateAlert", (req, res, next) => {
+  console.log(req.body)
     let data = {
         id: req.body.id, 
         alert_metric: req.body.alert_metric,
@@ -55,13 +57,14 @@ router.post("/updateAlert", (req, res, next) => {
         alert_email: req.body.alert_email,
         alert_phone: req.body.alert_phone,
         alert_repeat_secs: req.body.alert_repeat_secs,
+        alert_once:req.body.alert_once,
         active: req.body.active,        
         modified_time: new Date(),
     };
 
-    let sql = "UPDATE alerts SET alert_metric = ?, alert_threshold = ?, alert_email = ?, alert_phone = ?, alert_repeat_secs = ?, active = ?, modified_time = ? WHERE id = ?";
+    let sql = "UPDATE alerts SET alert_metric = ?, alert_threshold = ?, alert_email = ?, alert_phone = ?, alert_repeat_secs = ?, alert_once = ?, active = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.alert_metric, data.alert_threshold, data.alert_email, data.alert_phone, data.alert_repeat_secs, data.active, data.modified_time, data.id], (err, results) => {
+    db.query(sql, [data.alert_metric, data.alert_threshold, data.alert_email, data.alert_phone, data.alert_repeat_secs, data.alert_once, data.active, data.modified_time, data.id], (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));

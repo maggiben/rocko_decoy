@@ -10,18 +10,26 @@ const COINBASE_SCOPES = [
 ].join(',');
 
 const CURRENCY_SELECT: string | string[] = [
-  'WBTC',
+  // 'WBTC',
   'ETH',
-  'UNI',
-  'COMP',
-  'USDC',
+  // 'UNI',
+  // 'COMP',
+  // 'USDC',
 ].join(',');
 
 const SPEND_LIMIT_AMOUNT = '1'; // need to get app aproved to be more than 1
 
-export default function CoinbaseLoginBtn({ setModalStep }: any) {
+export default function CoinbaseLoginBtn({
+  setConnect,
+  setOpenModalFor,
+}: {
+  setConnect: any;
+  setOpenModalFor: any;
+}) {
   const handleLogin = () => {
     if (COINBASE_CLIENT_ID) {
+      console.log({ CURRENCY_SELECT, SPEND_LIMIT_AMOUNT });
+
       const params = new URLSearchParams();
       params.append('response_type', 'code');
       params.append('client_id', COINBASE_CLIENT_ID);
@@ -44,7 +52,8 @@ export default function CoinbaseLoginBtn({ setModalStep }: any) {
           'Coinbase Oauth',
           'height=600,width=800,left=10,top=10,titlebar=no,toolbar=no,menubar=no,location=no,directories=no,status=no',
         );
-      setModalStep && setModalStep(1);
+      setOpenModalFor && setOpenModalFor('');
+      setConnect && setConnect(false);
     }
   };
 

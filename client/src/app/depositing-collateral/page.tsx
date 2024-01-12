@@ -35,6 +35,8 @@ function DepositingCollateral() {
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
 
+  console.log(loanData);
+
   const anotherData = sessionStorage.getItem('borrowMoreData');
   const borrowMoreData = JSON.parse(anotherData || '{}');
 
@@ -77,6 +79,8 @@ function DepositingCollateral() {
     useGetLoan(collateral || 0, borrowing || 0);
 
   const start = async () => {
+    if (loanData?.paymentMethod !== 'ethereum') return;
+
     if (!wagmiAddress || !address || !(loanData || borrowMoreData)) return;
     if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error('Invalid Network!');

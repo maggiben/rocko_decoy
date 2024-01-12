@@ -55,14 +55,19 @@ router.get('/coinbase-balance', async (req, res) => {
 
         // Make a request to the Coinbase API to fetch the balance
         const response = await axios.get('https://api.coinbase.com/v2/accounts', { headers: headers });
+        console.log('Coinbase response:', response.data.data)
+        const eth_data = response.data.data.filter(
+            (data) => data.balance.currency === 'ETH',
+        );
+            console.log({eth_data});
 
         // Extract balance from the response
-        const balance = response.data.data[0].balance;
+        const balance = eth_data[0].balance;
 
         res.json({
             success: true,
             balance: balance,
-            response:  response.data.data[0]
+            response: eth_data
         });
     } catch (error) {
         console.error('Error fetching balance from Coinbase:', error, {statz: res.status});
@@ -80,7 +85,8 @@ router.post('/send-withdrawal', async (req, res) => {
     const CRYPTO_ADDRESS = req.body.crypto_address;
     const ACCOUNT_ID = req.body.accountId;
     const CB_2FA_TOKEN = req.body.cb_2fa_token;
-
+    console.log({AMOUNT, CURRENCY, CRYPTO_ADDRESS, ACCOUNT_ID });
+    
     if (!ACCESS_TOKEN || !AMOUNT) {
         return res.status(400).json({
             success: false,
@@ -116,12 +122,12 @@ router.post('/send-withdrawal', async (req, res) => {
     } catch (error) {
         
         console.error('Error sending withdrawal:', error);
+        console.log(JSON.stringify(error.response.data.errors));
 
         res.status(error.response.status).json({
             success: false,
-            message: `Failed to send withdrawal: ${error} ${error.response.statusText}`
+            message: error.response.data.errors
         });
-        
     }
 });
 

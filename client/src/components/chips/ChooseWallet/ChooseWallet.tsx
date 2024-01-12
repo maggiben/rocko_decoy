@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import closeIcon from '@/assets/Close.svg';
 import ModalContent from '../ModalContent/ModalContent';
+import CoinbaseLoginBtn from '../CoinbaseLoginBtn/CoinbaseLoginBtn';
 
 function ChooseWallet({
   setOpenModalFor,
@@ -14,6 +15,8 @@ function ChooseWallet({
   setConnect?: (value: boolean) => void; //! setConnect is only passed from modify-collateral page that's why it's optional
 }) {
   const [activeBtn, setActiveBtn] = useState<boolean>(false); //! on clicking any radio button the value will be true and continue btn will be activated
+  const [selected, setSelected] = useState<string>('');
+
   const handleContinueBtn = () => {
     if (setConnect) {
       setConnect(false);
@@ -62,7 +65,10 @@ function ChooseWallet({
             name="recommended-wallet"
             value="Coinbase"
             className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-            onClick={() => setActiveBtn(true)}
+            onClick={() => {
+              setActiveBtn(true);
+              setSelected('Coinbase');
+            }}
           />
           <label htmlFor="Coinbase" className="pl-4">
             <p className="font-semibold">Coinbase</p>
@@ -75,7 +81,10 @@ function ChooseWallet({
             name="recommended-wallet"
             value="Gemini"
             className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
-            onClick={() => setActiveBtn(true)}
+            onClick={() => {
+              setActiveBtn(true);
+              setSelected('Gemini');
+            }}
           />
           <label htmlFor="Gemini" className="pl-4">
             <p className="font-semibold">Gemini</p>
@@ -94,15 +103,24 @@ function ChooseWallet({
         )}
     </div> */}
       <div>
-        <button
-          onClick={handleContinueBtn}
-          className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
-            activeBtn ? 'bg-[#2C3B8D] text-white' : 'text-gray-100 bg-[#ABB1D1]'
-          }`}
-          disabled={!activeBtn} //! on clicking any radio button the value will be false and continue btn will be activated
-        >
-          Continue
-        </button>
+        {selected === 'Coinbase' ? (
+          <CoinbaseLoginBtn
+            setConnect={setConnect}
+            setOpenModalFor={setOpenModalFor}
+          />
+        ) : (
+          <button
+            onClick={handleContinueBtn}
+            className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
+              activeBtn
+                ? 'bg-[#2C3B8D] text-white'
+                : 'text-gray-100 bg-[#ABB1D1]'
+            }`}
+            disabled={!activeBtn} //! on clicking any radio button the value will be false and continue btn will be activated
+          >
+            Continue
+          </button>
+        )}
       </div>
     </ModalContent>
   );

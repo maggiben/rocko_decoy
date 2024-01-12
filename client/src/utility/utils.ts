@@ -93,3 +93,8 @@ export const getFrequencyObject = (repeat: number) => {
     };
   }
 };
+
+export function setDelay(delay: number) {
+  /* eslint-disable no-promise-executor-return */
+  return new Promise((res) => setTimeout(res, delay));
+}

@@ -23,4 +23,6 @@ module.exports = {
     'Trailing APRs are calculated as the average interest rate for the loan based on the previous 30 or 365 days. Interest rates are pulled every 30 minutes as part of the calculation.',
   AVERAGE_APR:
     'This is the average APR for the length of this loan. It is calculated using your beginning interest rate and then the interest rate at every hour and half hour for the course of your loan.',
+  FLOATING:
+    'Floating rates are interest rates that change in real-time according to a predefined formula — usually based on the market demand and supply of an asset.',
 };

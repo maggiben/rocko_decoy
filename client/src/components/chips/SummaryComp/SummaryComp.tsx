@@ -11,6 +11,7 @@ import StatusWarning from '@/assets/StatusWarning.svg';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
+import { useAccount } from 'wagmi';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import ChooseWallet from '../ChooseWallet/ChooseWallet';
 import LoanFinalized from '../LoanFinalized/LoanFinalized';
@@ -59,6 +60,7 @@ function SummaryComp(props: Props) {
 
   const { title, subTitle, invoiceTitle, category } = props;
 
+  const { address: zerodevAccount } = useAccount();
   const [paymentMethod, setPaymentMethod] = useState('');
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);
@@ -135,6 +137,21 @@ function SummaryComp(props: Props) {
       ],
     },
   ];
+
+  const OnSignIn = () => {
+    setOpenModalFor('Coinbase or Gemini');
+    setPaymentMethod('default');
+
+    const { sessionStorage } = window;
+    sessionStorage.setItem(
+      'coinbasePayment',
+      JSON.stringify({
+        currency: 'ETH',
+        amount: collateralPayment,
+        account: zerodevAccount?.toString(),
+      }),
+    );
+  };
 
   useEffect(() => {
     getETHPrice()
@@ -255,10 +272,7 @@ function SummaryComp(props: Props) {
               </div>
               <div className="text-center md:text-left mt-1 lg:mt-0">
                 <button
-                  onClick={() => {
-                    setOpenModalFor('Coinbase or Gemini');
-                    setPaymentMethod('default');
-                  }}
+                  onClick={OnSignIn}
                   className="w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]"
                 >
                   Sign in
