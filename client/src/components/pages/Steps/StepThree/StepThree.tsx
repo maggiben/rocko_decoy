@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { ProtocolStep } from '@/types/type';
 // import FilterOptions from '@/components/chips/FilterOptions/FilterOptions';
 // import SortOptions from '@/components/chips/SortOptions/SortOptions';
-import Protocol from '@/components/chips/Protocol/Protocol';
+// import Protocol from '@/components/chips/Protocol/Protocol';
 import CompoundProtocol from '@/components/chips/Protocol/CompoundProtocol';
 import useLoanData from '@/hooks/useLoanData';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
@@ -10,7 +10,7 @@ import ProtocolBanner from '@/components/ProtocolsBanner';
 
 // type FilterOptionsProps = string;
 
-const StepThree: FC<ProtocolStep> = ({ title, protocols }) => {
+const StepThree: FC<ProtocolStep> = ({ title }) => {
   const { loanData, setLoanData } = useLoanData();
   const [selectProtocol, setSelectProtocol] = useState('');
   // const [sortOption, setSortOption] = useState('APR (lowest)');
