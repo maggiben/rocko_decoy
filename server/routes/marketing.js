@@ -7,7 +7,7 @@ router.get('/follower-count', async (req, res) => {
     const list_id = process.env.MAILCHIMP_LIST_ID; 
 
     if (!apiKey || !list_id) {
-        res.status(401).json({
+        return res.status(401).json({
             success: false,
             message: 'Missing Mailchimp creds'
         });
