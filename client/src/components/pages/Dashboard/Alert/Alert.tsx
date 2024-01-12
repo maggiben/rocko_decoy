@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { useAlertDB } from '@/db/alertDb';
+import { useUserDB } from '@/db/userDb';
 import { getFrequencyObject } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import CollateralBufferAlerts from './collateralBufferAlerts/collateralBufferAlerts';
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
+  const [userPhone, setUserPhone] = useState<string>('');
+  const { getUserData } = useUserDB();
   const { userInfo } = useZeroDev();
   const { getAlertData } = useAlertDB();
   const {
@@ -52,7 +55,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
               id: alert.id,
               alertMethods: {
                 email: alert?.alert_email === 1 ? userInfo?.email : '',
-                sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
+                sms: alert?.alert_phone === 1 ? userPhone : '',
               },
               currentInterestRate: {
                 percentage: alert?.alert_threshold,
@@ -74,7 +77,7 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
               id: alert.id,
               alertMethods: {
                 email: alert?.alert_email === 1 ? userInfo?.email : '',
-                sms: alert?.alert_phone === 1 ? '55.555.5555' : '',
+                sms: alert?.alert_phone === 1 ? userPhone : '',
               },
               currentCollateralBuffer: {
                 percentage: alert?.alert_threshold,
@@ -97,8 +100,18 @@ const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
     await getAlerts();
   };
 
+  const fetchPhone = async (email: string) => {
+    try {
+      const user = await getUserData(email);
+      setUserPhone(user?.[0]?.phone);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (loanId) getAlerts();
+    fetchPhone(userInfo?.email);
   }, [userInfo, loanId]);
 
   useEffect(() => {

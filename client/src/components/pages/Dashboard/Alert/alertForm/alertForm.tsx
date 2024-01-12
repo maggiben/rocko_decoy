@@ -9,6 +9,7 @@ import { AlertFormProps, AprAlertType, BufferAlertType } from '@/types/type';
 import { useAlertDB } from '@/db/alertDb';
 import { useAlert } from '@/context/alertContext/alertContext';
 import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserDB } from '@/db/userDb';
 import closeIcon from '@/assets/Close.svg';
 import { UPDATE_ALERT } from '@/constants/alertType';
 import { FLAG_SMS_ALERTS } from '@/constants/featureFlags';
@@ -25,8 +26,9 @@ const AlertForm: FC<AlertFormProps> = ({
   forUpdate,
   updateIndex,
 }) => {
+  const [userPhone, setUserPhone] = useState<string>('');
   const { userInfo } = useZeroDev();
-
+  const { getUserData } = useUserDB();
   const { addAlert, updateAlert } = useAlertDB();
   const {
     aprAlertDispatch,
@@ -34,6 +36,20 @@ const AlertForm: FC<AlertFormProps> = ({
     bufferAlertState,
     bufferAlertDispatch,
   } = useAlert();
+
+  const fetchPhone = async (email: string) => {
+    try {
+      const user = await getUserData(email);
+      setUserPhone(user?.[0]?.phone);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPhone(userInfo?.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo?.email]);
 
   const [collateralBufferAlert, setCollateralBufferAlert] =
     useState<BufferAlertType>({
@@ -405,7 +421,7 @@ const AlertForm: FC<AlertFormProps> = ({
                 <input
                   type="text"
                   required
-                  defaultValue="555.555.5555"
+                  value={userPhone}
                   ref={collateralCallRef}
                   readOnly
                   className="grow focus:outline-none cursor-default"
