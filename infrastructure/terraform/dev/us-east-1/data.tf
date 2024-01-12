@@ -39,3 +39,11 @@ data "aws_secretsmanager_secret_version" "sendgrid_api_key" {
 data "aws_secretsmanager_secret_version" "messagebird_api_key" {
   secret_id = "prod/messagebird_key"
 }
+
+data "aws_secretsmanager_secret_version" "mailchimp_key" {
+  secret_id = "prod/mailchimp_key"
+}
+
+data "aws_secretsmanager_secret_version" "mailchimp_list" {
+  secret_id = "prod/mailchimp_list"
+}

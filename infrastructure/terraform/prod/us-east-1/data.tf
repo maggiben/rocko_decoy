@@ -28,6 +28,14 @@ data "aws_secretsmanager_secret_version" "vpnapi_key" {
   secret_id = "prod/vpn_api_key"
 }
 
+data "aws_secretsmanager_secret_version" "mailchimp_key" {
+  secret_id = "prod/mailchimp_key"
+}
+
+data "aws_secretsmanager_secret_version" "mailchimp_list" {
+  secret_id = "prod/mailchimp_list"
+}
+
 data "aws_vpc" "dev-infrastructure-vpc" {
   filter {
     name   = "tag:Name"

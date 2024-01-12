@@ -71,7 +71,9 @@ resource "aws_ecs_task_definition" "rocko_backend" {
       {"name": "ROCKO_DB_HOST", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["host"]}"},
       {"name": "ROCKO_DB_USER", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["username"]}"},
       {"name": "ROCKO_DB_PASSWORD", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"},
-      {"name": "ROCKO_DB_DATABASE", "value": "rocko_main"}
+      {"name": "ROCKO_DB_DATABASE", "value": "rocko_main"},
+      {"name": "MAILCHIMP_API_KEY", "value": "${jsondecode(data.aws_secretsmanager_secret_version.mailchimp_key.secret_string)["api_key"]}"},
+      {"name": "MAILCHIMP_LIST_ID", "value": "${jsondecode(data.aws_secretsmanager_secret_version.mailchimp_list.secret_string)["list_id"]}"}
     ],
     "portMappings": [
       {
