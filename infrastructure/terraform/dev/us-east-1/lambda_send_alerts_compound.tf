@@ -22,15 +22,16 @@ resource "aws_lambda_function" "send_alerts_compound" {
 
   environment {
     variables = {
-      ROCKO_ENV        = local.environment
-      DATABASE_HOST    = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["host"]}"
-      DATABASE_USER    = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["username"]}"
-      DATABASE_PASS    = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"
-      DATABASE_DB      = "rocko_develop",
-      SENDGRID_API_KEY = "${jsondecode(data.aws_secretsmanager_secret_version.sendgrid_api_key.secret_string)["auth_token"]}"
-      PROVIDER         = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url.secret_string)["url"]}"
-      COMET_CONTRACT   = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMET_CONTRACT"]}"
-      WETH_CONTRACT    = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["WETH_CONTRACT"]}"
+      ROCKO_ENV           = local.environment
+      DATABASE_HOST       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["host"]}"
+      DATABASE_USER       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["username"]}"
+      DATABASE_PASS       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"
+      DATABASE_DB         = "rocko_develop",
+      SENDGRID_API_KEY    = "${jsondecode(data.aws_secretsmanager_secret_version.sendgrid_api_key.secret_string)["auth_token"]}"
+      MESSAGEBIRD_API_KEY = "${jsondecode(data.aws_secretsmanager_secret_version.messagebird_api_key.secret_string)["auth_token"]}"
+      PROVIDER            = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url.secret_string)["url"]}"
+      COMET_CONTRACT      = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMET_CONTRACT"]}"
+      WETH_CONTRACT       = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["WETH_CONTRACT"]}"
     }
   }
 

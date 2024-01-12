@@ -3,7 +3,7 @@ import os
 import requests
 import sys
 
-API_KEY=os.environ.get('ROCKO_MESSAGEBIRD_API_KEY')
+API_KEY=os.environ.get('MESSAGEBIRD_API_KEY')
 
 CHANNEL_ID = "bca1c70c-bf08-4832-b821-459cc85e8fcc"
 WORKSPACE_ID = "18c67992-c7ba-470d-9189-da495ab636a6"
