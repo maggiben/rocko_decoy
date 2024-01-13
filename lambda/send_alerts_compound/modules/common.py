@@ -19,11 +19,13 @@ def send_alert(email_message, send_to_email, send_to_phone, loan_id, logger):
     logger.debug(f"Sending alert to {alert_email_address}")
     send_email.send_email_alert(alert_email_address, email_message)
 
-  elif send_to_phone:
+  if send_to_phone:
     alert_phone_number = get_user_phone_from_loan_id(loan_id)
+    sms_message = email_message[2].replace("<br>", "\n")
     logger.debug(f"Sending alert to {alert_phone_number}")
-    send_sms.send_sms_alert(alert_phone_number, "Test SMS Alert from Rocko")
-  else:
+    send_sms.send_sms_alert(alert_phone_number, sms_message)
+  
+  if not send_to_email and not send_to_phone:
     logger.error("Invalid message alert type")
 
   return True
