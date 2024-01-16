@@ -8,6 +8,11 @@ function Layout({ children }) {
     <div>
       <Navbar />
       <div>{children}</div>
+      <script
+        src="https://app.prival.co/static/chatbot/js/chatbubble.js"
+        data-id="ed90f4b2-3ac7-4a26-99b7-2a7ae2cfd9c8"
+        data-domain="https://app.prival.co"
+      />
     </div>
   )
 }

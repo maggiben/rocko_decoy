@@ -11,7 +11,7 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || CLIENT_URL || /(^https:\/\/)([a-z0-9]+[.])*testnet.rocko.co$/.test(origin)) {
+    if (!origin || CLIENT_URL || /(^https:\/\/)(([a-z0-9]+[.])*testnet.)?rocko.co$/.test(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

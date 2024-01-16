@@ -68,6 +68,16 @@ function ContactForm() {
         <div className="text-lg mb-8">
           Please reach out with any questions or feature requests.
         </div>
+        <iframe
+          src="https://app.prival.co/en/chatbot/embed/ed90f4b2-3ac7-4a26-99b7-2a7ae2cfd9c8"
+          width="100%"
+          height="600"
+          frameBorder="0"
+        />
+        <h2 className="text-4xl">Email</h2>
+        <div className="text-lg mb-8">
+          Drop us a DM and we&apos;ll get in touch ASAP
+        </div>
         <form action={FORM_ENDPOINT} onSubmit={handleSubmit} method="POST">
           <div className="pt-0 mb-3">
             <input
