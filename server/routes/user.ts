@@ -28,6 +28,25 @@ router.post(
     }
 );
   
+router.post(
+  '/updateUser', (req, res, next) => {
+    let data = {
+      email: req.body.email,
+      phone: req.body.phone,
+      modified_time: new Date(),
+    };
+    let sql = "UPDATE users SET phone = ?, modified_time = ? WHERE email = ?";
+
+    db.query(sql, [data.phone, data.modified_time, data.email], (err, results) => {
+      if (err) {
+        console.error(err);
+        return next(new Error('Database query failed'));
+      }
+      res.send("User's Phone data successfully updated");
+    });
+  }
+);
+
 // Get all users
 
 router.post('/users', (req, res, next) => {

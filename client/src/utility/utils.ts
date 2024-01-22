@@ -98,3 +98,10 @@ export function setDelay(delay: number) {
   /* eslint-disable no-promise-executor-return */
   return new Promise((res) => setTimeout(res, delay));
 }
+
+export const formatPhoneNumber = (phoneNumber: string) => {
+  let formattedNumber = phoneNumber.replace(/\D/g, '');
+  formattedNumber = `+${formattedNumber}`;
+
+  return formattedNumber;
+};

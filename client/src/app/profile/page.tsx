@@ -1,20 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import Image from 'next/image';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserDB } from '@/db/userDb';
 import { USDCContract, WETHContract, networkChainId } from '@/constants';
 import financial from '@/utility/currencyFormate';
-import { etherscanLink } from '@/utility/utils';
+import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState('');
   const { userInfo } = useZeroDev();
   const { address: zerodevAccount } = useAccount();
+  const { updateUser, getUserData } = useUserDB();
 
   const { data: ETH_Balance } = useBalance({
     address: zerodevAccount as `0x${string}`,
@@ -146,6 +151,29 @@ const Profile: React.FC = () => {
     },
   ];
 
+  const handleSavePhoneClick = () => {
+    setContactNumber(inputContactNumber === '+' ? '' : inputContactNumber);
+    setOpenContactNumberEdit(!openContactNumberEdit);
+
+    const phoneFlattened =
+      inputContactNumber === '+' ? '' : formatPhoneNumber(inputContactNumber);
+    updateUser(userInfo?.email, phoneFlattened);
+  };
+
+  const fetchPhone = async (email: string) => {
+    try {
+      const user = await getUserData(email);
+      setInputContactNumber(user?.[0]?.phone);
+      setContactNumber(user?.[0]?.phone);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo) fetchPhone(userInfo?.email);
+  }, [userInfo]);
+
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Profile & Settings</h1>
@@ -241,14 +269,30 @@ const Profile: React.FC = () => {
                     {info?.description === 'Contact Number' &&
                       openContactNumberEdit && (
                         <>
-                          <input
-                            type="text"
-                            autoComplete="off"
+                          <PhoneInput
+                            country="us"
+                            excludeCountries={[
+                              'cu',
+                              'ir',
+                              'kp',
+                              'ru',
+                              'sy',
+                              'ua',
+                            ]}
+                            containerClass="border-2 border-gray-200 rounded-lg bg-white mb-4"
+                            inputClass="w-full focus:outline-none bg-white number-input"
+                            inputStyle={{
+                              width: '100%',
+                              height: '50px',
+                              fontSize: '16px',
+                              fontWeight: '300',
+                            }}
+                            enableAreaCodes
+                            enableSearch
                             value={inputContactNumber}
-                            onChange={(e) =>
-                              setInputContactNumber(e.target.value)
-                            }
-                            className="w-full p-3 focus:outline-none border-2 border-gray-200 rounded-lg bg-white number-input mb-4"
+                            onChange={(value, country, e, formattedValue) => {
+                              setInputContactNumber(formattedValue);
+                            }}
                           />
                           <div className="mb-4 flex justify-between">
                             <div />
@@ -265,12 +309,7 @@ const Profile: React.FC = () => {
                               </button>
                               <button
                                 className="font-semibold  text-xs md:text-sm text-white py-[10px] w-[95px] px-6 rounded-full bg-blue mr-2"
-                                onClick={() => {
-                                  setContactNumber(inputContactNumber);
-                                  setOpenContactNumberEdit(
-                                    !openContactNumberEdit,
-                                  );
-                                }}
+                                onClick={handleSavePhoneClick}
                               >
                                 Save
                               </button>

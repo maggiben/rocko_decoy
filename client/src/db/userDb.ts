@@ -21,6 +21,16 @@ export const useUserDB = () => {
     });
   };
 
+  const updateUser = async (email: string, phone: string) => {
+    const userObject = {
+      email,
+      phone,
+    };
+    axios.post(`${BACKEND_URL}/updateUser`, userObject).then((res) => {
+      console.log(res.data);
+    });
+  };
+
   const getUserData = async (email: string) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/users`, {
@@ -89,6 +99,7 @@ export const useUserDB = () => {
 
   return {
     addUser,
+    updateUser,
     getUserData,
     getUserId,
     isVPN,
