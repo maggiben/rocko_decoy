@@ -221,6 +221,19 @@ const StepFive: React.FC = () => {
     );
   };
 
+  const handleOtherWalletBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const otherWallet = event.target.value;
+
+    console.log(otherWallet);
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        otherAddress: otherWallet,
+      }));
+    }
+  };
+
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Finalize Your Loan</h1>
@@ -389,10 +402,11 @@ const StepFive: React.FC = () => {
                     <p className="text-sm font-semibold font-inter mb-2">
                       Enter Wallet Address
                     </p>
-                    <div className="max-w-[426px] w-full">
+                    <div className="max-w-[450px] w-full">
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        onBlur={handleOtherWalletBlur}
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

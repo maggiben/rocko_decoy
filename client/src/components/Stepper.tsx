@@ -36,6 +36,7 @@ export default function Stepper(props: Props) {
   const { steps } = props;
 
   const { address: zerodevAccount } = useAccount();
+
   const { userInfo } = useZeroDev();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
@@ -86,6 +87,11 @@ export default function Stepper(props: Props) {
       return;
     }
 
+    if (loanData?.otherAddress === '' && currentStep === loanSteps.length - 1) {
+      toast.error('Please input wallet address!');
+      return;
+    }
+
     if (loanData?.nextValidation && setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
@@ -94,7 +100,6 @@ export default function Stepper(props: Props) {
       return;
     }
 
-    setIsFinalized(currentStep === loanSteps.length - 1);
     setShowQR(loanData.paymentMethod === 'other' && currentStep === 4);
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
       setCurrentStep(currentStep + 1);
@@ -104,6 +109,14 @@ export default function Stepper(props: Props) {
           activeNextButton: false,
         }));
       }
+    }
+
+    // if click Finalize Loan button
+    if (currentStep === loanSteps.length - 1 && loanData) {
+      const { sessionStorage } = window;
+      sessionStorage.setItem('loanData', JSON.stringify(loanData));
+
+      setIsFinalized(true);
     }
   };
 
@@ -201,7 +214,6 @@ export default function Stepper(props: Props) {
       </div>
       {isFinalized && showQR && (
         <TransferCollateral
-          lowAmount={false}
           onOk={handleOnOk}
           onCancel={() => {
             setShowQR(false);

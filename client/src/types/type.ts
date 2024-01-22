@@ -119,6 +119,7 @@ export interface LoanData {
   twelveMonthInterest: number;
   twentyFourMonthInterest: number;
   paymentMethod: string;
+  otherAddress: string;
   cryptoName: string;
   cryptoIcon: string;
   buffer: number;

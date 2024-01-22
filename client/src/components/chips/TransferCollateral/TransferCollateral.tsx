@@ -3,20 +3,27 @@ import QRCode from 'react-qr-code';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import contentCopy from '@/assets/content_copy.svg';
 import { useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 import closeIcon from '@/assets/Close.svg';
+import useLoanData from '@/hooks/useLoanData';
+import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import Warning from '../Warning/Warning';
 
 type Props = {
-  lowAmount: boolean;
   onOk: () => void;
   onCancel: () => void;
 };
 
 function TransferCollateral(props: Props) {
-  const { lowAmount, onCancel, onOk } = props;
+  const { onCancel, onOk } = props;
   const [warning, setWarning] = useState(false);
+  const [lowAmount, setLowAmount] = useState<boolean>(false);
+
+  const { loanData } = useLoanData();
+  const { address: zerodevAccount } = useAccount();
+  const { data } = useBalance({ address: zerodevAccount as `0x${string}` });
 
   if (warning) {
     return (
@@ -30,6 +37,19 @@ function TransferCollateral(props: Props) {
       </ModalContainer>
     );
   }
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(loanData?.otherAddress);
+  };
+
+  const handleOnContinue = () => {
+    const isLowAmount = Number(data?.formatted) < loanData?.collateralNeeded;
+
+    console.log(isLowAmount);
+
+    setLowAmount(isLowAmount);
+    if (!isLowAmount) onOk();
+  };
 
   return (
     <ModalContainer>
@@ -82,7 +102,7 @@ function TransferCollateral(props: Props) {
                   Amount Received
                 </p>
                 <p className="font-normal	text-blackPrimary text-[16px]">
-                  0 ETH
+                  {financial(data?.formatted, 3)} ETH
                 </p>
               </div>
               <div className="flex items-center gap-x-[4px] bg-[#F7B13329] rounded-[5px] py-[3px] ps-[4px] pe-[8px] cursor-pointer">
@@ -103,11 +123,11 @@ function TransferCollateral(props: Props) {
               Amount Required{' '}
             </p>
             <p className="font-normal	text-blackPrimary text-[16px]">
-              14.7341 ETH
+              {financial(loanData?.collateralNeeded, 3)} ETH
             </p>
           </div>
           <div className=" flex items-center flex-col py-[16px]">
-            <QRCode value="hello" size={200} />
+            <QRCode value={loanData?.otherAddress} size={200} />
             <p className="text-blackSecondary text-[14px] text-center mt-[12px]">
               Scan within your exchange mobile app
             </p>
@@ -117,14 +137,13 @@ function TransferCollateral(props: Props) {
               <p className="font-normal	text-blackSecondary text-[14px]">
                 Address
               </p>
-              <p className="font-normal	text-blackPrimary text-[16px] text-wrap">
-                0xC02aaA39b223FE8D0A0e5C4F27eAD908
-                <br />
-                3C756Cc2
+              <p className="font-normal	text-blackPrimary text-[14px] text-wrap">
+                {loanData?.otherAddress}
               </p>
             </div>
             <Image
               src={contentCopy}
+              onClick={copyToClipboard}
               alt="contentCopy"
               className="cursor-pointer"
             />
@@ -132,12 +151,22 @@ function TransferCollateral(props: Props) {
         </div>
         {/* continue button */}
         <div className="flex gap-x-[12px]  items-center">
-          <button
-            onClick={lowAmount ? onCancel : onOk}
-            className="py-[10px] px-6 rounded-full text-sm font-semibold bg-[#2C3B8D] text-white"
-          >
-            {lowAmount ? 'Go back and add collateral' : 'Continue'}
-          </button>
+          {!lowAmount && (
+            <button
+              onClick={handleOnContinue}
+              className="py-[10px] px-6 rounded-full text-sm font-semibold bg-[#2C3B8D] text-white"
+            >
+              Continue
+            </button>
+          )}
+          {lowAmount && (
+            <button
+              onClick={onCancel}
+              className="py-[10px] px-6 rounded-full text-sm font-semibold bg-[#2C3B8D] text-white"
+            >
+              Go back and add collateral
+            </button>
+          )}
           {lowAmount && (
             <button
               onClick={() => setWarning(true)}

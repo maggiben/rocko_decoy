@@ -1,12 +1,24 @@
 import Image from 'next/image';
 import QRCode from 'react-qr-code';
 import contentCopy from '@/assets/content_copy.svg';
+import { useAccount, useBalance } from 'wagmi';
+import useLoanData from '@/hooks/useLoanData';
+import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
 
 type Props = { goBack: () => void; proceedAnyway: () => void };
 
 function Warning(props: Props) {
   const { goBack, proceedAnyway } = props;
+
+  const { loanData } = useLoanData();
+  const { address: zerodevAccount } = useAccount();
+  const { data } = useBalance({ address: zerodevAccount as `0x${string}` });
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(loanData?.otherAddress);
+  };
+
   return (
     <ModalContent className="max-h-[90vh] overflow-y-auto">
       <div className="flex items-start justify-between gap-2 ">
@@ -26,7 +38,7 @@ function Warning(props: Props) {
               Amount Received
             </p>
             <p className="font-normal	text-blackPrimary text-[16px]">
-              10.8278 ETH
+              {financial(data?.formatted, 3)} ETH
             </p>
           </div>
         </div>
@@ -35,7 +47,7 @@ function Warning(props: Props) {
             Amount Required
           </p>
           <p className="font-normal	text-blackPrimary text-[16px]">
-            14.7341 ETH
+            {financial(loanData?.collateralNeeded, 3)} ETH
           </p>
         </div>
         <div className="flex justify-between items-center pt-[5px]">
@@ -43,20 +55,19 @@ function Warning(props: Props) {
             <p className="font-normal	text-blackSecondary text-[14px]">
               Address
             </p>
-            <p className="font-normal	text-blackPrimary text-[16px] text-wrap">
-              0xC02aaA39b223FE8D0A0e5C4F27eAD908
-              <br />
-              3C756Cc2
+            <p className="font-normal	text-blackPrimary text-[14px] text-wrap">
+              {loanData?.otherAddress}
             </p>
           </div>
           <Image
             src={contentCopy}
+            onClick={copyToClipboard}
             alt="contentCopy"
             className="cursor-pointer"
           />
         </div>
         <div className=" flex   flex-col py-[5px]">
-          <QRCode value="hello" size={100} />
+          <QRCode value={loanData?.otherAddress} size={100} />
           <p className="text-blackSecondary text-[14px]   mt-[12px]">
             Scan within your exchange mobile app
           </p>

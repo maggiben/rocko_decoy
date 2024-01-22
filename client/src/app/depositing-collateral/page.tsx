@@ -21,6 +21,7 @@ import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
+import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
   step: string;
@@ -35,8 +36,6 @@ function DepositingCollateral() {
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
 
-  console.log(loanData);
-
   const anotherData = sessionStorage.getItem('borrowMoreData');
   const borrowMoreData = JSON.parse(anotherData || '{}');
 
@@ -50,6 +49,7 @@ function DepositingCollateral() {
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
   const [totalBorrowing, setTotalBorrowing] = useState<number>(borrowing);
   const [totalCollateral, setTotalCollateral] = useState<number>(collateral);
+  const [collateralReceived, setCollateralReceived] = useState<boolean>(false);
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -69,10 +69,11 @@ function DepositingCollateral() {
   const { getUserId } = useUserDB();
   // Thirdweb for EOA
   const address = useAddress();
+  const { data } = useBalance({ address: address as `0x${string}` });
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
   const { address: wagmiAddress } = useAccount();
-  const { data } = useBalance({ address: address as `0x${string}` });
+  const { data: wagmiBalance } = useBalance({ address: wagmiAddress });
 
   const { chain } = useNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
@@ -168,6 +169,36 @@ function DepositingCollateral() {
       });
     }
   };
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(wagmiAddress as `0x${string}`);
+  };
+
+  useEffect(() => {
+    console.log(wagmiBalance?.formatted);
+    console.log(collateral);
+    console.log(collateralReceived);
+    console.log(loanData?.paymentMethod);
+
+    if (
+      loanData?.paymentMethod !== 'ethereum' &&
+      Number(wagmiBalance?.formatted) >= Number(collateral) &&
+      !collateralReceived
+    ) {
+      console.log('start!!!---');
+
+      setStartA(true);
+
+      setCollateralReceived(true);
+      setADone();
+
+      toast.success('Collateral is successfully received!');
+
+      // do batchTransactions
+      executeBatchGetLoan();
+      setStartB(true);
+    }
+  }, [wagmiBalance]);
 
   useEffect(() => {
     if (batchGetLoan !== undefined && userInfo !== undefined) {
@@ -415,7 +446,7 @@ function DepositingCollateral() {
                 Amount Received
               </p>
               <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
-                0 ETH{' '}
+                {financial(wagmiBalance?.formatted, 4)} ETH{' '}
               </p>
             </div>
             {/* <p className='bg-[#E6F2ED] rounded-[5px] flex items-center gap-x-1 py-0.5 ps-1 pe-2'></p> */}
@@ -425,7 +456,7 @@ function DepositingCollateral() {
               Amount Required
             </p>
             <p className="font-normal	text-blackPrimary text-[16px] leading-6">
-              14.7341 ETH{' '}
+              {financial(collateral, 4)} ETH{' '}
             </p>
           </div>
           <div className="flex justify-between items-center pt-[16px] ">
@@ -434,19 +465,20 @@ function DepositingCollateral() {
                 Rocko Wallet Address
               </p>
               <p className="font-normal	text-blackPrimary text-[16px] leading-6 text-wrap">
-                0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+                {wagmiAddress}
               </p>
             </div>
             <Image
               src={contentCopy}
               alt="contentCopy"
               className="cursor-pointer"
+              onClick={copyToClipboard}
             />
           </div>
         </div>
       </section>
       {completeModal && (
-        <TransferCollateral lowAmount onCancel={onBack} onOk={proceedAnyway} />
+        <TransferCollateral onCancel={onBack} onOk={proceedAnyway} />
       )}
       {showFinalModal && (
         <ModalContainer>
