@@ -1,8 +1,15 @@
-import React, { JSX, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import correct from '@/assets/correct.svg';
-import { ConnectWallet } from '@thirdweb-dev/react';
+import {
+  ConnectWallet,
+  ChainId,
+  useNetworkMismatch,
+  useSwitchChain,
+  useAddress,
+  useChain,
+} from '@thirdweb-dev/react';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
@@ -59,6 +66,12 @@ const terms: Term[] = [
 const StepFive: React.FC = () => {
   const { loanData, setLoanData } = useLoanData();
   const { address: zerodevAccount } = useAccount();
+
+  // for auto-switch network
+  const address = useAddress();
+  const chain = useChain();
+  const isMismatched = useNetworkMismatch();
+  const switchChain = useSwitchChain();
 
   const invoice = [
     {
@@ -233,6 +246,12 @@ const StepFive: React.FC = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    if (isMismatched) {
+      switchChain(ChainId.Mainnet);
+    }
+  }, [address, chain]);
 
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">

@@ -6,7 +6,14 @@ import {
   FLAG_COINBASE_FUNDING,
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
-import { ConnectWallet } from '@thirdweb-dev/react';
+import {
+  ConnectWallet,
+  ChainId,
+  useNetworkMismatch,
+  useSwitchChain,
+  useAddress,
+  useChain,
+} from '@thirdweb-dev/react';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
@@ -69,6 +76,12 @@ function SummaryComp(props: Props) {
 
   const { getETHPrice } = useSingleLoan();
   const [collateralPrice, setCollateralPrice] = useState<number>(0);
+
+  // for auto-switch network
+  const address = useAddress();
+  const chain = useChain();
+  const isMismatched = useNetworkMismatch();
+  const switchChain = useSwitchChain();
 
   const invoice: any = [
     {
@@ -172,6 +185,12 @@ function SummaryComp(props: Props) {
       }));
     }
   };
+
+  useEffect(() => {
+    if (isMismatched) {
+      switchChain(ChainId.Mainnet);
+    }
+  }, [address, chain]);
 
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">

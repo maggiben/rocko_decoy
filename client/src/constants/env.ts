@@ -5,7 +5,7 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // rexpects mainnet, goerli, etc
 type NetworkNames = 'mainnet' | 'goerli' | 'sepolia';
 export const NETWORK: NetworkNames =
-  (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'goerli';
+  (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'mainnet';
 export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || '';
 export const THIRDWEB_CLIENTID =
   process.env.NEXT_PUBLIC_THIRDWEB_CLIENTID || '';

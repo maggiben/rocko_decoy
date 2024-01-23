@@ -11,7 +11,14 @@ import correct from '@/assets/correct.svg';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
-import { useAddress, ConnectWallet } from '@thirdweb-dev/react';
+import {
+  ConnectWallet,
+  ChainId,
+  useNetworkMismatch,
+  useSwitchChain,
+  useAddress,
+  useChain,
+} from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
@@ -96,10 +103,15 @@ const MakePayment: FC = () => {
   const amount = 'add'; //! get the URL parameter amount value
 
   const { address: zerodevAccount } = useAccount();
-  const address = useAddress();
   const { getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
+
+  // for auto-switch network
+  const address = useAddress();
+  const chain = useChain();
+  const isMismatched = useNetworkMismatch();
+  const switchChain = useSwitchChain();
 
   const invoice: Info[] = [
     {
@@ -210,6 +222,12 @@ const MakePayment: FC = () => {
       .then((_buffer) => setBuffer(_buffer))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
+
+  useEffect(() => {
+    if (isMismatched) {
+      switchChain(ChainId.Mainnet);
+    }
+  }, [address, chain]);
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
