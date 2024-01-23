@@ -175,18 +175,11 @@ function DepositingCollateral() {
   };
 
   useEffect(() => {
-    console.log(wagmiBalance?.formatted);
-    console.log(collateral);
-    console.log(collateralReceived);
-    console.log(loanData?.paymentMethod);
-
     if (
       loanData?.paymentMethod !== 'ethereum' &&
       Number(wagmiBalance?.formatted) >= Number(collateral) &&
       !collateralReceived
     ) {
-      console.log('start!!!---');
-
       setStartA(true);
 
       setCollateralReceived(true);
