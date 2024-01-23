@@ -27,8 +27,9 @@ router.post(
 // Get all users
 
 router.post('/users', (req, res, next) => {
-    let sql = `SELECT * FROM users WHERE email = '${req.body.email}'`;
-    db.query(sql, (err, results) => {
+    let sql = `SELECT * FROM users WHERE email = ?`;
+    const params = [req.body.email];
+    db.query(sql, params, (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));
@@ -40,8 +41,9 @@ router.post('/users', (req, res, next) => {
 // Get user id
 
 router.post('/userid', (req, res, next) => {
-    let sql = `SELECT id FROM users WHERE email = '${req.body.email}'`;
-    db.query(sql, (err, results) => {
+    let sql = `SELECT id FROM users WHERE email = ?`;
+    const params = [req.body.email];
+    db.query(sql, params, (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));

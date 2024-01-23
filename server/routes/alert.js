@@ -6,8 +6,9 @@ const axios = require('axios');
 /////////////////// Get Alerts
 
 router.get('/alerts', (req, res, next) => {
-    let sql = `SELECT * FROM alerts WHERE loan_id = '${req.query.loanId}'`;
-    db.query(sql, (err, results) => {
+    let sql = `SELECT * FROM alerts WHERE loan_id = ?`;
+    let params = [req.query.loanId];
+    db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
         return next(new Error('Database query failed'));
