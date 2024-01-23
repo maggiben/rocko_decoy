@@ -5,6 +5,9 @@ import cookieParser from 'cookie-parser';
 // @ts-ignore
 import { connectDB, db } from './db';
 import cors from "cors";
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('./swagger.yaml');
 // @ts-ignore
 import router from './routes';
 import { CLIENT_URL } from "./constants";
@@ -29,6 +32,7 @@ connectDB();
 
 /////////////// Define Routes
 app.use('/', router);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(5000, () => {
   console.log("Server started on http://localhost:5000");
