@@ -19,9 +19,12 @@ function formatCurrency(number: number): string {
     count++;
   }
 
+  // Pad the decimal part with zeros if necessary
+  const formattedDecimal: string = decimalPart.padEnd(2, '0');
+
   // Combine integer and decimal parts
   const formattedNumber: string =
-    formattedInteger + (decimalPart ? `.${decimalPart}` : '');
+    formattedInteger + (decimalPart ? `.${formattedDecimal}` : '');
 
   return formattedNumber;
 }
