@@ -17,4 +17,3 @@ export const COINBASE_CLIENT_ID = process.env.COINBASE_CLIENT_ID;
 export const COINBASE_CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
 export const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY;
 export const MAILCHIMP_LIST_ID = process.env.MAILCHIMP_LIST_ID; 
-

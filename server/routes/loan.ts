@@ -1,13 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {db} = require('../db')
-const axios = require('axios');
+// @ts-ignore
+import { db } from '../db';
 
 /////////////////// Get loans
-
+// @ts-ignore
 router.get('/loans', (req, res, next) => {
     let sql = `SELECT * FROM loans WHERE user_id = ?`;
     const params = [req.query.user];
+    // @ts-ignore
     db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
@@ -21,6 +22,7 @@ router.get('/loans', (req, res, next) => {
 ////////////////////  Create a new loan
 
 router.post(
+  // @ts-ignore
   '/add', (req, res, next) => {
     let data = {
       user_id: req.body.user,
@@ -37,6 +39,7 @@ router.post(
 
     if (!req.body.exist) { // if new loan on current user
       let sql = "INSERT INTO loans SET ?";
+      // @ts-ignore
       db.query(sql, data, (err, results) => {
         if (err) {
           console.error(err);
@@ -47,7 +50,11 @@ router.post(
     } else { // update loan (add borrowing and collateral)
       let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user_id = ?";
 
-      db.query(sql, [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user_id], (err, results) => {
+      db.query(
+        sql, 
+        [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user_id], 
+        // @ts-ignore
+        (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));
@@ -74,7 +81,11 @@ router.post("/update", (req, res, next) => {
     };
     let sql = "UPDATE loans SET outstanding_balance = ?, interest = ?, loan_active = ?, transaction_hash = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.outstanding_balance, data.interest, data.loan_active, data.transaction_hash, data.modified_time, data.id], (err, results) => {
+    db.query(
+      sql, 
+      [data.outstanding_balance, data.interest, data.loan_active, data.transaction_hash, data.modified_time, data.id], 
+      // @ts-ignore
+      (err, results) => {
       if (err) {
         console.error(err);
         return next(new Error('Database query failed'));
@@ -90,7 +101,11 @@ router.post("/update", (req, res, next) => {
     };
     let sql = "UPDATE loans SET collateral = ?, transaction_hash = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.collateral, data.transaction_hash, data.modified_time, data.id], (err, results) => {
+    db.query(
+      sql, 
+      [data.collateral, data.transaction_hash, data.modified_time, data.id], 
+      // @ts-ignore
+      (err, results) => {
       if (err) {
         console.error(err);
         return next(new Error('Database query failed'));
@@ -100,5 +115,4 @@ router.post("/update", (req, res, next) => {
   }
 });
 
-
-module.exports = router;
+export default router;

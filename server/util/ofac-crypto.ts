@@ -19,4 +19,4 @@ const isOFACCompliant = async (address: string) => {
     }
 };
 
-module.exports = isOFACCompliant;
+export default isOFACCompliant;

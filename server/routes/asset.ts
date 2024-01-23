@@ -1,9 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {db} = require('../db');
+// @ts-ignore
+import { db } from '../db';
 
 /////////////////// Get loans
-
+// @ts-ignore
 router.get('/average_apr', (req, res, next) => {
   let params = []
   let sql;
@@ -13,10 +14,10 @@ router.get('/average_apr', (req, res, next) => {
       sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
     } else {
       sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= ?`;
-      params = params.push(req.query.openDate);
+      params.push(req.query.openDate);
     }
-
-    db.query(sql, (err, results) => {
+    // @ts-ignore
+    db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
         return next(new Error('Database query failed'));
@@ -27,7 +28,7 @@ router.get('/average_apr', (req, res, next) => {
 
 router.get('/average_reward_rate', (req, res, next) => {
   let sql = `SELECT AVG(borrow_reward_rate) AS average_reward_rate FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
-
+  // @ts-ignore
   db.query(sql, (err, results) => {
     if (err) {
       console.error(err);
@@ -39,7 +40,7 @@ router.get('/average_reward_rate', (req, res, next) => {
 
 router.get('/reward_rate', (req, res, next) => {
   let sql = `SELECT borrow_reward_rate FROM asset_data ORDER BY fetch_time DESC LIMIT 1`;
-
+  // @ts-ignore
   db.query(sql, (err, results) => {
     if (err) {
       console.error(err);
@@ -49,5 +50,4 @@ router.get('/reward_rate', (req, res, next) => {
   })
 })
 
-
-module.exports = router;
+export default router;

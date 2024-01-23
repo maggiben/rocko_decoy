@@ -1,13 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {db} = require('../db')
-const axios = require('axios');
+// @ts-ignore
+import { db } from '../db';
+import axios from 'axios';
 
 /////////////////// Get Alerts
-
+// @ts-ignore
 router.get('/alerts', (req, res, next) => {
     let sql = `SELECT * FROM alerts WHERE loan_id = ?`;
     let params = [req.query.loanId];
+    // @ts-ignore
     db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
@@ -21,6 +23,7 @@ router.get('/alerts', (req, res, next) => {
 ////////////////////  Create a new alert
 
 router.post(
+  // @ts-ignore
   '/addAlert', (req, res, next) => {
     let data = {
       loan_id: req.body.loan_id, 
@@ -37,6 +40,7 @@ router.post(
     };
 
     let sql = "INSERT INTO alerts SET ?";
+    // @ts-ignore
     db.query(sql, data, (err, results) => {
         if (err) {
           console.error(err);
@@ -65,7 +69,11 @@ router.post("/updateAlert", (req, res, next) => {
 
     let sql = "UPDATE alerts SET alert_metric = ?, alert_threshold = ?, alert_email = ?, alert_phone = ?, alert_repeat_secs = ?, alert_once = ?, active = ?, modified_time = ? WHERE id = ?";
 
-    db.query(sql, [data.alert_metric, data.alert_threshold, data.alert_email, data.alert_phone, data.alert_repeat_secs, data.alert_once, data.active, data.modified_time, data.id], (err, results) => {
+    db.query(
+      sql, 
+      [data.alert_metric, data.alert_threshold, data.alert_email, data.alert_phone, data.alert_repeat_secs, data.alert_once, data.active, data.modified_time, data.id], 
+      // @ts-ignore
+      (err, results) => {
         if (err) {
           console.error(err);
           return next(new Error('Database query failed'));
@@ -82,7 +90,7 @@ router.post("/deleteAlert", (req, res, next) => {
   };
 
   let sql = "UPDATE alerts SET active = ?, modified_time = ? WHERE id = ?";
-
+  // @ts-ignore
   db.query(sql, [data.active, data.modified_time, data.id], (err, results) => {
       if (err) {
         console.error(err);
@@ -100,7 +108,7 @@ router.post("/deleteAlertByType", (req, res, next) => {
   };
 
   let sql = "UPDATE alerts SET active = ?, modified_time = ? WHERE alert_type = ?";
-
+  // @ts-ignore
   db.query(sql, [data.active, data.modified_time, data.alertType], (err, results) => {
       if (err) {
         console.error(err);
@@ -111,4 +119,4 @@ router.post("/deleteAlertByType", (req, res, next) => {
 })
 
 
-module.exports = router;
+export default router;
