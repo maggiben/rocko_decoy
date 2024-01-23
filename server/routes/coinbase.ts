@@ -1,14 +1,21 @@
-const express = require('express');
+import { 
+    BACKEND_URL, 
+    CLIENT_URL, 
+    COINBASE_CLIENT_ID, 
+    COINBASE_CLIENT_SECRET 
+} from "../constants";
+
+import express from 'express';
 const router = express.Router();
-const cookieParser = require('cookie-parser');
-const axios = require('axios');
+import axios from 'axios';
 
 const OAUTH_TOKEN_URL = 'https://api.coinbase.com/oauth/token';  
-const CLIENT_ID = process.env.COINBASE_CLIENT_ID;
-const CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
-const REDIRECT_URI = `${process.env.BACKEND_URL}/cb-callback`; 
-const CLIENT_CALLBACK_URL = `${process.env.CLIENT_URL}/cb-callback?close=true`;
+const CLIENT_ID = COINBASE_CLIENT_ID;
+const CLIENT_SECRET = COINBASE_CLIENT_SECRET;
+const REDIRECT_URI = `${BACKEND_URL}/cb-callback`; 
+const CLIENT_CALLBACK_URL = `${CLIENT_URL}/cb-callback?close=true`;
 
+// @ts-ignore
 router.get('/cb-callback', async (req, res) => {
     const authorizationCode = req.query.code;
 
@@ -24,7 +31,6 @@ router.get('/cb-callback', async (req, res) => {
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET
         });
-
 
         const accessToken = response.data.access_token;
         
@@ -43,7 +49,7 @@ router.get('/cb-callback', async (req, res) => {
         res.status(500).send('Failed to fetch access token', error);
     }
 });
-
+// @ts-ignore
 router.get('/coinbase-balance', async (req, res) => {
     const ACCESS_TOKEN = req.cookies.access_token;
 
@@ -57,6 +63,7 @@ router.get('/coinbase-balance', async (req, res) => {
         const response = await axios.get('https://api.coinbase.com/v2/accounts', { headers: headers });
         console.log('Coinbase response:', response.data.data)
         const eth_data = response.data.data.filter(
+            // @ts-ignore
             (data) => data.balance.currency === 'ETH',
         );
             console.log({eth_data});
@@ -71,6 +78,7 @@ router.get('/coinbase-balance', async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching balance from Coinbase:', error, {statz: res.status});
+        // @ts-ignore
         res.status(error.response.status).json({
             success: false,
             message: 'Failed to fetch balance from Coinbase'
@@ -78,6 +86,7 @@ router.get('/coinbase-balance', async (req, res) => {
     }
 });
 
+// @ts-ignore
 router.post('/send-withdrawal', async (req, res) => {
     const ACCESS_TOKEN = req.cookies.access_token;
     const AMOUNT = req.body.amount;
@@ -122,10 +131,12 @@ router.post('/send-withdrawal', async (req, res) => {
     } catch (error) {
         
         console.error('Error sending withdrawal:', error);
+        // @ts-ignore
         console.log(JSON.stringify(error.response.data.errors));
-
+        // @ts-ignore
         res.status(error.response.status).json({
             success: false,
+            // @ts-ignore
             message: error.response.data.errors
         });
     }

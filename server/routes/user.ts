@@ -1,7 +1,10 @@
-const express = require('express');
+import { BLACKLIST_COUNTRY_CODES, VPNAPI_KEY } from "../constants";
+
+import express from 'express';
 const router = express.Router();
-const {db} = require('../db')
-const axios = require('axios');
+// @ts-ignore
+import { db } from '../db';
+import axios from 'axios';
 
 router.post(
     '/addUser', (req, res, next) => {
@@ -14,6 +17,7 @@ router.post(
         modified_time: new Date(),
       };
       let sql = "INSERT INTO users SET ?";
+      // @ts-ignore
       db.query(sql, data, (err, results) => {
         if (err) {
           console.error(err);
@@ -29,6 +33,7 @@ router.post(
 router.post('/users', (req, res, next) => {
     let sql = `SELECT * FROM users WHERE email = ?`;
     const params = [req.body.email];
+    // @ts-ignore
     db.query(sql, params, (err, results) => {
         if (err) {
           console.error(err);
@@ -43,6 +48,7 @@ router.post('/users', (req, res, next) => {
 router.post('/userid', (req, res, next) => {
     let sql = `SELECT id FROM users WHERE email = ?`;
     const params = [req.body.email];
+    // @ts-ignore
     db.query(sql, params, (err, results) => {
         if (err) {
           console.error(err);
@@ -53,9 +59,8 @@ router.post('/userid', (req, res, next) => {
 })
 
 // Get User IP
-const VPNAPI_URL = 'https://vpnapi.io/api';  
-const VPNAPI_KEY = process.env.VPNAPI_KEY;
-const blacklist_country_code = ['CU', 'IR', 'KP', 'RU', 'SY', 'UA'];
+const VPNAPI_URL = 'https://vpnapi.io/api';
+const blacklist_country_code = BLACKLIST_COUNTRY_CODES;
 
 router.post('/vpn', async (req, res) => {
   try {

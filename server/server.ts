@@ -1,15 +1,17 @@
-const express = require("express");
+import express from "express";
 require('dotenv').config();
-const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
-const {connectDB, db} = require('./db');
-const cors = require("cors");
-const router = require('./routes');
+import bodyParser from "body-parser";
+import cookieParser from 'cookie-parser';
+// @ts-ignore
+import { connectDB, db } from './db';
+import cors from "cors";
+// @ts-ignore
+import router from './routes';
+import { CLIENT_URL } from "./constants";
 const app = express();
 
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
-
 app.use(cors({
+  // @ts-ignore
   origin: (origin: string, callback: any ) => {
     if (!origin || CLIENT_URL || /(^https:\/\/)(([a-z0-9]+[.])*testnet.)?rocko.co$/.test(origin)) {
       callback(null, true);
