@@ -1,4 +1,4 @@
-const isOFACCompliant = async (address) => {
+const isOFACCompliant = async (address: string) => {
     const ofacUrl = "https://www.treasury.gov/ofac/downloads/sdnlist.txt";
 
     try {
@@ -13,7 +13,7 @@ const isOFACCompliant = async (address) => {
         
         return !ofacList.includes(address)
 
-    } catch (error) {
+    } catch (error: any) {
         console.log('Error:', error.message);
         return false;
     }

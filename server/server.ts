@@ -10,7 +10,7 @@ const app = express();
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
 
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: (origin: string, callback: any ) => {
     if (!origin || CLIENT_URL || /(^https:\/\/)(([a-z0-9]+[.])*testnet.)?rocko.co$/.test(origin)) {
       callback(null, true);
     } else {
@@ -29,5 +29,5 @@ connectDB();
 app.use('/', router);
 
 app.listen(5000, () => {
-  console.log("Server started on port 5000...");
+  console.log("Server started on http://localhost:5000");
 });
