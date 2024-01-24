@@ -4,7 +4,6 @@ import Image from 'next/image';
 import correct from '@/assets/correct.svg';
 import {
   ConnectWallet,
-  ChainId,
   useNetworkMismatch,
   useSwitchChain,
   useAddress,
@@ -22,6 +21,7 @@ import {
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
 import { useAccount } from 'wagmi';
+import { networkChainId } from '@/constants';
 
 const TOOLTIPS = require('../../../../locales/en_tooltips');
 
@@ -237,8 +237,6 @@ const StepFive: React.FC = () => {
   const handleOtherWalletBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const otherWallet = event.target.value;
 
-    console.log(otherWallet);
-
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
@@ -249,7 +247,7 @@ const StepFive: React.FC = () => {
 
   useEffect(() => {
     if (isMismatched) {
-      switchChain(ChainId.Mainnet);
+      switchChain(networkChainId);
     }
   }, [address, chain]);
 

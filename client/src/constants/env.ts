@@ -2,10 +2,10 @@ export const GEMINI_CLIENT_ID = process.env.NEXT_PUBLIC_GEMINI_CLIENT_ID;
 export const COINBASE_CLIENT_ID = process.env.NEXT_PUBLIC_COINBASE_CLIENT_ID;
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // Gotcha, some tools call mainnet 'ethereum', others call it 'mainnet'
-// rexpects mainnet, goerli, etc
+// rexpects mainnet, sepolia, etc
 type NetworkNames = 'mainnet' | 'goerli' | 'sepolia';
 export const NETWORK: NetworkNames =
-  (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'mainnet';
+  (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'sepolia';
 export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || '';
 export const THIRDWEB_CLIENTID =
   process.env.NEXT_PUBLIC_THIRDWEB_CLIENTID || '';

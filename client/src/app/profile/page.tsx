@@ -10,7 +10,12 @@ import TransferFundModal from '@/components/chips/TransferFundModal/TransferFund
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useUserDB } from '@/db/userDb';
-import { USDCContract, WETHContract, networkChainId } from '@/constants';
+import {
+  USDCContract,
+  WETHContract,
+  networkChainId,
+  exculdedCountries,
+} from '@/constants';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
@@ -271,14 +276,7 @@ const Profile: React.FC = () => {
                         <>
                           <PhoneInput
                             country="us"
-                            excludeCountries={[
-                              'cu',
-                              'ir',
-                              'kp',
-                              'ru',
-                              'sy',
-                              'ua',
-                            ]}
+                            excludeCountries={exculdedCountries}
                             containerClass="border-2 border-gray-200 rounded-lg bg-white mb-4"
                             inputClass="w-full focus:outline-none bg-white number-input"
                             inputStyle={{

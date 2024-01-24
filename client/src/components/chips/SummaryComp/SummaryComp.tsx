@@ -8,7 +8,6 @@ import {
 } from '@/constants/featureFlags';
 import {
   ConnectWallet,
-  ChainId,
   useNetworkMismatch,
   useSwitchChain,
   useAddress,
@@ -19,6 +18,7 @@ import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
 import { useAccount } from 'wagmi';
+import { networkChainId } from '@/constants';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import ChooseWallet from '../ChooseWallet/ChooseWallet';
 import LoanFinalized from '../LoanFinalized/LoanFinalized';
@@ -188,7 +188,7 @@ function SummaryComp(props: Props) {
 
   useEffect(() => {
     if (isMismatched) {
-      switchChain(ChainId.Mainnet);
+      switchChain(networkChainId);
     }
   }, [address, chain]);
 

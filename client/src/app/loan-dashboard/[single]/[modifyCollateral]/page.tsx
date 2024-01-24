@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import {
   ConnectWallet,
-  ChainId,
   useNetworkMismatch,
   useSwitchChain,
   useAddress,
@@ -26,6 +25,7 @@ import {
   FLAG_COINBASE_FUNDING,
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
+import { networkChainId } from '@/constants';
 
 interface InnerInfo {
   description: string;
@@ -147,7 +147,7 @@ const ModifyCollateral: React.FC = () => {
 
   useEffect(() => {
     if (isMismatched) {
-      switchChain(ChainId.Mainnet);
+      switchChain(networkChainId);
     }
   }, [address, chain]);
 

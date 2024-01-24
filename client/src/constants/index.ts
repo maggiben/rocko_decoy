@@ -42,3 +42,5 @@ export const ErrorMessages = {
   '-32002':
     'Already processing Metamask wallet connect. Please confirm metamask modal.',
 };
+
+export const exculdedCountries = ['cu', 'ir', 'kp', 'ru', 'sy', 'ua'];

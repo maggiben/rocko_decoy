@@ -13,7 +13,6 @@ import { useParams, useSearchParams } from 'next/navigation';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import {
   ConnectWallet,
-  ChainId,
   useNetworkMismatch,
   useSwitchChain,
   useAddress,
@@ -28,6 +27,7 @@ import {
   FLAG_COINBASE_FUNDING,
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
+import { networkChainId } from '@/constants';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -225,7 +225,7 @@ const MakePayment: FC = () => {
 
   useEffect(() => {
     if (isMismatched) {
-      switchChain(ChainId.Mainnet);
+      switchChain(networkChainId);
     }
   }, [address, chain]);
 

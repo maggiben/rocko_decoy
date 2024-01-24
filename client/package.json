@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@thirdweb-dev/chains": "^0.1.65",
     "@thirdweb-dev/react": "^3.16.4",
     "@thirdweb-dev/sdk": "^3.10.66",
     "@types/node": "^20.10.2",
