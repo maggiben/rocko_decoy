@@ -15,12 +15,12 @@ const siteUrl = `https://rocko.co`
 
 module.exports = {
   siteMetadata: {
-    title: `Rocko: DeFi Made Simple for Everyone`,
+    title: `Rocko: Crypto Backed Loans at Competitive Rates`,
     author: {
       name: `Rocko`,
-      summary: `DeFi made simple`,
+      summary: `The quickest way to get cash without selling your crypto. Rocko helps you find the best loan options at competitive rates and get funded in minutes`,
     },
-    description: `Rocko: DeFi for everyone`,
+    description: `Rocko: Get cash without selling your crypto, use your crypto as collateral on a crypto backed loan`,
     copyright: `© ${new Date().getFullYear()} Rocko, Inc.`,
     siteUrl,
     social: {
