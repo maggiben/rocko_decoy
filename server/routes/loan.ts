@@ -2,10 +2,11 @@ import express from 'express';
 const router = express.Router();
 // @ts-ignore
 import { db } from '../db';
+import checkJwt from '../auth/checkJwt';
 
 /////////////////// Get loans
 // @ts-ignore
-router.get('/loans', (req, res, next) => {
+router.get('/loans', checkJwt, (req, res, next) => {
     let sql = `SELECT * FROM loans WHERE user_id = ?`;
     const params = [req.query.user];
     // @ts-ignore
@@ -23,7 +24,7 @@ router.get('/loans', (req, res, next) => {
 
 router.post(
   // @ts-ignore
-  '/add', (req, res, next) => {
+  '/add', checkJwt, (req, res, next) => {
     let data = {
       user_id: req.body.user,
       transaction_hash: req.body.transaction_hash,
@@ -67,7 +68,7 @@ router.post(
 
 //////////////////// Update loan
 
-router.post("/update", (req, res, next) => {
+router.post("/update", checkJwt, (req, res, next) => {
   const updateType = req.body.updateType;
 
   if (updateType === "repay") {

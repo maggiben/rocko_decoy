@@ -2,11 +2,11 @@ import express from 'express';
 const router = express.Router();
 // @ts-ignore
 import { db } from '../db';
-import axios from 'axios';
+import checkJwt from '../auth/checkJwt';
 
 /////////////////// Get Alerts
 // @ts-ignore
-router.get('/alerts', (req, res, next) => {
+router.get('/alerts', checkJwt, (req, res, next) => {
     let sql = `SELECT * FROM alerts WHERE loan_id = ?`;
     let params = [req.query.loanId];
     // @ts-ignore
@@ -24,7 +24,7 @@ router.get('/alerts', (req, res, next) => {
 
 router.post(
   // @ts-ignore
-  '/addAlert', (req, res, next) => {
+  '/addAlert',  checkJwt, (req, res, next) => {
     let data = {
       loan_id: req.body.loan_id, 
       alert_type: req.body.alert_type,
@@ -53,7 +53,7 @@ router.post(
 
 //////////////////// Update alert
 
-router.post("/updateAlert", (req, res, next) => {
+router.post("/updateAlert", checkJwt, (req, res, next) => {
   console.log(req.body)
     let data = {
         id: req.body.id, 
@@ -82,7 +82,7 @@ router.post("/updateAlert", (req, res, next) => {
     });
 });
 
-router.post("/deleteAlert", (req, res, next) => {
+router.post("/deleteAlert", checkJwt, (req, res, next) => {
   let data = {
     id: req.body.id, 
     active: req.body.active,        
@@ -100,7 +100,7 @@ router.post("/deleteAlert", (req, res, next) => {
   });
 })
 
-router.post("/deleteAlertByType", (req, res, next) => {
+router.post("/deleteAlertByType", checkJwt, (req, res, next) => {
   let data = {
     alertType : req.body.alertType,   
     active: 0,     

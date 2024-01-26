@@ -5,9 +5,11 @@ const router = express.Router();
 // @ts-ignore
 import { db } from '../db';
 import axios from 'axios';
+import checkJwt from "../auth/checkJwt";
 
 router.post(
-    '/addUser', (req, res, next) => {
+  // TODO should we have an auth token here yet?
+    '/addUser', checkJwt, (req, res, next) => {
       let data = {
         auth0_id: req.body.auth0_id,
         email: req.body.email,
@@ -29,7 +31,7 @@ router.post(
 );
   
 router.post(
-  '/updateUser', (req, res, next) => {
+  '/updateUser', checkJwt, (req, res, next) => {
     let data = {
       email: req.body.email,
       phone: req.body.phone,
@@ -49,7 +51,7 @@ router.post(
 
 // Get all users
 
-router.post('/users', (req, res, next) => {
+router.post('/users', checkJwt, (req, res, next) => {
     let sql = `SELECT * FROM users WHERE email = ?`;
     const params = [req.body.email];
     // @ts-ignore
@@ -64,7 +66,7 @@ router.post('/users', (req, res, next) => {
 
 // Get user id
 
-router.post('/userid', (req, res, next) => {
+router.post('/userid', checkJwt, (req, res, next) => {
     let sql = `SELECT id FROM users WHERE email = ?`;
     const params = [req.body.email];
     // @ts-ignore
@@ -77,6 +79,7 @@ router.post('/userid', (req, res, next) => {
     })
 })
 
+// TODO move to compliance router
 // Get User IP
 const VPNAPI_URL = 'https://vpnapi.io/api';
 const blacklist_country_code = BLACKLIST_COUNTRY_CODES;
