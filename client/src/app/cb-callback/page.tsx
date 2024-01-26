@@ -1,8 +1,8 @@
 'use client';
 
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import axiosInterceptor from '@/utility/axiosInterceptor';
 import { setDelay } from '@/utility/utils';
 import financial from '@/utility/currencyFormate';
 import { BACKEND_URL } from '@/constants/env';
@@ -14,7 +14,7 @@ const initiateWithdrawal = async (
   currency: any,
   amount: any,
 ) => {
-  const result = await axios.post(
+  const result = await axiosInterceptor.post(
     `${BACKEND_URL}/send-withdrawal`,
     {
       accountId,
@@ -39,12 +39,12 @@ export default function CoinbaseCallback() {
   const [balance, setBalance] = useState<any>(null);
 
   const fetchCoinbaseBalance = () => {
-    fetch(`${BACKEND_URL}/coinbase-balance`, {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    axiosInterceptor
+      .get(`${BACKEND_URL}/coinbase-balance`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const { data } = response;
         setBalance(data);
       })
       .catch((error) => {

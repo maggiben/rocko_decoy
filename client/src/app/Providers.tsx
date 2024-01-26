@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { ThirdwebProvider } from '@thirdweb-dev/react';
-import { BLOCKCHAIN, THIRDWEB_CLIENTID } from '@/constants/env';
 import { Ethereum, Sepolia } from '@thirdweb-dev/chains';
+import { BLOCKCHAIN, THIRDWEB_CLIENTID } from '@/constants/env';
 import ZeroDevWrapper from './ZerodevWrapper';
 
 export default function Providers({ children }: { children: React.ReactNode }) {

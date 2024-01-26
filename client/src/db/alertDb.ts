@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 
 export const useAlertDB = () => {
@@ -31,7 +31,7 @@ export const useAlertDB = () => {
       active: 1,
     };
 
-    axios.post(`${BACKEND_URL}/addAlert`, alertObject);
+    axiosInterceptor.post(`${BACKEND_URL}/addAlert`, alertObject);
   };
 
   const updateAlert = (alertId: number, alertData: any, active: number) => {
@@ -48,12 +48,12 @@ export const useAlertDB = () => {
       active,
     };
 
-    axios.post(`${BACKEND_URL}/updateAlert`, updateObject);
+    axiosInterceptor.post(`${BACKEND_URL}/updateAlert`, updateObject);
   };
 
   const getAlertData = async (loanId: number) => {
     try {
-      const response = await axios.get(
+      const response = await axiosInterceptor.get(
         `${BACKEND_URL}/alerts?loanId=${loanId}`,
       );
       return response.data;
@@ -69,12 +69,14 @@ export const useAlertDB = () => {
       active: 0,
     };
 
-    await axios.post(`${BACKEND_URL}/deleteAlert`, deletedObject);
+    await axiosInterceptor.post(`${BACKEND_URL}/deleteAlert`, deletedObject);
   };
 
   const deleteAlertByType = async (alertType: string) => {
     console.log('alertType', alertType);
-    await axios.post(`${BACKEND_URL}/deleteAlertByType`, { alertType });
+    await axiosInterceptor.post(`${BACKEND_URL}/deleteAlertByType`, {
+      alertType,
+    });
   };
 
   return {

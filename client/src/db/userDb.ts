@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 import { publicIp } from 'public-ip';
 import logger from '@/utility/logger';
@@ -16,7 +16,7 @@ export const useUserDB = () => {
       wallet_address,
       active: Number(active),
     };
-    axios.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
+    axiosInterceptor.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
       console.log(res.data);
     });
   };
@@ -26,14 +26,16 @@ export const useUserDB = () => {
       email,
       phone,
     };
-    axios.post(`${BACKEND_URL}/updateUser`, userObject).then((res) => {
-      console.log(res.data);
-    });
+    axiosInterceptor
+      .post(`${BACKEND_URL}/updateUser`, userObject)
+      .then((res) => {
+        console.log(res.data);
+      });
   };
 
   const getUserData = async (email: string) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/users`, {
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
         email,
       });
       return response.data;
@@ -45,7 +47,7 @@ export const useUserDB = () => {
 
   const getUserId = async (email: string) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/userid`, {
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/userid`, {
         email,
       });
 
@@ -59,7 +61,7 @@ export const useUserDB = () => {
   const isVPN = async () => {
     try {
       const ip = await publicIp();
-      const response = await axios.post(`${BACKEND_URL}/vpn`, {
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
         ip,
       });
 
@@ -71,7 +73,7 @@ export const useUserDB = () => {
 
   const isInActive = async (email: string) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/users`, {
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
         email,
       });
 
@@ -84,7 +86,7 @@ export const useUserDB = () => {
 
   const isReadOnly = async (email: string) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/users`, {
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
         email,
       });
 

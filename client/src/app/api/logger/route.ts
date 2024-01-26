@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
 const { SLACK_WEBHOOK_URL } = process.env;
@@ -8,15 +9,24 @@ export async function POST(req: NextRequest) {
     try {
       const { message, level } = await req.json();
 
-      await fetch(SLACK_WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: `${level.toUpperCase()}: ${message}`,
-        }),
-      });
+      await axios
+        .post(
+          SLACK_WEBHOOK_URL,
+          {
+            text: `${level.toUpperCase()}: ${message}`,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .then((response) => {
+          console.log('Message sent successfully:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error sending message:', error);
+        });
 
       return NextResponse.json({ msg: 'OK' }, { status: 200 });
     } catch (error) {

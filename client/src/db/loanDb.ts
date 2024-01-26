@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 
 export const useLoanDB = () => {
@@ -22,7 +22,7 @@ export const useLoanDB = () => {
       collateral,
       exist,
     };
-    axios.post(`${BACKEND_URL}/add`, loanObject);
+    axiosInterceptor.post(`${BACKEND_URL}/add`, loanObject);
   };
 
   const updateLoan = (
@@ -50,12 +50,15 @@ export const useLoanDB = () => {
             collateral,
             transaction_hash: txHash,
           };
-    axios.post(`${BACKEND_URL}/update`, updateObject);
+    axiosInterceptor.post(`${BACKEND_URL}/update`, updateObject);
   };
 
   const getLoanData = async (user: string) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/loans?user=${user}`);
+      const response = await axiosInterceptor.get(
+        // TODO use request body for user data
+        `${BACKEND_URL}/loans?user=${user}`,
+      );
       return response.data;
     } catch (error) {
       console.error(error);
@@ -65,7 +68,7 @@ export const useLoanDB = () => {
 
   const getAverageAPR = async (openDate: Date) => {
     try {
-      const response = await axios.get(
+      const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=${openDate}`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
@@ -77,7 +80,7 @@ export const useLoanDB = () => {
 
   const getMonthAverageAPR = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=month`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
@@ -89,7 +92,7 @@ export const useLoanDB = () => {
 
   const getYearAverageAPR = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=year`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
@@ -101,7 +104,7 @@ export const useLoanDB = () => {
 
   const getYearAvgRewardRate = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_reward_rate?openDate=year`,
       );
       return response.data.length > 0
@@ -115,7 +118,7 @@ export const useLoanDB = () => {
 
   const getRewardRate = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/reward_rate`);
+      const response = await axiosInterceptor.get(`${BACKEND_URL}/reward_rate`);
       return response.data.length > 0
         ? response.data[0].borrow_reward_rate
         : null;

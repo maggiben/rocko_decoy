@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 type LogLevel = 'info' | 'error' | 'warn';
 
 const logger = (message: string, level: LogLevel = 'info'): void => {
@@ -5,13 +7,25 @@ const logger = (message: string, level: LogLevel = 'info'): void => {
     // eslint-disable-next-line no-console
     console.log({ message, level });
   } else {
-    fetch('/api/logger', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message, level }),
-    });
+    axios
+      .post(
+        '/api/logger',
+        {
+          message,
+          level,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then((response) => {
+        console.log('Log sent successfully:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error sending log:', error);
+      });
   }
 };
 
