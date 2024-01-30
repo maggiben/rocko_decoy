@@ -49,10 +49,13 @@ resource "aws_route53_record" "rocko_co_mx" {
 
 resource "aws_route53_record" "rocko_co_root_spf" {
   zone_id = aws_route53_zone.rocko_co.zone_id
-  name = "rocko.co."
+  name = ""
   type = "TXT"
   ttl = 60
-  records = [ "v=spf1 include:dc-aa8e722993._spfm.rocko.co ~all"]
+  records = [
+    "v=spf1 include:dc-aa8e722993._spfm.rocko.co ~all",
+    "google-site-verification=wJ0Bk589kUCjm10h74e1gK-jSObBotuBxDJAtS_Fyew"
+    ]
 }
 
 resource "aws_route53_record" "rocko_co_dc-aa8e722993_spf" {
@@ -61,14 +64,6 @@ resource "aws_route53_record" "rocko_co_dc-aa8e722993_spf" {
   type = "TXT"
   ttl = 60
   records = [ "v=spf1 include:_spf.google.com ~all"]
-}
-
-resource "aws_route53_record" "rocko_co_google_verify" {
-  zone_id = aws_route53_zone.rocko_co.zone_id
-  name = "rocko.co."
-  type = "TXT"
-  ttl = 60
-  records = [ "google-site-verification=wJ0Bk589kUCjm10h74e1gK-jSObBotuBxDJAtS_Fyew"]
 }
 
 resource "aws_route53_record" "rocko_co_test_app" {
