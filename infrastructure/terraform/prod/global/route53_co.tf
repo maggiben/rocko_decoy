@@ -49,7 +49,7 @@ resource "aws_route53_record" "rocko_co_mx" {
 
 resource "aws_route53_record" "rocko_co_root_spf" {
   zone_id = aws_route53_zone.rocko_co.zone_id
-  name = ""
+  name = "rocko.co."
   type = "TXT"
   ttl = 60
   records = [ "v=spf1 include:dc-aa8e722993._spfm.rocko.co ~all"]
