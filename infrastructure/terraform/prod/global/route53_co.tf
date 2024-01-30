@@ -63,6 +63,14 @@ resource "aws_route53_record" "rocko_co_dc-aa8e722993_spf" {
   records = [ "v=spf1 include:_spf.google.com ~all"]
 }
 
+resource "aws_route53_record" "rocko_co_google_verify" {
+  zone_id = aws_route53_zone.rocko_co.zone_id
+  name = ""
+  type = "TXT"
+  ttl = 60
+  records = [ "google-site-verification=wJ0Bk589kUCjm10h74e1gK-jSObBotuBxDJAtS_Fyew"]
+}
+
 resource "aws_route53_record" "rocko_co_test_app" {
   zone_id = aws_route53_zone.rocko_co.id
   name    = "*.test.app"
