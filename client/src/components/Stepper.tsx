@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { Auth0WalletConnector } from '@zerodev/wagmi';
 import * as blockchains from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { NETWORK } from '@/constants/env';
+import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
 import { useRouter } from 'next/navigation';
@@ -51,7 +51,7 @@ export default function Stepper(props: Props) {
   const auth0Connector = new Auth0WalletConnector({
     chains,
     options: {
-      projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID || '',
+      projectId: ZERODEV_PROJECT_ID,
       shimDisconnect: true,
     },
   });

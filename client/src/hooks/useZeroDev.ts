@@ -1,7 +1,9 @@
 import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
 import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { ZERODEV_PROJECT_ID } from '@/constants/env';
 
+// eslint-disable-next-line import/prefer-default-export
 export const useZeroDev = () => {
   const { isConnected } = useAccount();
 
@@ -9,11 +11,10 @@ export const useZeroDev = () => {
 
   useEffect(() => {
     if (isConnected) {
-      const zeroDevWeb3Auth = ZeroDevWeb3Auth.getInstance([
-        process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID ||
-          'b5486fa4-e3d9-450b-8428-646e757c10f6',
-      ]);
-      zeroDevWeb3Auth.getUserInfo().then((res) => {
+      const zeroDevWeb3Auth = ZeroDevWeb3Auth.getInstance([ZERODEV_PROJECT_ID]);
+      zeroDevWeb3Auth.getUserInfo().then((res): void => {
+        // Set token in session storage for use with backend authentication
+        sessionStorage.setItem('token', res?.idToken || '');
         setUserInfo(res);
       });
     }

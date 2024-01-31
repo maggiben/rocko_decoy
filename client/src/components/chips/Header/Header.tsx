@@ -11,7 +11,7 @@ import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { ROCKO_WEBSITE_URL } from '@/constants';
 import user from '@/assets/images/user.png';
 import logo from '@/assets/logo.png';
-import { NETWORK } from '@/constants/env';
+import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -25,7 +25,7 @@ function Header() {
   const auth0Connector = new Auth0WalletConnector({
     chains,
     options: {
-      projectId: process.env.NEXT_PUBLIC_ZERODEV_PROJECT_ID,
+      projectId: ZERODEV_PROJECT_ID,
       shimDisconnect: true,
     },
   });
