@@ -4,6 +4,9 @@ const router = express.Router();
 import { db } from '../db';
 import checkJwt from '../auth/checkJwt';
 
+// TODO check that user owns the alert before any actions below
+// TODO add user_id to the alerts table
+
 /////////////////// Get Alerts
 // @ts-ignore
 router.get('/alerts', checkJwt, (req, res, next) => {

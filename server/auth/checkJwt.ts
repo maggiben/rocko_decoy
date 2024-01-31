@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jose from "jose"
+import { db } from '../db';
 
 const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization || '';
@@ -12,11 +13,24 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
         const jwks = jose.createRemoteJWKSet(new URL("https://api-auth.web3auth.io/jwks"));
         // Verify token is valid and signed by Web3Auth
         const { payload } = await jose.jwtVerify(token, jwks, { algorithms: ["ES256"] });
-
+        let sql = `SELECT id FROM users WHERE email = ?`;
         // @ts-ignore
-        req.user = {email: payload.email};
+        const params = [payload.email];
+        db.query(sql, params, (err: any, results: any) => {
+            if (err) {
+              console.error(err);
+              res.status(404).send('User not found');
+            }
+            console.log({results, id: results[0].id})
+            // @ts-ignore
+            req.user = {
+                id: results[0].id,
+                email: payload.email
+            };
 
-        next(); // Proceed to the next middleware/route handler
+            next(); // Proceed to the next middleware/route handler
+        })
+
 
     } catch (error) {
         // Token verification failed
