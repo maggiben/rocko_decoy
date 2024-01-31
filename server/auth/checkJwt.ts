@@ -21,10 +21,10 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
               console.error(err);
               res.status(404).send('User not found');
             }
-            console.log({results, id: results[0].id})
+
             // @ts-ignore
             req.user = {
-                id: results[0].id,
+                id: JSON.stringify(results[0].id),
                 email: payload.email
             };
 
