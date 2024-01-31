@@ -8,9 +8,7 @@ import axios from 'axios';
 import checkJwt from "../auth/checkJwt";
 
 router.post(
-  // TODO should we have an auth token here yet?
-  // If NO remove checkJwt
-    '/addUser', checkJwt, (req, res, next) => {
+    '/addUser', (req, res, next) => {
       let data = {
         auth0_id: req.body.auth0_id,
         email: req.body.email,
