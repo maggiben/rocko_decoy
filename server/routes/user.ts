@@ -2,7 +2,6 @@ import { BLACKLIST_COUNTRY_CODES, VPNAPI_KEY } from "../constants";
 
 import express from 'express';
 const router = express.Router();
-// @ts-ignore
 import { db } from '../db';
 import axios from 'axios';
 import checkJwt from "../auth/checkJwt";
@@ -18,7 +17,7 @@ router.post(
         modified_time: new Date(),
       };
       let sql = "INSERT INTO users SET ?";
-      // @ts-ignore
+
       db.query(sql, data, (err, results) => {
         if (err) {
           console.error(err);
@@ -31,10 +30,8 @@ router.post(
   
 router.post(
   '/updateUser', checkJwt, (req, res, next) => {
-    // @ts-ignore
-    if (req.user.email === req.body.email) {
+    if (req.user && req.user.email === req.body.email) {
       let data = {
-        // @ts-ignore
         email: req.user.email,
         phone: req.body.phone,
         modified_time: new Date(),
@@ -57,12 +54,9 @@ router.post(
 // Get all users
 
 router.post('/users', checkJwt, (req, res, next) => {
-  // @ts-ignore
-  if (req.user.email === req.body.email) {
+  if (req.user && req.user.email === req.body.email) {
     let sql = `SELECT * FROM users WHERE email = ?`;
-    // @ts-ignore
     const params = [req.user.email];
-    // @ts-ignore
     db.query(sql, params, (err, results) => {
         if (err) {
           console.error(err);
@@ -78,12 +72,9 @@ router.post('/users', checkJwt, (req, res, next) => {
 // Get user id
 
 router.post('/userid', checkJwt, (req, res, next) => {
-    // @ts-ignore
-    if (req.user.email === req.body.email) {
+    if (req.user && req.user.email === req.body.email) {
       let sql = `SELECT id FROM users WHERE email = ?`;
-      // @ts-ignore
       const params = [req.user.email];
-      // @ts-ignore
       db.query(sql, params, (err, results) => {
           if (err) {
             console.error(err);

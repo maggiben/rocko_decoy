@@ -4,7 +4,6 @@ const router = express.Router();
 // Import the specific routers
 import coinbaseRouter from './coinbase';
 import healthcheckRouter from './healthcheck';
-// @ts-ignore
 import loanRouter from './loan';
 import assetRouter from './asset';
 import alertRouter from './alert';

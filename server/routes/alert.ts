@@ -1,6 +1,5 @@
 import express from 'express';
 const router = express.Router();
-// @ts-ignore
 import { db } from '../db';
 import checkJwt from '../auth/checkJwt';
 
@@ -8,11 +7,10 @@ import checkJwt from '../auth/checkJwt';
 // TODO add user_id to the alerts table
 
 /////////////////// Get Alerts
-// @ts-ignore
 router.get('/alerts', checkJwt, (req, res, next) => {
     let sql = `SELECT * FROM alerts WHERE loan_id = ?`;
     let params = [req.query.loanId];
-    // @ts-ignore
+
     db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
@@ -26,8 +24,7 @@ router.get('/alerts', checkJwt, (req, res, next) => {
 ////////////////////  Create a new alert
 
 router.post(
-  // @ts-ignore
-  '/addAlert',  checkJwt, (req, res, next) => {
+  '/addAlert', checkJwt, (req, res, next) => {
     let data = {
       loan_id: req.body.loan_id, 
       alert_type: req.body.alert_type,
@@ -43,7 +40,7 @@ router.post(
     };
 
     let sql = "INSERT INTO alerts SET ?";
-    // @ts-ignore
+
     db.query(sql, data, (err, results) => {
         if (err) {
           console.error(err);
@@ -75,7 +72,7 @@ router.post("/updateAlert", checkJwt, (req, res, next) => {
     db.query(
       sql, 
       [data.alert_metric, data.alert_threshold, data.alert_email, data.alert_phone, data.alert_repeat_secs, data.alert_once, data.active, data.modified_time, data.id], 
-      // @ts-ignore
+
       (err, results) => {
         if (err) {
           console.error(err);
@@ -93,7 +90,7 @@ router.post("/deleteAlert", checkJwt, (req, res, next) => {
   };
 
   let sql = "UPDATE alerts SET active = ?, modified_time = ? WHERE id = ?";
-  // @ts-ignore
+
   db.query(sql, [data.active, data.modified_time, data.id], (err, results) => {
       if (err) {
         console.error(err);
@@ -111,7 +108,7 @@ router.post("/deleteAlertByType", checkJwt, (req, res, next) => {
   };
 
   let sql = "UPDATE alerts SET active = ?, modified_time = ? WHERE alert_type = ?";
-  // @ts-ignore
+
   db.query(sql, [data.active, data.modified_time, data.alertType], (err, results) => {
       if (err) {
         console.error(err);

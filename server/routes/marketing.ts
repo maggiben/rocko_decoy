@@ -1,11 +1,11 @@
+import { Request, Response } from 'express';
 import { MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID } from "../constants";
 
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const axios = require('axios');
+import axios from 'axios';
 
-// @ts-ignore
-router.get('/follower-count', async (req, res) => {
+router.get('/follower-count', async (req: Request, res: Response) => {
     const apiKey = MAILCHIMP_API_KEY;
     const list_id = MAILCHIMP_LIST_ID; 
 

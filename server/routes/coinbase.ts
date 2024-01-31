@@ -15,7 +15,6 @@ const CLIENT_SECRET = COINBASE_CLIENT_SECRET;
 const REDIRECT_URI = `${BACKEND_URL}/cb-callback`; 
 const CLIENT_CALLBACK_URL = `${CLIENT_URL}/cb-callback?close=true`;
 
-// @ts-ignore
 router.get('/cb-callback', async (req, res) => {
     const authorizationCode = req.query.code;
 
@@ -49,7 +48,7 @@ router.get('/cb-callback', async (req, res) => {
         res.status(500).send(`Failed to fetch access token`);
     }
 });
-// @ts-ignore
+
 router.get('/coinbase-balance', async (req, res) => {
     const ACCESS_TOKEN = req.cookies.access_token;
 
@@ -86,7 +85,6 @@ router.get('/coinbase-balance', async (req, res) => {
     }
 });
 
-// @ts-ignore
 router.post('/send-withdrawal', async (req, res) => {
     const ACCESS_TOKEN = req.cookies.access_token;
     const AMOUNT = req.body.amount;

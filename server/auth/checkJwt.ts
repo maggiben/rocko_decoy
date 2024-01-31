@@ -14,7 +14,7 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
         // Verify token is valid and signed by Web3Auth
         const { payload } = await jose.jwtVerify(token, jwks, { algorithms: ["ES256"] });
         let sql = `SELECT id FROM users WHERE email = ?`;
-        // @ts-ignore
+
         const params = [payload.email];
         db.query(sql, params, (err: any, results: any) => {
             if (err) {
@@ -22,10 +22,9 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
               res.status(404).send('User not found');
             }
 
-            // @ts-ignore
             req.user = {
                 id: JSON.stringify(results[0].id),
-                email: payload.email
+                email: payload.email as string,
             };
 
             next(); // Proceed to the next middleware/route handler

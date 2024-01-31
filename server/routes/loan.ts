@@ -1,18 +1,13 @@
 import express from 'express';
 const router = express.Router();
-// @ts-ignore
 import { db } from '../db';
 import checkJwt from '../auth/checkJwt';
 
 /////////////////// Get loans
-// @ts-ignore
 router.get('/loans', checkJwt, (req, res, next) => {
-  // @ts-ignore
-  if (req.user.id === req.query.user) {
+  if (req.user && req.user.id === req.query.user) {
     let sql = `SELECT * FROM loans WHERE user_id = ?`;
-    // @ts-ignore
     const params = [req.user.id];
-    // @ts-ignore
     db.query(sql, params, (err, results) => {
       if (err) {
         console.error(err);
@@ -29,12 +24,9 @@ router.get('/loans', checkJwt, (req, res, next) => {
 ////////////////////  Create a new loan
 
 router.post(
-  // @ts-ignore
   '/add', checkJwt, (req, res, next) => {
-    // @ts-ignore
-    if (req.user.id === req.body.user) {
+    if (req.user && req.user.id === req.body.user) {
       let data = {
-        // @ts-ignore
         user_id: req.user.id,
         transaction_hash: req.body.transaction_hash,
         lending_protocol: req.body.lending_protocol,
@@ -49,7 +41,6 @@ router.post(
 
       if (!req.body.exist) { // if new loan on current user
         let sql = "INSERT INTO loans SET ?";
-        // @ts-ignore
         db.query(sql, data, (err, results) => {
           if (err) {
             console.error(err);
@@ -63,7 +54,6 @@ router.post(
         db.query(
           sql, 
           [data.transaction_hash, data.outstanding_balance, data.collateral, data.modified_time, data.user_id], 
-          // @ts-ignore
           (err, results) => {
           if (err) {
             console.error(err);
@@ -81,13 +71,11 @@ router.post(
 //////////////////// Update loan
 
 router.post("/update", checkJwt, (req, res, next) => {
-  // @ts-ignore
-  if (req.user.id) {
+  if (req?.user?.id) {
     const updateType = req.body.updateType;
 
     if (updateType === "repay") {
       let data = {
-        // @ts-ignore
         user_id: req.user.id,
         id: req.body.id,
         outstanding_balance: req.body.outstanding_balance,
@@ -101,7 +89,6 @@ router.post("/update", checkJwt, (req, res, next) => {
       db.query(
         sql, 
         [data.outstanding_balance, data.interest, data.loan_active, data.transaction_hash, data.modified_time, data.id, data.user_id], 
-        // @ts-ignore
         (err, results) => {
         if (err) {
           console.error(err);
@@ -111,7 +98,6 @@ router.post("/update", checkJwt, (req, res, next) => {
       });
     } else {
       let data = {
-        // @ts-ignore
         user_id: req.user.id,
         id: req.body.id,
         collateral: req.body.collateral,
@@ -122,8 +108,7 @@ router.post("/update", checkJwt, (req, res, next) => {
 
       db.query(
         sql, 
-        [data.collateral, data.transaction_hash, data.modified_time, data.id, data.user_id], 
-        // @ts-ignore
+        [data.collateral, data.transaction_hash, data.modified_time, data.id, data.user_id],
         (err, results) => {
         if (err) {
           console.error(err);
