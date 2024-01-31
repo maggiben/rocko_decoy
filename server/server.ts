@@ -2,7 +2,7 @@ import express from "express";
 require('dotenv').config();
 import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
-// @ts-ignore
+const { default: fetch, Headers, Request, Response } = require('node-fetch');
 import { connectDB, db } from './db';
 import cors from "cors";
 import swaggerUi from 'swagger-ui-express';
@@ -12,6 +12,15 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 import router from './routes';
 import { CLIENT_URL } from "./constants";
 const app = express();
+
+// Polyfill fetch, Headers, Request, and Response if they are not already defined
+// AWS does not have these globals defined, so we need to polyfill them
+if (!globalThis.fetch) {
+  globalThis.fetch = fetch;
+  globalThis.Headers = Headers;
+  globalThis.Request = Request;
+  globalThis.Response = Response;
+}
 
 app.use(cors({
   // @ts-ignore
