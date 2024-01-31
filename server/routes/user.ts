@@ -9,6 +9,7 @@ import checkJwt from "../auth/checkJwt";
 
 router.post(
   // TODO should we have an auth token here yet?
+  // If NO remove checkJwt
     '/addUser', checkJwt, (req, res, next) => {
       let data = {
         auth0_id: req.body.auth0_id,
@@ -32,28 +33,37 @@ router.post(
   
 router.post(
   '/updateUser', checkJwt, (req, res, next) => {
-    let data = {
-      email: req.body.email,
-      phone: req.body.phone,
-      modified_time: new Date(),
-    };
-    let sql = "UPDATE users SET phone = ?, modified_time = ? WHERE email = ?";
-
-    db.query(sql, [data.phone, data.modified_time, data.email], (err, results) => {
-      if (err) {
-        console.error(err);
-        return next(new Error('Database query failed'));
-      }
-      res.send("User's Phone data successfully updated");
-    });
+    // @ts-ignore
+    if (req.user.email === req.body.email) {
+      let data = {
+        // @ts-ignore
+        email: req.user.email,
+        phone: req.body.phone,
+        modified_time: new Date(),
+      };
+      let sql = "UPDATE users SET phone = ?, modified_time = ? WHERE email = ?";
+  
+      db.query(sql, [data.phone, data.modified_time, data.email], (err, results) => {
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
+        return res.send("User's Phone data successfully updated");
+      });
+    } else {
+      return res.status(401).send('Unauthorized: Invalid email');
+    }
   }
 );
 
 // Get all users
 
 router.post('/users', checkJwt, (req, res, next) => {
+  // @ts-ignore
+  if (req.user.email === req.body.email) {
     let sql = `SELECT * FROM users WHERE email = ?`;
-    const params = [req.body.email];
+    // @ts-ignore
+    const params = [req.user.email];
     // @ts-ignore
     db.query(sql, params, (err, results) => {
         if (err) {
@@ -62,21 +72,30 @@ router.post('/users', checkJwt, (req, res, next) => {
         }
         res.status(200).json(results);
     })
+  } else {
+    return res.status(401).send('Unauthorized: Invalid email');
+  }
 })
 
 // Get user id
 
 router.post('/userid', checkJwt, (req, res, next) => {
-    let sql = `SELECT id FROM users WHERE email = ?`;
-    const params = [req.body.email];
     // @ts-ignore
-    db.query(sql, params, (err, results) => {
-        if (err) {
-          console.error(err);
-          return next(new Error('Database query failed'));
-        }
-        res.status(200).json(results);
-    })
+    if (req.user.email === req.body.email) {
+      let sql = `SELECT id FROM users WHERE email = ?`;
+      // @ts-ignore
+      const params = [req.user.email];
+      // @ts-ignore
+      db.query(sql, params, (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          res.status(200).json(results);
+      })
+  } else {
+    return res.status(401).send('Unauthorized: Invalid email');
+  }
 })
 
 // TODO move to compliance router
