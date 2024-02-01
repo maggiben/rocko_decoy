@@ -16,15 +16,29 @@ router.post(
         create_time: new Date(),
         modified_time: new Date(),
       };
-      let sql = "INSERT INTO users SET ?";
-
-      db.query(sql, data, (err, results) => {
-        if (err) {
-          console.error(err);
-          return next(new Error('Database query failed'));
-        }
-        res.send("Data successfully saved in users table!");
-      });
+      let sql = `SELECT * FROM users WHERE email = ?`;
+      // @ts-ignore
+      const params = [req.body.email];
+      // @ts-ignore
+      db.query(sql, params, (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          if (results) {
+            return res.status(403).send('Cannot create user');
+          } else {
+            let sql = "INSERT INTO users SET ?";
+            // @ts-ignore
+            db.query(sql, data, (err, results) => {
+              if (err) {
+                console.error(err);
+                return next(new Error('Database query failed'));
+              }
+              res.send("Data successfully saved in users table!");
+            });
+          }
+      })
     }
 );
   
