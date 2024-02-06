@@ -25,7 +25,8 @@ router.post(
             console.error(err);
             return next(new Error('Database query failed'));
           }
-          if (results) {
+
+          if (results.length > 0) {
             return res.status(403).send('Cannot create user');
           } else {
             let sql = "INSERT INTO users SET ?";

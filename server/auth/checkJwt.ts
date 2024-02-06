@@ -22,10 +22,12 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
               res.status(404).send('User not found');
             }
 
-            req.user = {
+            if (results.length > 0) {
+              req.user = {
                 id: JSON.stringify(results[0].id),
                 email: payload.email as string,
-            };
+              };
+            }
 
             next(); // Proceed to the next middleware/route handler
         })

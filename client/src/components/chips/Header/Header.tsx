@@ -116,7 +116,7 @@ function Header() {
     if (userInfo) {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
-        if (res && res.length === 0) {
+        if (!res || (res && res.length === 0)) {
           addUser(
             userInfo.idToken,
             userInfo.email,
