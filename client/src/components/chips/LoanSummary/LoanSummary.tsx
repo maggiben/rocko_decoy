@@ -93,15 +93,20 @@ function LoanSummary() {
         <div className="flex items-center gap-2 text-blackPrimary">
           Collateral Needed
           <HoverTooltip text={TOOLTIPS.COLLATERAL_NEEDED} />
+          {loanData?.collateralNeeded &&
+            loanData?.cryptoName &&
+            loanData?.buffer === 0 && (
+              <p className="font-medium text-[10px] text-[#5E7CF1] bg-[#E7EBFD] rounded-md py-[2px] px-2">
+                Estimated Minimum Amount
+              </p>
+            )}
         </div>
         <div
           className="flex items-center
             justify-between gap-1"
         >
           <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-            {loanData?.protocol === DEFAULT_PROTOCOL &&
-            loanData?.collateralNeeded &&
-            loanData?.cryptoName ? (
+            {loanData?.collateralNeeded && loanData?.cryptoName ? (
               <>
                 {' '}
                 {financial(loanData?.collateralNeeded, 3)}{' '}

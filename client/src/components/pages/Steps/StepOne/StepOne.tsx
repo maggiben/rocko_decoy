@@ -39,16 +39,25 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     getRewardAmount,
   } = useSingleLoan();
 
-  const handleBorrowValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleBorrowValueChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     const inputValue = event.target.value;
     const num =
       inputValue === '' ? 0 : parseFloat(inputValue.replace(/,/g, ''));
     setValue('numberInput', financial(num), { shouldValidate: true });
 
+    const currentPrice = await getETHPrice();
+    const loanToValue = await getLTV();
+
+    const collateralInUSD = (num / loanToValue) * (1 + loanData?.buffer / 100);
+    const collateral = collateralInUSD / currentPrice;
+
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
         borrowing: num || 0,
+        collateralNeeded: collateral,
       }));
     }
   };
