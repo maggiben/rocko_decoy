@@ -133,6 +133,7 @@ export interface LoanData {
   subLiquidationPrice: number;
   rewardRate: number;
   rewardAmount: number;
+  termsChecked: boolean;
   activeNextButton?: boolean;
   nextValidation: any;
 }

@@ -178,6 +178,7 @@ export const loneContext = createContext<ContextValues>({
     coinIcon: '',
     cryptoIcon: '',
     cryptoName: 'ETH',
+    termsChecked: false,
     activeNextButton: false,
     nextValidation: '',
   },
@@ -223,6 +224,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     coinIcon: '',
     cryptoIcon: '',
     cryptoName: 'ETH',
+    termsChecked: false,
     activeNextButton: false,
     nextValidation: '',
   });

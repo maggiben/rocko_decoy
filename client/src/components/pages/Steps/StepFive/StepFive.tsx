@@ -33,28 +33,25 @@ const terms: Term[] = [
   {
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        By finalizing your loan request, you will receive a Rocko wallet that
-        will help facilitate and manage your loan. Rocko will have no access or
-        control over funds inside your wallet.
+        By finalizing your loan request, you will receive a non-custodial Rocko
+        wallet that will help facilitate your loan. You must transfer the Amount
+        Required (shown above) to your Rocko wallet in order for your loan to be
+        fulfilled.
       </li>
     ),
   },
   {
     rule: (
       <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        You will be asked to authorize a transaction for the loan amount
-        required (shown above). If your Rocko wallet does not receive the loan
-        amount required, your loan may not be fulfilled.
-      </li>
-    ),
-  },
-  {
-    rule: (
-      <li className="mb-1 ml-3 text-slate-600 text-sm lg:text-base">
-        Rocko&apos;s service fee will be taken out of the initial amount
-        transferred to your Rocko wallet. More info on Rocko&apos;s service fee
-        can be found{' '}
-        <Link href="/" className="underline">
+        Additionally, you authorize your Rocko wallet to pay the service fee
+        (shown above). The fee will be automatically transferred to Rocko from
+        the initial amount sent to your Rocko wallet. More info on Rocko&apos;s
+        fee can be found{' '}
+        <Link
+          href="https://rocko.co/faq/"
+          className="underline"
+          target="_blank"
+        >
           here
         </Link>
         .
@@ -241,6 +238,19 @@ const StepFive: React.FC = () => {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
         otherAddress: otherWallet,
+      }));
+    }
+  };
+
+  const handleTermsCheckChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const isChecked = event.target.checked;
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        termsChecked: isChecked,
       }));
     }
   };
@@ -444,13 +454,40 @@ const StepFive: React.FC = () => {
               </div>
             </div>
           )}
-
           <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
-            <ul className="list-disc">
-              {terms.map((term, i) => (
-                <React.Fragment key={i}>{term.rule}</React.Fragment>
-              ))}
-            </ul>
+            <div className="mt-2 p-3 bg-gray-100 rounded-2xl">
+              <ul className="list-disc">
+                {terms.map((term, i) => (
+                  <React.Fragment key={i}>{term.rule}</React.Fragment>
+                ))}
+              </ul>
+            </div>
+            <label className="mb-1 text-slate-600 text-sm lg:text-base">
+              <div className="flex gap-3">
+                <div className="mt-3">
+                  <input
+                    type="checkbox"
+                    className="checkbox1"
+                    onChange={(e) => handleTermsCheckChange(e)}
+                  />
+                </div>
+                <div>
+                  By checking this box, you agree to the Rocko Terms of Service
+                  which can be found{' '}
+                  <Link
+                    href="https://rocko.co/terms/"
+                    className="underline"
+                    target="_blank"
+                  >
+                    here
+                  </Link>
+                  . You also understand and acknowledge the risks of using DeFi
+                  protocols, non-custodial wallets, and blockchain networks
+                  which can include loss of funds.{' '}
+                </div>
+              </div>
+              {/* </input> */}
+            </label>
           </div>
         </div>
       </section>

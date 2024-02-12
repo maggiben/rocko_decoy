@@ -87,7 +87,11 @@ export default function Stepper(props: Props) {
       return;
     }
 
-    if (loanData?.otherAddress === '' && currentStep === loanSteps.length - 1) {
+    if (
+      loanData?.paymentMethod === 'other' &&
+      loanData?.otherAddress === '' &&
+      currentStep === loanSteps.length - 1
+    ) {
       toast.error('Please input wallet address!');
       return;
     }
@@ -200,9 +204,17 @@ export default function Stepper(props: Props) {
               <button
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
-                  isValidateNextButton() ? 'bg-blue' : 'bg-blue/40'
+                  !isValidateNextButton() ||
+                  (currentStep === loanSteps.length - 1 &&
+                    !loanData?.termsChecked)
+                    ? 'bg-blue/40'
+                    : 'bg-blue'
                 } py-[10px]  px-6 rounded-full text-white`}
-                disabled={!isValidateNextButton() && !isFinalized}
+                disabled={
+                  (!isValidateNextButton() && !isFinalized) ||
+                  (currentStep === loanSteps.length - 1 &&
+                    !loanData?.termsChecked)
+                }
               >
                 {currentStep === loanSteps.length - 1
                   ? 'Finalize Loan'
