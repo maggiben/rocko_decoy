@@ -117,12 +117,7 @@ function Header() {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
         if (!res || (res && res.length === 0)) {
-          addUser(
-            userInfo.idToken,
-            userInfo.email,
-            address as `0x${string}`,
-            false,
-          );
+          addUser(userInfo.email, address as `0x${string}`, false);
         } else {
           /* if user exist */
           const user_id = await getUserId(userInfo?.email);
