@@ -4,14 +4,8 @@ import { publicIp } from 'public-ip';
 import logger from '@/utility/logger';
 
 export const useUserDB = () => {
-  const addUser = (
-    auth0_id: string,
-    email: string,
-    wallet_address: string,
-    active: boolean,
-  ) => {
+  const addUser = (email: string, wallet_address: string, active: boolean) => {
     const userObject = {
-      auth0_id,
       email,
       wallet_address,
       active: Number(active),

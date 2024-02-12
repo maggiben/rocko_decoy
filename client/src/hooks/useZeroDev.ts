@@ -2,6 +2,7 @@ import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
 import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { ZERODEV_PROJECT_ID } from '@/constants/env';
+import setTokens from '@/utility/setTokens';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useZeroDev = () => {
@@ -14,7 +15,8 @@ export const useZeroDev = () => {
       const zeroDevWeb3Auth = ZeroDevWeb3Auth.getInstance([ZERODEV_PROJECT_ID]);
       zeroDevWeb3Auth.getUserInfo().then((res): void => {
         // Set token in session storage for use with backend authentication
-        sessionStorage.setItem('token', res?.idToken || '');
+        setTokens(res?.idToken || '');
+
         setUserInfo(res);
       });
     }
