@@ -22,9 +22,9 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
               res.status(404).send('User not found');
             }
 
-            if (results.length > 0) {
+            if (results?.length > 0) {
               req.user = {
-                id: JSON.stringify(results[0].id),
+                id: JSON.stringify(results?.[0]?.id),
                 email: payload.email as string,
               };
             }

@@ -4,13 +4,8 @@
 
 import Image from 'next/image';
 import React, { JSX, FC, useEffect, useState } from 'react';
-import StatusWarning from '@/assets/StatusWarning.svg';
-import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
-import correct from '@/assets/correct.svg';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
-import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import {
   ConnectWallet,
   useNetworkMismatch,
@@ -18,7 +13,12 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
+import StatusWarning from '@/assets/StatusWarning.svg';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
+import correct from '@/assets/correct.svg';
+import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import { PAYMENT_BUFFER } from '@/constants/env';
@@ -28,6 +28,7 @@ import {
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
 import { networkChainId } from '@/constants';
+import addressValidator from '@/utility/addressValidator';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -101,6 +102,8 @@ const MakePayment: FC = () => {
   const currentBalance = parseFloat(router.get('balance') || '0');
   const collateral = parseFloat(router.get('collateral') || '0');
   const amount = 'add'; //! get the URL parameter amount value
+
+  const { disconnect } = useDisconnect();
 
   const { address: zerodevAccount } = useAccount();
   const { getLiquidationPrice, getBuffer } = useSingleLoan();
@@ -228,6 +231,12 @@ const MakePayment: FC = () => {
       switchChain(networkChainId);
     }
   }, [address, chain]);
+
+  useEffect(() => {
+    if (address) {
+      addressValidator(address, disconnect);
+    }
+  }, [address, disconnect]);
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -401,6 +410,9 @@ const MakePayment: FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        onBlur={(e) =>
+                          addressValidator(e.target.value, disconnect)
+                        }
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

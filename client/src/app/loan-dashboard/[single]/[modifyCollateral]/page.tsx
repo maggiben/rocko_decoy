@@ -17,7 +17,7 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
@@ -26,6 +26,7 @@ import {
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
 import { networkChainId } from '@/constants';
+import addressValidator from '@/utility/addressValidator';
 
 interface InnerInfo {
   description: string;
@@ -75,6 +76,7 @@ const ModifyCollateral: React.FC = () => {
   const new_collateral =
     amount === 'add' ? basicCollateral + payment : basicCollateral - payment;
 
+  const { disconnect } = useDisconnect();
   const { address: zerodevAccount } = useAccount();
   const { getETHPrice, getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
@@ -150,6 +152,12 @@ const ModifyCollateral: React.FC = () => {
       switchChain(networkChainId);
     }
   }, [address, chain]);
+
+  useEffect(() => {
+    if (address) {
+      addressValidator(address, disconnect);
+    }
+  }, [address, disconnect]);
 
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
@@ -327,6 +335,9 @@ const ModifyCollateral: React.FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        onBlur={(e) =>
+                          addressValidator(e.target.value, disconnect)
+                        }
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

@@ -1,7 +1,6 @@
 import React, { JSX, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import correct from '@/assets/correct.svg';
 import {
   ConnectWallet,
   useNetworkMismatch,
@@ -9,6 +8,8 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
+import { useAccount, useDisconnect } from 'wagmi';
+import correct from '@/assets/correct.svg';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
@@ -20,8 +21,8 @@ import {
   FLAG_COINBASE_FUNDING,
   FLAG_OTHER_EXCHANGE_FUNDING,
 } from '@/constants/featureFlags';
-import { useAccount } from 'wagmi';
 import { networkChainId } from '@/constants';
+import addressValidator from '@/utility/addressValidator';
 
 const TOOLTIPS = require('../../../../locales/en_tooltips');
 
@@ -63,6 +64,7 @@ const terms: Term[] = [
 const StepFive: React.FC = () => {
   const { loanData, setLoanData } = useLoanData();
   const { address: zerodevAccount } = useAccount();
+  const { disconnect } = useDisconnect();
 
   // for auto-switch network
   const address = useAddress();
@@ -231,8 +233,12 @@ const StepFive: React.FC = () => {
     );
   };
 
-  const handleOtherWalletBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleOtherWalletBlur = async (
+    event: React.FocusEvent<HTMLInputElement>,
+  ) => {
     const otherWallet = event.target.value;
+
+    await addressValidator(otherWallet, disconnect);
 
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
@@ -260,6 +266,12 @@ const StepFive: React.FC = () => {
       switchChain(networkChainId);
     }
   }, [address, chain]);
+
+  useEffect(() => {
+    if (address) {
+      addressValidator(address, disconnect);
+    }
+  }, [address, disconnect]);
 
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">

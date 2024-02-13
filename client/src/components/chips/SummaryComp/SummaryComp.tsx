@@ -17,8 +17,9 @@ import StatusWarning from '@/assets/StatusWarning.svg';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { networkChainId } from '@/constants';
+import addressValidator from '@/utility/addressValidator';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import ChooseWallet from '../ChooseWallet/ChooseWallet';
 import LoanFinalized from '../LoanFinalized/LoanFinalized';
@@ -53,6 +54,7 @@ const summaryData = {
 };
 
 function SummaryComp(props: Props) {
+  const { disconnect } = useDisconnect();
   const retrievedData = sessionStorage.getItem('borrowMoreData');
   const borrowMoreData = JSON.parse(retrievedData || '{}');
 
@@ -171,6 +173,12 @@ function SummaryComp(props: Props) {
       .then((_price) => setCollateralPrice(_price))
       .catch((e) => console.log(e));
   });
+
+  useEffect(() => {
+    if (address) {
+      addressValidator(address, disconnect);
+    }
+  }, [address, disconnect]);
 
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -353,6 +361,9 @@ function SummaryComp(props: Props) {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
+                        onBlur={(e) =>
+                          addressValidator(e.target.value, disconnect)
+                        }
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

@@ -5,14 +5,14 @@ import isOFACCompliant from '../util/ofac-crypto';
 import complianceCheckAddress from '../util/complianceCheckAddress';
 import complianceTransaction from '../util/complianceTransaction';
 import { db } from '../db';
+import checkJwt from '../auth/checkJwt';
 const router = express.Router();
 
-router.post('/address', async (req: Request, res: Response, next) => {
+router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
     // address check
     if(req.body.address){
         const isOFACCompliantResult = await isOFACCompliant(req.body.address);
         const complianceCheckAddressResult = await complianceCheckAddress(req.body.address);
-
 
         const addressCompQuery = "INSERT INTO compliance_address (wallet_address, user_id, user_email, is_ofac_compliant, create_time) VALUES (?, ?, ?, ?, ?)";
         const addressParams = [req.body.address, req?.user?.id, req?.user?.email, isOFACCompliantResult, new Date()];
@@ -50,7 +50,7 @@ router.post('/address', async (req: Request, res: Response, next) => {
     }
 });
 
-router.post('/transaction', async (req: Request, res: Response, next) => {
+router.post('/transaction', checkJwt, async (req: Request, res: Response, next) => {
     // transaction check
      // send transaction to TRM for monitoring
     const transactionMonitoring = await complianceTransaction(req.body.transaction_hash)
