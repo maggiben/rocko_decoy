@@ -29,8 +29,8 @@ function SecurityFirstCard() {
             />
             <DataIconCard
               className="sm:max-w-[272px]  max-w-[100%] w-full"
-              cardHeading="Limited Personal Information"
-              CardContent="Besides email, Rocko doesn't store any of your personal information"
+              cardHeading="Passkeys Protection"
+              CardContent="Leverage Passkeys for greater security when authorizing transactions."
               icon={AccountBalanceIcon}
             />
           </div>
