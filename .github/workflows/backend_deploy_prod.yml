@@ -2,11 +2,11 @@ name: Backend Build and Deploy
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
-  build_and_deploy:
-    environment: dev
+  build_and_deploy_prod:
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -22,5 +22,5 @@ jobs:
         AWS_DEFAULT_OUTPUT: json
       run: |
        ./docker_build.sh
-       ./docker_push.sh dev
-       ./docker_deploy.sh dev
+       ./docker_push.sh prod
+       ./docker_deploy.sh prod
