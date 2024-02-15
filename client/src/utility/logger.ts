@@ -2,6 +2,14 @@ import axios from 'axios';
 
 type LogLevel = 'info' | 'error' | 'warn';
 
+const messageCleaner = (message: string): string =>
+  message
+    .replace(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g,
+      'redacted@user.email',
+    )
+    .replace(/Bearer\s[^\s]+/g, 'Bearer [REDACTED]');
+
 const logger = (message: string, level: LogLevel = 'info'): void => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
@@ -11,7 +19,7 @@ const logger = (message: string, level: LogLevel = 'info'): void => {
       .post(
         '/api/logger',
         {
-          message,
+          message: messageCleaner(message),
           level,
         },
         {
