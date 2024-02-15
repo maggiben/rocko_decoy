@@ -8,6 +8,8 @@ Rocko Site: [![Netlify Status](https://api.netlify.com/api/v1/badges/610f0a49-b8
 
 Backend Dev: [![Backend Build and Deploy](https://github.com/getrocko/poc/actions/workflows/backend_deploy_dev.yml/badge.svg)](https://github.com/getrocko/poc/actions/workflows/backend_deploy_dev.yml)
 
+Backend Prod: [![Backend Build and Deploy](https://github.com/getrocko/poc/actions/workflows/backend_deploy_prod.yml/badge.svg)](https://github.com/getrocko/poc/actions/workflows/backend_deploy_prod.yml)
+
 ## Dev Environment Setup (Mac)
 
 - Install VSCode  (https://code.visualstudio.com/)
