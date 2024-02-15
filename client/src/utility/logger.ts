@@ -5,7 +5,7 @@ type LogLevel = 'info' | 'error' | 'warn';
 const messageCleaner = (message: string): string =>
   message
     .replace(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g,
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
       'redacted@user.email',
     )
     .replace(/Bearer\s[^\s]+/g, 'Bearer [REDACTED]');

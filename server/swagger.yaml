@@ -13,7 +13,7 @@ paths:
       summary: List all items
       responses:
         200:
-          description: An array of thingamabobs
+          description: An array of thingamabobs[]
           schema:
             type: array
             items:
