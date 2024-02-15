@@ -9,7 +9,6 @@ import checkJwt from "../auth/checkJwt";
 router.post(
     '/addUser', (req, res, next) => {
       let data = {
-        auth0_id: req.body.auth0_id,
         email: req.body.email,
         wallet_address: req.body.wallet_address,
         inactive: req.body.active,
