@@ -17,7 +17,7 @@ router.get('/alerts', checkJwt, (req, res, next) => {
         console.error(err);
         return next(new Error('Database query failed'));
       }
-      res.status(200).json(results);
+      return res.status(200).json(results);
     })
   } else {
     return res.status(401).send('Unauthorized: Cannot get alerts');
@@ -87,7 +87,7 @@ router.post("/updateAlert", checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.send("Alert successfully updated");
+        return res.send("Alert successfully updated");
     });
   } else {
     return res.status(401).send('Unauthorized: Cannot update alert');
@@ -109,7 +109,7 @@ router.post("/deleteAlert", checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.send("Alert successfully removed");
+        return res.send("Alert successfully removed");
     });
   } else {
     return res.status(401).send('Unauthorized: Cannot update alert');
@@ -131,7 +131,7 @@ router.post("/deleteAlertByType", checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.send("Alerts successfully removed");
+        return res.send("Alerts successfully removed");
     });
   } else {
     return res.status(401).send('Unauthorized: Cannot delete alerts');

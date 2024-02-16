@@ -13,7 +13,7 @@ router.get('/loans', checkJwt, (req, res, next) => {
         console.error(err);
         return next(new Error('Database query failed'));
       }
-      res.status(200).json(results);
+      return res.status(200).json(results);
     })
   } else {
     return res.status(401).send('Unauthorized: Invalid ID');
@@ -46,7 +46,7 @@ router.post(
             console.error(err);
             return next(new Error('Database query failed'));
           }
-          res.send("Data successfully saved");
+          return res.send("Data successfully saved");
         });
       } else { // update loan (add borrowing and collateral)
         let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user_id = ?";
@@ -59,7 +59,7 @@ router.post(
             console.error(err);
             return next(new Error('Database query failed'));
           }
-          res.send("Deposit Loan Status successfully updated");
+          return res.send("Deposit Loan Status successfully updated");
         });
       }
     } else {
@@ -94,7 +94,7 @@ router.post("/update", checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.send("Amount and Active Status successfully updated");
+        return res.send("Amount and Active Status successfully updated");
       });
     } else {
       let data = {
@@ -114,7 +114,7 @@ router.post("/update", checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.send("Buffer, Collateral and LiquidationPrice successfully updated");
+        return res.send("Buffer, Collateral and LiquidationPrice successfully updated");
       });
     }
   } else {

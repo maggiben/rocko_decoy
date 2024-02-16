@@ -31,14 +31,14 @@ router.get('/follower-count', async (req: Request, res: Response) => {
         // Extract count from the response
         const total_count = response.data.total_items;
 
-        res.json({
+        return res.json({
             success: true,
             email: total_count,
         });
     } catch (error) {
         console.error('Error fetching count from Mailchimp:', error, {statz: res.status});
         // @ts-ignore
-        res.status(error.response.status).json({
+        return res.status(error.response.status).json({
             success: false,
             message: 'Failed to fetch count from Mailchimp'
         });

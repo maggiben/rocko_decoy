@@ -40,12 +40,12 @@ router.get('/cb-callback', async (req, res) => {
             maxAge: 3600000  // 1 hour in milliseconds
         });
 
-        res.redirect(CLIENT_CALLBACK_URL);
+        return res.redirect(CLIENT_CALLBACK_URL);
 
     } catch (error) {
         console.error('Error fetching access token:', error);
         // TODO dont send error back to client, may leak data
-        res.status(500).send(`Failed to fetch access token`);
+        return res.status(500).send(`Failed to fetch access token`);
     }
 });
 
@@ -70,7 +70,7 @@ router.get('/coinbase-balance', async (req, res) => {
         // Extract balance from the response
         const balance = eth_data[0].balance;
 
-        res.json({
+        return res.json({
             success: true,
             balance: balance,
             response: eth_data
@@ -78,7 +78,7 @@ router.get('/coinbase-balance', async (req, res) => {
     } catch (error) {
         console.error('Error fetching balance from Coinbase:', error, {statz: res.status});
         // @ts-ignore
-        res.status(error.response.status).json({
+        return res.status(error.response.status).json({
             success: false,
             message: 'Failed to fetch balance from Coinbase'
         });
@@ -122,7 +122,7 @@ router.post('/send-withdrawal', async (req, res) => {
             data, 
             { headers: headers });
 
-        res.json({
+        return res.json({
             success: true,
             transaction: response.data
         });
@@ -132,7 +132,7 @@ router.post('/send-withdrawal', async (req, res) => {
         // @ts-ignore
         console.log(JSON.stringify(error.response.data.errors));
         // @ts-ignore
-        res.status(error.response.status).json({
+        return res.status(error.response.status).json({
             success: false,
             // @ts-ignore
             message: error.response.data.errors

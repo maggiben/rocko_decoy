@@ -20,7 +20,7 @@ router.get('/average_apr', (req, res, next) => {
         console.error(err);
         return next(new Error('Database query failed'));
       }
-      res.status(200).json(results);
+      return res.status(200).json(results);
     })
 })
 
@@ -32,7 +32,7 @@ router.get('/average_reward_rate', (req, res, next) => {
       console.error(err);
       return next(new Error('Database query failed'));
     }
-    res.status(200).json(results);
+    return res.status(200).json(results);
   })
 })
 
@@ -44,7 +44,7 @@ router.get('/reward_rate', (req, res, next) => {
       console.error(err);
       return next(new Error('Database query failed'));
     }
-    res.status(200).json(results);
+    return res.status(200).json(results);
   })
 })
 

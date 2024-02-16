@@ -35,7 +35,7 @@ router.post(
                 console.error(err);
                 return next(new Error('Database query failed'));
               }
-              res.send("Data successfully saved in users table!");
+              return res.send("Data successfully saved in users table!");
             });
           }
       })
@@ -76,7 +76,7 @@ router.post('/users', checkJwt, (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        res.status(200).json(results);
+        return res.status(200).json(results);
     })
   } else {
     return res.status(401).send('Unauthorized: Invalid email');
@@ -94,7 +94,7 @@ router.post('/userid', checkJwt, (req, res, next) => {
             console.error(err);
             return next(new Error('Database query failed'));
           }
-          res.status(200).json(results);
+          return res.status(200).json(results);
       })
   } else {
     return res.status(401).send('Unauthorized: Invalid email');
@@ -121,13 +121,13 @@ router.post('/vpn', async (req, res) => {
         security.tor === false &&
         security.relay === false 
       ) {
-        res.status(200).send('No VPN, Proxy, Tor, or Relay detected');
+       return res.status(200).send('No VPN, Proxy, Tor, or Relay detected');
       } else {
-        res.status(403).send('VPN, Proxy, Tor, or Relay detected');
+        return res.status(403).send('VPN, Proxy, Tor, or Relay detected');
       }
     }
   } catch (error) {
-    res.status(403).send('Failed region/vpn test');
+    return res.status(403).send('Failed region/vpn test');
   }
 })
 
