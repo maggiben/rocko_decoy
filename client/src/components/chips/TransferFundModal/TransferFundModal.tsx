@@ -13,8 +13,8 @@ import {
 } from '@zerodev/wagmi';
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
 import logger from '@/utility/logger';
-import ModalContent from '../ModalContent/ModalContent';
 import transactionComp from '@/utility/transactionComp';
+import ModalContent from '../ModalContent/ModalContent';
 
 const WETHABI = require('../../../constants/weth.json');
 const USDCABI = require('../../../constants/usdc.json');

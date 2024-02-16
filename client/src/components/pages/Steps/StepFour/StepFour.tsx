@@ -9,6 +9,7 @@ import extrabitcoin from '@/assets/coins/extrabitcoin.svg';
 import extra from '@/assets/coins/extrabitcoin-se.svg';
 import etherIcon from '@/assets/coins/Extra(ETH).svg';
 import RadioInput from '@/components/RadioInput';
+import logger from '@/utility/logger';
 
 const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [selectedValue, setSelectedValue] = useState<number>(150);
@@ -54,7 +55,10 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
         }));
       }
     } catch (e) {
-      console.error({ e }, 'Cannot update loan buffer');
+      logger(
+        `Cannot update loan buffer: ${JSON.stringify(e, null, 2)}`,
+        'error',
+      );
     }
   };
 

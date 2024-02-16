@@ -29,9 +29,11 @@ const logger = (message: string, level: LogLevel = 'info'): void => {
         },
       )
       .then((response) => {
-        console.log('Log sent successfully:', response.data);
+        // eslint-disable-next-line no-console
+        console.log('Log:', response.data);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error('Error sending log:', error);
       });
   }

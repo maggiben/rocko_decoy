@@ -9,6 +9,7 @@ import {
 import { useAddress } from '@thirdweb-dev/react';
 import { parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
+import transactionComp from '@/utility/transactionComp';
 import {
   USDCContract,
   CometContract,
@@ -16,7 +17,6 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
-import transactionComp from '@/utility/transactionComp';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -33,7 +33,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const bigint_collateral = BigInt(
+  const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
@@ -46,7 +46,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
               abi: WETHABI,
               functionName: 'deposit',
               args: [],
-              value: bigint_collateral,
+              value: bigintCollateral,
             },
             {
               address: WETHContract[networkChainId],
@@ -167,7 +167,7 @@ export const useRepayFull = (collateral: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const bigint_collateral = BigInt(
+  const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
@@ -205,7 +205,7 @@ export const useRepayFull = (collateral: any) => {
             {
               to: address as `0x${string}`,
               data: '0x',
-              value: bigint_collateral,
+              value: bigintCollateral,
             },
             {
               address: CometRewardContract[networkChainId],
@@ -261,7 +261,7 @@ export const useAddCollateral = (collateral: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const bigInt_collateral = BigInt(
+  const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
@@ -274,7 +274,7 @@ export const useAddCollateral = (collateral: any) => {
               abi: WETHABI,
               functionName: 'deposit',
               args: [],
-              value: bigInt_collateral,
+              value: bigintCollateral,
             },
             {
               address: WETHContract[networkChainId],
@@ -340,7 +340,7 @@ export const useBorrowCollateral = (collateral: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const bigInt_collateral = BigInt(
+  const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
@@ -366,7 +366,7 @@ export const useBorrowCollateral = (collateral: any) => {
             {
               to: address as `0x${string}`,
               data: '0x',
-              value: bigInt_collateral,
+              value: bigintCollateral,
             },
           ],
           enabled: true,

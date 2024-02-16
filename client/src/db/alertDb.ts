@@ -1,5 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
+import logger from '@/utility/logger';
 
 export const useAlertDB = () => {
   const getSeconds = (frequencyObject: any) => {
@@ -58,7 +60,7 @@ export const useAlertDB = () => {
       );
       return response.data;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };

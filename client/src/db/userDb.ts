@@ -1,17 +1,18 @@
+/* eslint-disable import/prefer-default-export */
+import { publicIp } from 'public-ip';
 import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
-import { publicIp } from 'public-ip';
 import logger from '@/utility/logger';
 
 export const useUserDB = () => {
-  const addUser = (email: string, wallet_address: string, active: boolean) => {
+  const addUser = (email: string, walletAddress: string, active: boolean) => {
     const userObject = {
       email,
-      wallet_address,
+      wallet_address: walletAddress,
       active: Number(active),
     };
-    axiosInterceptor.post(`${BACKEND_URL}/addUser`, userObject).then((res) => {
-      console.log(res.data);
+    axiosInterceptor.post(`${BACKEND_URL}/addUser`, userObject).catch((e) => {
+      logger(`Cannot addUser: ${JSON.stringify(e, null, 2)}`, 'error');
     });
   };
 
@@ -22,8 +23,8 @@ export const useUserDB = () => {
     };
     axiosInterceptor
       .post(`${BACKEND_URL}/updateUser`, userObject)
-      .then((res) => {
-        console.log(res.data);
+      .catch((e) => {
+        logger(`Cannot updateUser: ${JSON.stringify(e, null, 2)}`, 'error');
       });
   };
 
@@ -34,7 +35,7 @@ export const useUserDB = () => {
       });
       return response.data;
     } catch (error) {
-      logger(`Cannot Get UserData: ${JSON.stringify(error, null, 2)}`);
+      logger(`Cannot Get UserData: ${JSON.stringify(error, null, 2)}`, 'error');
       return null;
     }
   };
@@ -47,7 +48,7 @@ export const useUserDB = () => {
 
       return response.data.length > 0 ? response.data[0].id : -1;
     } catch (error) {
-      logger(`Cannot Get UserId: ${JSON.stringify(error, null, 2)}`);
+      logger(`Cannot Get UserId: ${JSON.stringify(error, null, 2)}`, 'error');
       return null;
     }
   };
@@ -61,6 +62,7 @@ export const useUserDB = () => {
 
       return response;
     } catch (error: any) {
+      logger(`Cannot vpnRes: ${JSON.stringify(error, null, 2)}`, 'error');
       return error.response;
     }
   };
@@ -73,7 +75,10 @@ export const useUserDB = () => {
 
       return response.data.length > 0 ? response.data[0].inactive : null;
     } catch (error: any) {
-      logger(`Cannot Get InActive Status: ${JSON.stringify(error, null, 2)}`);
+      logger(
+        `Cannot Get InActive Status: ${JSON.stringify(error, null, 2)}`,
+        'error',
+      );
       return null;
     }
   };
@@ -84,9 +89,7 @@ export const useUserDB = () => {
         email,
       });
 
-      console.log(response);
-
-      return response.data.length > 0 ? response.data[0].readonly : null;
+      return response?.data.length > 0 ? response?.data[0].readonly : null;
     } catch (error: any) {
       logger(`Cannot Get ReadOnly Status: ${JSON.stringify(error, null, 2)}`);
       return null;

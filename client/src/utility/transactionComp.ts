@@ -1,6 +1,6 @@
 import { BACKEND_URL } from '@/constants/env';
-import axiosInterceptor from './axiosInterceptor';
 import logger from '@/utility/logger';
+import axiosInterceptor from './axiosInterceptor';
 
 // Transaction compliance check
 const transactionComp = async ({

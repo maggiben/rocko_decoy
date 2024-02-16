@@ -6,6 +6,7 @@ import axiosInterceptor from '@/utility/axiosInterceptor';
 import { setDelay } from '@/utility/utils';
 import financial from '@/utility/currencyFormate';
 import { BACKEND_URL } from '@/constants/env';
+import logger from '@/utility/logger';
 
 const initiateWithdrawal = async (
   accountId: any,
@@ -48,7 +49,10 @@ export default function CoinbaseCallback() {
         setBalance(data);
       })
       .catch((error) => {
-        console.error('Error fetching balance:', error);
+        logger(
+          `Error fetching balance: ${JSON.stringify(error, null, 2)}`,
+          'error',
+        );
       });
   };
 

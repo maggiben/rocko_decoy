@@ -70,26 +70,26 @@ export const etherscanLink = (
     : `https://${NETWORK}.etherscan.io/${type}/${txHash}`;
 
 export const getFrequencyObject = (repeat: number) => {
-  const secs_one_day = 60 * 60 * 24;
-  const secs_one_hour = 60 * 60;
-  const secs_one_min = 60;
+  const secsOneDay = 60 * 60 * 24;
+  const secsOneHour = 60 * 60;
+  const secsOneMin = 60;
 
-  if (repeat > secs_one_day) {
+  if (repeat > secsOneDay) {
     return {
       interval: 'Day(s)',
-      repeat: repeat / secs_one_day,
+      repeat: repeat / secsOneDay,
     };
   }
-  if (repeat > secs_one_hour) {
+  if (repeat > secsOneHour) {
     return {
       interval: 'Hour(s)',
-      repeat: repeat / secs_one_hour,
+      repeat: repeat / secsOneHour,
     };
   }
-  if (repeat > secs_one_min) {
+  if (repeat > secsOneMin) {
     return {
       interval: 'Min(s)',
-      repeat: repeat / secs_one_min,
+      repeat: repeat / secsOneMin,
     };
   }
 };

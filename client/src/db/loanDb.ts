@@ -1,24 +1,26 @@
+/* eslint-disable import/prefer-default-export */
 import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
+import logger from '@/utility/logger';
 
 export const useLoanDB = () => {
   const finalizeLoan = (
     user: string,
-    transaction_hash: string,
-    lending_protocol: string,
-    loan_active: boolean,
-    loan_asset: string,
-    outstanding_balance: number,
+    transactionHash: string,
+    lendingProtocol: string,
+    loanActive: boolean,
+    loanAsset: string,
+    outstandingBalance: number,
     collateral: number,
     exist: boolean,
   ) => {
     const loanObject = {
       user,
-      transaction_hash,
-      lending_protocol,
-      loan_active: Number(loan_active),
-      loan_asset,
-      outstanding_balance,
+      transaction_hash: transactionHash,
+      lending_protocol: lendingProtocol,
+      loan_active: Number(loanActive),
+      loan_asset: loanAsset,
+      outstanding_balance: outstandingBalance,
       collateral,
       exist,
     };
@@ -61,7 +63,7 @@ export const useLoanDB = () => {
       );
       return response.data;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };
@@ -73,7 +75,7 @@ export const useLoanDB = () => {
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };
@@ -85,7 +87,7 @@ export const useLoanDB = () => {
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };
@@ -97,7 +99,7 @@ export const useLoanDB = () => {
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };
@@ -111,7 +113,7 @@ export const useLoanDB = () => {
         ? response.data[0].average_reward_rate
         : null;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };
@@ -123,7 +125,7 @@ export const useLoanDB = () => {
         ? response.data[0].borrow_reward_rate
         : null;
     } catch (error) {
-      console.error(error);
+      logger(JSON.stringify(error, null, 2), 'error');
       return null;
     }
   };

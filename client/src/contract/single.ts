@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { ethers } from 'ethers';
 import { useAddress, useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
@@ -168,9 +169,9 @@ export const useSingleLoan = () => {
 
     const loanToValue = await getLTV();
     const collateralPrice = await getETHPrice();
-    const min_collateral = Number(loan) / loanToValue / collateralPrice;
+    const minCollateral = Number(loan) / loanToValue / collateralPrice;
 
-    return min_collateral;
+    return minCollateral;
   };
 
   const getLiquidationPrice = async (
@@ -203,10 +204,10 @@ export const useSingleLoan = () => {
 
     const loanToValue = await getLTV();
     const collateralPrice = await getETHPrice();
-    const min_collateral = Number(loan) / loanToValue / collateralPrice;
-    const new_buffer = (Number(collateral) - min_collateral) / min_collateral;
+    const minCollateral = Number(loan) / loanToValue / collateralPrice;
+    const newBuffer = (Number(collateral) - minCollateral) / minCollateral;
 
-    return new_buffer;
+    return newBuffer;
   };
 
   const approveWETH = async () => {
