@@ -156,7 +156,7 @@ function Processing() {
     updateLoan(
       'repay',
       loanData?.id,
-      outStandingBalance - payment,
+      outStandingBalance - payment < 0 ? 0 : outStandingBalance - payment,
       currentBalance !== payment,
       collateral,
       originalborrowBalance - outStandingBalance,
