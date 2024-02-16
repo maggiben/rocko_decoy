@@ -12,7 +12,7 @@ const transactionComp = async ({
 }) => {
   try {
     const transactionCompliance = await axiosInterceptor.post(
-      `${BACKEND_URL}/comp/transcation`,
+      `${BACKEND_URL}/comp/transaction`,
       {
         transaction_hash: transactionHash,
         destination_address: destinationAddress,
