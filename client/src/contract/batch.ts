@@ -16,6 +16,7 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
+import transactionComp from '@/utility/transactionComp';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -93,7 +94,12 @@ export const useGetLoan = (collateral: any, loan: any) => {
     onSuccess() {
       logger('Transaction was successful.', 'info');
       setSuccess(true);
-      if (data?.hash) setTxHash(data?.hash);
+      if (data?.hash) {
+        setTxHash(data?.hash);
+        transactionComp({
+          transactionHash: data?.hash,
+        });
+      }
     },
   });
 
@@ -138,7 +144,12 @@ export const useRepaySome = (loan: any) => {
     onSuccess() {
       logger('Transaction was successful.', 'info');
       setSuccess(true);
-      if (data?.hash) setTxHash(data?.hash);
+      if (data?.hash) {
+        setTxHash(data?.hash);
+        transactionComp({
+          transactionHash: data?.hash,
+        });
+      }
     },
   });
 
@@ -228,7 +239,12 @@ export const useRepayFull = (collateral: any) => {
     onSuccess() {
       logger('Transaction was successful.', 'info');
       setSuccess(true);
-      if (data?.hash) setTxHash(data?.hash);
+      if (data?.hash) {
+        setTxHash(data?.hash);
+        transactionComp({
+          transactionHash: data?.hash,
+        });
+      }
     },
   });
 
@@ -296,7 +312,12 @@ export const useAddCollateral = (collateral: any) => {
     onSuccess() {
       logger('Transaction was successful.', 'info');
       setSuccess(true);
-      if (data?.hash) setTxHash(data?.hash);
+      if (data?.hash) {
+        setTxHash(data?.hash);
+        transactionComp({
+          transactionHash: data?.hash,
+        });
+      }
     },
   });
 
@@ -367,7 +388,12 @@ export const useBorrowCollateral = (collateral: any) => {
     onSuccess() {
       logger('Transaction was successful.', 'info');
       setSuccess(true);
-      if (data?.hash) setTxHash(data?.hash);
+      if (data?.hash) {
+        setTxHash(data?.hash);
+        transactionComp({
+          transactionHash: data?.hash,
+        });
+      }
     },
   });
 

@@ -56,7 +56,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
     const transactionMonitoring = await complianceTransaction(req.body.transaction_hash)
    
     const txMonQuery = "INSERT INTO compliance_transaction (transaction_hash, destination_address, user_id, user_email, create_time) VALUES (?, ?, ?, ?, ?)";
-    const txParams = [req.body.transaction_hash, req.body.destination_address, req?.user?.id, req?.user?.email, new Date()];
+    const txParams = [req.body.transaction_hash, req.body?.destination_address, req?.user?.id, req?.user?.email, new Date()];
 
     db.query(txMonQuery, txParams, (err, results) => {
         if (err) {

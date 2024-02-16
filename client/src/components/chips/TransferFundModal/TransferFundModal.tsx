@@ -14,6 +14,7 @@ import {
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
 import logger from '@/utility/logger';
 import ModalContent from '../ModalContent/ModalContent';
+import transactionComp from '@/utility/transactionComp';
 
 const WETHABI = require('../../../constants/weth.json');
 const USDCABI = require('../../../constants/usdc.json');
@@ -69,6 +70,10 @@ function TransferFundModal({
     enabled: !!data,
     onSuccess() {
       if (data?.hash) {
+        transactionComp({
+          transactionHash: data?.hash,
+          destinationAddress: destination,
+        });
         toast(() => (
           <div className="flex items-center underline gap-2">
             <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
