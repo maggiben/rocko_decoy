@@ -127,17 +127,16 @@ function LoanSummary() {
         </div>
 
         <p className="text-[#545454] text-sm ">
-          {(loanData?.collateralNeeded &&
-            loanData?.protocol === DEFAULT_PROTOCOL && (
-              <>
-                {' '}
-                $
-                {financial(
-                  loanData?.collateralNeeded * loanData?.collateralPrice,
-                  2,
-                )}
-              </>
-            )) ||
+          {(loanData?.collateralNeeded && (
+            <>
+              {' '}
+              $
+              {financial(
+                loanData?.collateralNeeded * loanData?.collateralPrice,
+                2,
+              )}
+            </>
+          )) ||
             ''}
         </p>
       </div>
