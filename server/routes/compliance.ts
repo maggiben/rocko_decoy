@@ -74,4 +74,21 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
     }
 });
 
+router.get('/platform-status', async (req: Request, res: Response, next) => {
+    let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM kill_switch";
+
+    db.query(killSwitch, {}, (err, results) => {
+      if (err) {
+        console.error(err);
+        return next(new Error('Database query failed'));
+      }
+      if (results[0].loan_booking_blocked || results[0].transactions_blocked) {
+        return res.status(503).send(results[0]);
+      }
+
+      return res.status(200).send(results[0]);
+
+    });
+})
+
 export default router;

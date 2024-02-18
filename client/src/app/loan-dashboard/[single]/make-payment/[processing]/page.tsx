@@ -110,7 +110,7 @@ function Processing() {
       return;
     }
     if (Number(data?.formatted) < payment) {
-      toast.error('Insufficient loan Balance!');
+      toast.error('Insufficient USDC Balance!');
       return;
     }
 

@@ -1,4 +1,5 @@
 import express from 'express';
+import { Response, NextFunction } from 'express';
 const router = express.Router();
 import { db } from '../db';
 import checkJwt from '../auth/checkJwt';
@@ -23,9 +24,26 @@ router.get('/loans', checkJwt, (req, res, next) => {
 
 ////////////////////  Create a new loan
 
+const loanKillSwitch = (res: Response, next: NextFunction) => {
+  let killSwitch = "SELECT loan_booking_blocked FROM kill_switch";
+
+  db.query(killSwitch, {}, (err, results) => {
+    if (err) {
+      console.error(err);
+      return next(new Error('Database query failed'));
+    }
+    if (results[0].loan_booking_blocked) {
+      return res.status(503).send('New loans are currently disabled');
+    }
+  });
+}
+
 router.post(
   '/add', checkJwt, (req, res, next) => {
     if (req.user && req.user.id === req.body.user) {
+
+      loanKillSwitch(res, next);
+
       let data = {
         user_id: req.user.id,
         transaction_hash: req.body.transaction_hash,
