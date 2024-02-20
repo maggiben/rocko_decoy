@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import comp from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
@@ -13,10 +14,12 @@ import { etherscanLink, formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
+import useKillSwitch from '@/hooks/useKillSwitch';
 
 function Dashboard() {
   const [active, setActive] = useState(true);
-
+  const { loansPaused, transactionsPaused } = useKillSwitch();
+  const newLoansPaused = loansPaused || transactionsPaused;
   const { getLoanData } = useLoanDB();
   const { getUserId } = useUserDB();
   const { userInfo } = useZeroDev();
@@ -26,19 +29,25 @@ function Dashboard() {
   const { getBorrowAPR } = useSingleLoan();
   const [borrowAPR, setBorrowAPR] = useState<any>(0);
 
+  useEffect(() => {
+    if (!userInfo) {
+      toast.error('Please log in to view your loans');
+    }
+  }, [userInfo]);
+
   const initialize = async () => {
     if (userInfo) {
-      const user_id = await getUserId(userInfo?.email);
-      const result = await getLoanData(user_id);
+      const userId = await getUserId(userInfo?.email);
+      const result = await getLoanData(userId);
       if (result) {
-        const active_loans = result.filter(
+        const userActiveLoans = result.filter(
           (loan: any) => loan.loan_active === 1,
         );
-        const closed_loans = result.filter(
+        const userClosedLoans = result.filter(
           (loan: any) => loan.loan_active === 0,
         );
-        setActiveLoans(active_loans);
-        setClosedLoans(closed_loans);
+        setActiveLoans(userActiveLoans);
+        setClosedLoans(userClosedLoans);
       }
     }
   };
@@ -63,6 +72,7 @@ function Dashboard() {
         <h4 className="text-xl font-medium">Loans</h4>
         <div className="mt-4 mb-4">
           <button
+            type="button"
             className={`py-[6px] px-4 text-xs relative font-medium ${
               active
                 ? 'bg-[#2C3B8D] text-white z-10 rounded-3xl'
@@ -73,6 +83,7 @@ function Dashboard() {
             Active Loans
           </button>
           <button
+            type="button"
             className={`py-[6px] px-4 text-xs -ml-[10px] relative font-medium ${
               !active
                 ? 'bg-[#2C3B8D] text-white z-10 rounded-3xl'
@@ -85,7 +96,7 @@ function Dashboard() {
         </div>
         <div className="divide-y-2 space-y-5">
           {active &&
-            activeLoans?.map((loan: any, i: any) => (
+            activeLoans?.map((loan: any, i: number) => (
               <div key={i} className="space-y-6 pt-4">
                 {/* Parents */}
                 <div className="flex gap-x-2 items-center mb-3 relative">
@@ -223,13 +234,18 @@ function Dashboard() {
                 </div>
               </div>
             ))}
-          <div className="text-center md:text-left pb-2 md:pb-0">
-            <a href="/">
-              <button className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm">
-                Create New Loan
-              </button>
-            </a>
-          </div>
+          {newLoansPaused ? null : (
+            <div className="text-center md:text-left pb-2 md:pb-0">
+              <a href="/">
+                <button
+                  type="button"
+                  className="mt-6 py-[10px] px-6 rounded-3xl bg-[#2C3B8D] text-white font-semibold text-sm"
+                >
+                  Create New Loan
+                </button>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </main>

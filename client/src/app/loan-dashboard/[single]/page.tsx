@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import compound from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
@@ -20,7 +21,7 @@ import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
-import toast from 'react-hot-toast';
+import useKillSwitch from '@/hooks/useKillSwitch';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -41,7 +42,23 @@ const headings = [
   },
 ];
 
+const TxPaused = () => (
+  <p>
+    We are temporarily unable to process transactions, please check for{' '}
+    <a
+      className="underline text-red-500"
+      target="_blank"
+      rel="noopener noreferrer"
+      href="https://twitter.com/rockodefi"
+    >
+      status updates on X
+    </a>
+    .
+  </p>
+);
+
 function SinglePage() {
+  const { transactionsPaused } = useKillSwitch();
   const searchParams = useSearchParams();
   const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
@@ -284,6 +301,8 @@ function SinglePage() {
               {/* //! Alert end */}
               <div className="mt-5 md:mt-8 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
                 <button
+                  type="button"
+                  disabled={transactionsPaused}
                   onClick={() => setOpenModalFor('Make Payment')}
                   className="text-sm font-semibold bg-[#2C3B8D] text-white rounded-3xl px-7 py-3 w-max mx-auto md:m-0"
                 >
@@ -291,15 +310,21 @@ function SinglePage() {
                 </button>
                 <div className="flex md:flex-row flex-col just-between items-center gap-6">
                   <button
+                    type="button"
+                    disabled={transactionsPaused}
                     onClick={() => onClickBorrowMore()}
                     className="text-sm font-semibold bg-[#EEE] text-[#2C3B8D] rounded-3xl px-7 py-3 w-max mx-auto md:m-0 min-w-[167px]"
                   >
                     Borrow More
                   </button>
-                  <p className="text-sm text-center md:text-left text-[#545454] font-normal">
-                    There is no payment due date for this loan. You can repay it
-                    in part or in full at anytime.
-                  </p>
+                  {transactionsPaused ? (
+                    <TxPaused />
+                  ) : (
+                    <p className="text-sm text-center md:text-left text-[#545454] font-normal">
+                      There is no payment due date for this loan. You can repay
+                      it in part or in full at anytime.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -386,15 +411,21 @@ function SinglePage() {
             </div>
             <div className="pt-6 grid grid-cols-1 md:grid-cols-[1fr_3fr] min-[1535px]:grid-cols-[1fr_4fr]  items-center min-[1024px]:gap-x-3 min-[1280px]:gap-x-0 gap-y-2">
               <button
+                type="button"
+                disabled={transactionsPaused}
                 onClick={() => setOpenModalFor('Modify Collateral')}
                 className="text-sm bg-[#EEE] text-[#2C3B8D] rounded-full px-7 py-3 w-max mx-auto md:m-0 font-semibold"
               >
                 Modify Collateral
               </button>
-              <p className="text-sm text-center md:text-left text-[#545454]">
-                You can post additional collateral for this loan at anytime.
-                Doing so will decrease the possibility of liquidation.
-              </p>
+              {transactionsPaused ? (
+                <TxPaused />
+              ) : (
+                <p className="text-sm text-center md:text-left text-[#545454]">
+                  You can post additional collateral for this loan at anytime.
+                  Doing so will decrease the possibility of liquidation.
+                </p>
+              )}
             </div>
           </div>
         </div>

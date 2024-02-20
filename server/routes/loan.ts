@@ -25,14 +25,14 @@ router.get('/loans', checkJwt, (req, res, next) => {
 ////////////////////  Create a new loan
 
 const loanKillSwitch = (res: Response, next: NextFunction) => {
-  let killSwitch = "SELECT loan_booking_blocked FROM kill_switch";
+  let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM kill_switch";
 
   db.query(killSwitch, {}, (err, results) => {
     if (err) {
       console.error(err);
       return next(new Error('Database query failed'));
     }
-    if (results[0].loan_booking_blocked) {
+    if (!!results[0].loan_booking_blocked || !!results[0].transactions_blocked) {
       return res.status(503).send('New loans are currently disabled');
     }
   });

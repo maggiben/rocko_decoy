@@ -7,6 +7,8 @@ import StepFour from '@/components/pages/Steps/StepFour/StepFour';
 import StepFive from '@/components/pages/Steps/StepFive/StepFive';
 
 import Stepper, { Step } from '@/components/Stepper';
+import useKillSwitch from '@/hooks/useKillSwitch';
+import Status from '@/components/Status';
 
 const steps: Step[] = [
   { label: 'Loan Amount', component: StepOne },
@@ -17,5 +19,11 @@ const steps: Step[] = [
 ];
 
 export default function Home() {
-  return <Stepper steps={steps} />;
+  const { loansPaused, transactionsPaused } = useKillSwitch();
+
+  return transactionsPaused || loansPaused ? (
+    <Status />
+  ) : (
+    <Stepper steps={steps} />
+  );
 }

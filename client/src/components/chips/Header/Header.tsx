@@ -204,12 +204,14 @@ function Header() {
             </a>
             <div className="flex items-center gap-12 justify-end">
               <div className="hidden  lg:flex items-center gap-8 justify-end">
-                <Link
-                  href="/loan-dashboard"
-                  className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
-                >
-                  DASHBOARD
-                </Link>
+                {!userInfo ? null : (
+                  <Link
+                    href="/loan-dashboard"
+                    className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
+                  >
+                    DASHBOARD
+                  </Link>
+                )}
                 <Link
                   href="/"
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "

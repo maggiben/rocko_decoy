@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 const alert = {
@@ -37,6 +38,28 @@ const alert = {
       <p>
         Our service is not available for you. If you believe this is a mistake,
         please contact support@rocko.co
+      </p>
+    ),
+  },
+  loansPaused: {
+    title: (
+      <h1 className="text-2xl font-semibold mb-8 text-center">
+        New Loans Paused
+      </h1>
+    ),
+    content: (
+      <p>
+        We are currently not accepting new loan bookings, please check for{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://twitter.com/rockodefi"
+        >
+          status updates on X
+        </a>
+        . If you have an existing loan on Rocko, you can still manage it in your
+        servicing dashboard
+        <Link href="/loan-dashboard">servicing dashboard</Link>
       </p>
     ),
   },
