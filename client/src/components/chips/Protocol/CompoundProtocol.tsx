@@ -17,12 +17,14 @@ const CompoundProtocol: FC<ProtocolProps> = ({
 }) => {
   const { loanData, setLoanData } = useLoanData();
   const [monthAvgAPR, setMonthAvgAPR] = useState<any>(0);
-  const [yearAvgAPR, setYearAvgAPR] = useState<any>(0);
-  const [avgRewardRate, setAvgRewardRate] = useState<any>(0);
+  const [threeMonthAvgAPR, setThreeMonthAvgAPR] = useState<any>(0);
+  // const [yearAvgAPR, setYearAvgAPR] = useState<any>(0);
+  // const [avgRewardRate, setAvgRewardRate] = useState<any>(0);
   const {
     getMonthAverageAPR,
-    getYearAverageAPR,
-    getYearAvgRewardRate,
+    getThreeMonthAverageAPR,
+    // getYearAverageAPR,
+    // getYearAvgRewardRate,
     getRewardRate,
   } = useLoanDB();
 
@@ -94,13 +96,13 @@ const CompoundProtocol: FC<ProtocolProps> = ({
       .then((_apr) => setMonthAvgAPR(_apr))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getYearAverageAPR()
-      .then((_apr) => setYearAvgAPR(_apr))
+    getThreeMonthAverageAPR()
+      .then((_apr) => setThreeMonthAvgAPR(_apr))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getYearAvgRewardRate()
-      .then((_rate) => setAvgRewardRate(_rate))
-      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+    // getYearAvgRewardRate()
+    //   .then((_rate) => setAvgRewardRate(_rate))
+    //   .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -171,10 +173,10 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                 </div>
                 <div className="">
                   <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">365 Day</span>
+                    <span className="">90 Day</span>
                   </p>
                   <p className="font-semibold text-blackPrimary">
-                    {financial(yearAvgAPR * 100, 2)}%
+                    {financial(threeMonthAvgAPR * 100, 2)}%
                   </p>
                 </div>
               </div>
@@ -233,14 +235,14 @@ const CompoundProtocol: FC<ProtocolProps> = ({
                     {financial(loanData?.rewardRate * 100, 2)}%
                   </p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
                     <span className="">Trailing 365 average</span>
                   </p>
                   <p className="font-semibold text-blackPrimary">
                     {financial(avgRewardRate * 100, 2)}%
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

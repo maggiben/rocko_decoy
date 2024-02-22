@@ -8,6 +8,8 @@ router.get('/average_apr', (req, res, next) => {
   let sql;
     if (req.query.openDate === "month") {
       sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)`;
+    } else if (req.query.openDate === "threemonth") {
+      sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 90 DAY)`;
     } else if (req.query.openDate === "year") {
       sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
     } else {

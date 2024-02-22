@@ -94,6 +94,18 @@ export const useLoanDB = () => {
     }
   };
 
+  const getThreeMonthAverageAPR = async () => {
+    try {
+      const response = await axiosInterceptor.get(
+        `${BACKEND_URL}/average_apr?openDate=threemonth`,
+      );
+      return response.data.length > 0 ? response.data[0].average_apr : null;
+    } catch (error) {
+      logger(JSON.stringify(error, null, 2), 'error');
+      return null;
+    }
+  };
+
   const getYearAverageAPR = async () => {
     try {
       const response = await axiosInterceptor.get(
@@ -138,6 +150,7 @@ export const useLoanDB = () => {
     getLoanData,
     getAverageAPR,
     getMonthAverageAPR,
+    getThreeMonthAverageAPR,
     getYearAverageAPR,
     getYearAvgRewardRate,
     getRewardRate,
