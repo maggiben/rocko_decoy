@@ -15,7 +15,7 @@ type Props = {
 function LoanFinalized(props: Props) {
   const {
     navType,
-    title = 'Loan Finalized!',
+    title = 'Loan Ready for Funding!',
     description = 'You can track the status on the next page.',
     url = '/depositing-collateral',
     buttonText = 'Continue',

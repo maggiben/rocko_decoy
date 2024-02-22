@@ -15,7 +15,7 @@ export const useLoanDB = () => {
     exist: boolean,
   ) => {
     const loanObject = {
-      user,
+      user: user.toString(),
       transaction_hash: transactionHash,
       lending_protocol: lendingProtocol,
       loan_active: Number(loanActive),
@@ -56,15 +56,17 @@ export const useLoanDB = () => {
   };
 
   const getLoanData = async (user: string) => {
-    try {
-      const response = await axiosInterceptor.get(
-        // TODO use request body for user data
-        `${BACKEND_URL}/loans?user=${user}`,
-      );
-      return response.data;
-    } catch (error) {
-      logger(JSON.stringify(error, null, 2), 'error');
-      return null;
+    if (user) {
+      try {
+        const response = await axiosInterceptor.get(
+          // TODO use request body for user data
+          `${BACKEND_URL}/loans?user=${user}`,
+        );
+        return response.data;
+      } catch (error) {
+        logger(JSON.stringify(error, null, 2), 'error');
+        return null;
+      }
     }
   };
 

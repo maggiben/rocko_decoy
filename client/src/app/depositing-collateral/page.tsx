@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -19,9 +21,9 @@ import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
-import contentCopy from '@/assets/content_copy.svg';
+// import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
-import financial from '@/utility/currencyFormate';
+// import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
   step: string;
@@ -133,11 +135,22 @@ function DepositingCollateral() {
     setCounter(3);
   };
 
-  const setAllDone = async (txHash: string) => {
-    const user_id = await getUserId(userInfo?.email);
+  const setAllDone = async (txHashLoan: string) => {
+    const userId = await getUserId(userInfo?.email);
+    console.log({
+      email: userInfo?.email,
+      userId,
+      txHashLoan,
+      p: 'compound',
+      boo: true,
+      c: 'ETH',
+      totalBorrowing,
+      totalCollateral,
+      isExistLoan,
+    });
     finalizeLoan(
-      user_id,
-      txHash,
+      userId,
+      txHashLoan,
       'compound',
       true,
       'ETH',
@@ -154,27 +167,27 @@ function DepositingCollateral() {
 
   const setInitialParams = async () => {
     if (userInfo) {
-      const user_id = await getUserId(userInfo?.email);
+      const userId = await getUserId(userInfo?.email);
 
-      getLoanData(user_id).then((result) => {
+      getLoanData(userId).then((result) => {
         if (result && result.length > 0) {
           // set isExistLoan
-          const match_loan = result.filter(
+          const matchLoan = result.filter(
             (loan: any) => loan.loan_active === 1,
           );
-          if (match_loan && match_loan.length > 0) {
+          if (matchLoan && matchLoan.length > 0) {
             setIsExistLoan(true);
-            setTotalBorrowing(match_loan[0].outstanding_balance + borrowing);
-            setTotalCollateral(match_loan[0].collateral + collateral);
+            setTotalBorrowing(matchLoan[0].outstanding_balance + borrowing);
+            setTotalCollateral(matchLoan[0].collateral + collateral);
           }
         }
       });
     }
   };
 
-  const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(wagmiAddress as `0x${string}`);
-  };
+  // const copyToClipboard = async () => {
+  //   await navigator.clipboard.writeText(wagmiAddress as `0x${string}`);
+  // };
 
   useEffect(() => {
     if (
@@ -427,7 +440,7 @@ function DepositingCollateral() {
             )}
           </div>
         </div>
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:pt-6 lg:px-6 lg:mt-6 mt-4">
+        {/* <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:pt-6 lg:px-6 lg:mt-6 mt-4">
           <h6 className="text-blackPrimary lg:text-[20px] text-[16px] font-medium	leading-8">
             Collateral Instructions
           </h6>
@@ -444,7 +457,6 @@ function DepositingCollateral() {
                 {financial(wagmiBalance?.formatted, 4)} ETH{' '}
               </p>
             </div>
-            {/* <p className='bg-[#E6F2ED] rounded-[5px] flex items-center gap-x-1 py-0.5 ps-1 pe-2'></p> */}
           </div>
           <div className="py-[16px]  border-y	">
             <p className="font-normal	text-blackSecondary text-[14px] leading-5	">
@@ -470,7 +482,7 @@ function DepositingCollateral() {
               onClick={copyToClipboard}
             />
           </div>
-        </div>
+        </div> */}
       </section>
       {completeModal && (
         <TransferCollateral onCancel={onBack} onOk={proceedAnyway} />
@@ -506,10 +518,16 @@ function DepositingCollateral() {
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
-                onClick={() => setCompleteModal(true)}
+                type="button"
+                onClick={() => {
+                  setCompleteModal(true);
+                  navRouter.push('/loan-dashboard');
+                }}
                 className={`font-semibold  text-xs md:text-sm ${
                   !activeDone ? 'bg-blue/40' : 'bg-blue'
                 } py-[10px] px-6 rounded-full text-white`}
+                // TODO disable until transaction is completed
+                // why was this commented out Alberto?
                 // disabled={activeDone}
               >
                 Done

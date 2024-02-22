@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import toast from 'react-hot-toast';
 import comp from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
@@ -28,12 +27,6 @@ function Dashboard() {
 
   const { getBorrowAPR } = useSingleLoan();
   const [borrowAPR, setBorrowAPR] = useState<any>(0);
-
-  useEffect(() => {
-    if (!userInfo) {
-      toast.error('Please log in to view your loans');
-    }
-  }, [userInfo]);
 
   const initialize = async () => {
     if (userInfo) {

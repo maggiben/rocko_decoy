@@ -12,11 +12,22 @@ import ProtocolBanner from '@/components/ProtocolsBanner';
 
 const StepThree: FC<ProtocolStep> = ({ title }) => {
   const { loanData, setLoanData } = useLoanData();
-  const [selectProtocol, setSelectProtocol] = useState('');
+  // TODO remove when more protocols
+  // Default to Compound Protocol until we have more
+  const [selectProtocol, setSelectProtocol] = useState('Compound Finance');
   // const [sortOption, setSortOption] = useState('APR (lowest)');
   // const [filterOptions, setFilterOptions] = useState<FilterOptionsProps[]>([]);
 
   const initialize = () => {
+    // TODO remove when more protocols
+    // Default to Compound Protocol until we have more
+    // Enable next button
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        activeNextButton: true,
+      }));
+    }
     if (loanData?.protocol !== '') {
       setSelectProtocol(loanData?.protocol || '');
       if (setLoanData) {

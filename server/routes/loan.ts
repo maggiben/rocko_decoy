@@ -32,6 +32,7 @@ const loanKillSwitch = (res: Response, next: NextFunction) => {
       console.error(err);
       return next(new Error('Database query failed'));
     }
+
     if (!!results[0].loan_booking_blocked || !!results[0].transactions_blocked) {
       return res.status(503).send('New loans are currently disabled');
     }
