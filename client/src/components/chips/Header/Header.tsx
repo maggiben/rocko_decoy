@@ -43,8 +43,15 @@ function Header() {
   const { address, isConnected } = useAccount();
   const { userInfo } = useZeroDev();
   const { getLoanData } = useLoanDB();
-  const { getUserData, getUserId, addUser, isVPN, isInActive, isReadOnly } =
-    useUserDB();
+  const {
+    getUserData,
+    getUserId,
+    addUser,
+    updateCountry,
+    isVPN,
+    isInActive,
+    isReadOnly,
+  } = useUserDB();
   const [isUnavailable, setIsUnavailable] = useState(false);
 
   const OnLogin = async () => {
@@ -120,6 +127,8 @@ function Header() {
           addUser(userInfo.email, address as `0x${string}`, false);
         } else {
           /* if user exist */
+          await updateCountry(userInfo?.email); // log country_lastlogin
+
           const user_id = await getUserId(userInfo?.email);
           const result = await getLoanData(user_id);
           if (result) {

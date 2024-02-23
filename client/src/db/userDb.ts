@@ -5,10 +5,18 @@ import { BACKEND_URL } from '@/constants/env';
 import logger from '@/utility/logger';
 
 export const useUserDB = () => {
-  const addUser = (email: string, walletAddress: string, active: boolean) => {
+  const addUser = async (
+    email: string,
+    walletAddress: string,
+    active: boolean,
+  ) => {
+    const { country, ip } = await getUserCountry();
+
     const userObject = {
       email,
       wallet_address: walletAddress,
+      country,
+      ip,
       active: Number(active),
     };
     axiosInterceptor.post(`${BACKEND_URL}/addUser`, userObject).catch((e) => {
@@ -25,6 +33,21 @@ export const useUserDB = () => {
       .post(`${BACKEND_URL}/updateUser`, userObject)
       .catch((e) => {
         logger(`Cannot updateUser: ${JSON.stringify(e, null, 2)}`, 'error');
+      });
+  };
+
+  const updateCountry = async (email: string) => {
+    const { country, ip } = await getUserCountry();
+
+    const userObject = {
+      email,
+      country,
+      ip,
+    };
+    axiosInterceptor
+      .patch(`${BACKEND_URL}/updateCountry`, userObject)
+      .then((res) => {
+        console.log(res.data);
       });
   };
 
@@ -67,6 +90,19 @@ export const useUserDB = () => {
     }
   };
 
+  const getUserCountry = async () => {
+    try {
+      const ip = await publicIp();
+      const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
+        ip,
+      });
+
+      return response.data.details;
+    } catch (error: any) {
+      return error.response;
+    }
+  };
+
   const isInActive = async (email: string) => {
     try {
       const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
@@ -99,8 +135,10 @@ export const useUserDB = () => {
   return {
     addUser,
     updateUser,
+    updateCountry,
     getUserData,
     getUserId,
+    getUserCountry,
     isVPN,
     isInActive,
     isReadOnly,

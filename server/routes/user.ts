@@ -11,6 +11,8 @@ router.post(
       let data = {
         email: req.body.email,
         wallet_address: req.body.wallet_address,
+        country_origin: req.body.country,
+        ipaddress_lastlogin: req.body.ip,
         inactive: req.body.active,
         create_time: new Date(),
         modified_time: new Date(),
@@ -62,6 +64,26 @@ router.post(
     } else {
       return res.status(401).send('Unauthorized: Invalid email');
     }
+  }
+);
+
+router.patch(
+  '/updateCountry', (req, res, next) => {
+    let data = {
+      email: req.body.email,
+      country: req.body.country,
+      ip: req.body.ip,
+      modified_time: new Date(),
+    };
+    let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
+
+    db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
+      if (err) {
+        console.error(err);
+        return next(new Error('Database query failed'));
+      }
+      res.send("User's Country data successfully updated");
+    });
   }
 );
 
@@ -121,7 +143,13 @@ router.post('/vpn', async (req, res) => {
         security.tor === false &&
         security.relay === false 
       ) {
-       return res.status(200).send('No VPN, Proxy, Tor, or Relay detected');
+        res.status(200).send({
+          description: 'No VPN, Proxy, Tor, or Relay detected',
+          details: {
+            ip: req.body.ip,
+            country: location.country
+          }
+        });
       } else {
         return res.status(403).send('VPN, Proxy, Tor, or Relay detected');
       }
