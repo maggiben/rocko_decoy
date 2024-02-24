@@ -6,7 +6,10 @@ import {
   ROCKO_DB_USER 
 } from "../constants";
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
+    // TODO 
+    // have roughly twice as many connections as the number of CPU cores available on your database server
+    connectionLimit : 24,
     host: ROCKO_DB_HOST,
     user: ROCKO_DB_USER,
     password: ROCKO_DB_PASSWORD,
@@ -15,7 +18,7 @@ const db = mysql.createConnection({
 
 const connectDB = async () => {
   try {
-      db.connect((err) => {
+      db.getConnection((err) => {
         if (err) {
           console.error(err);
           // @ts-ignore
