@@ -4,7 +4,7 @@
 
 - [NEXT_PUBLIC_IS_DEMO_MODE] : if true, app will run in demo mode - otherwise(false), it will run in real mode
 
-- [NEXT_PUBLIC_NETWORK] : Blockchain network which application will run on. `goerli, mainnet, etc`
+- [NEXT_PUBLIC_NETWORK] : Blockchain network which application will run on. `sepolia, mainnet, etc`
 
 - [NEXT_PUBLIC_INFURA_APIKEY] : This is used to communicate with the Ethereum blockchain - infuraProvider will be used as wagmi provider
 
@@ -24,7 +24,7 @@ Create your own .env.local file in the root directory of the project and add the
 
 ```
 NEXT_PUBLIC_IS_DEMO_MODE=false
-NEXT_PUBLIC_NETWORK=goerli
+NEXT_PUBLIC_NETWORK=sepolia
 NEXT_PUBLIC_INFURA_APIKEY=ask_for_it
 NEXT_PUBLIC_THIRDWEB_CLIENTID=ask_for_it
 NEXT_PUBLIC_ZERODEV_PROJECT_ID=ask_for_it
