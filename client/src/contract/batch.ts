@@ -34,14 +34,16 @@ export const useGetLoan = (collateral: any, loan: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // TODO Sepolia
+  // TODO Sepolia.
   // const XXXcollateral = 0.041130385349850716;
 
   const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
-  // probably collateral infinity again?l
+  // Are gas fees a problem on Sepolia? How do we max out?
+
+  // probably collateral infinity again?
   console.log({ bigintCollateral, address, wagmiAddress, txHash, success });
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
