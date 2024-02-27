@@ -40,7 +40,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       const collateralInUSD = loanData?.borrowing
         ? (loanData?.borrowing / loanToValue) * (1 + newBuffer / 100)
         : 0;
-      const collateral = collateralInUSD / ethPrice;
+      const collateral = 0.041130385349850716; // collateralInUSD / ethPrice;
       const liquidationPrice = loanData?.borrowing
         ? loanData?.borrowing / threshold / collateral
         : 0;

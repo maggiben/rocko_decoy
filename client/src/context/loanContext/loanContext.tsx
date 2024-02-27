@@ -152,7 +152,7 @@ const protocols = !FLAG_MULTI_PROTOCOL
       },
     ];
 
-export const loneContext = createContext<ContextValues>({
+export const loanContext = createContext<ContextValues>({
   loanData: {
     borrowing: 0,
     protocol: '',
@@ -399,7 +399,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
   ];
 
   return (
-    <loneContext.Provider
+    <loanContext.Provider
       value={{
         loanData,
         setLoanData,
@@ -410,7 +410,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
       }}
     >
       {children}
-    </loneContext.Provider>
+    </loanContext.Provider>
   );
 };
 

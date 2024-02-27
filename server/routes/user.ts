@@ -69,21 +69,26 @@ router.post(
 
 router.patch(
   '/updateCountry', (req, res, next) => {
-    let data = {
-      email: req.body.email,
-      country: req.body.country,
-      ip: req.body.ip,
-      modified_time: new Date(),
-    };
-    let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
+    if (req.body.email) {
+      let data = {
+        email: req.body.email,
+        country: req.body.country,
+        ip: req.body.ip,
+        modified_time: new Date(),
+      };
+      let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
+  
+      db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
+        return res.send("User's Country data successfully updated");
+      });
+    } else {
+      return res.status(400).send('Bad Request: Missing email');
+    }
 
-    db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
-      if (err) {
-        console.error(err);
-        return next(new Error('Database query failed'));
-      }
-      res.send("User's Country data successfully updated");
-    });
   }
 );
 

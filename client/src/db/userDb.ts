@@ -37,42 +37,51 @@ export const useUserDB = () => {
   };
 
   const updateCountry = async (email: string) => {
-    const { country, ip } = await getUserCountry();
+    if (email) {
+      const { country, ip } = await getUserCountry();
 
-    const userObject = {
-      email,
-      country,
-      ip,
-    };
-    axiosInterceptor
-      .patch(`${BACKEND_URL}/updateCountry`, userObject)
-      .then((res) => {
-        console.log(res.data);
-      });
+      const userObject = {
+        email,
+        country,
+        ip,
+      };
+      axiosInterceptor
+        .patch(`${BACKEND_URL}/updateCountry`, userObject)
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
   };
 
   const getUserData = async (email: string) => {
-    try {
-      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
-        email,
-      });
-      return response.data;
-    } catch (error) {
-      logger(`Cannot Get UserData: ${JSON.stringify(error, null, 2)}`, 'error');
-      return null;
+    if (email) {
+      try {
+        const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
+          email,
+        });
+        return response.data;
+      } catch (error) {
+        logger(
+          `Cannot Get UserData: ${JSON.stringify(error, null, 2)}`,
+          'error',
+        );
+        return null;
+      }
     }
   };
 
   const getUserId = async (email: string) => {
-    try {
-      const response = await axiosInterceptor.post(`${BACKEND_URL}/userid`, {
-        email,
-      });
+    if (email) {
+      try {
+        const response = await axiosInterceptor.post(`${BACKEND_URL}/userid`, {
+          email,
+        });
 
-      return response.data.length > 0 ? response.data[0].id : -1;
-    } catch (error) {
-      logger(`Cannot Get UserId: ${JSON.stringify(error, null, 2)}`, 'error');
-      return null;
+        return response.data.length > 0 ? response.data[0].id : -1;
+      } catch (error) {
+        logger(`Cannot Get UserId: ${JSON.stringify(error, null, 2)}`, 'error');
+        return null;
+      }
     }
   };
 
@@ -104,31 +113,35 @@ export const useUserDB = () => {
   };
 
   const isInActive = async (email: string) => {
-    try {
-      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
-        email,
-      });
+    if (email) {
+      try {
+        const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
+          email,
+        });
 
-      return response.data.length > 0 ? response.data[0].inactive : null;
-    } catch (error: any) {
-      logger(
-        `Cannot Get InActive Status: ${JSON.stringify(error, null, 2)}`,
-        'error',
-      );
-      return null;
+        return response.data.length > 0 ? response.data[0].inactive : null;
+      } catch (error: any) {
+        logger(
+          `Cannot Get InActive Status: ${JSON.stringify(error, null, 2)}`,
+          'error',
+        );
+        return null;
+      }
     }
   };
 
   const isReadOnly = async (email: string) => {
-    try {
-      const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
-        email,
-      });
+    if (email) {
+      try {
+        const response = await axiosInterceptor.post(`${BACKEND_URL}/users`, {
+          email,
+        });
 
-      return response?.data.length > 0 ? response?.data[0].readonly : null;
-    } catch (error: any) {
-      logger(`Cannot Get ReadOnly Status: ${JSON.stringify(error, null, 2)}`);
-      return null;
+        return response?.data.length > 0 ? response?.data[0].readonly : null;
+      } catch (error: any) {
+        logger(`Cannot Get ReadOnly Status: ${JSON.stringify(error, null, 2)}`);
+        return null;
+      }
     }
   };
 

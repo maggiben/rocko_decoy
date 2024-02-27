@@ -46,9 +46,11 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     const num =
       inputValue === '' ? 0 : parseFloat(inputValue.replace(/,/g, ''));
     setValue('numberInput', financial(num), { shouldValidate: true });
-
-    const currentPrice = await getETHPrice();
-    const loanToValue = await getLTV();
+    console.log('getPrice');
+    const currentPrice = 2933.04826; // await getETHPrice();
+    console.log('currentPrice', currentPrice);
+    const loanToValue = 0.825; // await getLTV();
+    console.log('loanToValue', loanToValue);
 
     const collateralInUSD = (num / loanToValue) * (1 + loanData?.buffer / 100);
     const collateral = collateralInUSD / currentPrice;

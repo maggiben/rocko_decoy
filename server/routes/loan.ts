@@ -90,7 +90,7 @@ router.post(
 //////////////////// Update loan
 
 router.post("/update", checkJwt, (req, res, next) => {
-  if (req?.user?.id) {
+  if (req?.user?.id && req.body.id) {
     const updateType = req.body.updateType;
 
     if (updateType === "repay") {

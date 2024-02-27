@@ -31,6 +31,7 @@ export const WETHContract: { [key: number]: string } = {
   [chains.sepolia.id]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
 };
 
+// Correct for sepolia
 // See https://docs.chain.link/data-feeds/price-feeds/addresses/?network=ethereum
 export const ChainlinkEthPriceFeed: { [key: number]: string } = {
   [chains.mainnet.id]: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
@@ -46,4 +47,30 @@ export const ErrorMessages = {
     'Already processing Metamask wallet connect. Please confirm metamask modal.',
 };
 
-export const exculdedCountries = ['cu', 'ir', 'kp', 'ru', 'sy', 'ua'];
+const sanc = ['CU', 'IR', 'KP', 'RU', 'SY', 'UA'];
+const nonCompSanc = [
+  'AF',
+  'BY',
+  'MM',
+  'CF',
+  'CD',
+  'CI',
+  'ET',
+  'IQ',
+  'LB',
+  'LR',
+  'LY',
+  'ML',
+  'NI',
+  'SO',
+  'SS',
+  'SD',
+  'VE',
+  'YE',
+  'ZW',
+];
+const balkans = ['AL', 'BA', 'ME', 'XK', 'MK', 'RS'];
+
+export const exculdedCountries = [...sanc, ...nonCompSanc, ...balkans].map(
+  (c) => c.toLowerCase(),
+);

@@ -9,7 +9,33 @@ export const ROCKO_DB_PASSWORD = process.env.ROCKO_DB_PASSWORD;
 export const ROCKO_DB_DATABASE = process.env.ROCKO_DB_DATABASE;
 
 // Compliance
-export const BLACKLIST_COUNTRY_CODES = ['CU', 'IR', 'KP', 'RU', 'SY', 'UA'];
+const sanc = ['cu', 'ir', 'kp', 'ru', 'sy', 'ua'];
+const nonCompSanc = [
+  'AF',
+  'BY',
+  'MM',
+  'CF',
+  'CD',
+  'CI',
+  'ET',
+  'IQ',
+  'LB',
+  'LR',
+  'LY',
+  'ML',
+  'NI',
+  'SO',
+  'SS',
+  'SD',
+  'VE',
+  'YE',
+  'ZW',
+];
+const balkans = ['AL', 'BA', 'ME', 'XK', 'MK', 'RS'];
+
+export const BLACKLIST_COUNTRY_CODES = [...sanc, ...nonCompSanc, ...balkans].map(
+    (c) => c.toUpperCase(),
+  );
 
 // Third Party Keys
 export const VPNAPI_KEY = process.env.VPNAPI_KEY;

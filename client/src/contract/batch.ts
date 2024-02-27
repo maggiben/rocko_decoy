@@ -7,7 +7,7 @@ import {
   useContractBatchWrite,
 } from '@zerodev/wagmi';
 import { useAddress } from '@thirdweb-dev/react';
-import { parseBalance } from '@/utility/utils';
+import { etherscanLink, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
 import {
@@ -27,16 +27,21 @@ const uintMax =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 export const useGetLoan = (collateral: any, loan: any) => {
+  console.log('Failing here now');
   const { address: wagmiAddress } = useAccount();
   const address = useAddress();
 
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const XXXcollateral = 0.041130385349850716; // collateralInUSD / ethPrice;
+
   const bigintCollateral = BigInt(
-    ethers.utils.parseEther(collateral.toString()).toString(),
+    ethers.utils.parseEther(XXXcollateral.toString()).toString(),
   );
 
+  // probably collateral infinity again?l
+  console.log({ bigintCollateral, address, wagmiAddress, txHash, success });
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
@@ -92,18 +97,22 @@ export const useGetLoan = (collateral: any, loan: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
         transactionComp({
           transactionHash: data?.hash,
         });
+        logger(
+          `Transaction was successful. ${etherscanLink(data?.hash)}`,
+          'info',
+        );
       }
     },
   });
 
   const executeBatchGetLoan = () => {
+    console.log({ batchGetLoan });
     if (batchGetLoan) batchGetLoan();
   };
 
@@ -142,13 +151,16 @@ export const useRepaySome = (loan: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
         transactionComp({
           transactionHash: data?.hash,
         });
+        logger(
+          `Transaction was successful. ${etherscanLink(data?.hash)}`,
+          'info',
+        );
       }
     },
   });
@@ -237,13 +249,16 @@ export const useRepayFull = (collateral: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
         transactionComp({
           transactionHash: data?.hash,
         });
+        logger(
+          `Transaction was successful. ${etherscanLink(data?.hash)}`,
+          'info',
+        );
       }
     },
   });
@@ -310,13 +325,16 @@ export const useAddCollateral = (collateral: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
         transactionComp({
           transactionHash: data?.hash,
         });
+        logger(
+          `Transaction was successful. ${etherscanLink(data?.hash)}`,
+          'info',
+        );
       }
     },
   });
@@ -386,13 +404,16 @@ export const useBorrowCollateral = (collateral: any) => {
     hash: data?.hash,
     enabled: !!data,
     onSuccess() {
-      logger('Transaction was successful.', 'info');
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
         transactionComp({
           transactionHash: data?.hash,
         });
+        logger(
+          `Transaction was successful. ${etherscanLink(data?.hash)}`,
+          'info',
+        );
       }
     },
   });

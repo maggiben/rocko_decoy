@@ -46,11 +46,13 @@ const CompoundProtocol: FC<ProtocolProps> = ({
       const loanToValue = loanData?.loanToValue;
       const penalty = loanData?.liquidationPenalty;
       const threshold = loanData?.liquidationThreshold;
-      const rewardRate = await getRewardRate();
+      const rewardRate = 0.009341591416584728; // await getRewardRate();
+      console.log('rewardRate', rewardRate);
       const rewardAmount = loanData?.rewardAmount;
       const collateralInUSD =
         (borrowing / loanToValue) * (1 + loanData?.buffer / 100);
-      const collateral = collateralInUSD / loanData?.collateralPrice;
+      const collateral = 0.041130385349850716; // collateralInUSD / loanData?.collateralPrice;
+      console.log({ collateral, collateralInUSD });
       const liquidationPrice = borrowing / threshold / collateral;
       const interestSixMonths = calculateInterestAccrued(
         borrowing,
