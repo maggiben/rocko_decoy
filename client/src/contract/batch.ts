@@ -34,10 +34,11 @@ export const useGetLoan = (collateral: any, loan: any) => {
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const XXXcollateral = 0.041130385349850716; // collateralInUSD / ethPrice;
+  // TODO Sepolia
+  // const XXXcollateral = 0.041130385349850716;
 
   const bigintCollateral = BigInt(
-    ethers.utils.parseEther(XXXcollateral.toString()).toString(),
+    ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
   // probably collateral infinity again?l
