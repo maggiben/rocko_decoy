@@ -12,11 +12,12 @@ export const USDCContract: { [key: number]: string } = {
 };
 
 // See https://docs.compound.finance/#networks
+// Comp USDC Contract
 export const CometContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
   // [chains.goerli.id]: '0x3EE77595A8459e93C2888b13aDB354017B198188',
   // Does this have all the methods?
-  [chains.sepolia.id]: '0x91663d91795049c3d4afc85a7d0adb15238750aa',
+  [chains.sepolia.id]: '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e',
 };
 // Good to go on sepolia
 export const CometRewardContract: { [key: number]: string } = {

@@ -22,8 +22,6 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
                 console.error(err);
                 return next(new Error('Failed to insert into compliance_address'));
             }
-
-            console.log("compliance_address updated successfully");
         });
 
         if ( 
@@ -63,8 +61,6 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
             console.error(err);
             return next(new Error('Failed to insert into compliance_transaction'));
         }
-
-        console.log("compliance_transaction updated successfully");
     });
 
     if(transactionMonitoring){
