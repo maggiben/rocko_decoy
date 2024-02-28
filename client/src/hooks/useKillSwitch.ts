@@ -11,10 +11,6 @@ export default () => {
   const getKillSwitch = useCallback(async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/comp/platform-status`);
-      logger(
-        `${JSON.stringify({ platformStatus: response }, null, 2)}`,
-        'info',
-      );
       setLoansPaused(!!response.data.loan_booking_blocked);
       setTransactionsPaused(!!response.data.transactions_blocked);
     } catch (error: any) {
