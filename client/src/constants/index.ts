@@ -16,7 +16,6 @@ export const USDCContract: { [key: number]: string } = {
 export const CometContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
   // [chains.goerli.id]: '0x3EE77595A8459e93C2888b13aDB354017B198188',
-  // Does this have all the methods?
   [chains.sepolia.id]: '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e',
 };
 // Good to go on sepolia

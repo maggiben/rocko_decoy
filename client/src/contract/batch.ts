@@ -44,7 +44,15 @@ export const useGetLoan = (collateral: any, loan: any) => {
   // Are gas fees a problem on Sepolia? How do we max out?
 
   // probably collateral infinity again?
-  console.log({ bigintCollateral, address, wagmiAddress, txHash, success });
+  console.log({
+    bigintCollateral,
+    address,
+    wagmiAddress,
+    txHash,
+    success,
+    weth: WETHContract[networkChainId],
+    comet: CometContract[networkChainId],
+  });
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
