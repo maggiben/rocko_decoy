@@ -1,11 +1,8 @@
 /* eslint-disable import/prefer-default-export */
+import { ethers } from 'ethers';
 import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 import logger from '@/utility/logger';
-import { ethers } from 'ethers';
-
-// TODO modify when we have more collateral assets
-const collateralAsset = 'eth';
 
 export const useLoanDB = () => {
   const finalizeLoan = (
@@ -20,17 +17,18 @@ export const useLoanDB = () => {
   ) => {
     // TODO update ui execution code and math to use wei, until displayed to user
     const collateralWei = ethers.utils.parseEther(collateral.toString());
-
+    console.log({ collateralWei });
     const loanObject = {
-      user: user.toString(),
+      user,
       transaction_hash: transactionHash,
       lending_protocol: lendingProtocol,
       loan_active: Number(loanActive),
       loan_asset: loanAsset,
       outstanding_balance: outstandingBalance,
-      collateral: collateralWei,
+      collateral: collateralWei.toString(),
       exist,
     };
+
     axiosInterceptor.post(`${BACKEND_URL}/add`, loanObject);
   };
 
@@ -45,6 +43,7 @@ export const useLoanDB = () => {
   ) => {
     // TODO update ui execution code and math to use wei, until displayed to user
     const collateralWei = ethers.utils.parseEther(collateral.toString());
+
     const updateObject =
       updateType === 'repay'
         ? {
@@ -58,7 +57,7 @@ export const useLoanDB = () => {
         : {
             updateType,
             id,
-            collateral: collateralWei,
+            collateral: collateralWei.toString(),
             transaction_hash: txHash,
           };
     axiosInterceptor.post(`${BACKEND_URL}/update`, updateObject);
@@ -68,21 +67,19 @@ export const useLoanDB = () => {
     if (user) {
       try {
         const response = await axiosInterceptor.get(
-          // TODO use request body for user data
+          // TODO use request body for user id
           `${BACKEND_URL}/loans?user=${user}`,
         );
 
         // TODO update ui execution code and math to use wei, until displayed to user
-        const weiValue = ethers.BigNumber.from(
-          response.data.collateral.toString(),
-        );
-
-        const loanData = {
-          ...response.data,
-          collateral: ethers.utils.formatEther(weiValue),
-        };
-
-        return loanData;
+        const loanDataWithEthValues = response.data.map((loan: any) => ({
+          ...loan,
+          principal_balance: Number(loan?.principal_balance),
+          outstanding_balance: Number(loan?.outstanding_balance),
+          interest: Number(loan?.interest),
+          collateral: ethers.utils.formatEther(loan?.collateral),
+        }));
+        return loanDataWithEthValues;
       } catch (error) {
         logger(JSON.stringify(error, null, 2), 'error');
         return null;

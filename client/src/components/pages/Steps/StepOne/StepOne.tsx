@@ -46,13 +46,8 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
     const num =
       inputValue === '' ? 0 : parseFloat(inputValue.replace(/,/g, ''));
     setValue('numberInput', financial(num), { shouldValidate: true });
-    // TODO Sepolia.
-    console.log('getPrice');
-    const currentPrice = await getETHPrice(); // 2933.04826;
-    console.log('currentPrice', currentPrice);
-    const loanToValue = await getLTV(); // 0.825;
-    console.log('loanToValue', loanToValue);
-
+    const currentPrice = await getETHPrice();
+    const loanToValue = await getLTV();
     const collateralInUSD = (num / loanToValue) * (1 + loanData?.buffer / 100);
     const collateral = collateralInUSD / currentPrice;
 

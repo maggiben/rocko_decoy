@@ -41,7 +41,7 @@ const loanKillSwitch = (res: Response, next: NextFunction) => {
 
 router.post(
   '/add', checkJwt, (req, res, next) => {
-    if (req.user && req.user.id === req.body.user) {
+    if (req.user && Number(req.user.id) == req.body.user) {
 
       loanKillSwitch(res, next);
 

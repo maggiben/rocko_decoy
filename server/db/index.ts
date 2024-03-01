@@ -14,6 +14,8 @@ const db = mysql.createPool({
     user: ROCKO_DB_USER,
     password: ROCKO_DB_PASSWORD,
     database: ROCKO_DB_DATABASE,
+    supportBigNumbers: true,
+    bigNumberStrings: true
   });
 
 const connectDB = async () => {

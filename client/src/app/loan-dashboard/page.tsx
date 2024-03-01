@@ -24,7 +24,6 @@ function Dashboard() {
   const { userInfo } = useZeroDev();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
-
   const { getBorrowAPR } = useSingleLoan();
   const [borrowAPR, setBorrowAPR] = useState<any>(0);
 
@@ -32,6 +31,7 @@ function Dashboard() {
     if (userInfo) {
       const userId = await getUserId(userInfo?.email);
       const result = await getLoanData(userId);
+
       if (result) {
         const userActiveLoans = result.filter(
           (loan: any) => loan.loan_active === 1,

@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import StatusSuccess from '@/assets/StatusSuccess.png';
 import { etherscanLink, parseBalance } from '@/utility/utils';
-import { useAccount, useWaitForTransaction } from 'wagmi';
+import { useAccount, useDisconnect, useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
 import {
   usePrepareContractBatchWrite,
@@ -14,6 +14,7 @@ import {
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
+import addressValidator from '@/utility/addressValidator';
 import ModalContent from '../ModalContent/ModalContent';
 
 const WETHABI = require('../../../constants/weth.json');
@@ -32,6 +33,7 @@ function TransferFundModal({
 }) {
   const { address: wagmiAddress } = useAccount();
   const [destination, setDestination] = useState('');
+  const { disconnect } = useDisconnect();
 
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress && ethers.utils.isAddress(destination)
@@ -65,6 +67,7 @@ function TransferFundModal({
 
   const { sendUserOperation: batchWithdraw, data } =
     useContractBatchWrite(config);
+
   useWaitForTransaction({
     hash: data?.hash,
     enabled: !!data,
@@ -93,7 +96,8 @@ function TransferFundModal({
     },
   });
 
-  const withdraw = () => {
+  const withdraw = async () => {
+    await addressValidator(destination, disconnect);
     try {
       if (batchWithdraw) batchWithdraw();
     } catch (e) {

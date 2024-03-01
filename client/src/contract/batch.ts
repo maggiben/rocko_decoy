@@ -5,7 +5,10 @@ import { ethers } from 'ethers';
 import {
   usePrepareContractBatchWrite,
   useContractBatchWrite,
+  // useSendUserOperation,
+  // usePrepareSendUserOperation,
 } from '@zerodev/wagmi';
+import * as chains from 'wagmi/chains';
 import { useAddress } from '@thirdweb-dev/react';
 import { etherscanLink, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
@@ -17,6 +20,7 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
+// import { encodeFunctionData } from 'viem';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -27,24 +31,18 @@ const uintMax =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 export const useGetLoan = (collateral: any, loan: any) => {
-  console.log('Failing here now');
   const { address: wagmiAddress } = useAccount();
   const address = useAddress();
 
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // TODO Sepolia.
-  // const XXXcollateral = 0.041130385349850716;
-
   const bigintCollateral = BigInt(
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
-  // Are gas fees a problem on Sepolia? How do we max out?
-
-  // probably collateral infinity again?
-  console.log({
+  console.log('tx details', {
+    networkChainId,
     bigintCollateral,
     address,
     wagmiAddress,
@@ -52,44 +50,80 @@ export const useGetLoan = (collateral: any, loan: any) => {
     success,
     weth: WETHContract[networkChainId],
     comet: CometContract[networkChainId],
+    collateral: parseBalance(collateral.toString()),
   });
+
+  // // Prepare the tx
+  // const { config: singleConfig } = usePrepareSendUserOperation({
+  //   to: CometContract[networkChainId],
+  //   data: encodeFunctionData({
+  //     abi: COMETABI,
+  //     functionName: 'supply',
+  //     args: [WETHContract[networkChainId], BigInt('0x8bc10807903228')],
+  //   }),
+  //   value: undefined,
+  // });
+
+  // const {
+  //   sendUserOperation: batchGetLoan,
+  //   data,
+  //   error,
+  // } = useSendUserOperation(singleConfig);
+
+  // // Wait on the status of the tx
+  // useWaitForTransaction({
+  //   hash: data?.hash,
+  //   enabled: !!data,
+  //   onSuccess(data) {
+  //     console.log('Transaction was successful.', data?.transactionHash);
+  //   },
+  // });
+
+  const depositApproveWETH = [
+    {
+      address: WETHContract[networkChainId],
+      abi: WETHABI,
+      functionName: 'deposit',
+      args: [],
+      value: bigintCollateral,
+    },
+    {
+      address: WETHContract[networkChainId],
+      abi: WETHABI,
+      functionName: 'approve',
+      args: [CometContract[networkChainId], uintMax],
+    },
+  ];
+
+  const supplyWithdrawalToComp =
+    networkChainId === chains.sepolia.id
+      ? []
+      : [
+          {
+            address: CometContract[networkChainId],
+            abi: COMETABI,
+            functionName: 'supply',
+            args: [
+              WETHContract[networkChainId],
+              parseBalance(collateral.toString()),
+            ],
+          },
+          {
+            address: CometContract[networkChainId],
+            abi: COMETABI,
+            functionName: 'withdrawTo',
+            args: [
+              address || wagmiAddress,
+              USDCContract[networkChainId],
+              parseBalance(loan.toString(), 6),
+            ],
+          },
+        ];
+
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
-          calls: [
-            {
-              address: WETHContract[networkChainId],
-              abi: WETHABI,
-              functionName: 'deposit',
-              args: [],
-              value: bigintCollateral,
-            },
-            {
-              address: WETHContract[networkChainId],
-              abi: WETHABI,
-              functionName: 'approve',
-              args: [CometContract[networkChainId], uintMax],
-            },
-            {
-              address: CometContract[networkChainId],
-              abi: COMETABI,
-              functionName: 'supply',
-              args: [
-                WETHContract[networkChainId],
-                parseBalance(collateral.toString()),
-              ],
-            },
-            {
-              address: CometContract[networkChainId],
-              abi: COMETABI,
-              functionName: 'withdrawTo',
-              args: [
-                address || wagmiAddress,
-                USDCContract[networkChainId],
-                parseBalance(loan.toString(), 6),
-              ],
-            },
-          ],
+          calls: [...depositApproveWETH, ...supplyWithdrawalToComp],
           enabled: true,
         }
       : {
@@ -123,7 +157,6 @@ export const useGetLoan = (collateral: any, loan: any) => {
   });
 
   const executeBatchGetLoan = () => {
-    console.log({ batchGetLoan });
     if (batchGetLoan) batchGetLoan();
   };
 
@@ -275,7 +308,6 @@ export const useRepayFull = (collateral: any) => {
   });
 
   const executeBatchRepayFull = () => {
-    console.log(batchRepayFull);
     if (batchRepayFull) batchRepayFull();
   };
 
