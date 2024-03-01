@@ -83,7 +83,7 @@ router.patch(
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        return res.send("User's Country data successfully updated");
+        return res.status(200).send("OK");
       });
     } else {
       return res.status(400).send('Bad Request: Missing email');

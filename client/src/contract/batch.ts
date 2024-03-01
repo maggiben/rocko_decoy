@@ -10,6 +10,7 @@ import {
 } from '@zerodev/wagmi';
 import * as chains from 'wagmi/chains';
 import { useAddress } from '@thirdweb-dev/react';
+// import { encodeFunctionData } from 'viem';
 import { etherscanLink, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
@@ -20,7 +21,6 @@ import {
   WETHContract,
   networkChainId,
 } from '../constants';
-// import { encodeFunctionData } from 'viem';
 
 const WETHABI = require('../constants/weth.json');
 const COMETABI = require('../constants/comet.json');
@@ -53,7 +53,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
     collateral: parseBalance(collateral.toString()),
   });
 
-  // // Prepare the tx
+  // // // Prepare the tx
   // const { config: singleConfig } = usePrepareSendUserOperation({
   //   to: CometContract[networkChainId],
   //   data: encodeFunctionData({
@@ -61,7 +61,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
   //     functionName: 'supply',
   //     args: [WETHContract[networkChainId], BigInt('0x8bc10807903228')],
   //   }),
-  //   value: undefined,
+  //   value: bigintCollateral,
   // });
 
   // const {

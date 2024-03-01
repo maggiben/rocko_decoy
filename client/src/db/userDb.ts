@@ -4,6 +4,19 @@ import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 import logger from '@/utility/logger';
 
+const getUserCountry = async () => {
+  try {
+    const ip = await publicIp();
+    const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
+      ip,
+    });
+
+    return response.data.details;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
 export const useUserDB = () => {
   const addUser = async (
     email: string,
@@ -45,11 +58,7 @@ export const useUserDB = () => {
         country,
         ip,
       };
-      axiosInterceptor
-        .patch(`${BACKEND_URL}/updateCountry`, userObject)
-        .then((res) => {
-          console.log(res.data);
-        });
+      axiosInterceptor.patch(`${BACKEND_URL}/updateCountry`, userObject);
     }
   };
 
@@ -95,19 +104,6 @@ export const useUserDB = () => {
       return response;
     } catch (error: any) {
       logger(`Cannot vpnRes: ${JSON.stringify(error, null, 2)}`, 'error');
-      return error.response;
-    }
-  };
-
-  const getUserCountry = async () => {
-    try {
-      const ip = await publicIp();
-      const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
-        ip,
-      });
-
-      return response.data.details;
-    } catch (error: any) {
       return error.response;
     }
   };

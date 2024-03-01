@@ -17,6 +17,7 @@ router.get('/loans', checkJwt, (req, res, next) => {
       return res.status(200).json(results);
     })
   } else {
+    console.error({'req?.user?.id': req?.user?.id, 'req.query.user': req.query.user, jwtValid: req?.user?.id === req.query.user})
     return res.status(401).send('Unauthorized: Invalid ID');
   }
 })
@@ -82,6 +83,7 @@ router.post(
         });
       }
     } else {
+      console.error({'req?.user?.id': Number(req?.user?.id), 'req.body.user': req.body.user, jwtValid: Number(req?.user?.id) === req.body.user})
       return res.status(401).send('Unauthorized: Invalid ID');
     }
   }
@@ -137,6 +139,7 @@ router.post("/update", checkJwt, (req, res, next) => {
       });
     }
   } else {
+    console.error({'req?.user?.id': req?.user?.id, 'req.body.user': req.body.id, jwtValid: req?.user?.id === req.body.id})
     return res.status(401).send('Unauthorized: Invalid ID');
   }
 });

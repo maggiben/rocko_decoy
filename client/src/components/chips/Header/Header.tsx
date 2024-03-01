@@ -27,6 +27,8 @@ function Header() {
     options: {
       projectId: ZERODEV_PROJECT_ID,
       shimDisconnect: true,
+      bundlerProvider: 'PIMLICO',
+      paymasterProvider: 'PIMLICO',
     },
   });
 
