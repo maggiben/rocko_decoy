@@ -4,6 +4,10 @@ import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 import logger from '@/utility/logger';
 
+const assetDecimals: any = {
+  ETH: 18,
+};
+
 export const useLoanDB = () => {
   const finalizeLoan = (
     user: string,
@@ -17,7 +21,11 @@ export const useLoanDB = () => {
   ) => {
     // TODO update ui execution code and math to use wei, until displayed to user
     const collateralWei = ethers.utils.parseEther(collateral.toString());
-    console.log({ collateralWei });
+    console.log({
+      deci: assetDecimals?.[loanAsset] || 0,
+      loanAsset,
+      assetDecimals,
+    });
     const loanObject = {
       user,
       transaction_hash: transactionHash,
@@ -26,6 +34,7 @@ export const useLoanDB = () => {
       loan_asset: loanAsset,
       outstanding_balance: outstandingBalance,
       collateral: collateralWei.toString(),
+      collateral_decimals: assetDecimals?.[loanAsset] || 0,
       exist,
     };
 

@@ -29,7 +29,7 @@ export const CometRewardContract: { [key: number]: string } = {
 export const WETHContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   // [chains.goerli.id]: '0x42a71137C09AE83D8d05974960fd607d40033499',
-  [chains.sepolia.id]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
+  [chains.sepolia.id]: '0x2D5ee574e710219a521449679A4A7f2B43f046ad',
 };
 
 // Correct for sepolia

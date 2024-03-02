@@ -41,7 +41,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
-  console.log('tx details', {
+  console.log('txs details', {
     networkChainId,
     bigintCollateral,
     address,
@@ -95,31 +95,25 @@ export const useGetLoan = (collateral: any, loan: any) => {
     },
   ];
 
-  const supplyWithdrawalToComp =
-    networkChainId === chains.sepolia.id
-      ? []
-      : [
-          {
-            address: CometContract[networkChainId],
-            abi: COMETABI,
-            functionName: 'supply',
-            args: [
-              WETHContract[networkChainId],
-              parseBalance(collateral.toString()),
-            ],
-          },
-          {
-            address: CometContract[networkChainId],
-            abi: COMETABI,
-            functionName: 'withdrawTo',
-            args: [
-              address || wagmiAddress,
-              USDCContract[networkChainId],
-              parseBalance(loan.toString(), 6),
-            ],
-          },
-        ];
-
+  const supplyWithdrawalToComp = [
+    {
+      address: CometContract[networkChainId],
+      abi: COMETABI,
+      functionName: 'supply',
+      args: [WETHContract[networkChainId], parseBalance(collateral.toString())],
+    },
+    {
+      address: CometContract[networkChainId],
+      abi: COMETABI,
+      functionName: 'withdrawTo',
+      args: [
+        address || wagmiAddress,
+        USDCContract[networkChainId],
+        parseBalance(loan.toString(), 6),
+      ],
+    },
+  ];
+  console.log('calls', [...depositApproveWETH, ...supplyWithdrawalToComp]);
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
