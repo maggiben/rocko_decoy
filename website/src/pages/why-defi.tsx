@@ -29,7 +29,7 @@ export default function WhyDefi() {
       id: '4.',
       title: 'Non-Custodial',
       descriptions:
-        'When borrowing from a DeFi protocol, crypto used as collateral is stored in non-custodial smart contracts. That means borrowers do not have to trust another person or company to hold their assets — they just need to trust the code, which is public and can’t be changed. In fact, many DeFi protocols undergo public audits of their code to verify their security and that the code does what it’s supposed to.',
+        'When borrowing from many DeFi protocols, crypto used as collateral is stored in non-custodial smart contracts. That means borrowers do not have to trust another person or company to hold their assets — they just need to trust the code, which is public and generally can’t be changed. In fact, many DeFi protocols undergo public audits of their code to verify their security and that the code does what it’s supposed to.',
     },
   ]
   const smartData = [
@@ -41,13 +41,13 @@ export default function WhyDefi() {
     },
     {
       id: '2.',
-      title: 'Regulatory Risk',
+      title: 'Price Volatility',
       descriptions:
-        'For the most part, DeFi protocols do not currently operate under any regulatory body or government oversight. While there has been much discussion among various governments on how to regulate DeFi, much of how and when that will occur is unknown. Future changes could impact DeFi protocols and crypto assets held in them.',
+        'Crypto assets can be volatile — increasing the possibility that collateral used for a loan is liquidated. Additionally, DeFi protocols generally use third-party price oracles to determine asset prices. The oracle(s) used and the method for determining price can impact the collateral value at any given time.',
     },
     {
       id: '3.',
-      title: 'Lending model & interest rate risk',
+      title: 'Lending Model & Interest Rate Risk',
       descriptions:
         'The models used for lending and determining interest rates vary based on the DeFi protocols. For instance, some allow for interest rates to spike when there is significant demand to borrow which could cause the borrower’s interest expense to unexpectedly increase. Prospective borrowers should research DeFi protocols lending and interest rate models to understand how they work and what the risks are before borrowing.',
     },
@@ -77,7 +77,7 @@ export default function WhyDefi() {
             different value propositions. Asset-backed borrowing has emerged as
             a key use case with protocols allowing users to borrow using their
             crypto assets as collateral. For instance, users are able to borrow
-            USDC from Compound using their Eth as collateral which allows them
+            USDC from Compound using their ETH as collateral which allows them
             to get liquidity of their crypto holdings without having to sell.
           </p>
           <h3 className="defi text-[#141414] lg:text-[28px] md:text-[25px] text-[20px] leading-8 md:leading-9 font-normal md:my-[40px] my-[24px]">
@@ -116,8 +116,11 @@ export default function WhyDefi() {
             Simply put, DeFi is an incredible innovation that has the power to
             transform all of our financial lives. While there are many benefits,
             it’s important to understand the risks before interacting with DeFi.
-            Our mission is to help consumers access DeFi in a secure and simple
-            manner, and get the most value from their crypto assets.
+            While some risks have been covered on this page, there may be
+            additional and prospective users of DeFi protocols should conduct
+            their own research. Our mission is to help consumers access DeFi in
+            a secure and simple manner, and get the most value from their crypto
+            assets.
           </p>
           <p className="text-[#545454]  text-[14px leading-6 font-normal md:mt-[24px] mt-[18px]">
             Rocko does not guarantee the reliability of the Site content and

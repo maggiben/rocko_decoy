@@ -18,7 +18,7 @@ export default function About() {
             Our Mission
           </p>
           <h2 className="defi text-[#fff] lg:text-[48px] lg:leading-[56px]  font-medium sm:-text-[30px] text-[25px]">
-            Helping people access DeFi in a secure and simple manner to get the
+            Help people access DeFi in a secure and simple manner to get the
             most value from their crypto assets
           </h2>
         </div>
