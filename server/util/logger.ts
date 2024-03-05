@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ROCKO_DB_DATABASE, SLACK_WEBHOOK_URL } from '../constants';
 
 type LogLevel = 'info' | 'error' | 'warn';
 
@@ -14,34 +15,46 @@ const messageCleaner = (message: string): string =>
       'redacted.ip.address.',
     );
 
-const logger = (message: string | object, level: LogLevel = 'info'): void => {
-  if (process.env.NODE_ENV === 'development') {
+const logger = async (message: any, level: LogLevel = 'info') => {
+
+  // this should be the NODE_END but its undefined ¯\_(ツ)_/¯
+  if (ROCKO_DB_DATABASE !== "rocko_main") {
     // eslint-disable-next-line no-console
     console.log({ message, level });
   } else {
+    // Also log to stdout
+    console.log({ message, level });
+
+
     message = JSON.stringify(message, null, 2);
 
-    axios
-      .post(
-        '/api/logger',
-        {
-          message: messageCleaner(message),
-          level,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      .then((response) => {
+
+    if (SLACK_WEBHOOK_URL) {
+      try {
+  
+        await axios
+          .post(
+            SLACK_WEBHOOK_URL,
+            {
+              text: `${level.toUpperCase()}: ${message}`,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+          .then((response) => {
+            console.log('Message sent successfully:', response.data);
+          })
+          .catch((error) => {
+            console.error('Error sending message:', error);
+          });
+      } catch (error) {
         // eslint-disable-next-line no-console
-        console.log('Log:', response.data);
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error('Error sending log:', error);
-      });
+        console.error(error);
+      }
+    }
   }
 };
 

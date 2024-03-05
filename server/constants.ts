@@ -1,6 +1,8 @@
 // URLs
 export const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
 export const BACKEND_URL = process.env.BACKEND_URL; 
+// todo move this to env
+export const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'; // process.env.SLACK_WEBHOOK_URL;
 
 // Databse
 export const ROCKO_DB_HOST = process.env.ROCKO_DB_HOST;

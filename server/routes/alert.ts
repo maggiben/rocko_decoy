@@ -2,26 +2,32 @@ import express from 'express';
 const router = express.Router();
 import { db } from '../db';
 import checkJwt from '../auth/checkJwt';
+import logger from '../util/logger';
 
 // TODO check that user owns the alert before any actions below
 // TODO add user_id to the alerts table
 
 /////////////////// Get Alerts
 router.get('/alerts', checkJwt, (req, res, next) => {
-  if(req.user) {
-    let sql = `SELECT * FROM alerts WHERE loan_id = ? AND user_id = ?`;
-    let params = [req.query.loanId, req.user.id];
-
-    db.query(sql, params, (err, results) => {
-      if (err) {
-        console.error(err);
-        return next(new Error('Database query failed'));
-      }
-      return res.status(200).json(results);
-    })
-  } else {
-    return res.status(401).send('Unauthorized: Cannot get alerts');
+  try {
+    if(req.user) {
+      let sql = `SELECT * FROM alerts WHERE loan_id = ? AND user_id = ?`;
+      let params = [req.query.loanId, req.user.id];
+  
+      db.query(sql, params, (err, results) => {
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
+        return res.status(200).json(results);
+      })
+    } else {
+      return res.status(401).send('Unauthorized: Cannot get alerts');
+    }
+  } catch (error) {
+    logger(error, 'error');
   }
+  
 })
 
 

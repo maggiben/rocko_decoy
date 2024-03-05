@@ -1,53 +1,69 @@
 import express from 'express';
 const router = express.Router();
 import { db } from '../db';
+import logger from '../util/logger';
 
 /////////////////// Get loans
 router.get('/average_apr', (req, res, next) => {
-  let params = []
-  let sql;
-    if (req.query.openDate === "month") {
-      sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)`;
-    } else if (req.query.openDate === "threemonth") {
-      sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 90 DAY)`;
-    } else if (req.query.openDate === "year") {
-      sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
-    } else {
-      sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= ?`;
-      params.push(req.query.openDate);
-    }
+  try {
+    let params = []
+    let sql;
+      if (req.query.openDate === "month") {
+        sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)`;
+      } else if (req.query.openDate === "threemonth") {
+        sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 90 DAY)`;
+      } else if (req.query.openDate === "year") {
+        sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
+      } else {
+        sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= ?`;
+        params.push(req.query.openDate);
+      }
+  
+      db.query(sql, params, (err, results) => {
+        if (err) {
+          console.error(err);
+          return next(new Error('Database query failed'));
+        }
+        return res.status(200).json(results);
+      })
+  } catch (error) {
+    logger(error, 'error');
+  }
+  
+})
 
-    db.query(sql, params, (err, results) => {
+router.get('/average_reward_rate', (req, res, next) => {
+  try {
+    let sql = `SELECT AVG(borrow_reward_rate) AS average_reward_rate FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
+
+    db.query(sql, (err, results) => {
       if (err) {
         console.error(err);
         return next(new Error('Database query failed'));
       }
       return res.status(200).json(results);
     })
-})
+  } catch (error) {
+    logger(error, 'error');
+  }
 
-router.get('/average_reward_rate', (req, res, next) => {
-  let sql = `SELECT AVG(borrow_reward_rate) AS average_reward_rate FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)`;
-
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error(err);
-      return next(new Error('Database query failed'));
-    }
-    return res.status(200).json(results);
-  })
 })
 
 router.get('/reward_rate', (req, res, next) => {
-  let sql = `SELECT borrow_reward_rate FROM asset_data ORDER BY fetch_time DESC LIMIT 1`;
+  try {
+    let sql = `SELECT borrow_reward_rate FROM asset_data ORDER BY fetch_time DESC LIMIT 1`;
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error(err);
-      return next(new Error('Database query failed'));
-    }
-    return res.status(200).json(results);
-  })
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error(err);
+        return next(new Error('Database query failed'));
+      }
+      return res.status(200).json(results);
+    })
+  } catch (error) {
+    logger(error, 'error');
+  }
+
 })
 
 export default router;

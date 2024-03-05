@@ -42,5 +42,5 @@ connectDB();
 app.use('/', router);
 
 app.listen(5000, () => {
-  console.log("Server started on http://localhost:5000");
+  console.log(`Server started on http://localhost:5000 Env: ${process.env.NODE_ENV}`);
 });

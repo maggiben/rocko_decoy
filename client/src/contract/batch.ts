@@ -38,17 +38,17 @@ export const useGetLoan = (collateral: any, loan: any) => {
     ethers.utils.parseEther(collateral.toString()).toString(),
   );
 
-  console.log('txs details', {
-    networkChainId,
-    bigintCollateral,
-    address,
-    wagmiAddress,
-    txHash,
-    success,
-    weth: WETHContract[networkChainId],
-    comet: CometContract[networkChainId],
-    collateral: parseBalance(collateral.toString()),
-  });
+  // console.log('txs details', {
+  //   networkChainId,
+  //   bigintCollateral,
+  //   address,
+  //   wagmiAddress,
+  //   txHash,
+  //   success,
+  //   weth: WETHContract[networkChainId],
+  //   comet: CometContract[networkChainId],
+  //   collateral: parseBalance(collateral.toString()),
+  // });
 
   const depositApproveWETH = [
     {
@@ -85,6 +85,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
     },
   ];
 
+  console.log({ wagmiAddress });
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
@@ -104,6 +105,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
   } = useContractBatchWrite(config);
 
   console.log({
+    useContractBatchWrite: useContractBatchWrite(config),
     config,
     data,
     error,

@@ -1,6 +1,8 @@
 export const GEMINI_CLIENT_ID = process.env.NEXT_PUBLIC_GEMINI_CLIENT_ID;
 export const COINBASE_CLIENT_ID = process.env.NEXT_PUBLIC_COINBASE_CLIENT_ID;
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+export const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+
 // Gotcha, some tools call mainnet 'ethereum', others call it 'mainnet'
 // rexpects mainnet, sepolia, etc
 type NetworkNames = 'mainnet' | 'sepolia' | 'base';

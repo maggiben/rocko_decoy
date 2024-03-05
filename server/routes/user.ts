@@ -5,114 +5,133 @@ const router = express.Router();
 import { db } from '../db';
 import axios from 'axios';
 import checkJwt from "../auth/checkJwt";
+import logger from "../util/logger";
 
 router.post(
     '/addUser', (req, res, next) => {
-      let data = {
-        email: req.body.email,
-        wallet_address: req.body.wallet_address,
-        country_origin: req.body.country,
-        ipaddress_lastlogin: req.body.ip,
-        inactive: req.body.active,
-        create_time: new Date(),
-        modified_time: new Date(),
-      };
-      let sql = `SELECT * FROM users WHERE email = ?`;
-      // @ts-ignore
-      const params = [req.body.email];
-      // @ts-ignore
-      db.query(sql, params, (err, results) => {
-          if (err) {
-            console.error(err);
-            return next(new Error('Database query failed'));
-          }
+      try {
+        let data = {
+          email: req.body.email,
+          wallet_address: req.body.wallet_address,
+          country_origin: req.body.country,
+          ipaddress_lastlogin: req.body.ip,
+          inactive: req.body.active,
+          create_time: new Date(),
+          modified_time: new Date(),
+        };
+        let sql = `SELECT * FROM users WHERE email = ?`;
+        // @ts-ignore
+        const params = [req.body.email];
+        // @ts-ignore
+        db.query(sql, params, (err, results) => {
+            if (err) {
+              console.error(err);
+              return next(new Error('Database query failed'));
+            }
+  
+            if (results.length > 0) {
+              return res.status(403).send('Cannot create user');
+            } else {
+              let sql = "INSERT INTO users SET ?";
+              // @ts-ignore
+              db.query(sql, data, (err, results) => {
+                if (err) {
+                  console.error(err);
+                  return next(new Error('Database query failed'));
+                }
+                return res.send("Data successfully saved in users table!");
+              });
+            }
+        })
+      } catch (error) {
+       logger(error, 'error'); 
+      }
 
-          if (results.length > 0) {
-            return res.status(403).send('Cannot create user');
-          } else {
-            let sql = "INSERT INTO users SET ?";
-            // @ts-ignore
-            db.query(sql, data, (err, results) => {
-              if (err) {
-                console.error(err);
-                return next(new Error('Database query failed'));
-              }
-              return res.send("Data successfully saved in users table!");
-            });
-          }
-      })
     }
 );
   
 router.post(
   '/updateUser', checkJwt, (req, res, next) => {
-    if (req.user && req.user.email === req.body.email) {
-      let data = {
-        email: req.user.email,
-        phone: req.body.phone,
-        modified_time: new Date(),
-      };
-      let sql = "UPDATE users SET phone = ?, modified_time = ? WHERE email = ?";
-  
-      db.query(sql, [data.phone, data.modified_time, data.email], (err, results) => {
-        if (err) {
-          console.error(err);
-          return next(new Error('Database query failed'));
-        }
-        return res.send("User's Phone data successfully updated");
-      });
-    } else {
-      return res.status(401).send('Unauthorized: Invalid email');
+    try {
+      if (req.user && req.user.email === req.body.email) {
+        let data = {
+          email: req.user.email,
+          phone: req.body.phone,
+          modified_time: new Date(),
+        };
+        let sql = "UPDATE users SET phone = ?, modified_time = ? WHERE email = ?";
+    
+        db.query(sql, [data.phone, data.modified_time, data.email], (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          return res.send("User's Phone data successfully updated");
+        });
+      } else {
+        return res.status(401).send('Unauthorized: Invalid email');
+      }
+    } catch (error) {
+      logger(error, 'error');
     }
   }
 );
 
 router.patch(
   '/updateCountry', (req, res, next) => {
-    if (req.body.email) {
-      let data = {
-        email: req.body.email,
-        country: req.body.country,
-        ip: req.body.ip,
-        modified_time: new Date(),
-      };
-      let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
-  
-      db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
-        if (err) {
-          console.error(err);
-          return next(new Error('Database query failed'));
-        }
-        return res.status(200).send("OK");
-      });
-    } else {
-      return res.status(400).send('Bad Request: Missing email');
+    try {
+      if (req.body.email) {
+        let data = {
+          email: req.body.email,
+          country: req.body.country,
+          ip: req.body.ip,
+          modified_time: new Date(),
+        };
+        let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
+    
+        db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          return res.status(200).send("OK");
+        });
+      } else {
+        return res.status(400).send('Bad Request: Missing email');
+      }
+    } catch (error) {
+      logger(error, 'error');
     }
-
   }
 );
 
 // Get all users
 
 router.post('/users', checkJwt, (req, res, next) => {
-  if (req.user && req.user.email === req.body.email) {
-    let sql = `SELECT * FROM users WHERE email = ?`;
-    const params = [req.user.email];
-    db.query(sql, params, (err, results) => {
-        if (err) {
-          console.error(err);
-          return next(new Error('Database query failed'));
-        }
-        return res.status(200).json(results);
-    })
-  } else {
-    return res.status(401).send('Unauthorized: Invalid email');
+  try{
+    if (req.user && req.user.email === req.body.email) {
+      let sql = `SELECT * FROM users WHERE email = ?`;
+      const params = [req.user.email];
+      db.query(sql, params, (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          return res.status(200).json(results);
+      })
+    } else {
+      return res.status(401).send('Unauthorized: Invalid email');
+    }
+  } catch(error) {
+    logger(error, 'error');
   }
+
 })
 
 // Get user id
 
 router.post('/userid', checkJwt, (req, res, next) => {
+  try {
     if (req.user && req.user.email === req.body.email) {
       let sql = `SELECT id FROM users WHERE email = ?`;
       const params = [req.user.email];
@@ -125,6 +144,9 @@ router.post('/userid', checkJwt, (req, res, next) => {
       })
   } else {
     return res.status(401).send('Unauthorized: Invalid email');
+  }
+  } catch (error) {
+    logger(error, 'error');
   }
 })
 
@@ -160,6 +182,7 @@ router.post('/vpn', async (req, res) => {
       }
     }
   } catch (error) {
+    logger(error, 'error');
     return res.status(403).send('Failed region/vpn test');
   }
 })

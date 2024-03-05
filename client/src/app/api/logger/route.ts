@@ -1,7 +1,6 @@
+import { SLACK_WEBHOOK_URL } from '@/constants/env';
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
-
-const { SLACK_WEBHOOK_URL } = process.env;
 
 // eslint-disable-next-line import/prefer-default-export
 export async function POST(req: NextRequest) {

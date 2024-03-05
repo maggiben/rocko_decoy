@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jose from "jose"
 import { db } from '../db';
+import logger from '../util/logger';
 
 const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization || '';
@@ -35,7 +36,7 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
 
     } catch (error) {
         // Token verification failed
-        console.log({error})
+        logger(JSON.stringify(error, null, 2), 'error');
         res.status(401).send('Unauthorized: Invalid token');
     }
 
