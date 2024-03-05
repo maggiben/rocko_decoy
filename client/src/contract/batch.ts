@@ -103,6 +103,25 @@ export const useGetLoan = (collateral: any, loan: any) => {
     error,
   } = useContractBatchWrite(config);
 
+  console.log({
+    config,
+    data,
+    error,
+    batchGetLoan,
+    success,
+    txHash,
+    wagmiAddress,
+    address,
+    bigintCollateral,
+    networkChainId,
+    WETHContract,
+    CometContract,
+    USDCContract,
+    depositApproveWETH,
+    supplyWithdrawalToComp,
+    uintMax,
+  });
+
   console.log(batchGetLoan, 'batchGetLoan');
 
   useWaitForTransaction({
