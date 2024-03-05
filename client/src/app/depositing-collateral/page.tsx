@@ -85,7 +85,13 @@ function DepositingCollateral() {
 
   const start = async () => {
     if (loanData?.paymentMethod !== 'ethereum') return;
-
+    console.log({
+      pm: loanData?.paymentMethod,
+      wagmiAddress,
+      address,
+      loanData,
+      borrowMoreData,
+    });
     if (!wagmiAddress || !address || !(loanData || borrowMoreData)) return;
     if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error('Invalid Network!');
@@ -95,9 +101,9 @@ function DepositingCollateral() {
       toast.error('Insufficient Collateral Balance!');
       return;
     }
-
+    console.log(1, { startA });
     setStartA(true);
-
+    console.log(2, { startA });
     const collateralReceived = await receiveCollateral();
     if (collateralReceived) {
       setADone();

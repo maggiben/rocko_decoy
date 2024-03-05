@@ -5,12 +5,9 @@ import { ethers } from 'ethers';
 import {
   usePrepareContractBatchWrite,
   useContractBatchWrite,
-  // useSendUserOperation,
-  // usePrepareSendUserOperation,
 } from '@zerodev/wagmi';
 
 import { useAddress } from '@thirdweb-dev/react';
-// import { encodeFunctionData } from 'viem';
 import { etherscanLink, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
@@ -53,32 +50,6 @@ export const useGetLoan = (collateral: any, loan: any) => {
     collateral: parseBalance(collateral.toString()),
   });
 
-  // // // Prepare the tx
-  // const { config: singleConfig } = usePrepareSendUserOperation({
-  //   to: CometContract[networkChainId],
-  //   data: encodeFunctionData({
-  //     abi: COMETABI,
-  //     functionName: 'supply',
-  //     args: [WETHContract[networkChainId], BigInt('0x8bc10807903228')],
-  //   }),
-  //   value: bigintCollateral,
-  // });
-
-  // const {
-  //   sendUserOperation: batchGetLoan,
-  //   data,
-  //   error,
-  // } = useSendUserOperation(singleConfig);
-
-  // // Wait on the status of the tx
-  // useWaitForTransaction({
-  //   hash: data?.hash,
-  //   enabled: !!data,
-  //   onSuccess(data) {
-  //     console.log('Transaction was successful.', data?.transactionHash);
-  //   },
-  // });
-
   const depositApproveWETH = [
     {
       address: WETHContract[networkChainId],
@@ -113,7 +84,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
       ],
     },
   ];
-  console.log('calls', [...depositApproveWETH, ...supplyWithdrawalToComp]);
+
   const { config } = usePrepareContractBatchWrite(
     wagmiAddress
       ? {
@@ -132,6 +103,8 @@ export const useGetLoan = (collateral: any, loan: any) => {
     error,
   } = useContractBatchWrite(config);
 
+  console.log(batchGetLoan, 'batchGetLoan');
+
   useWaitForTransaction({
     hash: data?.hash,
     enabled: !!data,
@@ -147,6 +120,16 @@ export const useGetLoan = (collateral: any, loan: any) => {
           'info',
         );
       }
+    },
+    onError(e) {
+      logger(
+        `Transaction failed: DATA: ${JSON.stringify(
+          data,
+          null,
+          2,
+        )} ERR: ${JSON.stringify(e, null, 2)}`,
+        'error',
+      );
     },
   });
 
