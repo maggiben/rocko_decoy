@@ -53,6 +53,10 @@ First, run the development server:
 - [eslint fix] yarn eslint:fix
 ```
 
+## Opening a PR
+
+Once work is completed and ready for a PR, please make sure to run `yarn build` and `yarn eslint:fix` before opening a PR. This will ensure the build is working and wont fail the Netlify build.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

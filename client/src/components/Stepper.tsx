@@ -53,8 +53,8 @@ export default function Stepper(props: Props) {
     options: {
       projectId: ZERODEV_PROJECT_ID,
       shimDisconnect: true,
-      bundlerProvider: 'PIMLICO',
-      paymasterProvider: 'PIMLICO',
+      // bundlerProvider: 'PIMLICO',
+      // paymasterProvider: 'PIMLICO',
     },
   });
 

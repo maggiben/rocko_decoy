@@ -3,7 +3,7 @@ export const COINBASE_CLIENT_ID = process.env.NEXT_PUBLIC_COINBASE_CLIENT_ID;
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // Gotcha, some tools call mainnet 'ethereum', others call it 'mainnet'
 // rexpects mainnet, sepolia, etc
-type NetworkNames = 'mainnet' | 'sepolia';
+type NetworkNames = 'mainnet' | 'sepolia' | 'base';
 export const NETWORK: NetworkNames =
   (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'sepolia';
 export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || '';
@@ -15,7 +15,7 @@ export const PAYMENT_BUFFER = process.env.NEXT_PUBLIC_PAYMENT_BUFFER || 5;
 
 // Gotcha, some tools call mainnet 'ethereum', others call it 'mainnet'
 // returns ethereum, sepolia, etc
-type BlockchainNames = 'ethereum' | 'sepolia';
+type BlockchainNames = 'ethereum' | 'sepolia' | 'base';
 export const BLOCKCHAIN: BlockchainNames =
   NETWORK === 'mainnet' ? 'ethereum' : NETWORK;
 

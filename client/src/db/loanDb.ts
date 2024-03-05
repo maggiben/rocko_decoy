@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { ethers } from 'ethers';
 import axiosInterceptor from '@/utility/axiosInterceptor';
-import { BACKEND_URL } from '@/constants/env';
+import { BACKEND_URL, NETWORK } from '@/constants/env';
 import logger from '@/utility/logger';
 
 const assetDecimals: any = {
@@ -30,6 +30,7 @@ export const useLoanDB = () => {
       user,
       transaction_hash: transactionHash,
       lending_protocol: lendingProtocol,
+      protocol_chain: NETWORK,
       loan_active: Number(loanActive),
       loan_asset: loanAsset,
       outstanding_balance: outstandingBalance,

@@ -8,7 +8,7 @@ import {
   // useSendUserOperation,
   // usePrepareSendUserOperation,
 } from '@zerodev/wagmi';
-import * as chains from 'wagmi/chains';
+
 import { useAddress } from '@thirdweb-dev/react';
 // import { encodeFunctionData } from 'viem';
 import { etherscanLink, parseBalance } from '@/utility/utils';

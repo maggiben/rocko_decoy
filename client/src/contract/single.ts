@@ -2,6 +2,7 @@
 import { ethers } from 'ethers';
 import { useAddress, useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
+import * as chains from 'wagmi/chains';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { formatBalance, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
@@ -21,7 +22,7 @@ const BASIC_COMETABI = require('../constants/basic_comet.json');
 const USDCABI = require('../constants/usdc.json');
 const REWARDABI = require('../constants/reward.json');
 
-const ASSET_ID = 2;
+const COLLATERAL_ASSET_ID = BLOCKCHAIN === chains.base.network ? 1 : 2;
 
 export const useSingleLoan = () => {
   const address = useAddress();
@@ -52,9 +53,9 @@ export const useSingleLoan = () => {
     );
     const utilization = await contract.call('getUtilization');
     const borrowRate = await contract.call('getBorrowRate', [utilization]);
-
     const formattedRate = Number(ethers.utils.formatEther(borrowRate));
     const borrowAPR = formattedRate * 60 * 60 * 24 * 365 * 100;
+
     return borrowAPR;
   };
 
@@ -65,10 +66,14 @@ export const useSingleLoan = () => {
       CometContract[networkChainId],
       COMETABI,
     );
-    const assetInfo = await contract.call('getAssetInfo', [ASSET_ID]);
-    const LTV = assetInfo.borrowCollateralFactor;
 
+    const assetInfo = await contract.call('getAssetInfo', [
+      COLLATERAL_ASSET_ID,
+    ]);
+
+    const LTV = assetInfo.borrowCollateralFactor;
     const formattedValue = Number(ethers.utils.formatEther(LTV));
+
     return formattedValue;
   };
 
@@ -79,7 +84,9 @@ export const useSingleLoan = () => {
       CometContract[networkChainId],
       COMETABI,
     );
-    const assetInfo = await contract.call('getAssetInfo', [ASSET_ID]);
+    const assetInfo = await contract.call('getAssetInfo', [
+      COLLATERAL_ASSET_ID,
+    ]);
     const threshold = assetInfo.liquidateCollateralFactor;
 
     const formattedValue = Number(ethers.utils.formatEther(threshold));
@@ -93,7 +100,9 @@ export const useSingleLoan = () => {
       CometContract[networkChainId],
       COMETABI,
     );
-    const assetInfo = await contract.call('getAssetInfo', [ASSET_ID]);
+    const assetInfo = await contract.call('getAssetInfo', [
+      COLLATERAL_ASSET_ID,
+    ]);
     const penalty = assetInfo.liquidationFactor;
 
     const formattedValue = 1 - Number(ethers.utils.formatEther(penalty));

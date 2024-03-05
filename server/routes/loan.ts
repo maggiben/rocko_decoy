@@ -50,11 +50,13 @@ router.post(
         user_id: req.user.id,
         transaction_hash: req.body.transaction_hash,
         lending_protocol: req.body.lending_protocol,
+        protocol_chain: req.body.protocol_chain,
         loan_active: req.body.loan_active,
         loan_asset: req.body.loan_asset,
         principal_balance: req.body.outstanding_balance,
         outstanding_balance: req.body.outstanding_balance,
         collateral: req.body.collateral,
+        collateral_decimals: req.body.collateral_decimals,
         create_time: new Date(),
         modified_time: new Date(),
       };
