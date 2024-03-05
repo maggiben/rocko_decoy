@@ -97,6 +97,7 @@ function TransferFundModal({
   });
 
   const withdraw = async () => {
+    // console.log('Withdrawal using token:', sessionStorage.getItem('token'));
     await addressValidator(destination, disconnect);
     try {
       if (batchWithdraw) batchWithdraw();

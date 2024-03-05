@@ -19,9 +19,9 @@ router.post(
           create_time: new Date(),
           modified_time: new Date(),
         };
-        let sql = `SELECT * FROM users WHERE email = ?`;
+        let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
         // @ts-ignore
-        const params = [req.body.email];
+        const params = [req.body.email, req.body.wallet_address];
         // @ts-ignore
         db.query(sql, params, (err, results) => {
             if (err) {
@@ -30,6 +30,7 @@ router.post(
             }
   
             if (results.length > 0) {
+              logger(`Attempted to create duplicate user email (${req.body.email.replace("@", "(at)")}) or wallet_address (${req.body.wallet_address})`, 'error')
               return res.status(403).send('Cannot create user');
             } else {
               let sql = "INSERT INTO users SET ?";

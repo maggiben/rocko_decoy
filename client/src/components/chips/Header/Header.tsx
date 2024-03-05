@@ -43,7 +43,7 @@ function Header() {
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
-  const { userInfo } = useZeroDev();
+  const { userInfo, setUserInfo } = useZeroDev();
   const { getLoanData } = useLoanDB();
   const {
     getUserData,
@@ -56,14 +56,16 @@ function Header() {
   } = useUserDB();
   const [isUnavailable, setIsUnavailable] = useState(false);
 
-  const OnLogin = async () => {
-    await connect({
+  const OnLogin = () => {
+    connect({
       connector: auth0Connector,
     });
   };
 
-  const OnLogout = async () => {
-    await disconnect();
+  const OnLogout = () => {
+    sessionStorage.removeItem('token');
+    disconnect();
+    setUserInfo(null);
   };
 
   const handleClickOutside = (event: { target: any }) => {
