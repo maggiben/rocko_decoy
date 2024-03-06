@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ROCKO_DB_DATABASE, SLACK_WEBHOOK_URL } from '../constants';
+import { CLIENT_URL, ROCKO_DB_DATABASE, SLACK_WEBHOOK_URL } from '../constants';
 
 type LogLevel = 'info' | 'error' | 'warn';
 
@@ -18,43 +18,41 @@ const messageCleaner = (message: string): string =>
 const logger = async (message: any, level: LogLevel = 'info') => {
 
   // this should be the NODE_END but its undefined ¯\_(ツ)_/¯
-  if (ROCKO_DB_DATABASE !== "rocko_main") {
-    // eslint-disable-next-line no-console
-    console.log({ message, level });
-  } else {
-    // Also log to stdout
-    console.log({ message, level });
+  if (ROCKO_DB_DATABASE === "rocko_main" || CLIENT_URL === "https://develop.testnet.rocko.co") {
+     // Also log to stdout
+     console.log({ message, level });
 
-
-    message = JSON.stringify(message, null, 2);
-
-
-    if (SLACK_WEBHOOK_URL) {
-      try {
+     message = JSON.stringify(message, null, 2);
   
-        await axios
-          .post(
-            SLACK_WEBHOOK_URL,
-            {
-              text: `${level.toUpperCase()}: ${message}`,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          .then((response) => {
-            console.log('Message sent successfully:', response.data);
-          })
-          .catch((error) => {
-            console.error('Error sending message:', error);
-          });
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    }
+     if (SLACK_WEBHOOK_URL) {
+       try {
+   
+         await axios
+           .post(
+             SLACK_WEBHOOK_URL,
+             {
+               text: `${level.toUpperCase()}: ${message}`,
+             },
+             {
+               headers: {
+                 'Content-Type': 'application/json',
+               },
+             },
+           )
+           .then((response) => {
+             console.log('Message sent successfully:', response.data);
+           })
+           .catch((error) => {
+             console.error('Error sending message:', error);
+           });
+       } catch (error) {
+         // eslint-disable-next-line no-console
+         console.error(error);
+       }
+     }
+  } else {
+       // eslint-disable-next-line no-console
+       console.log({ message, level });
   }
 };
 
