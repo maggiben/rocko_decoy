@@ -20,11 +20,8 @@ router.post(
           modified_time: new Date(),
         };
 
-        // TODO reenable this after we find the dupe wallet issue
-        // let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
-        // const params = [req.body.email, req.body.wallet_address];
-        let sql = `SELECT * FROM users WHERE email = ?`;
-        const params = [req.body.email];
+        let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
+        const params = [req.body.email, req.body.wallet_address];
 
         db.query(sql, params, (err, results) => {
             if (err) {
