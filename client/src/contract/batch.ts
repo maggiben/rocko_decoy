@@ -10,7 +10,6 @@ import {
 import { useAddress } from '@thirdweb-dev/react';
 import { etherscanLink, parseBalance } from '@/utility/utils';
 import logger from '@/utility/logger';
-import transactionComp from '@/utility/transactionComp';
 import {
   USDCContract,
   CometContract,
@@ -133,9 +132,6 @@ export const useGetLoan = (collateral: any, loan: any) => {
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
-        transactionComp({
-          transactionHash: data?.hash,
-        });
         logger(
           `Transaction was successful. ${etherscanLink(data?.hash)}`,
           'info',
@@ -196,9 +192,6 @@ export const useRepaySome = (loan: any) => {
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
-        transactionComp({
-          transactionHash: data?.hash,
-        });
         logger(
           `Transaction was successful. ${etherscanLink(data?.hash)}`,
           'info',
@@ -294,9 +287,6 @@ export const useRepayFull = (collateral: any) => {
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
-        transactionComp({
-          transactionHash: data?.hash,
-        });
         logger(
           `Transaction was successful. ${etherscanLink(data?.hash)}`,
           'info',
@@ -369,9 +359,6 @@ export const useAddCollateral = (collateral: any) => {
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
-        transactionComp({
-          transactionHash: data?.hash,
-        });
         logger(
           `Transaction was successful. ${etherscanLink(data?.hash)}`,
           'info',
@@ -448,9 +435,6 @@ export const useBorrowCollateral = (collateral: any) => {
       setSuccess(true);
       if (data?.hash) {
         setTxHash(data?.hash);
-        transactionComp({
-          transactionHash: data?.hash,
-        });
         logger(
           `Transaction was successful. ${etherscanLink(data?.hash)}`,
           'info',

@@ -13,7 +13,6 @@ import {
 } from '@zerodev/wagmi';
 import { WETHContract, networkChainId, USDCContract } from '@/constants';
 import logger from '@/utility/logger';
-import transactionComp from '@/utility/transactionComp';
 import addressValidator from '@/utility/addressValidator';
 import ModalContent from '../ModalContent/ModalContent';
 
@@ -73,10 +72,6 @@ function TransferFundModal({
     enabled: !!data,
     onSuccess() {
       if (data?.hash) {
-        transactionComp({
-          transactionHash: data?.hash,
-          destinationAddress: destination,
-        });
         toast(() => (
           <div className="flex items-center underline gap-2">
             <Image className="w-6 h-6" src={StatusSuccess} alt="success" />

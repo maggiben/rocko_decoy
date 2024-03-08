@@ -5,7 +5,7 @@
 import Image from 'next/image';
 import React, { JSX, FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
   ConnectWallet,
   useNetworkMismatch,
@@ -95,9 +95,8 @@ const MakePayment: FC = () => {
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
 
-  const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const loanIndex = parseFloat(basicRouter.single.toString() || '0');
+  const loanIndex = parseFloat(router.get('id') || '0');
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   const currentBalance = parseFloat(router.get('balance') || '0');
   const collateral = parseFloat(router.get('collateral') || '0');
@@ -468,7 +467,7 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${'make-payment'}/processing?balance=${currentBalance}&payment=${
+                href={`/loan-dashboard/${loanIndex}/${'make-payment'}/processing?method=${paymentMethod}&balance=${currentBalance}&payment=${
                   payment +
                   (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
                 }`}

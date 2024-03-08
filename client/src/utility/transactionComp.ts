@@ -5,17 +5,17 @@ import axiosInterceptor from './axiosInterceptor';
 // Transaction compliance check
 const transactionComp = async ({
   transactionHash,
-  destinationAddress = '0xX',
+  metadata,
 }: {
   transactionHash: string;
-  destinationAddress?: string;
+  metadata: any;
 }) => {
   try {
     const transactionCompliance = await axiosInterceptor.post(
       `${BACKEND_URL}/comp/transaction`,
       {
         transaction_hash: transactionHash,
-        destination_address: destinationAddress,
+        metadata,
       },
     );
 

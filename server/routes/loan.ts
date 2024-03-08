@@ -79,7 +79,10 @@ router.post(
               console.error(err);
               return next(new Error('Database query failed'));
             }
-            return res.send("Data successfully saved");
+            return res.send({
+              value: results.insertId,
+              description: 'Data successfully saved'
+            });
           });
         } else { // update loan (add borrowing and collateral)
           let sql = "UPDATE loans SET transaction_hash = ?, outstanding_balance = ?, collateral = ?, modified_time = ? WHERE user_id = ?";

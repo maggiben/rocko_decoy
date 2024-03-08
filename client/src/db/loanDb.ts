@@ -9,7 +9,7 @@ const assetDecimals: any = {
 };
 
 export const useLoanDB = () => {
-  const finalizeLoan = (
+  const finalizeLoan = async (
     user: string,
     transactionHash: string,
     lendingProtocol: string,
@@ -19,27 +19,37 @@ export const useLoanDB = () => {
     collateral: number,
     exist: boolean,
   ) => {
-    // TODO update ui execution code and math to use wei, until displayed to user
-    const collateralWei = ethers.utils.parseEther(collateral.toString());
-    console.log({
-      deci: assetDecimals?.[loanAsset] || 0,
-      loanAsset,
-      assetDecimals,
-    });
-    const loanObject = {
-      user,
-      transaction_hash: transactionHash,
-      lending_protocol: lendingProtocol,
-      protocol_chain: NETWORK,
-      loan_active: Number(loanActive),
-      loan_asset: loanAsset,
-      outstanding_balance: outstandingBalance,
-      collateral: collateralWei.toString(),
-      collateral_decimals: assetDecimals?.[loanAsset] || 0,
-      exist,
-    };
+    try {
+      // TODO update ui execution code and math to use wei, until displayed to user
+      const collateralWei = ethers.utils.parseEther(collateral.toString());
+      console.log({
+        deci: assetDecimals?.[loanAsset] || 0,
+        loanAsset,
+        assetDecimals,
+      });
+      const loanObject = {
+        user,
+        transaction_hash: transactionHash,
+        lending_protocol: lendingProtocol,
+        protocol_chain: NETWORK,
+        loan_active: Number(loanActive),
+        loan_asset: loanAsset,
+        outstanding_balance: outstandingBalance,
+        collateral: collateralWei.toString(),
+        collateral_decimals: assetDecimals?.[loanAsset] || 0,
+        exist,
+      };
 
-    axiosInterceptor.post(`${BACKEND_URL}/add`, loanObject);
+      const response = await axiosInterceptor.post(
+        `${BACKEND_URL}/add`,
+        loanObject,
+      );
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      logger(JSON.stringify(error, null, 2), 'error');
+      return null;
+    }
   };
 
   const updateLoan = (

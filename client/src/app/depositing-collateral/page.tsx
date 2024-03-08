@@ -23,6 +23,8 @@ import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 // import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
+import transactionComp from '@/utility/transactionComp';
+import { CometContract, networkChainId } from '@/constants';
 // import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
@@ -154,7 +156,8 @@ function DepositingCollateral() {
       totalCollateral,
       isExistLoan,
     });
-    finalizeLoan(
+
+    const result = await finalizeLoan(
       userId,
       txHashLoan,
       'compound',
@@ -165,10 +168,50 @@ function DepositingCollateral() {
       isExistLoan,
     );
 
+    // store transaction
+    if (result) {
+      saveTransactions(result.value, txHashLoan);
+    }
+
     setDoneTracker([...doneTracker, { step: 'two' }]);
     setStartB(false);
     setActiveDone(true);
     setCompleteModal(true);
+  };
+
+  const saveTransactions = async (loanId: any, hash: string) => {
+    const metadata_initialCollateral = {
+      loan_id: loanId,
+      asset: 'eth',
+      asset_decimals: 18,
+      amount: collateral,
+      usd_value: loanData?.collateralPrice,
+      recipient_address: wagmiAddress,
+      sender_address: address,
+      transaction_type: 'initial_collateral',
+      funding_source: loanData?.paymentMethod,
+    };
+    const metadata_loan = {
+      loan_id: loanId,
+      asset: 'usdc',
+      asset_decimals: 6,
+      amount: borrowing,
+      usd_value: borrowing,
+      recipient_address: address,
+      sender_address: CometContract[networkChainId],
+      transaction_type:
+        type === 'add' ? 'loan_increase' : 'new_loan_withdrawal',
+      funding_source: loanData?.paymentMethod,
+    };
+
+    transactionComp({
+      transactionHash: hash,
+      metadata: metadata_initialCollateral,
+    });
+    transactionComp({
+      transactionHash: hash,
+      metadata: metadata_loan,
+    });
   };
 
   const setInitialParams = async () => {

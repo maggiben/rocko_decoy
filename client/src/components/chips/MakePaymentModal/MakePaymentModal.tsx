@@ -9,10 +9,12 @@ import logger from '@/utility/logger';
 import ModalContent from '../ModalContent/ModalContent';
 
 function MakePaymentModal({
+  loanId,
   setOpenModalFor,
   currentBalance,
   collateral,
 }: {
+  loanId: any;
   setOpenModalFor: Function;
   currentBalance: string;
   collateral: string;
@@ -214,7 +216,7 @@ function MakePaymentModal({
       </div>
       {/* continue button */}
       <Link
-        href={`/loan-dashboard/${loanIndex}/${'make-payment'}?payment=${parseFloat(
+        href={`/loan-dashboard/${loanIndex}/${'make-payment'}?id=${loanId}&payment=${parseFloat(
           inputNumber?.replace(/,/g, '') || '0',
         )}&balance=${balanceFloat}&collateral=${collateral}
         `}

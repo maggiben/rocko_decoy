@@ -468,6 +468,7 @@ function SinglePage() {
       {openModalFor && openModalFor === 'Make Payment' && (
         <ModalContainer>
           <MakePaymentModal
+            loanId={loanData?.id}
             setOpenModalFor={setOpenModalFor}
             currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}

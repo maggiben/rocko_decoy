@@ -390,7 +390,7 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${'modify_collateral'}/${amount}?payment=${payment}`}
+                href={`/loan-dashboard/${loanIndex}/${'modify_collateral'}/${amount}?payment=${payment}&method=${paymentMethod}`}
               >
                 <button
                   className={`font-semibold  text-xs md:text-sm ${

@@ -58,15 +58,39 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
  // transaction check
      // send transaction to TRM for monitoring
      const transactionMonitoring = await complianceTransaction(req.body.transaction_hash)
-   
-     const txMonQuery = "INSERT INTO compliance_transaction (transaction_hash, destination_address, user_id, user_email, create_time) VALUES (?, ?, ?, ?, ?)";
-     const txParams = [req.body.transaction_hash, req.body?.destination_address, req?.user?.id, req?.user?.email, new Date()];
+
+     let source = req.body.metadata.funding_source;
+     if (source === 'default') {
+         source = 'exchange_oauth';
+     } else if (source === 'ethereum') {
+         source = 'connected_wallet';
+     } else if (source === 'other') {
+         source = 'external_transfer';
+     };
  
-     db.query(txMonQuery, txParams, (err, results) => {
+     let data = {
+         user_id: req?.user?.id,
+         loan_id: req.body.metadata.loan_id,
+         asset: req.body.metadata.asset,
+         asset_decimals: req.body.metadata.asset_decimals,
+         amount: req.body.metadata.amount * (10**req.body.metadata.asset_decimals),
+         usd_value: req.body.metadata.usd_value,
+         recipient_address: req.body.metadata.recipient_address,
+         sender_address: req.body.metadata.sender_address,
+         transaction_hash: req.body.transaction_hash,
+         transaction_type: req.body.metadata.transaction_type,
+         funding_source: source
+     };
+    
+     const txMonQuery = "INSERT INTO transactions SET ?";
+     
+     db.query(txMonQuery, data, (err, results) => {
          if (err) {
              console.error(err);
              return next(new Error('Failed to insert into compliance_transaction'));
          }
+ 
+         console.log("compliance_transaction updated successfully");
      });
  
      if(transactionMonitoring){
@@ -77,9 +101,8 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
     } catch (error) {
         logger(error, 'error');
     }
-   
 });
-
+  
 router.get('/platform-status', async (req: Request, res: Response, next) => {
     try {
         let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM kill_switch";

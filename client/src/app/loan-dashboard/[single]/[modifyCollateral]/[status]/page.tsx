@@ -21,6 +21,8 @@ import { useAddCollateral, useBorrowCollateral } from '@/contract/batch';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
+import { CometContract, networkChainId } from '@/constants';
+import transactionComp from '@/utility/transactionComp';
 
 interface DoneTracker {
   step: string;
@@ -30,14 +32,17 @@ function ModifyStatus() {
   const { status, single: loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
+  const paymentMethod = router.get('method') || '';
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
   const [loanData, setLoanData] = useState<any>();
   const [collateral, setCollateral] = useState<number>(0);
+  const [collateralPrice, setCollateralPrice] = useState<any>();
   // Thirdweb for EOA
   const address = useAddress();
-  const { depositZerodevAccount, getCollateralBalanceOf } = useSingleLoan();
+  const { depositZerodevAccount, getCollateralBalanceOf, getETHPrice } =
+    useSingleLoan();
   const { data } = useBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address: zerodevAccount } = useAccount();
@@ -105,6 +110,27 @@ function ModifyStatus() {
     return depositResult;
   };
 
+  const saveTx = () => {
+    const metadata = {
+      loan_id: loanIndex,
+      asset: 'weth',
+      asset_decimals: 18,
+      amount: payment,
+      usd_value: payment * Number(collateralPrice),
+      recipient_address:
+        status === 'add' ? CometContract[networkChainId] : zerodevAccount,
+      sender_address:
+        status === 'add' ? zerodevAccount : CometContract[networkChainId],
+      transaction_type:
+        status === 'add' ? 'collateral_addition' : 'collateral_withdrawal',
+      funding_source: paymentMethod,
+    };
+    transactionComp({
+      transactionHash: txHash,
+      metadata,
+    });
+  };
+
   const setADone = () => {
     setStartA(false);
     setProgress(0);
@@ -127,6 +153,9 @@ function ModifyStatus() {
       0,
       txHash,
     );
+
+    // save transaction
+    saveTx();
 
     setDoneTracker([{ step: 'one' }, { step: 'two' }]);
     setStartB(false);
@@ -155,6 +184,10 @@ function ModifyStatus() {
   useEffect(() => {
     getCollateralBalanceOf()
       .then((_value) => setCollateral(_value))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+
+    getETHPrice()
+      .then((_price) => setCollateralPrice(_price))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 

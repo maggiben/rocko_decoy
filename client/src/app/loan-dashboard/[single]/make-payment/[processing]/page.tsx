@@ -19,9 +19,17 @@ import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useRepayFull, useRepaySome } from '@/contract/batch';
-import { USDCContract, networkChainId } from '@/constants';
+import {
+  CometContract,
+  CometRewardContract,
+  USDCContract,
+  networkChainId,
+} from '@/constants';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink, parseBalance } from '@/utility/utils';
+import { useCompPrice } from '@/hooks/usePrice';
+import logger from '@/utility/logger';
+import transactionComp from '@/utility/transactionComp';
 
 const USDCABI = require('../../../../../constants/usdc.json');
 
@@ -32,6 +40,7 @@ interface DoneTracker {
 function Processing() {
   const { single: loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const paymentMethod = router.get('method') || '';
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   let currentBalance = parseFloat(router.get('balance') || '0');
   currentBalance +=
@@ -43,13 +52,21 @@ function Processing() {
   const { getLoanData, updateLoan } = useLoanDB();
   const [loanData, setLoanData] = useState<any>();
   const [collateral, setCollateral] = useState<number>(0);
+  const [collateralPrice, setCollateralPrice] = useState<any>();
   const [outStandingBalance, setOutStandingBalance] = useState<number>(0);
   const [originalborrowBalance, setOriginalBorrowBalance] = useState<number>(0);
+  const [rewardAmount, setRewardAmount] = useState<any>();
 
+  const { compPrice } = useCompPrice();
   // Thirdweb for EOA
   const address = useAddress();
-  const { depositZerodevAccount, getBorrowBalanceOf, getCollateralBalanceOf } =
-    useSingleLoan();
+  const {
+    depositZerodevAccount,
+    getBorrowBalanceOf,
+    getCollateralBalanceOf,
+    getETHPrice,
+    getRewardAmount,
+  } = useSingleLoan();
   const { data } = useBalance({
     address: address as `0x${string}`,
     token: USDCContract[networkChainId] as `0x${string}`,
@@ -184,6 +201,9 @@ function Processing() {
 
     await waitForTransaction({ hash });
 
+    // save batch transactions
+    saveTxRepayFull();
+
     toast(() => (
       <div className="flex items-center underline gap-2">
         <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
@@ -201,10 +221,89 @@ function Processing() {
     setAllDone(fullyTxHash);
   };
 
+  const saveTxRepaySome = () => {
+    const metadata = {
+      loan_id: loanIndex,
+      asset: 'usdc',
+      asset_decimals: 6,
+      amount: payment,
+      usd_value: payment,
+      recipient_address: CometContract[networkChainId],
+      sender_address: zerodevAccount,
+      transaction_type: 'payment',
+      funding_source: paymentMethod,
+    };
+
+    transactionComp({
+      transactionHash: txHash,
+      metadata,
+    });
+  };
+
+  const saveTxRepayFull = () => {
+    const metadata_loan = {
+      loan_id: loanIndex,
+      asset: 'usdc',
+      asset_decimals: 6,
+      amount: payment,
+      usd_value: payment,
+      recipient_address: CometContract[networkChainId],
+      sender_address: zerodevAccount,
+      transaction_type: 'payment',
+      funding_source: paymentMethod,
+    };
+    transactionComp({
+      transactionHash: fullyTxHash,
+      metadata: metadata_loan,
+    });
+
+    const metadata_collateral = {
+      loan_id: loanIndex,
+      asset: 'weth',
+      asset_decimals: 18,
+      amount: collateral,
+      usd_value: collateral * Number(collateralPrice),
+      recipient_address: zerodevAccount,
+      sender_address: CometContract[networkChainId],
+      transaction_type: 'payment',
+      funding_source: paymentMethod,
+    };
+    transactionComp({
+      transactionHash: fullyTxHash,
+      metadata: metadata_collateral,
+    });
+
+    const metadata_reward = {
+      loan_id: loanIndex,
+      asset: 'comp',
+      asset_decimals: 18,
+      amount: rewardAmount,
+      usd_value: rewardAmount * Number(compPrice),
+      recipient_address: address,
+      sender_address: CometRewardContract[networkChainId],
+      transaction_type: 'rewards_withdrawal',
+      funding_source: paymentMethod,
+    };
+    transactionComp({
+      transactionHash: fullyTxHash,
+      metadata: metadata_reward,
+    });
+  };
+
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
+
+  useEffect(() => {
+    getETHPrice()
+      .then((_price) => setCollateralPrice(_price))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+
+    getRewardAmount()
+      .then((_reward) => setRewardAmount(_reward))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+  });
 
   useEffect(() => {
     if (
@@ -227,6 +326,9 @@ function Processing() {
     }
 
     if (success) {
+      console.log(Number(loanIndex));
+      saveTxRepaySome();
+
       toast(() => (
         <div className="flex items-center underline gap-2">
           <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
