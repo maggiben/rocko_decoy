@@ -73,7 +73,9 @@ resource "aws_ecs_task_definition" "rocko_backend" {
       {"name": "ROCKO_DB_PASSWORD", "value": "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"},
       {"name": "ROCKO_DB_DATABASE", "value": "rocko_main"},
       {"name": "MAILCHIMP_API_KEY", "value": "${jsondecode(data.aws_secretsmanager_secret_version.mailchimp_key.secret_string)["api_key"]}"},
-      {"name": "MAILCHIMP_LIST_ID", "value": "${jsondecode(data.aws_secretsmanager_secret_version.mailchimp_list.secret_string)["list_id"]}"}
+      {"name": "MAILCHIMP_LIST_ID", "value": "${jsondecode(data.aws_secretsmanager_secret_version.mailchimp_list.secret_string)["list_id"]}"},
+      {"name": "TRM_API_KEY", "value": "${jsondecode(data.aws_secretsmanager_secret_version.trm_api_key.secret_string)["trm_api_key"]}"},
+      {"name": "SLACK_WEBHOOK_URL", "value": "${jsondecode(data.aws_secretsmanager_secret_version.slack_webhook_url.secret_string)["webhook"]}"}
     ],
     "portMappings": [
       {

@@ -9,7 +9,8 @@ import cors from "cors";
 
 // @ts-ignore
 import router from './routes';
-import { CLIENT_URL } from "./constants";
+import { BACKEND_URL, CLIENT_URL } from "./constants";
+import logger from "./util/logger";
 const app = express();
 
 // Polyfill fetch, Headers, Request, and Response if they are not already defined
@@ -42,5 +43,5 @@ connectDB();
 app.use('/', router);
 
 app.listen(5000, () => {
-  console.log(`Server started on http://localhost:5000 Env: ${process.env.NODE_ENV}`);
+  logger(`Server started on ${BACKEND_URL}, with Client ${CLIENT_URL} in Env: ${process.env.NODE_ENV}`, 'info');
 });

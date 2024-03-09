@@ -1,0 +1,1 @@
+ALTER TABLE transactions ADD COLUMN compliance_id VARCHAR(64) AFTER transaction_hash;

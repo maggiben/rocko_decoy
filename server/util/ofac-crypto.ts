@@ -1,3 +1,5 @@
+import logger from "./logger";
+
 const isOFACCompliant = async (address: string) => {
     const ofacUrl = "https://www.treasury.gov/ofac/downloads/sdnlist.txt";
 
@@ -5,16 +7,16 @@ const isOFACCompliant = async (address: string) => {
         let response = await fetch(ofacUrl );
 
         if (!response.ok) {
+            logger(`Failed to fetch OFAC list ${response}`, 'error');
             throw new Error('Failed to fetch OFAC list');
         }
 
         const ofacList = await response.text();
-        console.log(!ofacList.includes(address));
         
         return !ofacList.includes(address)
 
     } catch (error: any) {
-        console.log('Error:', error.message);
+        logger(error.message, 'error');
         return false;
     }
 };

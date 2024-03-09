@@ -5,6 +5,7 @@ import {
   ROCKO_DB_PASSWORD, 
   ROCKO_DB_USER 
 } from "../constants";
+import logger from "../util/logger";
 
 const db = mysql.createPool({
     // TODO 
@@ -23,14 +24,15 @@ const connectDB = async () => {
       db.getConnection((err) => {
         if (err) {
           console.error(err);
-          // @ts-ignore
+          logger({msg:"Database connection failed", err: err.message}, 'error');
+
           throw new Error('Database query failed');
         }
-        console.log("MySQL Connected...");
+        logger(`MySQL Connected to ${ROCKO_DB_DATABASE}`, 'info');
       });
   } catch (err) {
     // @ts-ignore
-    console.error("Database connection failed:", err.message);
+    logger({msg:"Database connection failed", err: err.message}, 'error');
     // Exit process with failure
     process.exit(1);
   }

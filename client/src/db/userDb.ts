@@ -7,6 +7,7 @@ import logger from '@/utility/logger';
 const getUserCountry = async () => {
   try {
     const ip = await publicIp();
+
     const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
       ip,
     });

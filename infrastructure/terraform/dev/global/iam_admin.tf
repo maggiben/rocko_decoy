@@ -12,8 +12,8 @@ resource "aws_iam_group_membership" "admin-membership" {
   name = "admin-membership"
 
   users = [
-    aws_iam_user.jcamp.name,
     aws_iam_user.vince.name,
+    aws_iam_user.thomas.name,
     aws_iam_user.scalr_deploy.name,
   ]
 

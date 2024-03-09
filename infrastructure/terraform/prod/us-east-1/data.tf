@@ -36,6 +36,14 @@ data "aws_secretsmanager_secret_version" "mailchimp_list" {
   secret_id = "prod/mailchimp_list"
 }
 
+data "aws_secretsmanager_secret_version" "trm_api_key" {
+  secret_id = "prod/trm_api_key"
+}
+
+data "aws_secretsmanager_secret_version" "slack_webhook_url" {
+  secret_id = "prod/slack_webhook_url"
+}
+
 data "aws_vpc" "dev-infrastructure-vpc" {
   filter {
     name   = "tag:Name"

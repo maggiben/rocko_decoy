@@ -6,6 +6,7 @@ import { db } from '../db';
 import axios from 'axios';
 import checkJwt from "../auth/checkJwt";
 import logger from "../util/logger";
+import { getAddress } from "ethers";
 
 router.post(
     '/addUser', (req, res, next) => {
@@ -20,30 +21,45 @@ router.post(
           modified_time: new Date(),
         };
 
-        let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
-        const params = [req.body.email, req.body.wallet_address];
+        let validAddress: string = "";
 
-        db.query(sql, params, (err, results) => {
-            if (err) {
-              console.error(err);
-              return next(new Error('Database query failed'));
-            }
+        try {
+          validAddress = getAddress(req.body.wallet_address);
+        } catch (error) {
+          logger(error, 'error');
+          return res.status(400).send('Invalid wallet address');
+        }
+
+        if (req.body.email && validAddress) {
+          let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
+          const params = [req.body.email, validAddress];
   
-            if (results.length > 0) {
-              logger(`Attempted to create duplicate user email (${req.body.email.replace("@", "(at)")}) or wallet_address (${req.body.wallet_address})`, 'error')
-              return res.status(403).send('Cannot create user');
-            } else {
-              let sql = "INSERT INTO users SET ?";
-              // @ts-ignore
-              db.query(sql, data, (err, results) => {
-                if (err) {
-                  console.error(err);
-                  return next(new Error('Database query failed'));
-                }
-                return res.send("Data successfully saved in users table!");
-              });
-            }
-        })
+          db.query(sql, params, (err, results) => {
+              if (err) {
+                console.error(err);
+                return next(new Error('Database query failed'));
+              }
+    
+              if (results.length > 0) {
+                logger(`Attempted to create duplicate user email (${req.body.email.replace("@", "(at)")}) or wallet_address (${req.body.wallet_address})`, 'error')
+                return res.status(403).send('Cannot create user');
+              } else {
+                let sql = "INSERT INTO users SET ?";
+                // @ts-ignore
+                db.query(sql, data, (err, results) => {
+                  if (err) {
+                    console.error(err);
+                    return next(new Error('Database query failed'));
+                  }
+                  return res.send("Data successfully saved in users table!");
+                });
+              }
+          })
+        } else {
+          logger('Cannot create user', 'error');
+          return res.status(400).send('Cannot create user');
+        }
+
       } catch (error) {
        logger(error, 'error'); 
       }

@@ -1,10 +1,14 @@
 // URLs
 export const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'
 export const BACKEND_URL = process.env.BACKEND_URL; 
-// todo move this to env
-export const SLACK_WEBHOOK_URL = CLIENT_URL === "https://develop.testnet.rocko.co" ? 'https://hooks.slack.com/services/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' : 'https://hooks.slack.com/services/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'; // process.env.SLACK_WEBHOOK_URL;
 
-// Databse
+// Slack Logging
+export const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+
+// Compliance
+export const TRM_API_KEY = process.env.TRM_API_KEY;
+
+// Database
 export const ROCKO_DB_HOST = process.env.ROCKO_DB_HOST;
 export const ROCKO_DB_USER = process.env.ROCKO_DB_USER;
 export const ROCKO_DB_PASSWORD = process.env.ROCKO_DB_PASSWORD;

@@ -47,3 +47,11 @@ data "aws_secretsmanager_secret_version" "mailchimp_key" {
 data "aws_secretsmanager_secret_version" "mailchimp_list" {
   secret_id = "prod/mailchimp_list"
 }
+
+data "aws_secretsmanager_secret_version" "trm_api_key" {
+  secret_id = "dev/trm_api_key"
+}
+
+data "aws_secretsmanager_secret_version" "slack_webhook_url" {
+  secret_id = "dev/slack_webhook_url"
+}
