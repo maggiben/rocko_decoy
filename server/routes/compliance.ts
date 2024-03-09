@@ -106,7 +106,6 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
 
             } catch (e) {
                 logger(e, 'error');
-                return res.status(400).send('Bad Request: Missing id');
             }
 
             const source = {
