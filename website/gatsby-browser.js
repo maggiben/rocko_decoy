@@ -13,3 +13,6 @@ import './src/styles/style.scss'
 // Highlighting for code blocks
 import 'prismjs/themes/prism.css'
 import './src/styles/global.css'
+
+// page styles
+import './src/styles/pages/_terms.scss'
