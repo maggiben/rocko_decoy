@@ -227,7 +227,7 @@ function DepositingCollateral() {
           if (matchLoan && matchLoan.length > 0) {
             setIsExistLoan(true);
             setTotalBorrowing(matchLoan[0].outstanding_balance + borrowing);
-            setTotalCollateral(matchLoan[0].collateral + collateral);
+            setTotalCollateral(Number(matchLoan[0].collateral) + Number(collateral));
           }
         }
       });
