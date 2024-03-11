@@ -25,7 +25,7 @@ resource "aws_lambda_function" "get_compound_usdc_data" {
       ROCKO_ENV           = local.environment
       PROVIDER            = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url.secret_string)["url"]}"
       PROVIDER_MAIN       = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url_prod.secret_string)["url"]}"
-      NETWORK             = "goerli"
+      NETWORK             = "sepolia"
       COMET_CONTRACT      = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMET_CONTRACT"]}"
       COMET_CONTRACT_MAIN = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses_prod.secret_string)["COMET_CONTRACT"]}"
       COMP_CONTRACT       = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMP_CONTRACT"]}"
