@@ -51,6 +51,7 @@ function DepositingCollateral() {
       : loanData?.collateralNeeded;
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
+  const [existLoanId, setExistLoanId] = useState<number>(0);
   const [totalBorrowing, setTotalBorrowing] = useState<number>(borrowing);
   const [totalCollateral, setTotalCollateral] = useState<number>(collateral);
   const [collateralReceived, setCollateralReceived] = useState<boolean>(false);
@@ -181,7 +182,7 @@ function DepositingCollateral() {
 
   const saveTransactions = async (loanId: any, hash: string) => {
     const metadata_initialCollateral = {
-      loan_id: loanId,
+      loan_id: type === 'add' ? existLoanId : loanId,
       asset: 'eth',
       asset_decimals: 18,
       amount: collateral,
@@ -192,7 +193,7 @@ function DepositingCollateral() {
       funding_source: loanData?.paymentMethod,
     };
     const metadata_loan = {
-      loan_id: loanId,
+      loan_id: type === 'add' ? existLoanId : loanId,
       asset: 'usdc',
       asset_decimals: 6,
       amount: borrowing,
@@ -225,9 +226,12 @@ function DepositingCollateral() {
             (loan: any) => loan.loan_active === 1,
           );
           if (matchLoan && matchLoan.length > 0) {
+            setExistLoanId(matchLoan[0]?.id);
             setIsExistLoan(true);
             setTotalBorrowing(matchLoan[0].outstanding_balance + borrowing);
-            setTotalCollateral(Number(matchLoan[0].collateral) + Number(collateral));
+            setTotalCollateral(
+              Number(matchLoan[0].collateral) + Number(collateral),
+            );
           }
         }
       });
