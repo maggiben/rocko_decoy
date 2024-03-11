@@ -95,7 +95,11 @@ router.post(
               console.error(err);
               return next(new Error('Database query failed'));
             }
-            return res.send("Deposit Loan Status successfully updated");
+
+            return res.send({
+              value: results.insertId,
+              description: 'Data successfully saved'
+            });
           });
         }
       } else {
