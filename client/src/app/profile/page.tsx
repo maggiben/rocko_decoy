@@ -26,16 +26,16 @@ const Profile: React.FC = () => {
   const { address: zerodevAccount } = useAccount();
   const { updateUser, getUserData } = useUserDB();
 
-  const { data: ETH_Balance } = useBalance({
+  const { data: ethBalance } = useBalance({
     address: zerodevAccount as `0x${string}`,
   });
 
-  const { data: USDC_Balance } = useBalance({
+  const { data: usdcBalance } = useBalance({
     address: zerodevAccount as `0x${string}`,
     token: USDCContract[networkChainId] as `0x${string}`,
   });
 
-  const { data: WETH_Balance } = useBalance({
+  const { data: wethBalance } = useBalance({
     address: zerodevAccount as `0x${string}`,
     token: WETHContract[networkChainId] as `0x${string}`,
   });
@@ -61,7 +61,11 @@ const Profile: React.FC = () => {
         },
         {
           description: 'Password',
-          details: <button className="underline">Reset Password</button>,
+          details: (
+            <button type="button" className="underline">
+              Reset Password
+            </button>
+          ),
         },
       ]
     : [];
@@ -73,6 +77,12 @@ const Profile: React.FC = () => {
     },
     ...phoneEmailPass,
   ];
+
+  console.log(ethBalance?.formatted && wethBalance?.formatted, {
+    eth: ethBalance,
+    wth: wethBalance,
+    usd: usdcBalance,
+  });
 
   const invoice2 = [
     {
@@ -90,70 +100,75 @@ const Profile: React.FC = () => {
         ''
       ),
     },
-    {
-      description: 'Total Balance',
-      details:
-        ETH_Balance?.formatted &&
-        WETH_Balance?.formatted &&
-        `${financial(ETH_Balance?.formatted + WETH_Balance?.formatted, 3)} ETH`,
-      subDescription: [
-        {
-          description: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">ETH </span>{' '}
-            </div>
-          ),
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">
-                {userInfo && `${financial(ETH_Balance?.formatted, 3)} ETH`}
-              </span>{' '}
-            </div>
-          ),
-        },
-        {
-          description: (
-            <div className="flex items-center lg:gap-x-1">
-              <span className="mr-1 lg:mr-0">WETH </span>{' '}
-            </div>
-          ),
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">
-                {userInfo && `${financial(WETH_Balance?.formatted, 3)} WETH`}
-              </span>{' '}
-            </div>
-          ),
-        },
-        {
-          description: (
-            <div className="flex items-center lg:gap-x-1">
-              <span className="mr-1 lg:mr-0">USDC </span>{' '}
-            </div>
-          ),
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">
-                {userInfo && `${financial(USDC_Balance?.formatted, 6)} USDC`}
-              </span>{' '}
-            </div>
-          ),
-        },
-        {
-          description: '',
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max mt-6">
-              <button
-                className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
-                onClick={() => setOpenModalFor('Transfer Fund')}
-              >
-                Transfer Funds
-              </button>
-            </div>
-          ),
-        },
-      ],
-    },
+    Number(ethBalance?.formatted) ||
+    Number(wethBalance?.formatted) ||
+    Number(usdcBalance?.formatted)
+      ? {
+          description: 'Total Balance',
+          details: `${financial(
+            Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
+            3,
+          )} ETH`,
+          subDescription: [
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">ETH </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(ethBalance?.formatted, 3)} ETH`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">WETH </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(wethBalance?.formatted, 3)} WETH`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">USDC </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: '',
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max mt-6">
+                  <button
+                    type="button"
+                    className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
+                    onClick={() => setOpenModalFor('Transfer Fund')}
+                  >
+                    Transfer Funds
+                  </button>
+                </div>
+              ),
+            },
+          ],
+        }
+      : null,
   ];
 
   const handleSavePhoneClick = () => {
@@ -247,6 +262,7 @@ const Profile: React.FC = () => {
                             <div />
                             <div>
                               <button
+                                type="button"
                                 className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
                                 onClick={() =>
                                   setOpenContactEmailEditBox(
@@ -257,6 +273,7 @@ const Profile: React.FC = () => {
                                 Cancel
                               </button>
                               <button
+                                type="button"
                                 className="font-semibold  text-xs md:text-sm text-white py-[10px] w-[95px] px-6 rounded-full bg-blue mr-2"
                                 onClick={() => {
                                   setContactEmail(inputContact);
@@ -296,6 +313,7 @@ const Profile: React.FC = () => {
                             <div />
                             <div>
                               <button
+                                type="button"
                                 className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
                                 onClick={() =>
                                   setOpenContactNumberEdit(
@@ -306,6 +324,7 @@ const Profile: React.FC = () => {
                                 Cancel
                               </button>
                               <button
+                                type="button"
                                 className="font-semibold  text-xs md:text-sm text-white py-[10px] w-[95px] px-6 rounded-full bg-blue mr-2"
                                 onClick={handleSavePhoneClick}
                               >
@@ -328,11 +347,13 @@ const Profile: React.FC = () => {
               <React.Fragment key={i}>
                 <div className="flex pb-3 pt-2 flex-wrap items-center space-y-2">
                   <p className="font-medium w-[62%] md:w-1/2">
-                    {info?.description}
+                    <span>{info?.description}</span>
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-right">
                     <div className="flex gap-1 justify-end md:justify-end">
-                      <p>{info?.details}</p>
+                      <p>
+                        <span>{info?.details}</span>
+                      </p>
                     </div>
                   </div>
                   {info?.subDescription &&
@@ -365,9 +386,9 @@ const Profile: React.FC = () => {
         <ModalContainer>
           <TransferFundModal
             setOpenModalFor={setOpenModalFor}
-            ethBalance={ETH_Balance?.value}
-            wethBalance={WETH_Balance?.formatted}
-            usdcBalance={USDC_Balance?.formatted}
+            ethBalance={ethBalance?.value}
+            wethBalance={wethBalance?.formatted}
+            usdcBalance={usdcBalance?.formatted}
           />
         </ModalContainer>
       )}
