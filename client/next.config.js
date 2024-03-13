@@ -17,6 +17,7 @@ const connectSrc = [
   'https://fittest-ultra-aura.ethereum-sepolia.quiknode.pro',
   'https://meta-aa-provider.onrender.com',
   'https://v0-6-meta-bundler.onrender.com',
+  'https://api.coinbase.com',
 ];
 
 const cspHeader = `
