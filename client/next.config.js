@@ -15,6 +15,7 @@ const connectSrc = [
   'https://broadcast-server.tor.us',
   'wss://broadcast-server.tor.us',
   'https://fittest-ultra-aura.ethereum-sepolia.quiknode.pro',
+  'https://meta-aa-provider.onrender.com',
 ];
 
 const cspHeader = `
