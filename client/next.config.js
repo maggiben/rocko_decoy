@@ -55,6 +55,21 @@ const nextConfig = {
         ],
       },
       {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'app.rocko.co',
+          },
+        ],
+        headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+        ],
+      },
+      {
         source: '/api/:path*',
         headers: [
           {

@@ -21,6 +21,19 @@ if (!globalThis.fetch) {
   globalThis.Request = Request;
   globalThis.Response = Response;
 }
+const setSecurityHeaders = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  res.set('X-XSS-Protection', '1; mode=block');
+  res.set('X-Frame-Options', 'SAMEORIGIN');
+  res.set('X-Content-Type-Options', 'nosniff');
+  res.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none';");
+  res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  // Set Strict-Transport-Security header only for backend.dev.rocko.cloud prod domain
+  if (req.hostname === 'backend.dev.rocko.cloud') {
+    res.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+};
 
 app.use(cors({
   // @ts-ignore
@@ -35,6 +48,9 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// Apply the security headers middleware to all routes
+app.use(setSecurityHeaders);
 
 // Connect Database
 connectDB();

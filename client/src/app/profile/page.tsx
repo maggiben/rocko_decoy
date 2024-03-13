@@ -78,12 +78,6 @@ const Profile: React.FC = () => {
     ...phoneEmailPass,
   ];
 
-  console.log(ethBalance?.formatted && wethBalance?.formatted, {
-    eth: ethBalance,
-    wth: wethBalance,
-    usd: usdcBalance,
-  });
-
   const invoice2 = [
     {
       description: 'Address',
