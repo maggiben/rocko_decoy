@@ -45,13 +45,13 @@ resource "aws_lambda_function" "get_daily_metrics" {
   }
 }
 
-resource "aws_cloudwatch_event_target" "trigger_lambda_on_schedule" {
+resource "aws_cloudwatch_event_target" "trigger_metrics_on_schedule" {
   rule      = aws_cloudwatch_event_rule.lambda_every_24_hours.name
   target_id = "${local.environment}-get_daily_metrics"
   arn       = aws_lambda_function.get_daily_metrics.arn
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_metrics" {
   statement_id  = "AllowEventBridgeToCallLambda"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.get_daily_metrics.function_name
