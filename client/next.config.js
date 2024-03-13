@@ -14,6 +14,7 @@ const connectSrc = [
   'https://backend-vikp.onrender.com',
   'https://broadcast-server.tor.us',
   'wss://broadcast-server.tor.us',
+  // This only appears to be called in dev on Seploia
   'https://fittest-ultra-aura.ethereum-sepolia.quiknode.pro',
   'https://meta-aa-provider.onrender.com',
   'https://v0-6-meta-bundler.onrender.com',
