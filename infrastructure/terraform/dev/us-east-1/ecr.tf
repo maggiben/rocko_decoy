@@ -50,3 +50,15 @@ resource "aws_ecr_repository" "send_alerts_compound" {
   }
 }
 
+resource "aws_ecr_repository" "get_daily_metrics" {
+  name                 = "get_daily_metrics"
+  image_tag_mutability = "MUTABLE"
+
+  encryption_configuration {
+    encryption_type = "KMS"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
