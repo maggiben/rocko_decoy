@@ -11,6 +11,10 @@ resource "aws_cloudwatch_log_group" "get_daily_metrics" {
   }
 }
 
+data "aws_ecr_repository" "get_daily_metrics" {
+  name = "get-daily-metrics"
+}
+
 resource "aws_lambda_function" "get_daily_metrics" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.get_daily_metrics.repository_url}:latest"
