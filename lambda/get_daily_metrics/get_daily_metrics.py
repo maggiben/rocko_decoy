@@ -42,7 +42,7 @@ def handler_inner(event, context):
 
   # Put together SQL statement
   sql = "INSERT INTO daily_metrics (total_outstanding_balance, total_active_loans, total_active_borrowers, metrics_date, create_time) VALUES ("
-  sql += f"{total_outstanding_balance}, {total_active_loans}, {total_active_borrowers}, {metrics_date}, {create_time})"
+  sql += f"{total_outstanding_balance}, {total_active_loans}, {total_active_borrowers}, '{metrics_date}', '{create_time}')"
 
   logger.debug(sql)
 
