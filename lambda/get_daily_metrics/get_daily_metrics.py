@@ -51,10 +51,10 @@ def handler_inner(event, context):
         total_active_loans = result[0] if result else 0
 
         # Fetch the total outstanding balance for active loans
-        sql_total_balance = "SELECT SUM(outstanding_balance) AS total_outstanding_balance FROM loans WHERE loan_active = 1"
+        sql_total_balance = "SELECT COALESCE(SUM(outstanding_balance), 0) AS total_outstanding_balance FROM loans WHERE loan_active = 1"
         cursor.execute(sql_total_balance)
         result = cursor.fetchone()
-        total_outstanding_balance = result[0] if result else 0
+        total_outstanding_balance = result[0]
 
         # Put together the SQL statement to insert metrics
         sql_insert = "INSERT INTO daily_metrics (total_outstanding_balance, total_active_loans, total_active_borrowers, metrics_date, create_time) VALUES (%s, %s, %s, %s, %s)"

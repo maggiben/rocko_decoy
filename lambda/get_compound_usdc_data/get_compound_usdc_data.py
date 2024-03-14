@@ -7,7 +7,7 @@
 # COMET_CONTRACT_MAIN: Comet contract for pricing
 # USDC_CONTRACT:       USDC contract address for compound
 # COMP_CONTRACT:       COMP contract address
-# NETWORK:             Network (goerli/mainnet)
+# NETWORK:             Network (sepolia/mainnet)
 # DATABASE_HOST:       Database host
 # DATABASE_USER:       Database user
 # DATABASE_PASS:       Database password
