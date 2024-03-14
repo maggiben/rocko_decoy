@@ -12,7 +12,8 @@ resource "aws_cloudwatch_log_group" "get_daily_metrics" {
 }
 
 data "aws_ecr_repository" "get_daily_metrics" {
-  name = "get-daily-metrics"
+  name        = "get_daily_metrics"
+  registry_id = "835780150279"
 }
 
 resource "aws_lambda_function" "get_daily_metrics" {
