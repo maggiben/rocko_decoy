@@ -17,7 +17,7 @@ data "aws_ecr_repository" "get_daily_metrics" {
 
 resource "aws_lambda_function" "get_daily_metrics" {
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.get_daily_metrics.repository_url}:latest"
+  image_uri    = "${data.aws_ecr_repository.get_daily_metrics.repository_url}:latest"
 
   function_name = "${local.environment}-get_daily_metrics"
   role          = "arn:aws:iam::835780150279:role/ecs_instance_role"

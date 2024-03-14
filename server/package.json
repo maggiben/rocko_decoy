@@ -1,7 +1,7 @@
 {
-  "name": "poc",
+  "name": "rockobackend",
   "version": "1.0.0",
-  "description": "Poc",
+  "description": "Rocko DeFi Backend Server",
   "main": "server.js",
   "scripts": {
     "start": "node build/server.js",

@@ -6,9 +6,9 @@ Rocko Web: [![Netlify Status](https://api.netlify.com/api/v1/badges/3ef1e8f8-dbc
 
 Rocko Site: [![Netlify Status](https://api.netlify.com/api/v1/badges/610f0a49-b81b-415e-bb3d-ffb7c5ac44c4/deploy-status)](https://app.netlify.com/sites/amazing-twilight-1b6090/deploys)
 
-Backend Dev: [![Backend Build and Deploy](https://github.com/getrocko/poc/actions/workflows/backend_deploy_dev.yml/badge.svg)](https://github.com/getrocko/poc/actions/workflows/backend_deploy_dev.yml)
+Backend Dev: [![Backend Build and Deploy](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_dev.yml/badge.svg)](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_dev.yml)
 
-Backend Prod: [![Backend Build and Deploy](https://github.com/getrocko/poc/actions/workflows/backend_deploy_prod.yml/badge.svg)](https://github.com/getrocko/poc/actions/workflows/backend_deploy_prod.yml)
+Backend Prod: [![Backend Build and Deploy](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_prod.yml/badge.svg)](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_prod.yml)
 
 ## Dev Environment Setup (Mac)
 

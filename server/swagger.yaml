@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Poc API
+  title: Rocko Backend API Docs
   version: 1.0.0
 servers:
   - url: https://backend.dev.rocko.cloud
