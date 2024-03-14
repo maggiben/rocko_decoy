@@ -241,7 +241,7 @@ const ModifyCollateral: React.FC = () => {
                   <p className="font-medium">
                     Coinbase or Gemini Account{' '}
                     <span className="font-medium text-xs  lg:ml-3 bg-[#EFF3FE] py-1 px-2 rounded-xl text-[#276EF1] inline-block my-1 lg:my-0">
-                      Recommended
+                      Easiest
                     </span>
                   </p>
                   <p className="text-sm text-gray-600">
