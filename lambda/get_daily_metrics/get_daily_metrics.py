@@ -30,32 +30,47 @@ DB_CONFIG = {
 }
 
 def handler_inner(event, context):
-  current_time = datetime.datetime.now()
+    current_time = datetime.datetime.now()
+    metrics_date = current_time.strftime("%Y-%m-%d")  # 2024-02-20
+    create_time = current_time.strftime("%Y-%m-%d %H:%M:%S")  # 2024-02-20 23:49:44
 
-  total_outstanding_balance = 0
-  total_active_loans = 0
-  total_active_borrowers = 0
-  metrics_date = current_time.strftime("%Y-%m-%d") # 2024-02-20
-  create_time = current_time.strftime("%Y-%m-%d %H:%M:%S") # 2024-02-20 23:49:44
+    conn = mysql.connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
 
-  # TODO fetch and calculate metrics
+    try:
+        # Fetch the count of unique active borrowers
+        sql_active_borrowers = "SELECT COUNT(DISTINCT user_id) AS total_active_borrowers FROM loans WHERE loan_active = 1"
+        cursor.execute(sql_active_borrowers)
+        result = cursor.fetchone()
+        total_active_borrowers = result[0] if result else 0
 
-  # Put together SQL statement
-  sql = "INSERT INTO daily_metrics (total_outstanding_balance, total_active_loans, total_active_borrowers, metrics_date, create_time) VALUES ("
-  sql += f"{total_outstanding_balance}, {total_active_loans}, {total_active_borrowers}, '{metrics_date}', '{create_time}')"
+        # Fetch the total number of active loans
+        sql_active_loans = "SELECT COUNT(*) AS total_active_loans FROM loans WHERE loan_active = 1"
+        cursor.execute(sql_active_loans)
+        result = cursor.fetchone()
+        total_active_loans = result[0] if result else 0
 
-  logger.debug(sql)
+        # Fetch the total outstanding balance for active loans
+        sql_total_balance = "SELECT SUM(outstanding_balance) AS total_outstanding_balance FROM loans WHERE loan_active = 1"
+        cursor.execute(sql_total_balance)
+        result = cursor.fetchone()
+        total_outstanding_balance = result[0] if result else 0
 
-  conn = mysql.connector.connect(**DB_CONFIG)
-  cursor = conn.cursor()
+        # Put together the SQL statement to insert metrics
+        sql_insert = "INSERT INTO daily_metrics (total_outstanding_balance, total_active_loans, total_active_borrowers, metrics_date, create_time) VALUES (%s, %s, %s, %s, %s)"
+        values = (total_outstanding_balance, total_active_loans, total_active_borrowers, metrics_date, create_time)
+        cursor.execute(sql_insert, values)
+        conn.commit()
 
-  cursor.execute(sql)
-  conn.commit()
+    except Exception as e:
+        logger.error(f"Error occurred: {str(e)}")
+        raise
 
-  cursor.close()
-  conn.close()
+    finally:
+        cursor.close()
+        conn.close()
 
-  return True
+    return True
 
 def lambda_handler(event, context):
     try:
