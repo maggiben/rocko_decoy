@@ -543,12 +543,14 @@ function Processing() {
               title="Payment Complete"
               details="You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "
               id={0}
+              txHash=""
             />
           ) : (
             <LoanComplete
               title="Payment Complete"
               details="You have successfully made a payment"
               id={Number(loanIndex)}
+              txHash=""
             />
           )}
         </ModalContainer>

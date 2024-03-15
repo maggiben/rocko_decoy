@@ -3,7 +3,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
@@ -11,7 +10,6 @@ import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import StatusSuccess from '@/assets/StatusSuccess.png';
 import { useGetLoan } from '@/contract/batch';
 import { useSingleLoan } from '@/contract/single';
 import { BLOCKCHAIN } from '@/constants/env';
@@ -19,7 +17,6 @@ import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
 import { useZeroDev } from '@/hooks/useZeroDev';
-import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 // import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
@@ -66,6 +63,7 @@ function DepositingCollateral() {
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
   const [completeModal, setCompleteModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
+  const [showTxModal, setShowTxModal] = useState(false);
 
   // get User info
   const { userInfo } = useZeroDev();
@@ -273,19 +271,21 @@ function DepositingCollateral() {
     if (error) logger(JSON.stringify(error, null, 2));
 
     if (success) {
-      toast(() => (
-        <div className="flex items-center underline gap-2">
-          <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-          <a
-            className="hover:text-green-700"
-            target="_blank"
-            href={etherscanLink(txHash)}
-            rel="noopener noreferrer"
-          >
-            Loan successfully fulfilled!
-          </a>
-        </div>
-      ));
+      // toast(() => (
+      //   <div className="flex items-center underline gap-2">
+      //     <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
+      //     <a
+      //       className="hover:text-green-700"
+      //       target="_blank"
+      //       href={etherscanLink(txHash)}
+      //       rel="noopener noreferrer"
+      //     >
+      //       Loan successfully fulfilled!
+      //     </a>
+      //   </div>
+      // ));
+
+      setShowTxModal(true);
 
       setAllDone(txHash);
     }
@@ -546,6 +546,17 @@ function DepositingCollateral() {
             title="Loan Complete"
             details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             id={1}
+            txHash=""
+          />
+        </ModalContainer>
+      )}
+      {showTxModal && (
+        <ModalContainer>
+          <LoanComplete
+            title="Loan Complete"
+            details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
+            id={1}
+            txHash={txHash}
           />
         </ModalContainer>
       )}

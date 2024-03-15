@@ -397,12 +397,14 @@ function ModifyStatus() {
               title="Collateral Deposit Complete"
               details="You have successfully increased your loan collateral"
               id={Number(loanIndex)}
+              txHash=""
             />
           ) : (
             <LoanComplete
               title="Collateral Withdrawal Complete"
               details="You have successfully withdrawn collateral"
               id={Number(loanIndex)}
+              txHash=""
             />
           )}
         </ModalContainer>

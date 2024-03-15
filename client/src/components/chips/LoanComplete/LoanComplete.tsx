@@ -1,16 +1,19 @@
 import frameIcon from '@/assets/frame.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { etherscanLink } from '@/utility/utils';
 import ModalContent from '../ModalContent/ModalContent';
 
 function LoanComplete({
   title,
   details,
   id,
+  txHash,
 }: {
   title: string;
   details: string;
   id: number;
+  txHash: string;
 }) {
   return (
     <ModalContent>
@@ -28,21 +31,32 @@ function LoanComplete({
         <p className="text-sm text-[#141414] font-inter ">{details}</p>
       </div>
 
+      {txHash !== '' && (
+        <Link
+          className="text-sm text-[#141414] font-bold underline"
+          target="_blank"
+          href={etherscanLink(txHash)}
+          rel="noopener noreferrer"
+        >
+          View transaction on Etherscan
+        </Link>
+      )}
+
       {/* continue button */}
-      <div className="my-6">
+      <div className="my-4">
         {id === 0 ? (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
             href="/loan-dashboard"
           >
-            Okay
+            Continue
           </Link>
         ) : (
           <Link
             className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-sm font-semibold text-white"
             href={`/loan-dashboard/${id}?active=true`}
           >
-            Okay
+            Continue
           </Link>
         )}
       </div>
