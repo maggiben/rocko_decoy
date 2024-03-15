@@ -418,14 +418,25 @@ const AlertForm: FC<AlertFormProps> = ({
                 <div className="rounded-full bg-[#EEE] p-2 w-max">
                   <IoMdCall className="h-5 w-5 text-[#323232]" />
                 </div>
-                <input
-                  type="text"
-                  required
-                  value={userPhone}
-                  ref={collateralCallRef}
-                  readOnly
-                  className="grow focus:outline-none cursor-default"
-                />
+                {userPhone ? (
+                  <input
+                    type="text"
+                    required
+                    value={userPhone}
+                    ref={collateralCallRef}
+                    readOnly
+                    className="grow focus:outline-none cursor-default"
+                  />
+                ) : (
+                  <Link
+                    className="grow underline"
+                    href="https://rocko.co/profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Add number via your profile page
+                  </Link>
+                )}
                 {collateralBufferAlert.alertMethods.sms && (
                   <button
                     onClick={handleToggleCallAlertType}
@@ -438,13 +449,15 @@ const AlertForm: FC<AlertFormProps> = ({
                   <MdCheckBoxOutlineBlank
                     className="h-6 w-6 cursor-pointer"
                     onClick={() => {
-                      setCollateralBufferAlert((prev) => ({
-                        ...prev,
-                        alertMethods: {
-                          ...prev.alertMethods,
-                          sms: collateralCallRef.current.value,
-                        },
-                      }));
+                      if (userPhone) {
+                        setCollateralBufferAlert((prev) => ({
+                          ...prev,
+                          alertMethods: {
+                            ...prev.alertMethods,
+                            sms: collateralCallRef.current.value,
+                          },
+                        }));
+                      }
                     }}
                   />
                 ) : (
