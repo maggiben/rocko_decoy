@@ -155,6 +155,18 @@ const faqPageData = [
     answer: () =>
       'Generally, using your crypto as collateral for a loan is not considered a taxable event as long as your crypto is not sold or exchanged. The tax implications for wrapping tokens — such as ETH for WETH — is unclear, as the IRS has not issued specific guidelines on this topic. This content is for informational purposes only and is not tax or legal advice. Please consult your tax advisor for further guidance.',
   },
+  {
+    id: '14',
+    ques: 'Does Rocko custody or have control over my funds?',
+    answer: () =>
+      'No, Rocko smart wallets are non-custodial meaning only you have control over any funds held inside. When you deposit collateral for a loan, it is held in a smart contract for that specific DeFi lending protocol.',
+  },
+  {
+    id: '15',
+    ques: 'Can I export my private key?',
+    answer: () =>
+      'Yes, you are able to export your private key through your account sign-in modal.',
+  },
 ]
 
 export { faqs, faqPageData }

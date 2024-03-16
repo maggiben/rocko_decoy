@@ -1,7 +1,12 @@
 import * as React from 'react'
+import { useEffect } from 'react'
 import Layout from '../layout'
 
 const Index = () => {
+  useEffect(() => {
+    document.title = 'The Privacy Policy for Rocko'
+  }, [])
+
   return (
     <Layout>
       <a class="accessibility" href="#main">
