@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react'
 import Layout from '../layout'
 import Banner from '../assets/images/banner.png'
 import Envelope from '../assets/images/envelope.svg'
@@ -52,6 +53,11 @@ export default function WhyDefi() {
         'The models used for lending and determining interest rates vary based on the DeFi protocols. For instance, some allow for interest rates to spike when there is significant demand to borrow which could cause the borrower’s interest expense to unexpectedly increase. Prospective borrowers should research DeFi protocols lending and interest rate models to understand how they work and what the risks are before borrowing.',
     },
   ]
+
+  useEffect(() => {
+    document.title =
+      'An Overview of DeFi Borrowing and Rocko: Crypto-Backed Loans at Competitive Rates'
+  }, [])
   return (
     <Layout>
       <div className="max-w-[675px] w-full lg:py-[80px] py-[40px] m-[auto] px-[15px]">

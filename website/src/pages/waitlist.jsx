@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { navigate } from 'gatsby'
 import rockoLogo from '../assets/images/logo.png'
 import Footer from '../../../ui-lib/Footer/Footer'
@@ -7,6 +7,11 @@ function LandingPage() {
   const handleNotifyMe = () => {
     navigate(`/waitlist-confirmation/`)
   }
+
+  useEffect(() => {
+    document.title =
+      'The Waitlist Page For Rocko: Crypto-Backed Loans at Competitive Rates'
+  }, [])
 
   return (
     <>

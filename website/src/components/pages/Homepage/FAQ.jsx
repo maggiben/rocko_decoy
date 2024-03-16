@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'gatsby'
 import { Collapse } from 'react-collapse'
 import clsx from 'clsx'
@@ -16,6 +16,10 @@ function FAQ(props) {
       [id]: !active[id],
     })
   }
+
+  useEffect(() => {
+    document.title = 'FAQ for Rocko: Crypto-Backed Loans at Competitive Rates'
+  }, [])
 
   return (
     <section className={clsx(className, 'bg-[#F9F9F9] lg:py-[80px] py-[50px]')}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../layout'
 import Title from '../components/Title'
 import Input from '../components/Input'
@@ -6,6 +6,10 @@ import FormWrapper from '../components/shared/FormWrapper'
 import Mission from '../assets/images/mission.svg'
 
 export default function About() {
+  useEffect(() => {
+    document.title =
+      "About Rocko's Team and Mission: Crypto-Backed Loans at Competitve Rates"
+  }, [])
   return (
     <Layout>
       <div className="banner bg-[#081D21] lg:pt-[120px] py-[50px] px-[16px]  lg:pb-[120px]  text-center">

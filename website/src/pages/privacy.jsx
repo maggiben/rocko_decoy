@@ -4,7 +4,8 @@ import Layout from '../layout'
 
 const Index = () => {
   useEffect(() => {
-    document.title = 'The Privacy Policy for Rocko'
+    document.title =
+      'The Privacy Policy for Rocko: Crypto-Backed Loans at Competitve Rates'
   }, [])
 
   return (
