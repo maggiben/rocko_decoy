@@ -124,7 +124,7 @@ function Header() {
   };
 
   const detectUserExist = async () => {
-    if (userInfo) {
+    if (userInfo && userInfo.idToken) {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
         if (!res || (res && res.length === 0)) {
@@ -139,7 +139,7 @@ function Header() {
             const active_loans = result.filter(
               (loan: any) => loan.loan_active === 1,
             );
-            console.log(pathName);
+
             if (active_loans?.length > 0 && pathName === '/') {
               /* if there is an active loan */
               setOpenModalFor('Already Open');

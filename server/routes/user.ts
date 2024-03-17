@@ -9,61 +9,59 @@ import logger from "../util/logger";
 import { getAddress } from "ethers";
 
 router.post(
-    '/addUser', (req, res, next) => {
-      try {
-        let data = {
-          email: req.body.email,
-          wallet_address: req.body.wallet_address,
-          country_origin: req.body.country,
-          ipaddress_lastlogin: req.body.ip,
-          inactive: req.body.active,
-          create_time: new Date(),
-          modified_time: new Date(),
-        };
-
-        let validAddress: string = "";
-
+    '/addUser', checkJwt, async (req, res, next) => {
+      if (req.user && req.user?.email === req.body?.email) {
         try {
-          validAddress = getAddress(req.body.wallet_address);
-        } catch (error) {
-          logger(error, 'error');
-          return res.status(400).send('Invalid wallet address');
-        }
-
-        if (req.body.email && validAddress) {
-          let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
-          const params = [req.body.email, validAddress];
+          let data = {
+            email: req.body.email,
+            wallet_address: req.body.wallet_address,
+            country_origin: req.body.country,
+            ipaddress_lastlogin: req.body.ip,
+            inactive: req.body.active,
+            create_time: new Date(),
+            modified_time: new Date(),
+          };
+          let validAddress: string = "";
   
-          db.query(sql, params, (err, results) => {
-              if (err) {
-                console.error(err);
-                return next(new Error('Database query failed'));
-              }
-    
-              if (results.length > 0) {
-                logger(`Attempted to create duplicate user email (${req.body.email.replace("@", "(at)")}) or wallet_address (${req.body.wallet_address})`, 'error')
-                return res.status(403).send('Cannot create user');
-              } else {
-                let sql = "INSERT INTO users SET ?";
-                // @ts-ignore
-                db.query(sql, data, (err, results) => {
-                  if (err) {
-                    console.error(err);
-                    return next(new Error('Database query failed'));
-                  }
-                  return res.send("Data successfully saved in users table!");
-                });
-              }
-          })
-        } else {
-          logger('Cannot create user', 'error');
-          return res.status(400).send('Cannot create user');
+          try {
+            validAddress = getAddress(req.body.wallet_address);
+          } catch (error) {
+            logger(error, 'error');
+            return res.status(400).send('Invalid wallet address');
+          }
+
+          if (req.body.email && validAddress) {
+            let sql = `SELECT * FROM users WHERE email = ? OR wallet_address = ?`;
+            const params = [req.body.email, validAddress];
+
+            db.query(sql, params, (err, results) => {
+                if (err) {
+                  console.error(err);
+                  return next(new Error('Database query failed'));
+                }
+      
+                if (results.length > 0) {
+                  logger(`Attempted to create duplicate user email (${req.body.email.replace("@", "(at)")}) or wallet_address (${req.body.wallet_address})`, 'error')
+                  return res.status(403).send('Cannot create user');
+                } else {
+                  let sql = "INSERT INTO users SET ?";
+
+                  // @ts-ignore
+                  db.query(sql, data, (err, results) => {
+                    if (err) {
+                      console.error(err);
+                      return next(new Error('Database query failed'));
+                    }
+   
+                    return res.send("Data successfully saved in users table!");
+                  });
+                }
+            })
+          } 
+        } catch (error) {
+         logger(error, 'error'); 
         }
-
-      } catch (error) {
-       logger(error, 'error'); 
-      }
-
+      } 
     }
 );
   
@@ -95,29 +93,33 @@ router.post(
 );
 
 router.patch(
-  '/updateCountry', (req, res, next) => {
-    try {
-      if (req.body.email) {
-        let data = {
-          email: req.body.email,
-          country: req.body.country,
-          ip: req.body.ip,
-          modified_time: new Date(),
-        };
-        let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
-    
-        db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
-          if (err) {
-            console.error(err);
-            return next(new Error('Database query failed'));
-          }
-          return res.status(200).send("OK");
-        });
-      } else {
-        return res.status(400).send('Bad Request: Missing email');
+  '/updateCountry', checkJwt, (req, res, next) => {
+    if (req.user && req.user.email === req.body?.email) {
+      try {
+        if (req.body.email) {
+          let data = {
+            email: req.body.email,
+            country: req.body.country,
+            ip: req.body.ip,
+            modified_time: new Date(),
+          };
+          let sql = "UPDATE users SET country_lastlogin = ?, ipaddress_lastlogin = ?, modified_time = ? WHERE email = ?";
+      
+          db.query(sql, [data.country, data.ip, data.modified_time, data.email], (err, results) => {
+            if (err) {
+              console.error(err);
+              return next(new Error('Database query failed'));
+            }
+            return res.status(200).send("OK");
+          });
+        } else {
+          return res.status(400).send('Bad Request: Missing email');
+        }
+      } catch (error) {
+        logger(error, 'error');
       }
-    } catch (error) {
-      logger(error, 'error');
+    } else {
+      return res.status(401).send('Unauthorized');
     }
   }
 );

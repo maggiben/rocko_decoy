@@ -25,7 +25,6 @@ export const useUserDB = () => {
     active: boolean,
   ) => {
     const { country, ip } = await getUserCountry();
-
     const userObject = {
       email,
       wallet_address: walletAddress,

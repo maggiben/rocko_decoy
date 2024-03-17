@@ -14,6 +14,7 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
         const jwks = jose.createRemoteJWKSet(new URL("https://api-auth.web3auth.io/jwks"));
         // Verify token is valid and signed by Web3Auth
         const { payload } = await jose.jwtVerify(token, jwks, { algorithms: ["ES256"] });
+
         let sql = `SELECT id FROM users WHERE email = ?`;
 
         const params = [payload.email];
@@ -28,8 +29,12 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
                 id: JSON.stringify(results?.[0]?.id),
                 email: payload.email as string,
               };
+            } else {
+              req.user = {
+                id: '', // new users wont have an id yet
+                email: payload.email as string,
+              };
             }
-
             next(); // Proceed to the next middleware/route handler
         })
 
