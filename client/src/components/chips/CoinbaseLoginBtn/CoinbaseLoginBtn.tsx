@@ -1,5 +1,5 @@
 import { COINBASE_CLIENT_ID, BACKEND_URL } from '@/constants/env';
-import generateCSRFCode from '@/utility/generateCsrfCode';
+import generateCSRFCode from '@/utility/generateCSRFCode';
 
 const COINBASE_REDIRECT_URI = `${BACKEND_URL}/cb-callback`;
 const COINBASE_SCOPES = [
