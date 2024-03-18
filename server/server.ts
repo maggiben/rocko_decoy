@@ -59,5 +59,5 @@ connectDB();
 app.use('/', router);
 
 app.listen(5000, () => {
-  logger(`Server started on ${BACKEND_URL}, with Client ${CLIENT_URL} in Env: ${process.env.NODE_ENV}`, 'info');
+  logger(`Server started on ${BACKEND_URL}, with Client ${CLIENT_URL}`, 'info');
 });

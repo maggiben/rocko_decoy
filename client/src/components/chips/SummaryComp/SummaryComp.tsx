@@ -299,6 +299,7 @@ function SummaryComp(props: Props) {
               </div>
               <div className="text-center md:text-left mt-1 lg:mt-0">
                 <button
+                  type="button"
                   onClick={OnSignIn}
                   className="w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]"
                 >

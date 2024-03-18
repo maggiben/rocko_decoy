@@ -39,6 +39,11 @@ export default function CoinbaseCallback() {
   const [code, setCode] = useState('');
   const [balance, setBalance] = useState<any>(null);
 
+  const stateToken = sessionStorage.getItem('stateToken');
+  const searchParams = new URLSearchParams(window.location.search);
+  const stateParam = searchParams.get('state');
+  const validStateToken = stateToken === stateParam;
+
   const fetchCoinbaseBalance = () => {
     axiosInterceptor
       .get(`${BACKEND_URL}/coinbase-balance`, {
@@ -87,8 +92,18 @@ export default function CoinbaseCallback() {
   };
 
   useEffect(() => {
-    fetchCoinbaseBalance();
-  }, []);
+    if (validStateToken) {
+      fetchCoinbaseBalance();
+    }
+    return () => {
+      sessionStorage.removeItem('stateToken');
+    };
+  }, [validStateToken]);
+
+  if (!validStateToken) {
+    toast.error('Invalid state token');
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center mt-36">
@@ -107,6 +122,7 @@ export default function CoinbaseCallback() {
           className="text-xl border border-[#2C3B8D] rounded-lg px-4 py-2 mb-4 w-full text-center"
         />
         <button
+          type="button"
           className="py-[10px] px-6 bg-[#2C3B8D] rounded-full text-xl font-semibold text-white w-full"
           onClick={OnVerify}
         >

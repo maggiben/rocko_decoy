@@ -14,9 +14,10 @@ const OAUTH_TOKEN_URL = 'https://api.coinbase.com/oauth/token';
 const CLIENT_ID = COINBASE_CLIENT_ID;
 const CLIENT_SECRET = COINBASE_CLIENT_SECRET;
 const REDIRECT_URI = `${BACKEND_URL}/cb-callback`; 
-const CLIENT_CALLBACK_URL = `${CLIENT_URL}/cb-callback?close=true`;
 
 router.get('/cb-callback', async (req, res) => {
+    const CLIENT_CALLBACK_URL = `${CLIENT_URL}/cb-callback?state=${req.query.state}&close=true`
+
     try {
         const authorizationCode = req.query.code;
 
@@ -67,12 +68,11 @@ router.get('/coinbase-balance', async (req, res) => {
     
             // Make a request to the Coinbase API to fetch the balance
             const response = await axios.get('https://api.coinbase.com/v2/accounts', { headers: headers });
-            console.log('Coinbase response:', response.data.data)
+
             const eth_data = response.data.data.filter(
                 // @ts-ignore
                 (data) => data.balance.currency === 'ETH',
             );
-                console.log({eth_data});
     
             // Extract balance from the response
             const balance = eth_data[0].balance;
@@ -103,8 +103,7 @@ router.post('/send-withdrawal', async (req, res) => {
         const CRYPTO_ADDRESS = req.body.crypto_address;
         const ACCOUNT_ID = req.body.accountId;
         const CB_2FA_TOKEN = req.body.cb_2fa_token;
-        console.log({AMOUNT, CURRENCY, CRYPTO_ADDRESS, ACCOUNT_ID });
-        
+
         if (!ACCESS_TOKEN || !AMOUNT) {
             return res.status(400).json({
                 success: false,
@@ -113,7 +112,7 @@ router.post('/send-withdrawal', async (req, res) => {
         }
     
         const cb2faHeader = CB_2FA_TOKEN ? { 'CB-2FA-TOKEN': CB_2FA_TOKEN } : {};
-    
+
         try {
             const headers = {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,

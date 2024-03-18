@@ -6,7 +6,11 @@ const NETWORK = process.env.NEXT_PUBLIC_NETWORK;
 const connectSrc = [
   BACKEND_URL,
   `https://${NETWORK}.infura.io`,
+
+  // Thirdweb RPC
   `https://${NETWORK === 'mainnet' ? 'ethereum' : NETWORK}.rpc.thirdweb.com`,
+  'https://ethereum.rpc.thirdweb.com',
+
   'https://ipv6.icanhazip.com',
   'https://ipv4.icanhazip.com',
   'https://api.ipify.org',
@@ -14,6 +18,7 @@ const connectSrc = [
   'https://backend-vikp.onrender.com',
   'https://broadcast-server.tor.us',
   'wss://broadcast-server.tor.us',
+
   // This only appears to be called in dev on Seploia
   'https://fittest-ultra-aura.ethereum-sepolia.quiknode.pro',
   'https://meta-aa-provider.onrender.com',

@@ -253,6 +253,7 @@ const ModifyCollateral: React.FC = () => {
                 {/* based on the connect value toggling the buttons */}
                 {connect ? (
                   <button
+                    type="button"
                     onClick={OnSignIn}
                     disabled={paymentMethod !== 'default'}
                     className={` w-24 md:w-32 h-10 rounded-3xl text-sm font-semibold ${

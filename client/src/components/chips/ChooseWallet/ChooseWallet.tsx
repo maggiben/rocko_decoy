@@ -43,6 +43,7 @@ function ChooseWallet({
         </div>
         <div className="">
           <button
+            type="button"
             onClick={() => setOpenModalFor('')}
             className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
           >
@@ -110,6 +111,7 @@ function ChooseWallet({
           />
         ) : (
           <button
+            type="button"
             onClick={handleContinueBtn}
             className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
               activeBtn

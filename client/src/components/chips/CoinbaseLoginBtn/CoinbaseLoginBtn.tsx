@@ -1,4 +1,5 @@
 import { COINBASE_CLIENT_ID, BACKEND_URL } from '@/constants/env';
+import generateCSRFCode from '@/utility/generateCsrfCode';
 
 const COINBASE_REDIRECT_URI = `${BACKEND_URL}/cb-callback`;
 const COINBASE_SCOPES = [
@@ -10,11 +11,11 @@ const COINBASE_SCOPES = [
 ].join(',');
 
 const CURRENCY_SELECT: string | string[] = [
-  // 'WBTC',
+  'WBTC',
   'ETH',
-  // 'UNI',
-  // 'COMP',
-  // 'USDC',
+  'UNI',
+  'COMP',
+  'USDC',
 ].join(',');
 
 const SPEND_LIMIT_AMOUNT = '1'; // need to get app aproved to be more than 1
@@ -26,11 +27,13 @@ export default function CoinbaseLoginBtn({
   setConnect: any;
   setOpenModalFor: any;
 }) {
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (COINBASE_CLIENT_ID) {
-      console.log({ CURRENCY_SELECT, SPEND_LIMIT_AMOUNT });
+      const csrfToken = await generateCSRFCode();
+      sessionStorage.setItem('stateToken', csrfToken);
 
       const params = new URLSearchParams();
+      params.append('state', csrfToken);
       params.append('response_type', 'code');
       params.append('client_id', COINBASE_CLIENT_ID);
       params.append('redirect_uri', COINBASE_REDIRECT_URI);

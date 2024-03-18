@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CLIENT_URL, ROCKO_DB_DATABASE, SLACK_WEBHOOK_URL } from '../constants';
+import { CLIENT_URL, SLACK_WEBHOOK_URL } from '../constants';
 
 type LogLevel = 'info' | 'error' | 'warn';
 
@@ -18,7 +18,7 @@ const messageCleaner = (message: string): string =>
 const logger = async (message: any, level: LogLevel = 'info') => {
 
   // this should be the NODE_END but its undefined ¯\_(ツ)_/¯
-  if (ROCKO_DB_DATABASE === "rocko_main" || CLIENT_URL === "https://develop.testnet.rocko.co") {
+  if (CLIENT_URL === "https://app.rocko.co" || CLIENT_URL === "https://develop.testnet.rocko.co") {
      // Also log to stdout
      console.log({ message, level });
 

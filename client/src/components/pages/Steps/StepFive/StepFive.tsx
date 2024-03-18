@@ -371,13 +371,17 @@ const StepFive: React.FC = () => {
               <div className="text-center md:text-left mt-1 lg:mt-0">
                 {connect ? (
                   <button
+                    type="button"
                     onClick={OnSignIn}
                     className="w-24 md:w-32 h-10 rounded-3xl text-sm md:text-base text-[#eee] bg-[#2C3B8D]"
                   >
                     Sign in
                   </button>
                 ) : (
-                  <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md">
+                  <button
+                    type="button"
+                    className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md"
+                  >
                     <Image src={correct} alt="Correct Image" />
                     <p>Connected</p>
                   </button>
