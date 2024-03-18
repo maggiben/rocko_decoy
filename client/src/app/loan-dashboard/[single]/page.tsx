@@ -405,7 +405,7 @@ function SinglePage() {
                 title=" Collateral Buffer Alerts"
                 loanId={loanData?.id}
                 alertFor="collateralBuffer"
-                description="Set up alerts to be notified when your collateral buffer is getting too low. Alerts are automatically sent at 5% as liquidation can occur once it becomes negative."
+                description="Set up alerts to be notified when your collateral buffer is low. liquidation can occur once it becomes negative."
               />
               {/* //!alert end */}
             </div>
