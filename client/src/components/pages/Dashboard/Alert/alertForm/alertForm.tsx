@@ -13,9 +13,9 @@ import { useUserDB } from '@/db/userDb';
 import closeIcon from '@/assets/Close.svg';
 import { UPDATE_ALERT } from '@/constants/alertType';
 import { FLAG_SMS_ALERTS } from '@/constants/featureFlags';
+import { ROCKO_WEBSITE_URL } from '@/constants';
 import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
 import SelectOptionOne from '../collateralBufferAlerts/selectOption/SelectOptionOne';
-import { ROCKO_WEBSITE_URL } from '@/constants';
 
 const AlertForm: FC<AlertFormProps> = ({
   loanId,
