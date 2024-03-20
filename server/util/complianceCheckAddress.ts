@@ -9,7 +9,7 @@ const complianceCheckAddress = async (address: string) => {
         validAddress = getAddress(address);
     } catch (error) {
         logger(error, 'error');
-        return undefined;
+        return false;
     }
 
     try {

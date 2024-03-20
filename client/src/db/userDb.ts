@@ -19,18 +19,22 @@ const getUserCountry = async () => {
 };
 
 export const useUserDB = () => {
-  const addUser = async (
-    email: string,
-    walletAddress: string,
-    active: boolean,
-  ) => {
+  const addUser = async ({
+    email,
+    walletAddress,
+    inactive,
+  }: {
+    email: string;
+    walletAddress: string;
+    inactive: boolean;
+  }) => {
     const { country, ip } = await getUserCountry();
     const userObject = {
       email,
       wallet_address: walletAddress,
       country,
       ip,
-      active: Number(active),
+      inactive: Number(inactive),
     };
     axiosInterceptor.post(`${BACKEND_URL}/addUser`, userObject).catch((e) => {
       logger(`Cannot addUser: ${JSON.stringify(e, null, 2)}`, 'error');

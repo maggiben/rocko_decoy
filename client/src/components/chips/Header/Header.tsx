@@ -128,7 +128,11 @@ function Header() {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
         if (!res || (res && res.length === 0)) {
-          addUser(userInfo.email, address as `0x${string}`, false);
+          addUser({
+            email: userInfo.email,
+            walletAddress: address as `0x${string}`,
+            inactive: false,
+          });
         } else {
           /* if user exist */
           await updateCountry(userInfo?.email); // log country_lastlogin

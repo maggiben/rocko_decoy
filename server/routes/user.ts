@@ -17,7 +17,7 @@ router.post(
             wallet_address: req.body.wallet_address,
             country_origin: req.body.country,
             ipaddress_lastlogin: req.body.ip,
-            inactive: req.body.active,
+            inactive: req.body.inactive,
             create_time: new Date(),
             modified_time: new Date(),
           };

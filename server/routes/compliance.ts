@@ -37,11 +37,19 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
     try {
         // address check
         if(req.body.address){
-            const isOFACCompliantResult = await isOFACCompliant(req.body.address);
-            const complianceCheckAddressResult = await complianceCheckAddress(req.body.address);
+            let isCompliant = false;
+            try {
+                const isOFACCompliantResult = await isOFACCompliant(req.body.address);
+                const complianceCheckAddressResult = await complianceCheckAddress(req.body.address);
+
+                isCompliant = isOFACCompliantResult && complianceCheckAddressResult;
+            } catch (e) {
+                logger(e, 'error');
+                return res.status(502).send('Something went wrong');
+            }
 
             const addressCompQuery = "INSERT INTO compliance_address (wallet_address, user_id, user_email, is_ofac_compliant, create_time) VALUES (?, ?, ?, ?, ?)";
-            const addressParams = [req.body.address, req?.user?.id, req?.user?.email, isOFACCompliantResult, new Date()];
+            const addressParams = [req.body.address, req?.user?.id, req?.user?.email, isCompliant, new Date()];
 
             db.query(addressCompQuery, addressParams, (err, results) => {
                 if (err) {
@@ -50,7 +58,7 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
                 }
 
                 if ( 
-                    isOFACCompliantResult && complianceCheckAddressResult
+                    isCompliant
                 ) {
                     return res.status(200).send('OK');
                 } else {            
@@ -64,10 +72,7 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
                         }
                         return res.status(401).send('Unauthorized');
                     });
-    
-                    return res.status(400).send('Bad Request');
                 }
-
             });            
         } else {
             return res.status(400).send('Bad Request: Missing address');
