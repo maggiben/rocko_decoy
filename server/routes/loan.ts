@@ -107,7 +107,8 @@ router.post(
         return res.status(401).send('Unauthorized: Invalid ID');
       }
     } catch (error) {
-      logger(error, 'error');;
+      logger(error, 'error');
+      return res.status(500).send('Something went wrong');
     }
 
   }
@@ -169,6 +170,7 @@ router.post("/update", checkJwt, (req, res, next) => {
     }
   } catch (error) {
     logger(error, 'error');
+    return res.status(500).send('Something went wrong');
   }
 
 });

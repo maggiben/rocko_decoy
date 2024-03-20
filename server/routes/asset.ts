@@ -28,6 +28,7 @@ router.get('/average_apr', (req, res, next) => {
       })
   } catch (error) {
     logger(error, 'error');
+    return res.status(500).send('Something went wrong');
   }
   
 })
@@ -45,6 +46,7 @@ router.get('/average_reward_rate', (req, res, next) => {
     })
   } catch (error) {
     logger(error, 'error');
+    return res.status(500).send('Something went wrong');
   }
 
 })
@@ -62,6 +64,7 @@ router.get('/reward_rate', (req, res, next) => {
     })
   } catch (error) {
     logger(error, 'error');
+    return res.status(500).send('Something went wrong');
   }
 
 })

@@ -52,6 +52,7 @@ router.get('/cb-callback', async (req, res) => {
         }
     } catch (error) {
         logger(error, 'error');
+        return res.status(500).send('Something went wrong');
     }
    
 });
@@ -92,6 +93,7 @@ router.get('/coinbase-balance', async (req, res) => {
         }
     } catch (error) {
         logger(error, 'error');
+        return res.status(500).send('Something went wrong');
     }
 });
 
@@ -150,6 +152,7 @@ router.post('/send-withdrawal', async (req, res) => {
         }
     } catch (error) {
         logger(error, 'error');
+        return res.status(500).send('Something went wrong');
     }
    
 });

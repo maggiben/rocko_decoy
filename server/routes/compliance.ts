@@ -48,32 +48,33 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
                     console.error(err);
                     return next(new Error('Failed to insert into compliance_address'));
                 }
-            });
 
-            if ( 
-                isOFACCompliantResult && complianceCheckAddressResult
-            ) {
-                return res.status(200).send('OK');
-            } else {            
-                // block user
-                let sql = "UPDATE users SET inactive = ?, modified_time = ? WHERE email = ?";
-                const params = [1, new Date(), req?.user?.email];
-                db.query(sql, params, (err: any, results: any) => {
-                    if (err) {
-                    console.error(err);
-                    return next(new Error('Database query failed'));
-                    }
-                    return res.status(401).send('Unauthorized');
-                });
+                if ( 
+                    isOFACCompliantResult && complianceCheckAddressResult
+                ) {
+                    return res.status(200).send('OK');
+                } else {            
+                    // block user
+                    let sql = "UPDATE users SET inactive = ?, modified_time = ? WHERE email = ?";
+                    const params = [1, new Date(), req?.user?.email];
+                    db.query(sql, params, (err: any, results: any) => {
+                        if (err) {
+                        console.error(err);
+                        return next(new Error('Database query failed'));
+                        }
+                        return res.status(401).send('Unauthorized');
+                    });
+    
+                    return res.status(400).send('Bad Request');
+                }
 
-                return res.status(400).send('Bad Request');
-            }
-            
+            });            
         } else {
             return res.status(400).send('Bad Request: Missing address');
         }
     } catch (error) {
         logger(error, 'error');
+        return res.status(500).send('Something went wrong');
     }
 });
 
@@ -91,7 +92,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 [TransactionType.Fee]: TransferType.CryptoDeposit
             }
             const assetAmount = req.body.metadata.amount * (10**req.body.metadata.asset_decimals);
-            let complianceSubmission;
+            let complianceSubmission: { uuid: string; } | undefined;
             try {
                 complianceSubmission = await complianceTransaction({
                     rockoUserId: req?.user?.id.toString(),
@@ -139,15 +140,18 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 }
         
                 console.log("compliance_transaction updated successfully");
+                            
+                if(req.body.transaction_hash && complianceSubmission?.uuid){
+                    return res.send('OK');
+                } else {
+                    return res.status(400).send('Bad Request: Missing tx hash');
+                }
+
             });
-        
-            if(req.body.transaction_hash && complianceSubmission?.uuid){
-                return res.send('OK');
-            } else {
-                return res.status(400).send('Bad Request: Missing tx hash');
-            }
+
            } catch (error) {
                logger(error, 'error');
+               return res.status(500).send('Something went wrong');
            }
     } else {
         return res.status(400).send('Bad Request: Missing payload');
@@ -173,6 +177,7 @@ router.get('/platform-status', async (req: Request, res: Response, next) => {
         });
     } catch (error) {
         logger(error, 'error');
+        return res.status(500).send('Something went wrong');
     }
 
 })

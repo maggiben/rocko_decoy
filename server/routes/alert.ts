@@ -26,6 +26,7 @@ router.get('/alerts', checkJwt, (req, res, next) => {
     }
   } catch (error) {
     logger(error, 'error');
+    return res.status(500).send('Something went wrong');
   }
   
 })
