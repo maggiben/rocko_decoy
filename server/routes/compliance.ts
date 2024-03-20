@@ -126,7 +126,8 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 sender_address: req.body.metadata.sender_address,
                 transaction_hash: req.body.transaction_hash,
                 transaction_type: req.body.metadata.transaction_type,
-                funding_source: source[req.body.metadata.funding_source as FundingSourceUI]
+                funding_source: source[req.body.metadata.funding_source as FundingSourceUI],
+                create_time: new Date(),
             };
            
             const txMonQuery = "INSERT INTO transactions SET ?";
