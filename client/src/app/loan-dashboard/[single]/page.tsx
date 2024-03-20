@@ -214,7 +214,7 @@ function SinglePage() {
             <div className="flex justify-between flex-wrap gap-1 md:gap-0 pt-4">
               <div className="w-[30%]">
                 <p className="text-2xl  font-medium">
-                  {financial(borrowBalanceOf, 6)} <small>USDC</small>
+                  {financial(borrowBalanceOf, 2)} <small>USDC</small>
                   <span className="block text-sm text-[#545454]">
                     ${financial(borrowBalanceOf, 2)}
                   </span>
@@ -226,7 +226,7 @@ function SinglePage() {
                   {financial(
                     collateralPrice * collateralBalanceOf * LTV -
                       borrowBalanceOf,
-                    6,
+                    2,
                   )}{' '}
                   <small>USDC</small>
                 </span>
@@ -259,7 +259,7 @@ function SinglePage() {
                 <span className="block text-xl  font-medium">
                   {financial(
                     borrowBalanceOf - loanData?.outstanding_balance,
-                    6,
+                    2,
                   )}{' '}
                   <small>USDC</small>
                 </span>
