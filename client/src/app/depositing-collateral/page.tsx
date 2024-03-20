@@ -93,7 +93,12 @@ function DepositingCollateral() {
       loanData,
       borrowMoreData,
     });
-    if (!wagmiAddress || !address || !(loanData || borrowMoreData)) return;
+    if (
+      !wagmiAddress ||
+      !address ||
+      !(loanData?.collateralNeeded || borrowMoreData?.collateralNeeded)
+    )
+      return;
     if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
       toast.error('Invalid Network!');
       return;
@@ -172,10 +177,17 @@ function DepositingCollateral() {
       saveTransactions(result.value, txHashLoan);
     }
 
+    // clear session storage to avoid duplicate transaction
+    clearLoanDataSession();
+
     setDoneTracker([...doneTracker, { step: 'two' }]);
     setStartB(false);
     setActiveDone(true);
     setCompleteModal(true);
+  };
+
+  const clearLoanDataSession = () => {
+    sessionStorage.removeItem(type === 'add' ? 'borrowMoreData' : 'loanData');
   };
 
   const saveTransactions = async (loanId: any, hash: string) => {
@@ -271,22 +283,7 @@ function DepositingCollateral() {
     if (error) logger(JSON.stringify(error, null, 2));
 
     if (success) {
-      // toast(() => (
-      //   <div className="flex items-center underline gap-2">
-      //     <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
-      //     <a
-      //       className="hover:text-green-700"
-      //       target="_blank"
-      //       href={etherscanLink(txHash)}
-      //       rel="noopener noreferrer"
-      //     >
-      //       Loan successfully fulfilled!
-      //     </a>
-      //   </div>
-      // ));
-
       setShowTxModal(true);
-
       setAllDone(txHash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
