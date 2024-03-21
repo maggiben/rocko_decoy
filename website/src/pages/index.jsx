@@ -35,13 +35,15 @@ export default function Homepage() {
   useEffect(() => {
     handleGetBorrowerApr()
   }, [])
+  // const title = `Crypto-backed loans as low as ${
+  //         (inBrowser && sessionStorage.getItem('borrowApr')) || borrowApr
+  //       }¹`
+  const title = `Crypto-backed loans at competitive rates¹`
 
   return (
     <Layout>
       <Header
-        title={`Crypto-backed loans as low as ${
-          (inBrowser && sessionStorage.getItem('borrowApr')) || borrowApr
-        }¹`}
+        title={title}
         subTitle="Receive USD² or USDC using your crypto holdings as collateral. Be one of the first to get early access."
         description="¹Interest rates are offered by Compound III lending protocol and fluctuate
         in real-time based on market forces. The rate displayed may be delayed."
