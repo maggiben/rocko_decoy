@@ -7,7 +7,7 @@
 # COMET_CONTRACT_MAIN: Comet contract for pricing
 # USDC_CONTRACT:       USDC contract address for compound
 # COMP_CONTRACT:       COMP contract address
-# NETWORK:             Network (sepolia/mainnet)
+# NETWORK:             Network (sepolia/mainnet/base)
 # DATABASE_HOST:       Database host
 # DATABASE_USER:       Database user
 # DATABASE_PASS:       Database password
@@ -195,22 +195,48 @@ def handler_inner(event, context):
   logger.debug("")
 
   # Put together SQL statement
-  sql = "INSERT INTO asset_data (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, utilization_percent, available, supply_rate, supply_apr, supply_total, comp_to_suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, borrow_collateral_factor, comp_to_borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES ("
-  sql += f"'compound', '3', '{os.environ.get('NETWORK')}', 'USDC', {usdc_price}, {comp_price}, {utilization}, {utilization_percent}, {total_available}, {supply_rate}, {supply_apr}, {supply_total}, {comp_to_suppliers_per_day}, {supply_reward_rate}, {supply_net_rate}, {borrow_rate}, {borrow_apr}, {borrow_total}, {borrow_collateral_factor}, {comp_to_borrowers_per_day}, {borrow_reward_rate}, {borrow_net_rate}, {borrow_min}, {borrow_reward_min})"
+  table_name = "asset_data_base_compound" if os.environ.get('NETWORK') == 'base' else "asset_data"
+
+  sql = f"INSERT INTO {table_name} (lending_protocol, protocol_version, network, loan_asset, base_price, comp_price, utilization, utilization_percent, available, supply_rate, supply_apr, supply_total, comp_to_suppliers_per_day, supply_reward_rate, supply_net_rate, borrow_rate, borrow_apr, borrow_total, borrow_collateral_factor, comp_to_borrowers_per_day, borrow_reward_rate, borrow_net_rate, borrow_min, borrow_reward_min) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+  params = (
+      'compound',
+      '3',
+      os.environ.get('NETWORK'),
+      'USDC',
+      usdc_price,
+      comp_price,
+      utilization,
+      utilization_percent,
+      total_available,
+      supply_rate,
+      supply_apr,
+      supply_total,
+      comp_to_suppliers_per_day,
+      supply_reward_rate,
+      supply_net_rate,
+      borrow_rate,
+      borrow_apr,
+      borrow_total,
+      borrow_collateral_factor,
+      comp_to_borrowers_per_day,
+      borrow_reward_rate,
+      borrow_net_rate,
+      borrow_min,
+      borrow_reward_min
+  )
 
   logger.debug(sql)
+  logger.debug(params)
 
   if not DRY_RUN:
-    conn = mysql.connector.connect(**DB_CONFIG)
-    cursor = conn.cursor()
-
-    cursor.execute(sql)
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-
-  return True
+      conn = mysql.connector.connect(**DB_CONFIG)
+      cursor = conn.cursor()
+      cursor.execute(sql, params)
+      conn.commit()
+      cursor.close()
+      conn.close()
+      return True
 
 def lambda_handler(event, context):
     try:
