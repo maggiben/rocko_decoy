@@ -23,13 +23,19 @@ resource "aws_lambda_function" "get_compound_usdc_data" {
   environment {
     variables = {
       ROCKO_ENV           = local.environment
+      
+      NETWORK             = "sepolia"
       PROVIDER            = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url.secret_string)["url"]}"
       PROVIDER_MAIN       = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url_prod.secret_string)["url"]}"
-      NETWORK             = "sepolia"
       COMET_CONTRACT      = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMET_CONTRACT"]}"
       COMET_CONTRACT_MAIN = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses_prod.secret_string)["COMET_CONTRACT"]}"
       COMP_CONTRACT       = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMP_CONTRACT"]}"
       USDC_CONTRACT       = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["USDC_CONTRACT"]}"
+
+      NETWORK_BASE        = "base"      
+      PROVIDER_BASE       = "${jsondecode(data.aws_secretsmanager_secret_version.provider_url.secret_string)["url_base"]}"
+      COMET_CONTRACT_BASE = "${jsondecode(data.aws_secretsmanager_secret_version.contract_addresses.secret_string)["COMET_CONTRACT_BASE"]}"
+      
       DATABASE_HOST       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["host"]}"
       DATABASE_USER       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["username"]}"
       DATABASE_PASS       = "${jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)["password"]}"
