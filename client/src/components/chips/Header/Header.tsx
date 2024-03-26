@@ -15,6 +15,7 @@ import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
+import usePlatformStatus from '@/hooks/usePlatformStatus';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
 
@@ -31,7 +32,7 @@ function Header() {
       // paymasterProvider: 'PIMLICO',
     },
   });
-
+  const { platformStatusMessage } = usePlatformStatus();
   const loginRef: any = useRef();
   const router = useRouter();
   const pathName = usePathname();
@@ -368,6 +369,28 @@ function Header() {
           <AlreadyOpenModal setOpenModalFor={setOpenModalFor} />
         </ModalContainer>
       )}
+      {platformStatusMessage ? (
+        <div
+          style={{
+            width: '100%',
+            backgroundColor: 'rgba(255, 85, 85, 1)',
+            textAlign: 'center',
+            color: 'white',
+            padding: '8px',
+          }}
+        >
+          {platformStatusMessage}, please visit{' '}
+          <a
+            href="https://x.com/rockodefi"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'underline' }}
+          >
+            @rockodefi
+          </a>{' '}
+          for more information.
+        </div>
+      ) : null}
     </nav>
   );
 }

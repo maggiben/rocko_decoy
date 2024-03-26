@@ -32,7 +32,7 @@ router.get('/loans', checkJwt, (req, res, next) => {
 
 const loanKillSwitch = (res: Response, next: NextFunction) => {
   try {
-    let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM kill_switch";
+    let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM platform_status";
 
     db.query(killSwitch, {}, (err, results) => {
       if (err) {

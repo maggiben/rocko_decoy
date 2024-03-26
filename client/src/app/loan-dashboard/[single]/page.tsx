@@ -21,7 +21,7 @@ import { formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
-import useKillSwitch from '@/hooks/useKillSwitch';
+import usePlatformStatus from '@/hooks/usePlatformStatus';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -58,7 +58,7 @@ const TxPaused = () => (
 );
 
 function SinglePage() {
-  const { transactionsPaused } = useKillSwitch();
+  const { transactionsPaused } = usePlatformStatus();
   const searchParams = useSearchParams();
   const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');

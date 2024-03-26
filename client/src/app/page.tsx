@@ -7,7 +7,7 @@ import StepFour from '@/components/pages/Steps/StepFour/StepFour';
 import StepFive from '@/components/pages/Steps/StepFive/StepFive';
 
 import Stepper, { Step } from '@/components/Stepper';
-import useKillSwitch from '@/hooks/useKillSwitch';
+import usePlatformStatus from '@/hooks/usePlatformStatus';
 import Status from '@/components/Status';
 
 const steps: Step[] = [
@@ -19,7 +19,7 @@ const steps: Step[] = [
 ];
 
 export default function Home() {
-  const { loansPaused, transactionsPaused } = useKillSwitch();
+  const { loansPaused, transactionsPaused } = usePlatformStatus();
 
   return transactionsPaused || loansPaused ? (
     <Status />

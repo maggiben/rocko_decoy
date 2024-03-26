@@ -13,11 +13,11 @@ import { etherscanLink, formatDate } from '@/utility/utils';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
-import useKillSwitch from '@/hooks/useKillSwitch';
+import usePlatformStatus from '@/hooks/usePlatformStatus';
 
 function Dashboard() {
   const [active, setActive] = useState(true);
-  const { loansPaused, transactionsPaused } = useKillSwitch();
+  const { loansPaused, transactionsPaused } = usePlatformStatus();
   const newLoansPaused = loansPaused || transactionsPaused;
   const { getLoanData } = useLoanDB();
   const { getUserId } = useUserDB();

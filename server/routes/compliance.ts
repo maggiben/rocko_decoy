@@ -166,7 +166,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
   
 router.get('/platform-status', async (req: Request, res: Response, next) => {
     try {
-        let killSwitch = "SELECT loan_booking_blocked, transactions_blocked FROM kill_switch";
+        let killSwitch = "SELECT loan_booking_blocked, transactions_blocked, status_message FROM platform_status";
 
         db.query(killSwitch, {}, (err, results) => {
           if (err) {
