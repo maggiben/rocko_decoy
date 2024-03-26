@@ -286,27 +286,36 @@ def get_compound_usdc_data(
         return True
 
 def handler_inner(event, context):
-  # Get current netork data (mainnet/sepolia)
-  get_compound_usdc_data(
-      network=os.environ.get('NETWORK'),
-      provider=os.environ.get('PROVIDER'),
-      provider_main=os.environ.get('PROVIDER_MAIN'), 
-      comet_contract=os.environ.get('COMET_CONTRACT'),
-      comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
-      usdc_contract=os.environ.get('USDC_CONTRACT'), 
-      comp_contract=os.environ.get('COMP_CONTRACT'), 
-  )
-  
-  get_compound_usdc_data(
-    network=os.environ.get('NETWORK_BASE'),
-    provider=os.environ.get('PROVIDER_BASE'),
-    provider_main=os.environ.get('PROVIDER_MAIN'), 
-    comet_contract=os.environ.get('COMET_CONTRACT_BASE'),
-    comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
-    usdc_contract=os.environ.get('USDC_CONTRACT'), 
-    comp_contract=os.environ.get('COMP_CONTRACT'), 
-  )
-
+    try:
+      # Get current netork data (mainnet/sepolia)
+      get_compound_usdc_data(
+          network=os.environ.get('NETWORK'),
+          provider=os.environ.get('PROVIDER'),
+          provider_main=os.environ.get('PROVIDER_MAIN'), 
+          comet_contract=os.environ.get('COMET_CONTRACT'),
+          comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
+          usdc_contract=os.environ.get('USDC_CONTRACT'), 
+          comp_contract=os.environ.get('COMP_CONTRACT'), 
+      )
+    except Exception:
+        logger.error(
+            f"{os.environ.get('NETWORK')} lambda failed with exception: {traceback.format_exc()}, event: {event}")
+    
+    try:
+      # Get current netork data (mainnet/sepolia)
+        get_compound_usdc_data(
+          network=os.environ.get('NETWORK_BASE'),
+          provider=os.environ.get('PROVIDER_BASE'),
+          provider_main=os.environ.get('PROVIDER_MAIN'), 
+          comet_contract=os.environ.get('COMET_CONTRACT_BASE'),
+          comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
+          usdc_contract=os.environ.get('USDC_CONTRACT'), 
+          comp_contract=os.environ.get('COMP_CONTRACT'), 
+        )
+    except Exception:
+        logger.error(
+            f"{os.environ.get('NETWORK_BASE')} lambda failed with exception: {traceback.format_exc()}, event: {event}")
+ 
 def lambda_handler(event, context):
     try:
         return handler_inner(event, context)
