@@ -7,7 +7,7 @@ export const ROCKO_WEBSITE_URL = 'https://rocko.co';
 export const USDCContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   [chains.sepolia.id]: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
-  [chains.base.id]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
+  [chains.base.id]: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
 };
 
 // Comp USDC Contract cUSDCv3
@@ -15,8 +15,7 @@ export const USDCContract: { [key: number]: string } = {
 export const CometContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
   [chains.sepolia.id]: '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e',
-  // !! cUSDbCv3
-  [chains.base.id]: '0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf',
+  [chains.base.id]: '0xb125E6687d4313864e53df431d5425969c15Eb2F',
 };
 
 export const CometRewardContract: { [key: number]: string } = {

@@ -87,7 +87,8 @@ def get_compound_usdc_data(
     provider_main, 
     comet_contract, 
     comet_contract_main, 
-    usdc_contract, 
+    usdc_contract,
+    asset_index, 
     comp_contract, 
     network
   ):
@@ -95,6 +96,8 @@ def get_compound_usdc_data(
 
     # Use network provider for comet contract
     comet_contract = w3.eth.contract(address=comet_contract, abi=COMET_ABI)
+
+    logger.debug(f"NETWORK: {network}")
 
     #
     # Scales
@@ -126,7 +129,6 @@ def get_compound_usdc_data(
     time.sleep(1)
     logger.debug("")
 
-    logger.debug(f"NETWORK: {network}")
     # Get COMP price
     comp_price = get_pricing_data(
       comp_contract, 
@@ -203,12 +205,6 @@ def get_compound_usdc_data(
     borrow_speed = comet_contract.functions.baseTrackingBorrowSpeed().call()
     logger.debug(f"BORROW SPEED: {borrow_speed}")
 
-    # Borrow collateral factor
-    #  asset_info = comet_contract.functions.AssetInfo0i
-
-    borrow_collateral_factor = comet_contract.functions.getAssetInfo(2).call()[4] / factor_scale
-    logger.debug(f"BORROW COLLATERAL FACTOR: {borrow_collateral_factor}")
-
     # COMP to borrowers per day
     comp_to_borrowers_per_day = borrow_speed / base_index_scale * 86400
     logger.debug(f"BORROWERS PER DAY {comp_to_borrowers_per_day}")
@@ -230,6 +226,10 @@ def get_compound_usdc_data(
     # This is the minimum to calculate rewards
     borrow_reward_min = comet_contract.functions.baseMinForRewards().call() / base_accrual_scale
     logger.debug(f"BORROW MIN REWARDS: {'{:.2f}'.format(borrow_reward_min)}")
+  
+    borrow_collateral_factor = comet_contract.functions.getAssetInfo(asset_index).call()[4] / factor_scale
+    logger.debug(f"BORROW COLLATERAL FACTOR: {borrow_collateral_factor}")
+
 
     # Other
     # Calculate available to borrow
@@ -294,7 +294,8 @@ def handler_inner(event, context):
           provider_main=os.environ.get('PROVIDER_MAIN'), 
           comet_contract=os.environ.get('COMET_CONTRACT'),
           comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
-          usdc_contract=os.environ.get('USDC_CONTRACT'), 
+          usdc_contract=os.environ.get('USDC_CONTRACT'),
+          asset_index=2, 
           comp_contract=os.environ.get('COMP_CONTRACT'), 
       )
     except Exception:
@@ -309,7 +310,8 @@ def handler_inner(event, context):
           provider_main=os.environ.get('PROVIDER_MAIN'), 
           comet_contract=os.environ.get('COMET_CONTRACT_BASE'),
           comet_contract_main=os.environ.get('COMET_CONTRACT_MAIN'), 
-          usdc_contract=os.environ.get('USDC_CONTRACT'), 
+          usdc_contract=os.environ.get('USDC_CONTRACT'),
+          asset_index=1,
           comp_contract=os.environ.get('COMP_CONTRACT'), 
         )
     except Exception:
