@@ -48,6 +48,7 @@ const Profile: React.FC = () => {
     useState<boolean>(false);
   const [contactNumber, setContactNumber] = useState('');
   const [inputContactNumber, setInputContactNumber] = useState('');
+  const [termsChecked, setTermsChecked] = useState<boolean>(false);
 
   const phoneEmailPass = PHONE_EMAIL_PASS_SETTINGS
     ? [
@@ -164,6 +165,13 @@ const Profile: React.FC = () => {
         }
       : null,
   ];
+
+  const handleTermsCheckChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const isChecked = event.target.checked;
+    setTermsChecked(isChecked);
+  };
 
   const handleSavePhoneClick = () => {
     setContactNumber(inputContactNumber === '+' ? '' : inputContactNumber);
@@ -303,7 +311,27 @@ const Profile: React.FC = () => {
                               setInputContactNumber(formattedValue);
                             }}
                           />
-                          <div className="mb-4 flex justify-between">
+                          <label className="text-slate-600 text-sm lg:text-base">
+                            <div className="flex gap-3">
+                              <div className="mt-3">
+                                <input
+                                  type="checkbox"
+                                  className="checkbox1"
+                                  onChange={(e) => handleTermsCheckChange(e)}
+                                />
+                              </div>
+                              <div>
+                                By checking this box, you agree to receive
+                                informational, non-marketing text messages at
+                                the phone number you provided above. Text STOP
+                                to cancel. Consent not required to purchase
+                                goods or services. Message and data rates may
+                                apply.{' '}
+                              </div>
+                            </div>
+                            {/* </input> */}
+                          </label>
+                          <div className="mb-4 mt-4 flex justify-between">
                             <div />
                             <div>
                               <button
@@ -319,7 +347,10 @@ const Profile: React.FC = () => {
                               </button>
                               <button
                                 type="button"
-                                className="font-semibold  text-xs md:text-sm text-white py-[10px] w-[95px] px-6 rounded-full bg-blue mr-2"
+                                className={`font-semibold  text-xs md:text-sm ${
+                                  !termsChecked ? 'bg-blue/40' : 'bg-blue'
+                                } py-[10px] w-[95px] px-6 rounded-full text-white mr-2`}
+                                disabled={!termsChecked}
                                 onClick={handleSavePhoneClick}
                               >
                                 Save
