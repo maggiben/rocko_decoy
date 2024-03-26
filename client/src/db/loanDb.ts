@@ -110,7 +110,7 @@ export const useLoanDB = () => {
   const getAverageAPR = async (openDate: Date) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=${openDate}`,
+        `${BACKEND_URL}/average_apr?openDate=${openDate}&network=${NETWORK}`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
@@ -122,7 +122,7 @@ export const useLoanDB = () => {
   const getMonthAverageAPR = async () => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=month`,
+        `${BACKEND_URL}/average_apr?openDate=month&network=${NETWORK}`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
@@ -134,7 +134,7 @@ export const useLoanDB = () => {
   const getThreeMonthAverageAPR = async () => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=threemonth`,
+        `${BACKEND_URL}/average_apr?openDate=threemonth&network=${NETWORK}`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
@@ -146,7 +146,7 @@ export const useLoanDB = () => {
   const getYearAverageAPR = async () => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=year`,
+        `${BACKEND_URL}/average_apr?openDate=year&network=${NETWORK}`,
       );
       return response.data.length > 0 ? response.data[0].average_apr : null;
     } catch (error) {
@@ -158,7 +158,7 @@ export const useLoanDB = () => {
   const getYearAvgRewardRate = async () => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_reward_rate?openDate=year`,
+        `${BACKEND_URL}/average_reward_rate?openDate=year&network=${NETWORK}`,
       );
       return response.data.length > 0
         ? response.data[0].average_reward_rate
@@ -171,7 +171,9 @@ export const useLoanDB = () => {
 
   const getRewardRate = async () => {
     try {
-      const response = await axiosInterceptor.get(`${BACKEND_URL}/reward_rate`);
+      const response = await axiosInterceptor.get(
+        `${BACKEND_URL}/reward_rate&network=${NETWORK}`,
+      );
       return response.data.length > 0
         ? response.data[0].borrow_reward_rate
         : null;

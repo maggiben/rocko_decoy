@@ -219,6 +219,14 @@ paths:
             schema:
               type : string
               example: month
+          - name: network
+            in: query
+            description: ""
+            required: false
+            explode: true
+            schema:
+              type : string
+              example: sepolia
         responses:
           '200':
             description: ""
@@ -237,6 +245,15 @@ paths:
           - asset
         summary: ""
         description: ""
+        parameters:
+          - name: network
+            in: query
+            description: ""
+            required: false
+            explode: true
+            schema:
+              type : string
+              example: sepolia
         responses:
           '200':
             description: ""
@@ -257,6 +274,15 @@ paths:
           - asset
         summary: ""
         description: ""
+        parameters:
+          - name: network
+            in: query
+            description: ""
+            required: false
+            explode: true
+            schema:
+              type : string
+              example: sepolia
         responses:
           '200':
             description: ""
