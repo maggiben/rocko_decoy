@@ -11,6 +11,16 @@ function LandingPage() {
   useEffect(() => {
     document.title =
       'The Waitlist Page For Rocko: Crypto-Backed Loans at Competitive Rates'
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content =
+      'The Waitlist Page for Rocko. Join now to get early access to DeFi loans with no credit check required!'
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
 
   return (

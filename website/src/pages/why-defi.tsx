@@ -56,8 +56,19 @@ export default function WhyDefi() {
 
   useEffect(() => {
     document.title =
-      'An Overview of DeFi Borrowing and Rocko: Crypto-Backed Loans at Competitive Rates'
+      'Why DeFi by Rocko: Crypto-Backed Loans at Competitive Rates'
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content =
+      'An overview of some of the benefits and risks of DeFi loans.'
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
+
   return (
     <Layout>
       <div className="max-w-[675px] w-full lg:py-[80px] py-[40px] m-[auto] px-[15px]">

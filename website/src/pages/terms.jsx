@@ -6,7 +6,18 @@ const Index = () => {
   useEffect(() => {
     document.title =
       'The Terms of Service for Rocko: Crypto-Backed Loans at Competitve Rates'
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content =
+      'This is the Terms of Service for Rocko. Understand the Terms before you use Rocko to crypto-backed loans at comptetive rates.'
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
+
   return (
     <Layout>
       <a class="accessibility" href="#main">

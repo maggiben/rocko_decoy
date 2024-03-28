@@ -6,6 +6,16 @@ const Index = () => {
   useEffect(() => {
     document.title =
       'The Privacy Policy for Rocko: Crypto-Backed Loans at Competitve Rates'
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content =
+      'This is the Privay Policy for Rocko. Learn what info Rocko collects and how it uses it.'
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
 
   return (

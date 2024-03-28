@@ -19,6 +19,16 @@ function FAQ(props) {
 
   useEffect(() => {
     document.title = 'FAQ for Rocko: Crypto-Backed Loans at Competitive Rates'
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content =
+      'Frequently asked questions on Rocko, crypto-backed loans, DeFi, and more.'
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
 
   return (

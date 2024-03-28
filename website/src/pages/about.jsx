@@ -9,7 +9,17 @@ export default function About() {
   useEffect(() => {
     document.title =
       "About Rocko's Team and Mission: Crypto-Backed Loans at Competitve Rates"
+
+    const metaDescription = document.createElement('meta')
+    metaDescription.name = 'description'
+    metaDescription.content = "An overview of Rocko's team and mission."
+    document.head.appendChild(metaDescription)
+
+    return () => {
+      document.head.removeChild(metaDescription)
+    }
   }, [])
+
   return (
     <Layout>
       <div className="banner bg-[#081D21] lg:pt-[120px] py-[50px] px-[16px]  lg:pb-[120px]  text-center">
