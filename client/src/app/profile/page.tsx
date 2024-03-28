@@ -21,7 +21,8 @@ import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
 
 const Profile: React.FC = () => {
-  const [openModalFor, setOpenModalFor] = useState('');
+  const [openModalFor, setOpenModalFor] = useState<undefined | string>();
+
   const { userInfo } = useZeroDev();
   const { address: zerodevAccount } = useAccount();
   const { updateUser, getUserData } = useUserDB();
@@ -195,6 +196,12 @@ const Profile: React.FC = () => {
   useEffect(() => {
     if (userInfo) fetchPhone(userInfo?.email);
   }, [userInfo]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && openModalFor === '') {
+      window.location.reload();
+    }
+  }, [openModalFor]);
 
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
