@@ -33,7 +33,7 @@ function Subscribe({
           />
         </div>
         <div className="subscribe_container_info">
-          <h1
+          <h2
             className={`${
               singleBlog
                 ? 'subscribe_container_info_h1_singleblog_true'
@@ -41,7 +41,7 @@ function Subscribe({
             } subscribe_container_info_h1`}
           >
             {tagline}
-          </h1>
+          </h2>
           <p className="mb-20">{subheading}</p>
           <FormWrapper className="subscribe_container_info_input_container">
             <input
