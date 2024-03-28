@@ -311,26 +311,22 @@ const Profile: React.FC = () => {
                               setInputContactNumber(formattedValue);
                             }}
                           />
-                          <label className="text-slate-600 text-sm lg:text-base">
-                            <div className="flex gap-3">
-                              <div className="mt-3">
-                                <input
-                                  type="checkbox"
-                                  className="checkbox1"
-                                  onChange={(e) => handleTermsCheckChange(e)}
-                                />
-                              </div>
-                              <div>
-                                By checking this box, you agree to receive
-                                informational, non-marketing text messages at
-                                the phone number you provided above. Text STOP
-                                to cancel. Consent not required to purchase
-                                goods or services. Message and data rates may
-                                apply.{' '}
-                              </div>
+                          <div className="flex gap-3">
+                            <div className="mt-3">
+                              <input
+                                type="checkbox"
+                                className="checkbox1"
+                                onChange={(e) => handleTermsCheckChange(e)}
+                              />
                             </div>
-                            {/* </input> */}
-                          </label>
+                            <div className="text-slate-600 text-sm lg:text-base">
+                              By checking this box, you agree to receive
+                              informational, non-marketing text messages at the
+                              phone number you provided above. Text STOP to
+                              cancel. Consent not required to purchase goods or
+                              services. Message and data rates may apply.{' '}
+                            </div>
+                          </div>
                           <div className="mb-4 mt-4 flex justify-between">
                             <div />
                             <div>
