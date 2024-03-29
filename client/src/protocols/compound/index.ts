@@ -1,0 +1,113 @@
+import { NetworkNames } from '@/constants/env';
+import { ProtocolConfig } from '../types';
+import {
+  getETHPrice,
+  getBorrowAPR,
+  approveWETH,
+  addCollateral,
+  addLoan,
+  approveUSDC,
+  borrowCollateral,
+  borrowLoan,
+  claimReward,
+  deposit,
+  depositZeroDevAccount,
+  getBorrowBalanceOf,
+  getBuffer,
+  getCollateralBalanceOf,
+  getLTV,
+  getLiquidationPrice,
+  getMinCollateral,
+  getPenalty,
+  getRewardAmount,
+  getRewardRate,
+  getThreshold,
+  wethToETH,
+} from './util';
+
+const compoundConfig = ({
+  chain,
+  zeroDevAccount,
+  signer,
+}: {
+  // Comp USDC Contract cUSDCv3
+  // See https://docs.compound.finance/#networks
+  contract: string;
+  chain: NetworkNames;
+  chainId: number;
+  zeroDevAccount: any;
+  signer: any;
+}): ProtocolConfig => ({
+  name: 'Compound',
+  url: 'https://compound.finance',
+  description:
+    'Compound is an algorithmic, autonomous interest rate protocol built for developers, to unlock a universe of open financial applications.',
+  chain,
+  collateral: ['ETH', 'WBTC', 'UNI'],
+  rateType: 'floating',
+  minBorrow: 100,
+  maxBorrow: 100000,
+  loanTerm: 'open',
+  getETHPrice: async () => getETHPrice(chain),
+  getBorrowAPR: async () => getBorrowAPR(chain),
+  getLTV: async () => getLTV(chain),
+  getThreshold: async () => getThreshold(chain),
+  getPenalty: async () => getPenalty(chain),
+  getCollateralBalanceOf: async () =>
+    getCollateralBalanceOf({
+      chain,
+      zeroDevAccount,
+    }),
+  getBorrowBalanceOf: async () =>
+    getBorrowBalanceOf({
+      chain,
+      zeroDevAccount,
+    }),
+  getRewardAmount: async () =>
+    getRewardAmount({
+      chain,
+      zeroDevAccount,
+    }),
+  getRewardRate: async () => getRewardRate(chain),
+  tx: {
+    addCollateral: async (amount: string | number) =>
+      addCollateral({ amount, signer, chain }),
+    addLoan: async (amount: string | number) =>
+      addLoan({ amount, signer, chain }),
+    approveWETH: async () => approveWETH({ signer, chain }),
+    approveUSDC: async () => approveUSDC({ signer, chain }),
+    borrowLoan: async (amount: string | number) =>
+      borrowLoan({ amount, signer, chain }),
+    borrowCollateral: async (amount: string | number) =>
+      borrowCollateral({ amount, signer, chain }),
+    claimReward: async (address: string) =>
+      claimReward({ address, signer, chain }),
+    deposit: async (amount: string | number) =>
+      deposit({ amount, signer, chain }),
+    depositZerodevAccount: async (
+      zerodevDepositAccount: string,
+      amount: string | number,
+      currency: string,
+    ) =>
+      depositZeroDevAccount({
+        zerodevDepositAccount,
+        amount,
+        currency,
+        chain,
+        signer,
+      }),
+    getBuffer: async (loan: string | number, collateral: string | number) =>
+      getBuffer({ loan, collateral, chain }),
+    getLiquidationPrice: async (
+      loan: string | number,
+      collateral: string | number,
+    ) => getLiquidationPrice({ loan, collateral, chain }),
+    getMinCollateral: async (loan: string | number) =>
+      getMinCollateral({ loan, chain }),
+    wethToETH: async (amount: string | number) =>
+      wethToETH({ amount, signer, chain }),
+  },
+});
+
+// eslint-disable-next-line import/prefer-default-export
+export { compoundConfig };

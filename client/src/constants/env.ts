@@ -5,7 +5,7 @@ export const { SLACK_WEBHOOK_URL } = process.env;
 
 // Gotcha, some tools call mainnet 'ethereum', others call it 'mainnet'
 // rexpects mainnet, sepolia, etc
-type NetworkNames = 'mainnet' | 'sepolia' | 'base';
+export type NetworkNames = 'mainnet' | 'sepolia' | 'base';
 export const NETWORK: NetworkNames =
   (process.env.NEXT_PUBLIC_NETWORK as NetworkNames) || 'sepolia';
 export const INFURA_APIKEY = process.env.NEXT_PUBLIC_INFURA_APIKEY || '';

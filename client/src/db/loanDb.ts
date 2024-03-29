@@ -172,7 +172,7 @@ export const useLoanDB = () => {
   const getRewardRate = async () => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/reward_rate&network=${NETWORK}`,
+        `${BACKEND_URL}/reward_rate?network=${NETWORK}`,
       );
       return response.data.length > 0
         ? response.data[0].borrow_reward_rate
