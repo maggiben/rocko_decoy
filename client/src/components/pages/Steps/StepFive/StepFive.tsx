@@ -138,7 +138,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1">
               <span className="mr-1 lg:mr-0">Max Loan-to-Value </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.MAX_LTV} />
             </div>
           ),
           details: `${loanData?.loanToValue * 100}%`,
@@ -147,7 +147,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1 w-max">
               <span className="mr-1 lg:mr-0">Liquidation Threshold </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESDHOLD} />
             </div>
           ),
           details: `${loanData?.liquidationThreshold * 100}%`,
@@ -156,7 +156,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1">
               <span className="mr-1 lg:mr-0">Liquidation Penalty </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
             </div>
           ),
           details: `${financial(loanData?.liquidationPenalty * 100)}%`,
@@ -165,7 +165,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1">
               <span className="mr-1 lg:mr-0">Loan Term </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.LOAN_TERM} />
             </div>
           ),
           details: `Open Ended`,
@@ -174,7 +174,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1 w-max">
               <span className="mr-1 lg:mr-0">Minimum Monthly Payment </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.MINIMUM_MONTHLY_PAYMENT} />
             </div>
           ),
           details: `None`,
@@ -183,7 +183,7 @@ const StepFive: React.FC = () => {
           description: (
             <div className="flex items-center lg:gap-x-1">
               <span className="mr-1 lg:mr-0">Protocol Rewards </span>{' '}
-              <HoverTooltip text="this is tooltip" />
+              <HoverTooltip text={TOOLTIPS.PROTOCOL_REWARDS} />
             </div>
           ),
           details: `${financial(loanData?.rewardRate * 100, 2)}%`,
