@@ -379,7 +379,7 @@ const Profile: React.FC = () => {
                   </p>
                   <div className="w-[38%] md:w-1/2 text-right md:text-right">
                     <div className="flex gap-1 justify-end md:justify-end">
-                      <p>
+                      <p className="break-all">
                         <span>{info?.details}</span>
                       </p>
                     </div>

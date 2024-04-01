@@ -1,12 +1,27 @@
 /* eslint-disable import/prefer-default-export */
-import { publicIp } from 'public-ip';
+import { publicIpv4, publicIpv6 } from 'public-ip';
 import axiosInterceptor from '@/utility/axiosInterceptor';
 import { BACKEND_URL } from '@/constants/env';
 import logger from '@/utility/logger';
 
+const getIp = async () => {
+  let ip;
+  try {
+    ip = await publicIpv4();
+  } catch (error) {
+    try {
+      ip = await publicIpv6();
+    } catch (error) {
+      return null;
+    }
+  }
+
+  return ip;
+};
+
 const getUserCountry = async () => {
   try {
-    const ip = await publicIp();
+    const ip = await getIp();
 
     const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
       ip,
@@ -100,7 +115,10 @@ export const useUserDB = () => {
 
   const isVPN = async () => {
     try {
-      const ip = await publicIp();
+      // const ip = await publicIp();
+      const ip = await getIp();
+      if (!ip) return null;
+
       const response = await axiosInterceptor.post(`${BACKEND_URL}/vpn`, {
         ip,
       });

@@ -52,6 +52,10 @@ const CompoundProtocol: FC<ProtocolProps> = ({
         (borrowing / loanToValue) * (1 + loanData?.buffer / 100);
       const collateral = collateralInUSD / loanData?.collateralPrice;
       const liquidationPrice = borrowing / threshold / collateral;
+      const decreaseToLiquidationPrice =
+        ((loanData?.collateralPrice - liquidationPrice) /
+          loanData?.collateralPrice) *
+        100;
       const interestSixMonths = calculateInterestAccrued(
         borrowing,
         currentAPR / 100,
@@ -80,6 +84,7 @@ const CompoundProtocol: FC<ProtocolProps> = ({
           liquidationThreshold: threshold,
           collateralNeeded: collateral,
           liquidationPrice,
+          decreaseToLiquidationPrice,
           rewardRate,
           rewardAmount,
         }));

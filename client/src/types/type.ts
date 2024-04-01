@@ -130,6 +130,7 @@ export interface LoanData {
   subCollateralPrice: number;
   collateralNeeded: number;
   liquidationPrice: number;
+  decreaseToLiquidationPrice: number;
   subLiquidationPrice: number;
   rewardRate: number;
   rewardAmount: number;

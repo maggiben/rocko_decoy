@@ -93,13 +93,14 @@ function LoanSummary() {
         <div className="flex items-center gap-2 text-blackPrimary">
           Collateral Needed
           <HoverTooltip text={TOOLTIPS.COLLATERAL_NEEDED} />
-          {loanData?.collateralNeeded &&
+          {(loanData?.collateralNeeded &&
             loanData?.cryptoName &&
             loanData?.buffer === 0 && (
               <p className="font-medium text-[10px] text-[#5E7CF1] bg-[#E7EBFD] rounded-md py-[2px] px-2">
                 Estimated Minimum Amount
               </p>
-            )}
+            )) ||
+            ''}
         </div>
         <div
           className="flex items-center
@@ -147,12 +148,22 @@ function LoanSummary() {
           {loanData?.cryptoName && `(${loanData?.cryptoName})`}
           <HoverTooltip text={TOOLTIPS.LIQUIDATION_PRICE} />
         </div>
-        <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-          {(loanData?.liquidationPrice &&
-            loanData?.protocol === DEFAULT_PROTOCOL &&
-            `$${financial(loanData?.liquidationPrice, 2)}`) ||
-            '--'}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
+            {(loanData?.liquidationPrice &&
+              loanData?.protocol === DEFAULT_PROTOCOL &&
+              `$${financial(loanData?.liquidationPrice, 2)}`) ||
+              '--'}
+          </p>
+          <p className="text-base font-medium">
+            {(loanData?.liquidationPrice &&
+              loanData?.decreaseToLiquidationPrice &&
+              `(-${financial(
+                loanData?.decreaseToLiquidationPrice,
+              )}% from current price)`) ||
+              ''}
+          </p>
+        </div>
         {(loanData?.collateralPrice && loanData?.cryptoName && (
           <p className="text-sm flex items-center justify-between font-medium ">
             <span className="text-blackSecondary">
