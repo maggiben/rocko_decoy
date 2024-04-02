@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { NetworkNames } from '@/constants/env';
 
-type CollateralTokens = 'ETH' | 'WBTC' | 'UNI';
+type CollateralTokens = {
+  ticker: 'ETH' | 'COMP' | 'WBTC' | 'UNI';
+  fullName: string;
+  icon: string;
+  comingSoon: boolean;
+};
 type RateType = 'floating' | 'fixed';
 type LoanTerm = 'open' | 'fixed';
 

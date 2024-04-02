@@ -25,6 +25,11 @@ import {
   wethToETH,
 } from './util';
 
+import etherIcon from '@/assets/coins/Ether (ETH).svg';
+import compoundIcon from '@/assets/coins/Compound (COMP).svg';
+import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
+import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
+
 const compoundConfig = ({
   chain,
   zeroDevAccount,
@@ -43,7 +48,22 @@ const compoundConfig = ({
   description:
     'Compound is an algorithmic, autonomous interest rate protocol built for developers, to unlock a universe of open financial applications.',
   chain,
-  collateral: ['ETH', 'WBTC', 'UNI'],
+  collateral: [
+    { ticker: 'ETH', fullName: 'Ether', icon: etherIcon, comingSoon: false },
+    {
+      ticker: 'COMP',
+      fullName: 'Compound',
+      icon: compoundIcon,
+      comingSoon: true,
+    },
+    {
+      ticker: 'WBTC',
+      fullName: 'Wrapped Bitcoin',
+      icon: wBitcoinIcon,
+      comingSoon: true,
+    },
+    { ticker: 'UNI', fullName: 'Uniswap', icon: uniswapIcon, comingSoon: true },
+  ],
   rateType: 'floating',
   minBorrow: 100,
   maxBorrow: 100000,

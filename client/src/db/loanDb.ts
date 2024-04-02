@@ -112,7 +112,7 @@ export const useLoanDB = () => {
       const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=${openDate}&network=${NETWORK}`,
       );
-      return response.data.length > 0 ? response.data[0].average_apr : null;
+      return response.data?.average_apr;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
       return null;
@@ -124,7 +124,7 @@ export const useLoanDB = () => {
       const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=month&network=${NETWORK}`,
       );
-      return response.data.length > 0 ? response.data[0].average_apr : null;
+      return response.data?.average_apr;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
       return null;
@@ -136,7 +136,7 @@ export const useLoanDB = () => {
       const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=threemonth&network=${NETWORK}`,
       );
-      return response.data.length > 0 ? response.data[0].average_apr : null;
+      return response.data?.average_apr;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
       return null;
@@ -148,7 +148,7 @@ export const useLoanDB = () => {
       const response = await axiosInterceptor.get(
         `${BACKEND_URL}/average_apr?openDate=year&network=${NETWORK}`,
       );
-      return response.data.length > 0 ? response.data[0].average_apr : null;
+      return response.data?.average_apr;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
       return null;
@@ -174,9 +174,9 @@ export const useLoanDB = () => {
       const response = await axiosInterceptor.get(
         `${BACKEND_URL}/reward_rate?network=${NETWORK}`,
       );
-      return response.data.length > 0
-        ? response.data[0].borrow_reward_rate
-        : null;
+      // TODO this is wrong ==> Current Rate 6,088.57%
+      console.log({ response });
+      return response.data?.borrow_reward_rate;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
       return null;

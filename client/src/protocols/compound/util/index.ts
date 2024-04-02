@@ -550,11 +550,6 @@ const claimReward = async ({
 };
 
 const getBorrowAPR = async (chain: string): Promise<number> => {
-  logger({
-    x: 'getBorrowAPR',
-    k: CometContract[networkChainId(chain)],
-    chain,
-  });
   const BLOCKCHAIN: BlockchainNames =
     chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
 

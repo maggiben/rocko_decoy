@@ -2,7 +2,7 @@ import Header from '@/components/chips/Header/Header';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import LoneProvider from '@/context/loanContext/loanContext';
+import LoanProvider from '@/context/loanContext/loanContext';
 import AlertProvider from '@/context/alertContext/alertContext';
 import { Toaster } from 'react-hot-toast';
 import Providers from './Providers';
@@ -25,9 +25,9 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Toaster position="bottom-right" reverseOrder />
-          <LoneProvider>
+          <LoanProvider>
             <AlertProvider>{children}</AlertProvider>
-          </LoneProvider>
+          </LoanProvider>
         </Providers>
       </body>
     </html>

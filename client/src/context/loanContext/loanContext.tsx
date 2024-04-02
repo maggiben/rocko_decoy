@@ -18,6 +18,8 @@ import wrappedIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
 import { FC, ReactNode, SetStateAction, createContext, useState } from 'react';
 import { FLAG_MULTI_PROTOCOL } from '@/constants/featureFlags';
+import { useProtocolConfig } from '@/protocols';
+import { ProtocolConfig } from '@/protocols/types';
 
 const protocols = !FLAG_MULTI_PROTOCOL
   ? []
@@ -152,6 +154,101 @@ const protocols = !FLAG_MULTI_PROTOCOL
       },
     ];
 
+const hardcodedMeta: any = {
+  eth: {
+    loanToValue: 0.7, // data is  in percentage
+    liquidationThreshold: 0.82, // data is in percentage
+    liquidationPenalty: 0.05, // data is in percentage
+    collateralPrice: 8.3145,
+    subCollateralPrice: 16548.6,
+    liquidationPrice: 1902.48,
+    subLiquidationPrice: 2264.82,
+  },
+  comp: {
+    loanToValue: 0.8, // data is  in percentage
+    liquidationThreshold: 0.1, // data is in percentage
+    liquidationPenalty: 0.06, // data is in percentage
+    collateralPrice: 7.3121,
+    subCollateralPrice: 13823.6,
+    liquidationPrice: 1712.48,
+    subLiquidationPrice: 1864.82,
+  },
+  wbtc: {
+    loanToValue: 0.9, // data is  in percentage
+    liquidationThreshold: 0.6, // data is in percentage
+    liquidationPenalty: 0.04, // data is in percentage
+    collateralPrice: 9.0421,
+    subCollateralPrice: 30823.6,
+    liquidationPrice: 1212.48,
+    subLiquidationPrice: 1264.82,
+  },
+  uni: {
+    loanToValue: 0.8, // data is  in percentage
+    liquidationThreshold: 0.8, // data is in percentage
+    liquidationPenalty: 0.02, // data is in percentage
+    collateralPrice: 9.3121,
+    subCollateralPrice: 62823.6,
+    liquidationPrice: 1542.48,
+    subLiquidationPrice: 3864.82,
+  },
+};
+const getSupportedAssets = (protocolConfigs: ProtocolConfig[]) => {
+  const seenTickers: any = {}; // Object to keep track of seen tickers
+  return protocolConfigs.reduce((acc: any, protocolConfig) => {
+    const { collateral } = protocolConfig;
+    const uniqueCollateral = collateral.filter((collateralToken) => {
+      if (!seenTickers[collateralToken.ticker]) {
+        seenTickers[collateralToken.ticker] = true; // Mark this ticker as seen
+        return true; // Include this collateralToken since its ticker hasn't been seen before
+      }
+      return false; // Exclude this collateralToken because its ticker has already been seen
+    });
+
+    return acc.concat(
+      uniqueCollateral.map((collateralToken) => ({
+        id: `asset-${collateralToken.ticker}`,
+        name: collateralToken.ticker,
+        fullName: collateralToken.fullName,
+        symbol: collateralToken.icon,
+        comingSoon: collateralToken.comingSoon,
+        ...hardcodedMeta[collateralToken.ticker.toLowerCase()],
+      })),
+    );
+  }, []);
+};
+// [
+//   {
+//     id: 'asset-1',
+//     name: 'ETH',
+//     fullName: 'Ether',
+//     symbol: etherIcon,
+//     comingSoon: false,
+//   },
+
+//   {
+//     id: 'assets-2',
+//     name: 'COMP',
+//     fullName: 'Compound',
+//     symbol: compoundIcon,
+//     comingSoon: true,
+//   },
+
+//   {
+//     id: 'assets-3',
+//     name: 'WBTC',
+//     fullName: 'Wrapped Bitcoin',
+//     symbol: wrappedIcon,
+//     comingSoon: true,
+//   },
+//   {
+//     id: 'assets-4',
+//     name: 'UNI',
+//     fullName: 'Uniswap',
+//     symbol: uniswapIcon,
+//     comingSoon: true,
+//   },
+// ];
+
 export const loanContext = createContext<ContextValues>({
   loanData: {
     borrowing: 0,
@@ -196,11 +293,11 @@ export const loanContext = createContext<ContextValues>({
   },
 });
 
-interface LoneProviderProps {
+interface LoanProviderProps {
   children: ReactNode;
 }
 
-const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
+const LoanProvider: FC<LoanProviderProps> = ({ children }) => {
   const [loanData, setLoanData] = useState<LoanData>({
     borrowing: 0,
     protocol: '',
@@ -231,7 +328,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     nextValidation: '',
   });
   const [currentStep, setCurrentStep] = useState(0);
-
+  const { compoundConfigMainnet, compoundConfigBase } = useProtocolConfig();
   const loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[] = [
     // step-1 need to select currencies usdc or usd.
     {
@@ -261,70 +358,7 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
     {
       id: 2,
       title: 'Choose which asset you will post as collateral.',
-      assets: [
-        {
-          id: 'asset-1',
-          name: 'ETH',
-          fullName: 'Ether',
-          symbol: etherIcon,
-
-          loanToValue: 0.7, // data is  in percentage
-          liquidationThreshold: 0.82, // data is in percentage
-          liquidationPenalty: 0.05, // data is in percentage
-          collateralPrice: 8.3145,
-          subCollateralPrice: 16548.6,
-          liquidationPrice: 1902.48,
-          subLiquidationPrice: 2264.82,
-          comingSoon: false,
-        },
-
-        {
-          id: 'assets-2',
-          name: 'COMP',
-          fullName: 'Compound',
-          symbol: compoundIcon,
-
-          loanToValue: 0.8, // data is  in percentage
-          liquidationThreshold: 0.1, // data is in percentage
-          liquidationPenalty: 0.06, // data is in percentage
-          collateralPrice: 7.3121,
-          subCollateralPrice: 13823.6,
-          liquidationPrice: 1712.48,
-          subLiquidationPrice: 1864.82,
-          comingSoon: true,
-        },
-
-        {
-          id: 'assets-3',
-          name: 'WBTC',
-          fullName: 'Wrapped Bitcoin',
-          symbol: wrappedIcon,
-
-          loanToValue: 0.9, // data is  in percentage
-          liquidationThreshold: 0.6, // data is in percentage
-          liquidationPenalty: 0.04, // data is in percentage
-          collateralPrice: 9.0421,
-          subCollateralPrice: 30823.6,
-          liquidationPrice: 1212.48,
-          subLiquidationPrice: 1264.82,
-          comingSoon: true,
-        },
-        {
-          id: 'assets-4',
-          name: 'UNI',
-          fullName: 'Uniswap',
-          symbol: uniswapIcon,
-
-          loanToValue: 0.8, // data is  in percentage
-          liquidationThreshold: 0.8, // data is in percentage
-          liquidationPenalty: 0.02, // data is in percentage
-          collateralPrice: 9.3121,
-          subCollateralPrice: 62823.6,
-          liquidationPrice: 1542.48,
-          subLiquidationPrice: 3864.82,
-          comingSoon: true,
-        },
-      ],
+      assets: getSupportedAssets([compoundConfigMainnet, compoundConfigBase]),
       description:
         'You will be able to choose the amount of collateral to post after confirming the lending protocol for your loan.',
     },
@@ -416,4 +450,4 @@ const LoneProvider: FC<LoneProviderProps> = ({ children }) => {
   );
 };
 
-export default LoneProvider;
+export default LoanProvider;
