@@ -37,6 +37,6 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   });
 
   return NETWORK === 'mainnet'
-    ? [compoundConfigMainnet, compoundConfigBase]
+    ? [compoundConfigMainnet]
     : [compoundConfigSepolia, compoundConfigBase];
 };
