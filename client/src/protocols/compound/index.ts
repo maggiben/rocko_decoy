@@ -1,4 +1,10 @@
 import { NetworkNames } from '@/constants/env';
+
+import etherIcon from '@/assets/coins/Ether (ETH).svg';
+import compoundIcon from '@/assets/coins/Compound (COMP).svg';
+import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
+import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
+
 import { ProtocolConfig } from '../types';
 import {
   getETHPrice,
@@ -24,11 +30,6 @@ import {
   getThreshold,
   wethToETH,
 } from './util';
-
-import etherIcon from '@/assets/coins/Ether (ETH).svg';
-import compoundIcon from '@/assets/coins/Compound (COMP).svg';
-import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
-import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
 const compoundConfig = ({
   chain,

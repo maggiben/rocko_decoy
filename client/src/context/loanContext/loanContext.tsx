@@ -17,7 +17,7 @@ import { FLAG_MULTI_PROTOCOL } from '@/constants/featureFlags';
 import { useProtocolConfig } from '@/protocols';
 import { ProtocolConfig } from '@/protocols/types';
 
-export const protocols = !FLAG_MULTI_PROTOCOL
+export const protocols: any = !FLAG_MULTI_PROTOCOL
   ? []
   : [
       {

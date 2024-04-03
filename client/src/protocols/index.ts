@@ -4,9 +4,9 @@ import { ethers } from 'ethers';
 import { useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import * as chains from 'wagmi/chains';
+import { NETWORK } from '@/constants/env';
 import { compoundConfig } from './compound';
 import { ProtocolConfig } from './types';
-import { NETWORK } from '@/constants/env';
 
 export const useProtocolConfig = (): ProtocolConfig[] => {
   const { address: zeroDevAccount } = useAccount();

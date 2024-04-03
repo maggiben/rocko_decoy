@@ -11,6 +11,7 @@ import {
   CLEAR_ALERT,
 } from '@/constants/alertType';
 import { ProtocolConfig } from '@/protocols/types';
+import { NetworkNames } from '@/constants/env';
 
 export interface CoinCardProps {
   coinIcon: string;
@@ -77,7 +78,7 @@ export interface ProtocolProps {
   id?: string;
   name?: string;
   symbol?: string;
-  chain?: string;
+  chain?: NetworkNames;
   // eslint-disable-next-line no-unused-vars
   interestRate?: (chain: string) => Promise<number>;
   protocolInfo: ProtocolConfig;

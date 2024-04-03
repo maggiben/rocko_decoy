@@ -5,6 +5,8 @@ import useLoanData from '@/hooks/useLoanData';
 import { useLoanDB } from '@/db/loanDb';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
+import { NETWORK } from '@/constants/env';
+import useSelectedNetwork from '@/hooks/useSelectedNetwork';
 import HoverTooltip from '../HoverTooltip/HoverTooltip';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -18,6 +20,7 @@ const Protocol: FC<ProtocolProps> = ({
   selectProtocol,
   handleProtocol,
 }) => {
+  const { setSelectedNetwork } = useSelectedNetwork();
   const { loanData, setLoanData } = useLoanData();
   const [protocolData, setProtocolData] = useState<LoanData>(loanData);
   const [monthAvgAPR, setMonthAvgAPR] = useState<any>(0);
@@ -80,6 +83,7 @@ const Protocol: FC<ProtocolProps> = ({
       );
 
       if (setData) {
+        setSelectedNetwork(chain || NETWORK);
         setData((prevLoanData: any) => {
           const newLoanData = {
             ...prevLoanData,
