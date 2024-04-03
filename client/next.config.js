@@ -10,6 +10,8 @@ const connectSrc = [
   // Thirdweb RPC
   `https://${NETWORK === 'mainnet' ? 'ethereum' : NETWORK}.rpc.thirdweb.com`,
   'https://ethereum.rpc.thirdweb.com',
+  'https://base.rpc.thirdweb.com',
+  'https://sepolia.rpc.thirdweb.com',
 
   'https://ipv6.icanhazip.com',
   'https://ipv4.icanhazip.com',

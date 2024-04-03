@@ -563,7 +563,7 @@ const getBorrowAPR = async (chain: string): Promise<number> => {
   const borrowRate = await contract.call('getBorrowRate', [utilization]);
   const formattedRate = Number(ethers.utils.formatEther(borrowRate));
   const borrowAPR = formattedRate * 60 * 60 * 24 * 365 * 100;
-
+  console.log({ borrowAPR });
   return borrowAPR;
 };
 

@@ -107,10 +107,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getAverageAPR = async (openDate: Date) => {
+  const getAverageAPR = async (openDate: Date, chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=${openDate}&network=${NETWORK}`,
+        `${BACKEND_URL}/average_apr?openDate=${openDate}&network=${chain}`,
       );
       return response.data?.average_apr;
     } catch (error) {
@@ -119,10 +119,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getMonthAverageAPR = async () => {
+  const getMonthAverageAPR = async (chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=month&network=${NETWORK}`,
+        `${BACKEND_URL}/average_apr?openDate=month&network=${chain}`,
       );
       return response.data?.average_apr;
     } catch (error) {
@@ -131,10 +131,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getThreeMonthAverageAPR = async () => {
+  const getThreeMonthAverageAPR = async (chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=threemonth&network=${NETWORK}`,
+        `${BACKEND_URL}/average_apr?openDate=threemonth&network=${chain}`,
       );
       return response.data?.average_apr;
     } catch (error) {
@@ -143,10 +143,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getYearAverageAPR = async () => {
+  const getYearAverageAPR = async (chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_apr?openDate=year&network=${NETWORK}`,
+        `${BACKEND_URL}/average_apr?openDate=year&network=${chain}`,
       );
       return response.data?.average_apr;
     } catch (error) {
@@ -155,10 +155,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getYearAvgRewardRate = async () => {
+  const getYearAvgRewardRate = async (chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/average_reward_rate?openDate=year&network=${NETWORK}`,
+        `${BACKEND_URL}/average_reward_rate?openDate=year&network=${chain}`,
       );
       return response.data.length > 0
         ? response.data[0].average_reward_rate
@@ -169,10 +169,10 @@ export const useLoanDB = () => {
     }
   };
 
-  const getRewardRate = async () => {
+  const getRewardRate = async (chain: string = NETWORK) => {
     try {
       const response = await axiosInterceptor.get(
-        `${BACKEND_URL}/reward_rate?network=${NETWORK}`,
+        `${BACKEND_URL}/reward_rate?network=${chain}`,
       );
       // TODO this is wrong ==> Current Rate 6,088.57%
       console.log({ response });

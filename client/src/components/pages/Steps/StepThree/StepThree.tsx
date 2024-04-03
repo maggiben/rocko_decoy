@@ -3,14 +3,18 @@ import { ProtocolStep } from '@/types/type';
 // import FilterOptions from '@/components/chips/FilterOptions/FilterOptions';
 // import SortOptions from '@/components/chips/SortOptions/SortOptions';
 // import Protocol from '@/components/chips/Protocol/Protocol';
-import CompoundProtocol from '@/components/chips/Protocol/CompoundProtocol';
+import Protocol from '@/components/chips/Protocol/Protocol';
 import useLoanData from '@/hooks/useLoanData';
 import LoanSummary from '@/components/chips/LoanSummary/LoanSummary';
 import ProtocolBanner from '@/components/ProtocolsBanner';
+// import ProtocolDemo from '@/components/chips/Protocol/ProtocolDemo';
+// import { protocols } from '@/context/loanContext/loanContext';
+import { useProtocolConfig } from '@/protocols';
 
 // type FilterOptionsProps = string;
 
 const StepThree: FC<ProtocolStep> = ({ title }) => {
+  const protocolConfigs = useProtocolConfig();
   const { loanData, setLoanData } = useLoanData();
   const [selectProtocol, setSelectProtocol] = useState('');
   // const [sortOption, setSortOption] = useState('APR (lowest)');
@@ -111,15 +115,21 @@ const StepThree: FC<ProtocolStep> = ({ title }) => {
               {title}
             </p>
             <div className="divide-y-2 divide-[#E2E2E2]">
-              <CompoundProtocol
-                interestRate={3.88}
-                name="Compound Finance"
-                symbol="/icons/Compound (COMP).svg"
-                handleProtocol={handleProtocol}
-                selectProtocol={selectProtocol}
-              />
-              {/* {protocols?.map((protocol) => (
+              {protocolConfigs.map((p) => (
                 <Protocol
+                  key={`${p.name.toLowerCase()}-${p.chain}`}
+                  interestRate={p.getBorrowAPR}
+                  protocolInfo={p}
+                  name={p.name}
+                  symbol="/icons/Compound (COMP).svg"
+                  chain={p.chain}
+                  handleProtocol={handleProtocol}
+                  selectProtocol={selectProtocol}
+                />
+              ))}
+              {/* 
+              {protocols?.map((protocol) => (
+                <ProtocolDemo
                   key={protocol.id}
                   interestRate={protocol.interestRate}
                   name={protocol.name}

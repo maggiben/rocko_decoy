@@ -8,9 +8,8 @@ import HoverTooltip from '../HoverTooltip/HoverTooltip';
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
 function LoanSummary() {
-  const DEFAULT_PROTOCOL = 'Compound Finance';
   const { loanData } = useLoanData();
-
+  console.log({ loanData });
   return (
     <>
       <p className="text-2xl font-medium text-blackPrimary">Loan Summary</p>
@@ -39,7 +38,7 @@ function LoanSummary() {
           <HoverTooltip text={TOOLTIPS.CURRENT_APR} />
         </div>
         <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
-          {(loanData?.currentAPR && loanData?.protocol === DEFAULT_PROTOCOL && (
+          {(loanData?.currentAPR && loanData?.protocol && (
             <>
               {financial(loanData?.currentAPR, 2)}
               <span className="text-base">%</span>
@@ -57,10 +56,9 @@ function LoanSummary() {
         <p className="text-sm flex items-center justify-between font-medium ">
           <span className="text-blackSecondary">6 months</span>
           <span className="text-blackPrimary">
-            {(loanData?.sixMonthInterest &&
-              loanData?.protocol === DEFAULT_PROTOCOL && (
-                <>${financial(loanData?.sixMonthInterest, 2)}</>
-              )) ||
+            {(loanData?.sixMonthInterest && loanData?.protocol && (
+              <>${financial(loanData?.sixMonthInterest, 2)}</>
+            )) ||
               '--'}
           </span>
         </p>
@@ -68,10 +66,9 @@ function LoanSummary() {
           <span className="text-blackSecondary">12 months</span>
           <span className="text-blackPrimary">
             {' '}
-            {(loanData?.twelveMonthInterest &&
-              loanData?.protocol === DEFAULT_PROTOCOL && (
-                <> ${financial(loanData?.twelveMonthInterest, 2)}</>
-              )) ||
+            {(loanData?.twelveMonthInterest && loanData?.protocol && (
+              <> ${financial(loanData?.twelveMonthInterest, 2)}</>
+            )) ||
               '--'}
           </span>
         </p>
@@ -79,10 +76,9 @@ function LoanSummary() {
           <span className="text-blackSecondary">24 months</span>
           <span className="text-blackPrimary">
             {' '}
-            {(loanData?.twentyFourMonthInterest &&
-              loanData?.protocol === DEFAULT_PROTOCOL && (
-                <> ${financial(loanData?.twentyFourMonthInterest, 2)}</>
-              )) ||
+            {(loanData?.twentyFourMonthInterest && loanData?.protocol && (
+              <> ${financial(loanData?.twentyFourMonthInterest, 2)}</>
+            )) ||
               '--'}
           </span>
         </p>
@@ -133,7 +129,8 @@ function LoanSummary() {
               {' '}
               $
               {financial(
-                loanData?.collateralNeeded * loanData?.collateralPrice,
+                Number(loanData?.collateralNeeded) *
+                  Number(loanData?.collateralPrice),
                 2,
               )}
             </>
@@ -151,7 +148,7 @@ function LoanSummary() {
         <div className="flex items-center gap-2">
           <p className="text-2xl font-medium tracking-[-0.5px] text-blackPrimary">
             {(loanData?.liquidationPrice &&
-              loanData?.protocol === DEFAULT_PROTOCOL &&
+              loanData?.protocol &&
               `$${financial(loanData?.liquidationPrice, 2)}`) ||
               '--'}
           </p>

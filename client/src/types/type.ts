@@ -10,6 +10,7 @@ import {
   // UPDATE_INTEREST_RATE,
   CLEAR_ALERT,
 } from '@/constants/alertType';
+import { ProtocolConfig } from '@/protocols/types';
 
 export interface CoinCardProps {
   coinIcon: string;
@@ -76,7 +77,10 @@ export interface ProtocolProps {
   id?: string;
   name?: string;
   symbol?: string;
-  interestRate?: number;
+  chain?: string;
+  // eslint-disable-next-line no-unused-vars
+  interestRate?: (chain: string) => Promise<number>;
+  protocolInfo: ProtocolConfig;
   selectProtocol?: string;
   handleProtocol?: Function;
   protocolInfos?: {

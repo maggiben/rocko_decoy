@@ -1,5 +1,6 @@
 'use client';
 
+import { FC, ReactNode, SetStateAction, createContext, useState } from 'react';
 import {
   AssetStep,
   ContextValues,
@@ -11,19 +12,78 @@ import {
 
 import usdcIcon from '@/assets/coins/USD Coin (USDC).svg';
 import usdIcon from '@/assets/coins/USD.svg';
-import etherIcon from '@/assets/coins/Ether (ETH).svg';
-import compoundIcon from '@/assets/coins/Compound (COMP).svg';
-import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
-import wrappedIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
-import { FC, ReactNode, SetStateAction, createContext, useState } from 'react';
 import { FLAG_MULTI_PROTOCOL } from '@/constants/featureFlags';
 import { useProtocolConfig } from '@/protocols';
 import { ProtocolConfig } from '@/protocols/types';
 
-const protocols = !FLAG_MULTI_PROTOCOL
+export const protocols = !FLAG_MULTI_PROTOCOL
   ? []
   : [
+      {
+        id: 'protocol-0',
+        name: 'Compound Config',
+        symbol: '/icons/Compound (COMP).svg',
+        interestRate: 4.44,
+        protocolInfos: [
+          {
+            id: 'protocol-info-1',
+            title: 'Trailing APRs',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: '30 Day',
+                value: '4.01%', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: '365 Day',
+                value: '3.76%', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-2',
+            title: 'Collateral Parameters (ETH)',
+            tooltip: '',
+            options: [
+              {
+                name: 'Max Loan-to-Value',
+                value: '82.5%', // value will percentage
+                subInfo: 'Max Loan-to-Value tooltip',
+              },
+              {
+                name: 'Liquidation Threshold',
+                value: '86%', // value will percentage
+                subInfo: 'Liquidation Threshold tooltip',
+              },
+              {
+                name: 'Liquidation Penalty',
+                value: '5%', // value will percentage
+                subInfo: 'Liquidation Penalty',
+              },
+            ],
+          },
+          {
+            id: 'protocol-info-3',
+            title: 'Rewards',
+            tooltip: 'tooltip information',
+            options: [
+              {
+                name: 'Current Rate',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+              {
+                name: 'Trailing 365 average',
+                value: 'N/A', // value will percentage
+                subInfo: '',
+              },
+            ],
+          },
+        ],
+      },
       {
         id: 'protocol-2',
         name: 'Aave',
@@ -328,7 +388,7 @@ const LoanProvider: FC<LoanProviderProps> = ({ children }) => {
     nextValidation: '',
   });
   const [currentStep, setCurrentStep] = useState(0);
-  const { compoundConfigMainnet, compoundConfigBase } = useProtocolConfig();
+  const protocolConfigs = useProtocolConfig();
   const loanSteps: (CurrencyStep | AssetStep | ProtocolStep | RiskStep)[] = [
     // step-1 need to select currencies usdc or usd.
     {
@@ -358,7 +418,7 @@ const LoanProvider: FC<LoanProviderProps> = ({ children }) => {
     {
       id: 2,
       title: 'Choose which asset you will post as collateral.',
-      assets: getSupportedAssets([compoundConfigMainnet, compoundConfigBase]),
+      assets: getSupportedAssets(protocolConfigs),
       description:
         'You will be able to choose the amount of collateral to post after confirming the lending protocol for your loan.',
     },

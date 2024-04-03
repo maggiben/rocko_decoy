@@ -6,12 +6,9 @@ import { useAccount } from 'wagmi';
 import * as chains from 'wagmi/chains';
 import { compoundConfig } from './compound';
 import { ProtocolConfig } from './types';
+import { NETWORK } from '@/constants/env';
 
-interface ProtocolConfigs {
-  [key: string]: ProtocolConfig;
-}
-
-export const useProtocolConfig = (): ProtocolConfigs => {
+export const useProtocolConfig = (): ProtocolConfig[] => {
   const { address: zeroDevAccount } = useAccount();
   const signer: ethers.Signer | undefined = useSigner();
 
@@ -39,9 +36,7 @@ export const useProtocolConfig = (): ProtocolConfigs => {
     signer,
   });
 
-  return {
-    compoundConfigMainnet,
-    compoundConfigBase,
-    compoundConfigSepolia,
-  };
+  return NETWORK === 'mainnet'
+    ? [compoundConfigMainnet, compoundConfigBase]
+    : [compoundConfigSepolia, compoundConfigBase];
 };

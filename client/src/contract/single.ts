@@ -1,45 +1,35 @@
 import { NETWORK } from '@/constants/env';
 import { useProtocolConfig } from '@/protocols';
-
-// eslint-disable-next-line import/prefer-default-export
-
-const configs = {
-  mainnet: 'compoundConfigMainnet',
-  sepolia: 'compoundConfigSepolia',
-  base: 'compoundConfigBase',
-};
+import { ProtocolConfig } from '@/protocols/types';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useSingleLoan = () => {
-  const currentSingleConfig: string = configs[NETWORK];
   const {
-    [currentSingleConfig]: {
-      getBorrowAPR,
-      getETHPrice,
-      getLTV,
-      getThreshold,
-      getPenalty,
-      getBorrowBalanceOf,
-      getCollateralBalanceOf,
-      getRewardRate,
-      getRewardAmount,
-      tx: {
-        addCollateral,
-        addLoan,
-        approveUSDC,
-        approveWETH,
-        borrowLoan,
-        borrowCollateral,
-        claimReward,
-        deposit,
-        depositZerodevAccount,
-        getMinCollateral,
-        getLiquidationPrice,
-        getBuffer,
-        wethToETH,
-      },
+    getBorrowAPR,
+    getETHPrice,
+    getLTV,
+    getThreshold,
+    getPenalty,
+    getBorrowBalanceOf,
+    getCollateralBalanceOf,
+    getRewardRate,
+    getRewardAmount,
+    tx: {
+      addCollateral,
+      addLoan,
+      approveUSDC,
+      approveWETH,
+      borrowLoan,
+      borrowCollateral,
+      claimReward,
+      deposit,
+      depositZerodevAccount,
+      getMinCollateral,
+      getLiquidationPrice,
+      getBuffer,
+      wethToETH,
     },
-  } = useProtocolConfig();
+  } = useProtocolConfig().filter((c: ProtocolConfig) => c.chain === NETWORK)[0];
 
   return {
     approveWETH,
