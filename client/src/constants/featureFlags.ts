@@ -17,3 +17,6 @@ export const FLAG_SMS_ALERTS =
 
 export const PHONE_EMAIL_PASS_SETTINGS =
   process.env.NEXT_PUBLIC_FLAG_PHONE_EMAIL_PASS_SETTINGS === 'true';
+
+export const FLAG_MULTI_CHAIN =
+  process.env.NEXT_PUBLIC_FLAG_MULTI_CHAIN === 'true';

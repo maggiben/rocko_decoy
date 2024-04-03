@@ -5,6 +5,7 @@ import { useSigner } from '@thirdweb-dev/react';
 import { useAccount } from 'wagmi';
 import * as chains from 'wagmi/chains';
 import { NETWORK } from '@/constants/env';
+import { FLAG_MULTI_CHAIN } from '@/constants/featureFlags';
 import { compoundConfig } from './compound';
 import { ProtocolConfig } from './types';
 
@@ -36,7 +37,10 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
     signer,
   });
 
+  // eslint-disable-next-line no-nested-ternary
   return NETWORK === 'mainnet'
     ? [compoundConfigMainnet]
-    : [compoundConfigSepolia, compoundConfigBase];
+    : FLAG_MULTI_CHAIN
+      ? [compoundConfigSepolia, compoundConfigBase]
+      : [compoundConfigSepolia];
 };
