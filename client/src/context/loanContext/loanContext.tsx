@@ -362,6 +362,7 @@ const LoanProvider: FC<LoanProviderProps> = ({ children }) => {
   const [loanData, setLoanData] = useState<LoanData>({
     borrowing: 0,
     protocol: '',
+    chain: null,
     currentAPR: 0,
     coin: '',
     sixMonthInterest: 0,

@@ -30,6 +30,13 @@ import {
   getThreshold,
   wethToETH,
 } from './util';
+import {
+  useAddCollateral,
+  useBorrowCollateral,
+  useGetLoan,
+  useRepayFull,
+  useRepaySome,
+} from './util/batch';
 
 const compoundConfig = ({
   chain,
@@ -90,6 +97,15 @@ const compoundConfig = ({
       zeroDevAccount,
     }),
   getRewardRate: async () => getRewardRate(chain),
+  txBatch: {
+    useGetLoan: async (collateral: any, loan: any) =>
+      useGetLoan(collateral, loan),
+    useRepaySome: async (loan: any) => useRepaySome(loan),
+    useRepayFull: async (collateral: any) => useRepayFull(collateral),
+    useAddCollateral: async (collateral: any) => useAddCollateral(collateral),
+    useBorrowCollateral: async (collateral: any) =>
+      useBorrowCollateral(collateral),
+  },
   tx: {
     addCollateral: async (amount: string | number) =>
       addCollateral({ amount, signer, chain }),

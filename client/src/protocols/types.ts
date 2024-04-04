@@ -29,6 +29,13 @@ export type ProtocolConfig = {
   getBorrowBalanceOf: () => Promise<number>;
   getRewardAmount: () => Promise<number>;
   getRewardRate: () => Promise<number>;
+  txBatch: {
+    useGetLoan: (collateral: any, loan: any) => any;
+    useRepaySome: (loan: any) => any;
+    useRepayFull: (collateral: any) => any;
+    useAddCollateral: (collateral: any) => any;
+    useBorrowCollateral: (collateral: any) => any;
+  };
   tx: {
     addCollateral: (amount: string | number) => Promise<any>;
     addLoan: (amount: string | number) => Promise<any>;

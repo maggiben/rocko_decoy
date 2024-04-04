@@ -17,12 +17,13 @@ import { NETWORK } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
-import { useAddCollateral, useBorrowCollateral } from '@/contract/batch';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 import { CometContract, networkChainId } from '@/constants';
 import transactionComp from '@/utility/transactionComp';
+import { useProtocolConfig } from '@/protocols';
+import { ProtocolConfig } from '@/protocols/types';
 
 interface DoneTracker {
   step: string;
@@ -49,6 +50,10 @@ function ModifyStatus() {
   const { userInfo } = useZeroDev();
   const { getUserId } = useUserDB();
   const { chain } = useNetwork();
+  const {
+    txBatch: { useAddCollateral, useBorrowCollateral },
+  } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
+
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } =
     useAddCollateral(payment);
   const {

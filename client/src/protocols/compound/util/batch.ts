@@ -16,12 +16,12 @@ import {
   CometRewardContract,
   WETHContract,
   networkChainId,
-} from '../constants';
+} from '@/constants';
 
-const WETHABI = require('../constants/weth.json');
-const COMETABI = require('../constants/comet.json');
-const USDCABI = require('../constants/usdc.json');
-const REWARDABI = require('../constants/reward.json');
+const WETHABI = require('@/constants/weth.json');
+const COMETABI = require('@/constants/comet.json');
+const USDCABI = require('@/constants/usdc.json');
+const REWARDABI = require('@/constants/reward.json');
 
 const uintMax =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';

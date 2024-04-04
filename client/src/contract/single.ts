@@ -29,7 +29,7 @@ export const useSingleLoan = () => {
       getBuffer,
       wethToETH,
     },
-  } = useProtocolConfig().filter((c: ProtocolConfig) => c.chain === NETWORK)[0];
+  } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   return {
     approveWETH,

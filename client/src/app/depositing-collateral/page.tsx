@@ -10,9 +10,7 @@ import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import { useGetLoan } from '@/contract/batch';
-import { useSingleLoan } from '@/contract/single';
-import { BLOCKCHAIN } from '@/constants/env';
+import { BLOCKCHAIN, NETWORK } from '@/constants/env';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
@@ -22,6 +20,9 @@ import logger from '@/utility/logger';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
 import transactionComp from '@/utility/transactionComp';
 import { CometContract, networkChainId } from '@/constants';
+import { useProtocolConfig } from '@/protocols';
+import { ProtocolConfig } from '@/protocols/types';
+import { useSingleLoan } from '@/contract/single';
 // import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
@@ -33,6 +34,10 @@ function DepositingCollateral() {
   const type = router.get('type') || '';
 
   const navRouter = useRouter();
+
+  const {
+    txBatch: { useGetLoan },
+  } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
