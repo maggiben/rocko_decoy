@@ -15,7 +15,6 @@ const Protocol: FC<ProtocolProps> = ({
   name,
   symbol,
   chain,
-  interestRate,
   protocolInfo,
   selectProtocol,
   handleProtocol,
@@ -55,7 +54,8 @@ const Protocol: FC<ProtocolProps> = ({
       const borrowing = Number(loanData?.borrowing);
       const buffer = Number(loanData?.buffer);
       const collateralPrice = Number(loanData?.collateralPrice);
-      const currentAPR = (await interestRate?.(chain || 'sepolia')) || 0; // protocolData?.currentAPR;
+      const currentAPR =
+        (await protoData.getBorrowAPR?.(chain || 'sepolia')) || 0; // protocolData?.currentAPR;
       const loanToValue = await protoData.getLTV(); // Number(protocolData?.loanToValue);
       const penalty = await protoData.getPenalty(); // protocolData?.liquidationPenalty;
       const threshold = await protoData.getThreshold(); // Number(protocolData?.liquidationThreshold);
@@ -166,7 +166,7 @@ const Protocol: FC<ProtocolProps> = ({
               type="button"
               onClick={() => {
                 if (handleProtocol) {
-                  handleProtocol(`${name}-${chain}`);
+                  handleProtocol(name, chain);
                   updateLoanData(protocolInfo, setLoanData);
                 }
               }}

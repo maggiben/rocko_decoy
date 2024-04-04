@@ -31,7 +31,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const { loanData, setLoanData } = useLoanData();
   const {
     getETHPrice,
-    getBorrowAPR,
+    // getBorrowAPR,
     getLTV,
     getPenalty,
     getThreshold,
@@ -80,7 +80,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
   const updateLoanData = async () => {
     try {
       const currentPrice = await getETHPrice();
-      const currentAPR = await getBorrowAPR();
+      // const currentAPR = await getBorrowAPR();
       const loanToValue = await getLTV();
       const penalty = await getPenalty();
       const threshold = await getThreshold();
@@ -91,7 +91,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
         setLoanData((prevLoanData) => ({
           ...prevLoanData,
           collateralPrice: currentPrice,
-          currentAPR,
+          // currentAPR,
           loanToValue,
           liquidationPenalty: penalty,
           liquidationThreshold: threshold,
@@ -141,6 +141,7 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
         activeNextButton: true,
+        // eslint-disable-next-line no-nested-ternary
         nextValidation: borrowingValue
           ? errors.numberInput
             ? errors.numberInput.message
@@ -188,11 +189,12 @@ const StepOne: FC<CurrencyStep> = ({ title, currency }) => {
               </p>
               <div className="flex items-center justify-start gap-4 p-4 rounded-[10px] border border-[#E6E6E6] max-w-[310px] w-full bg-white ">
                 <input
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('numberInput', {
                     required: 'Number is required',
                     validate: (value) => {
                       const num = parseFloat(value.replace(/,/g, ''));
-                      if (isNaN(num)) {
+                      if (Number.isNaN(num)) {
                         return 'Invalid number';
                       }
                       if (num < 100) {

@@ -71,12 +71,16 @@ const StepFive: React.FC = () => {
   const chain = useChain();
   const isMismatched = useNetworkMismatch();
   const switchChain = useSwitchChain();
-
+  console.log({ loanData });
   const invoice = [
     {
       description: 'Lending Protocol',
-      details: <span className="underline">Compound Finance</span>,
+      details: <span className="underline">{loanData.protocol}</span>,
       symbol: '/icons/Compound (COMP).svg',
+    },
+    {
+      description: 'Blockchain Network',
+      details: <span>{loanData.chain}</span>,
     },
     {
       description: 'Loan Amount',

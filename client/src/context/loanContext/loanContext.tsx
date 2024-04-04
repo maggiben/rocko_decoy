@@ -313,6 +313,7 @@ export const loanContext = createContext<ContextValues>({
   loanData: {
     borrowing: 0,
     protocol: '',
+    chain: null,
     currentAPR: 0,
     coin: '',
     sixMonthInterest: 0,

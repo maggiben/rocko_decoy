@@ -41,6 +41,6 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   return NETWORK === 'mainnet'
     ? [compoundConfigMainnet]
     : FLAG_MULTI_CHAIN
-      ? [compoundConfigSepolia, compoundConfigBase]
+      ? [compoundConfigBase, compoundConfigSepolia]
       : [compoundConfigSepolia];
 };

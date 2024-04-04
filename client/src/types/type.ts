@@ -79,8 +79,6 @@ export interface ProtocolProps {
   name?: string;
   symbol?: string;
   chain?: NetworkNames;
-  // eslint-disable-next-line no-unused-vars
-  interestRate?: (chain: string) => Promise<number>;
   protocolInfo: ProtocolConfig;
   selectProtocol?: string;
   handleProtocol?: Function;
@@ -117,6 +115,7 @@ export interface RiskStep {
 export interface LoanData {
   borrowing: number;
   protocol: string;
+  chain: NetworkNames | null;
   currentAPR: number;
   coin: string;
   coinIcon: string;

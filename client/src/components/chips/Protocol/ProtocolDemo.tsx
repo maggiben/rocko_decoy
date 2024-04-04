@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { FC } from 'react';
 import { ProtocolProps } from '@/types/type';
+import { NETWORK } from '@/constants/env';
 import HoverTooltip from '../HoverTooltip/HoverTooltip';
 
 const ProtocolDemo: FC<ProtocolProps> = ({
@@ -49,9 +50,10 @@ const ProtocolDemo: FC<ProtocolProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={() => {
               if (handleProtocol) {
-                handleProtocol(name);
+                handleProtocol(name, NETWORK);
               }
             }}
             className={`rounded-full py-[10px] px-6  text-sm font-semibold ${

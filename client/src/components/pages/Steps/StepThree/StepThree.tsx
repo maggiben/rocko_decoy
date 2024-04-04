@@ -10,6 +10,7 @@ import ProtocolBanner from '@/components/ProtocolsBanner';
 // import ProtocolDemo from '@/components/chips/Protocol/ProtocolDemo';
 // import { protocols } from '@/context/loanContext/loanContext';
 import { useProtocolConfig } from '@/protocols';
+import { NetworkNames } from '@/constants/env';
 
 // type FilterOptionsProps = string;
 
@@ -32,12 +33,13 @@ const StepThree: FC<ProtocolStep> = ({ title }) => {
     }
   };
 
-  const handleProtocol = (name: string) => {
+  const handleProtocol = (name: string, chain: NetworkNames) => {
     setSelectProtocol(name);
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
         protocol: name,
+        chain,
         activeNextButton: true,
       }));
     }
@@ -118,7 +120,6 @@ const StepThree: FC<ProtocolStep> = ({ title }) => {
               {protocolConfigs.map((p) => (
                 <Protocol
                   key={`${p.name.toLowerCase()}-${p.chain}`}
-                  interestRate={p.getBorrowAPR}
                   protocolInfo={p}
                   name={p.name}
                   symbol="/icons/Compound (COMP).svg"
