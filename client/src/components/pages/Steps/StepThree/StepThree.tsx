@@ -22,8 +22,8 @@ const StepThree: FC<ProtocolStep> = ({ title }) => {
   // const [filterOptions, setFilterOptions] = useState<FilterOptionsProps[]>([]);
 
   const initialize = () => {
-    if (loanData?.protocol !== '') {
-      setSelectProtocol(loanData?.protocol || '');
+    if (loanData?.protocol && loanData?.chain) {
+      setSelectProtocol(`${loanData?.protocol}-${loanData?.chain}` || '');
       if (setLoanData) {
         setLoanData((prevLoanData) => ({
           ...prevLoanData,
@@ -34,7 +34,7 @@ const StepThree: FC<ProtocolStep> = ({ title }) => {
   };
 
   const handleProtocol = (name: string, chain: NetworkNames) => {
-    setSelectProtocol(name);
+    setSelectProtocol(`${name}-${chain}`);
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
