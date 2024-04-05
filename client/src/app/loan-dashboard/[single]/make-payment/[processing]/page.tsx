@@ -14,7 +14,7 @@ import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { BLOCKCHAIN, NETWORK, PAYMENT_BUFFER } from '@/constants/env';
+import { BLOCKCHAIN, PAYMENT_BUFFER } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -29,8 +29,9 @@ import { etherscanLink, parseBalance } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
-import { useProtocolConfig } from '@/protocols';
-import { ProtocolConfig } from '@/protocols/types';
+// import { useProtocolConfig } from '@/protocols';
+// import { ProtocolConfig } from '@/protocols/types';
+import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 
 const USDCABI = require('../../../../../constants/usdc.json');
 
@@ -49,9 +50,9 @@ function Processing() {
       ? Number(PAYMENT_BUFFER)
       : 0;
 
-  const {
-    txBatch: { useRepayFull, useRepaySome },
-  } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
+  // const {
+  //   txBatch: { useRepayFull, useRepaySome },
+  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();

@@ -22,8 +22,12 @@ import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 import { CometContract, networkChainId } from '@/constants';
 import transactionComp from '@/utility/transactionComp';
-import { useProtocolConfig } from '@/protocols';
-import { ProtocolConfig } from '@/protocols/types';
+// import { useProtocolConfig } from '@/protocols';
+// import { ProtocolConfig } from '@/protocols/types';
+import {
+  useAddCollateral,
+  useBorrowCollateral,
+} from '@/protocols/compound/util/batch';
 
 interface DoneTracker {
   step: string;
@@ -50,9 +54,9 @@ function ModifyStatus() {
   const { userInfo } = useZeroDev();
   const { getUserId } = useUserDB();
   const { chain } = useNetwork();
-  const {
-    txBatch: { useAddCollateral, useBorrowCollateral },
-  } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
+  // const {
+  //   txBatch: { useAddCollateral, useBorrowCollateral },
+  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   const { executeBatchAddCollateral, batchAddCollateral, success, txHash } =
     useAddCollateral(payment);
