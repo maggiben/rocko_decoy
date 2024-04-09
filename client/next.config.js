@@ -27,21 +27,53 @@ const connectSrc = [
   'https://v0-6-meta-bundler.onrender.com',
   'https://api.coinbase.com',
 
+  // Dynamic
+  `https://rpc.${NETWORK}.org`,
+  'https://app.dynamicauth.com',
+  'https://dynamic-static-assets.com',
+  'wss://relay.walletconnect.com',
+  // 'https://verify.walletconnect.com',
+  'https://rpc.ankr.com',
+  'https://api.turnkey.com',
+  'https://cloudflare-eth.com',
+
+  // Zero Dev
+  'https://rpc.zerodev.app',
+
   // Coinbase Wallet
   'wss://www.walletlink.org',
 ];
 
+const frameSrc = [
+  'https://verify.walletconnect.org',
+  'https://verify.walletconnect.com',
+  'https://auth.turnkey.com',
+];
+
+const imgSrc = [
+  'https://dynamic-static-assets.com',
+  'https://demo.dynamic.xyz',
+  'https://app.dynamic.xyz',
+  'https://iconic.dynamic-static-assets.com',
+  'https://lh3.googleusercontent.com',
+];
+
+const fontSrc = ['https://fonts.gstatic.com', 'https://cdn.jsdelivr.net'];
+
+const styleSrc = ['https://fonts.googleapis.com'];
+
 const cspHeader = `
     default-src 'self';
+    frame-src 'self' ${frameSrc.join(' ')};
+    frame-ancestors 'none';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data:;
+    style-src 'self' 'unsafe-inline' ${styleSrc.join(' ')};
+    img-src 'self' blob: data: ${imgSrc.join(' ')};
     connect-src 'self' ${connectSrc.join(' ')};
-    font-src 'self' https://fonts.gstatic.com;
+    font-src 'self' ${fontSrc.join(' ')};
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
 `;
