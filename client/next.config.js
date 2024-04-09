@@ -26,6 +26,9 @@ const connectSrc = [
   'https://meta-aa-provider.onrender.com',
   'https://v0-6-meta-bundler.onrender.com',
   'https://api.coinbase.com',
+
+  // Coinbase Wallet
+  'wss://www.walletlink.org',
 ];
 
 const cspHeader = `
