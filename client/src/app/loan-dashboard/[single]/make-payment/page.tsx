@@ -241,7 +241,10 @@ const MakePayment: FC = () => {
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Make a Payment</h1>
       {payment === currentBalance ? (
-        <p>You’re repaying your loan in full</p>
+        <p>
+          You’re repaying your loan in full and withdrawing your collateral plus
+          any earned rewards
+        </p>
       ) : (
         <p>You’re making a partial payment</p>
       )}
@@ -423,8 +426,9 @@ const MakePayment: FC = () => {
                         alt="warning"
                       />
                       <p className="text-sm font-inter text-[#010304]">
-                        Caution: Please ensure this address is correct as
-                        inputting an incorrect address could lead to lost funds.
+                        Caution: Please ensure the provided information is
+                        correct. Inputting an incorrect address could lead to
+                        lost funds.
                       </p>
                     </div>
                   </div>

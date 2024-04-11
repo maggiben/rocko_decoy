@@ -349,8 +349,9 @@ const ModifyCollateral: React.FC = () => {
                         alt="warning"
                       />
                       <p className="text-sm font-inter text-[#010304]">
-                        Caution: Please ensure this address is correct as
-                        inputting an incorrect address could lead to lost funds.
+                        Caution: Please ensure the provided information is
+                        correct. Inputting an incorrect address could lead to
+                        lost funds.
                       </p>
                     </div>
                   </div>
