@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import LogoIcon from '../assets/images/logo.png'
+import PubSiteFooter from './pubSiteFooter'
 // import logo from '../../images/logo.svg'
 
 function Layout({ children }) {
@@ -13,6 +14,7 @@ function Layout({ children }) {
         data-id="ed90f4b2-3ac7-4a26-99b7-2a7ae2cfd9c8"
         data-domain="https://app.prival.co"
       />
+      <PubSiteFooter />
     </div>
   )
 }

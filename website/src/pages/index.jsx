@@ -63,7 +63,8 @@ export default function Homepage() {
         title="Be one of the first to get a crypto-backed loan using Rocko"
         // description="*USD only available to U.S. Coinbase or Gemini users at this time. All users can convert their USDC loan into USD or other fiat via crypto exchanges."
       />
-      <div className="bg-[#081D21] text-center text-[#ffffff66] py-5">
+      {/* commenting below out since pubSiteFooter replaces */}
+      {/* <div className="bg-[#081D21] text-center text-[#ffffff66] py-5">
         <Link
           to="/terms"
           variant="custom"
@@ -79,7 +80,7 @@ export default function Homepage() {
         >
           Privacy Policy
         </Link>
-      </div>
+      </div> */}
     </Layout>
   )
 }
