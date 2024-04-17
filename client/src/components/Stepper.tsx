@@ -2,21 +2,15 @@
 
 import { useState, useEffect, useMemo, FC } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
-import { useAccount, configureChains, useConnect } from 'wagmi';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
 import useLoanData from '@/hooks/useLoanData';
-import toast from 'react-hot-toast';
-import { Auth0WalletConnector } from '@zerodev/wagmi';
-import * as blockchains from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
-import { useRouter } from 'next/navigation';
 import TransferCollateral from './chips/TransferCollateral/TransferCollateral';
-
-const net = (blockchains as { [key: string]: any })[NETWORK];
 
 export type Step = {
   label: string;
@@ -35,28 +29,15 @@ type Props = {
 export default function Stepper(props: Props) {
   const { steps } = props;
 
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
 
-  const { userInfo } = useZeroDev();
+  const { userInfo, loginUser, isSuccess } = useZeroDev();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const router = useRouter();
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
-
-  const { connect, isSuccess } = useConnect();
-  const { chains } = configureChains([net], [publicProvider()]);
-
-  const auth0Connector = new Auth0WalletConnector({
-    chains,
-    options: {
-      projectId: ZERODEV_PROJECT_ID,
-      shimDisconnect: true,
-      // bundlerProvider: 'PIMLICO',
-      // paymasterProvider: 'PIMLICO',
-    },
-  });
 
   const { stepsName, Steps } = useMemo(() => {
     const names: Step['label'][] = [];
@@ -70,12 +51,6 @@ export default function Stepper(props: Props) {
     return { stepsName: names, Steps: components };
   }, []);
 
-  const loginZerodev = async () => {
-    await connect({
-      connector: auth0Connector,
-    });
-  };
-
   const handleOnOk = () => {
     router.push('/depositing-collateral?type=start');
     setIsFinalized(false);
@@ -85,7 +60,7 @@ export default function Stepper(props: Props) {
   const nextStep = async () => {
     if (!zerodevAccount && currentStep === 2) {
       toast.error('Please log in to finalize your loan!');
-      await loginZerodev();
+      await loginUser();
       return;
     }
 
@@ -195,6 +170,7 @@ export default function Stepper(props: Props) {
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
+                type="button"
                 onClick={prevStep}
                 className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
                   currentStep === 0 ? 'bg-grayPrimary' : 'bg-gray-200'
@@ -204,6 +180,7 @@ export default function Stepper(props: Props) {
                 Back
               </button>
               <button
+                type="button"
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
                   !isValidateNextButton() ||

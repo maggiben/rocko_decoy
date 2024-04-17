@@ -5,12 +5,11 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import { BLOCKCHAIN } from '@/constants/env';
+// import { BLOCKCHAIN } from '@/constants/env';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
@@ -24,6 +23,9 @@ import { CometContract, networkChainId } from '@/constants';
 // import { ProtocolConfig } from '@/protocols/types';
 import { useSingleLoan } from '@/contract/single';
 import { useGetLoan } from '@/protocols/compound/util/batch';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 // import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
@@ -78,15 +80,15 @@ function DepositingCollateral() {
   const { getUserId } = useUserDB();
   // Thirdweb for EOA
   const address = useAddress();
-  const { data } = useBalance({ address: address as `0x${string}` });
+  const { data } = useRockoBalance({ address: address as `0x${string}` });
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
-  const { address: wagmiAddress } = useAccount();
-  const { data: wagmiBalance } = useBalance({
+  const { address: wagmiAddress } = useRockoAccount();
+  const { data: wagmiBalance } = useRockoBalance({
     address: wagmiAddress as `0x${string}`,
   });
 
-  const { chain } = useNetwork();
+  // const { chain } = useRockoNetwork();
   const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
     useGetLoan(collateral || 0, borrowing || 0);
 
@@ -105,10 +107,10 @@ function DepositingCollateral() {
       !(loanData?.collateralNeeded || borrowMoreData?.collateralNeeded)
     )
       return;
-    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
-      toast.error('Invalid Network!');
-      return;
-    }
+    // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
+    //   toast.error('Invalid Network!');
+    //   return;
+    // }
     if (Number(data?.formatted) < collateral) {
       toast.error('Insufficient Collateral Balance!');
       return;

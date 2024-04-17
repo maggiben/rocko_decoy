@@ -7,14 +7,13 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { writeContract, waitForTransaction, fetchBalance } from 'wagmi/actions';
 import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { BLOCKCHAIN, PAYMENT_BUFFER } from '@/constants/env';
+import { PAYMENT_BUFFER } from '@/constants/env';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -32,6 +31,9 @@ import transactionComp from '@/utility/transactionComp';
 // import { useProtocolConfig } from '@/protocols';
 // import { ProtocolConfig } from '@/protocols/types';
 import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
 
@@ -73,15 +75,15 @@ function Processing() {
     getETHPrice,
     getRewardAmount,
   } = useSingleLoan();
-  const { data } = useBalance({
+  const { data } = useRockoBalance({
     address: address as `0x${string}`,
     token: USDCContract[networkChainId] as `0x${string}`,
   });
   // Wagmi for ZeroDev Smart wallet
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const { userInfo } = useZeroDev();
   const { getUserId } = useUserDB();
-  const { chain } = useNetwork();
+  // const { chain } = useRockoNetwork();
   const { executeBatchRepaySome, batchRepaySome, success, txHash } =
     useRepaySome(payment);
   const {
@@ -128,10 +130,10 @@ function Processing() {
 
   const start = async () => {
     if (!zerodevAccount || !address) return; // !zerodevAccount - logout, !address - no EOA
-    if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
-      toast.error('Invalid Network!');
-      return;
-    }
+    // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
+    //   toast.error('Invalid Network!');
+    //   return;
+    // }
     if (Number(data?.formatted) < payment) {
       toast.error('Insufficient USDC Balance!');
       return;

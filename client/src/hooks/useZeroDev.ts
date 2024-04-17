@@ -1,17 +1,40 @@
 import { ZeroDevWeb3Auth } from '@zerodev/web3auth';
+import { Auth0WalletConnector } from '@zerodev/wagmi';
+import * as blockchains from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
 import { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
-import { ZERODEV_PROJECT_ID } from '@/constants/env';
+import { configureChains, useConnect } from 'wagmi';
+import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
 import setTokens from '@/utility/setTokens';
+import { useRockoAccount } from './useRockoAccount';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useZeroDev = () => {
-  const { isConnected } = useAccount();
-
+  const { isConnected } = useRockoAccount();
+  const net = (blockchains as { [key: string]: any })[NETWORK];
+  const { isSuccess } = useConnect();
+  const { chains } = configureChains([net], [publicProvider()]);
+  const { connect } = useConnect();
   const [userInfo, setUserInfo] = useState<any>();
   const [zeroDevWeb3Auth] = useState(
     ZeroDevWeb3Auth.getInstance([ZERODEV_PROJECT_ID]),
   );
+
+  const auth0Connector = new Auth0WalletConnector({
+    chains,
+    options: {
+      projectId: ZERODEV_PROJECT_ID,
+      shimDisconnect: true,
+      // bundlerProvider: 'PIMLICO',
+      // paymasterProvider: 'PIMLICO',
+    },
+  });
+
+  const loginZerodev = async () => {
+    connect({
+      connector: auth0Connector,
+    });
+  };
 
   useEffect(() => {
     if (isConnected) {
@@ -26,6 +49,6 @@ export const useZeroDev = () => {
       setUserInfo(null);
     }
   });
-
-  return { userInfo, setUserInfo };
+  console.log({ loginZerodev, isSuccess });
+  return { userInfo, setUserInfo, loginUser: loginZerodev, isSuccess };
 };

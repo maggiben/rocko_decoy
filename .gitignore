@@ -2,6 +2,7 @@
 designs/yarn.lock
 .vscode/extensions.json
 client/.env
+client/.next
 .DS_Store
 *.swp
 **/.terraform*

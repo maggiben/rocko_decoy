@@ -5,13 +5,14 @@ import QRCode from 'react-qr-code';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import contentCopy from '@/assets/content_copy.svg';
 import { useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import closeIcon from '@/assets/Close.svg';
 import useLoanData from '@/hooks/useLoanData';
 import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import Warning from '../Warning/Warning';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
 
 type Props = {
   onOk: () => void;
@@ -24,8 +25,10 @@ function TransferCollateral(props: Props) {
   const [lowAmount, setLowAmount] = useState<boolean>(false);
 
   const { loanData } = useLoanData();
-  const { address: zerodevAccount } = useAccount();
-  const { data } = useBalance({ address: zerodevAccount as `0x${string}` });
+  const { address: zerodevAccount } = useRockoAccount();
+  const { data } = useRockoBalance({
+    address: zerodevAccount as `0x${string}`,
+  });
 
   if (warning) {
     return (

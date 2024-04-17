@@ -13,7 +13,6 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
-import { useAccount, useDisconnect } from 'wagmi';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
@@ -29,6 +28,8 @@ import {
 } from '@/constants/featureFlags';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -102,9 +103,9 @@ const MakePayment: FC = () => {
   const collateral = parseFloat(router.get('collateral') || '0');
   const amount = 'add'; //! get the URL parameter amount value
 
-  const { disconnect } = useDisconnect();
+  const { disconnect } = useRockoDisconnect();
 
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const { getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();

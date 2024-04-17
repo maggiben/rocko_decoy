@@ -1,6 +1,6 @@
 /* global BigInt */
 import { useState } from 'react';
-import { useAccount, useWaitForTransaction } from 'wagmi';
+import { useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
 import {
   usePrepareContractBatchWrite,
@@ -17,6 +17,7 @@ import {
   WETHContract,
   networkChainId,
 } from '@/constants';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
 
 const WETHABI = require('@/constants/weth.json');
 const COMETABI = require('@/constants/comet.json');
@@ -27,8 +28,10 @@ const uintMax =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 export const useGetLoan = (collateral: any, loan: any) => {
-  const { address: wagmiAddress } = useAccount();
+  const { address: wagmiAddress } = useRockoAccount();
   const address = useAddress();
+
+  console.log({ wagmiAddress });
 
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
@@ -208,7 +211,7 @@ export const useRepaySome = (loan: any) => {
 };
 
 export const useRepayFull = (collateral: any) => {
-  const { address: wagmiAddress } = useAccount();
+  const { address: wagmiAddress } = useRockoAccount();
   const address = useAddress();
 
   const [txHash, setTxHash] = useState('');
@@ -303,7 +306,7 @@ export const useRepayFull = (collateral: any) => {
 };
 
 export const useAddCollateral = (collateral: any) => {
-  const { address: wagmiAddress } = useAccount();
+  const { address: wagmiAddress } = useRockoAccount();
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
 
@@ -381,7 +384,7 @@ export const useAddCollateral = (collateral: any) => {
 };
 
 export const useBorrowCollateral = (collateral: any) => {
-  const { address: wagmiAddress } = useAccount();
+  const { address: wagmiAddress } = useRockoAccount();
   const address = useAddress();
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);

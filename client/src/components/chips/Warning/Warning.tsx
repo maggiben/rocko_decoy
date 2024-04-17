@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import QRCode from 'react-qr-code';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
 import contentCopy from '@/assets/content_copy.svg';
-import { useAccount, useBalance } from 'wagmi';
 import useLoanData from '@/hooks/useLoanData';
 import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
@@ -12,8 +13,10 @@ function Warning(props: Props) {
   const { goBack, proceedAnyway } = props;
 
   const { loanData } = useLoanData();
-  const { address: zerodevAccount } = useAccount();
-  const { data } = useBalance({ address: zerodevAccount as `0x${string}` });
+  const { address: zerodevAccount } = useRockoAccount();
+  const { data } = useRockoBalance({
+    address: zerodevAccount as `0x${string}`,
+  });
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(loanData?.otherAddress);

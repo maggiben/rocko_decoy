@@ -7,13 +7,15 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
 import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-import { NETWORK } from '@/constants/env';
+// import { NETWORK } from '@/constants/env';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -48,12 +50,12 @@ function ModifyStatus() {
   const address = useAddress();
   const { depositZerodevAccount, getCollateralBalanceOf, getETHPrice } =
     useSingleLoan();
-  const { data } = useBalance({ address: address as `0x${string}` });
+  const { data } = useRockoBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const { userInfo } = useZeroDev();
   const { getUserId } = useUserDB();
-  const { chain } = useNetwork();
+  // const { chain } = useRockoNetwork();
   // const {
   //   txBatch: { useAddCollateral, useBorrowCollateral },
   // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
@@ -79,10 +81,10 @@ function ModifyStatus() {
 
   const start = async () => {
     if (!zerodevAccount || !address || !loanData) return; // !zerodevAccount - logout, !address - no EOA, !loanData - no db data
-    if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
-      toast.error('Invalid Network!');
-      return;
-    }
+    // if (chain && chain.name.toUpperCase() !== NETWORK.toUpperCase()) {
+    //   toast.error('Invalid Network!');
+    //   return;
+    // }
 
     setStartA(true);
     // if add collateral

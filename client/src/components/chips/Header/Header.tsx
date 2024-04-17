@@ -4,14 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { configureChains, useAccount, useConnect, useDisconnect } from 'wagmi';
-import { publicProvider } from 'wagmi/providers/public';
-import * as chains from 'wagmi/chains';
-import { Auth0WalletConnector } from '@zerodev/wagmi';
 import { ROCKO_WEBSITE_URL } from '@/constants';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
 import user from '@/assets/images/user.png';
 import logo from '@/assets/logo.png';
-import { NETWORK, ZERODEV_PROJECT_ID } from '@/constants/env';
 import { useZeroDev } from '@/hooks/useZeroDev';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -19,32 +16,17 @@ import usePlatformStatus from '@/hooks/usePlatformStatus';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
 
-const net = (chains as { [key: string]: any })[NETWORK];
-
 function Header() {
-  const { chains } = configureChains([net], [publicProvider()]);
-  const auth0Connector = new Auth0WalletConnector({
-    chains,
-    options: {
-      projectId: ZERODEV_PROJECT_ID,
-      shimDisconnect: true,
-      // bundlerProvider: 'PIMLICO',
-      // paymasterProvider: 'PIMLICO',
-    },
-  });
   const { platformStatusMessage } = usePlatformStatus();
   const loginRef: any = useRef();
   const router = useRouter();
   const pathName = usePathname();
-
   const [toggle, setToggle] = useState(false);
   const [toggleDown, setToggleDown] = useState(false);
   const [openModalFor, setOpenModalFor] = useState('');
-
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
-  const { address, isConnected } = useAccount();
-  const { userInfo, setUserInfo } = useZeroDev();
+  const { disconnect } = useRockoDisconnect();
+  const { address, isConnected } = useRockoAccount();
+  const { userInfo, setUserInfo, loginUser } = useZeroDev();
   const { getLoanData } = useLoanDB();
   const {
     getUserData,
@@ -58,9 +40,7 @@ function Header() {
   const [isUnavailable, setIsUnavailable] = useState(false);
 
   const OnLogin = () => {
-    connect({
-      connector: auth0Connector,
-    });
+    loginUser();
   };
 
   const OnLogout = () => {

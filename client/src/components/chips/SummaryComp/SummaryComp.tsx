@@ -13,11 +13,12 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
-import { useAccount, useDisconnect } from 'wagmi';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
 import ModalContainer from '../ModalContainer/ModalContainer';
@@ -54,7 +55,7 @@ const summaryData = {
 };
 
 function SummaryComp(props: Props) {
-  const { disconnect } = useDisconnect();
+  const { disconnect } = useRockoDisconnect();
   const retrievedData = sessionStorage.getItem('borrowMoreData');
   const borrowMoreData = JSON.parse(retrievedData || '{}');
 
@@ -69,7 +70,7 @@ function SummaryComp(props: Props) {
 
   const { title, subTitle, invoiceTitle, category } = props;
 
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const [paymentMethod, setPaymentMethod] = useState('');
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);

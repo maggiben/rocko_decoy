@@ -17,7 +17,6 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
-import { useAccount, useDisconnect } from 'wagmi';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
@@ -27,6 +26,8 @@ import {
 } from '@/constants/featureFlags';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
 
 interface InnerInfo {
   description: string;
@@ -76,8 +77,8 @@ const ModifyCollateral: React.FC = () => {
   const new_collateral =
     amount === 'add' ? basicCollateral + payment : basicCollateral - payment;
 
-  const { disconnect } = useDisconnect();
-  const { address: zerodevAccount } = useAccount();
+  const { disconnect } = useRockoDisconnect();
+  const { address: zerodevAccount } = useRockoAccount();
   const { getETHPrice, getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();

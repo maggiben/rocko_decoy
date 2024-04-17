@@ -7,8 +7,6 @@ import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
 import { ProtocolConfig } from '../types';
 import {
-  getETHPrice,
-  getBorrowAPR,
   approveWETH,
   addCollateral,
   addLoan,
@@ -18,6 +16,11 @@ import {
   claimReward,
   deposit,
   depositZeroDevAccount,
+  wethToETH,
+} from './util';
+import {
+  getETHPrice,
+  getBorrowAPR,
   getBorrowBalanceOf,
   getBuffer,
   getCollateralBalanceOf,
@@ -28,8 +31,8 @@ import {
   getRewardAmount,
   getRewardRate,
   getThreshold,
-  wethToETH,
-} from './util';
+} from './util/data';
+
 import {
   useAddCollateral,
   useBorrowCollateral,
@@ -40,7 +43,7 @@ import {
 
 const compoundConfig = ({
   chain,
-  zeroDevAccount,
+  rockoWalletAddress,
   signer,
 }: {
   // Comp USDC Contract cUSDCv3
@@ -48,7 +51,7 @@ const compoundConfig = ({
   contract: string;
   chain: NetworkNames;
   chainId: number;
-  zeroDevAccount: any;
+  rockoWalletAddress: any;
   signer: any;
 }): ProtocolConfig => ({
   name: 'Compound',
@@ -84,17 +87,17 @@ const compoundConfig = ({
   getCollateralBalanceOf: async () =>
     getCollateralBalanceOf({
       chain,
-      zeroDevAccount,
+      rockoWalletAddress,
     }),
   getBorrowBalanceOf: async () =>
     getBorrowBalanceOf({
       chain,
-      zeroDevAccount,
+      rockoWalletAddress,
     }),
   getRewardAmount: async () =>
     getRewardAmount({
       chain,
-      zeroDevAccount,
+      rockoWalletAddress,
     }),
   getRewardRate: async () => getRewardRate(chain),
   txBatch: {

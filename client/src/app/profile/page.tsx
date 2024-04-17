@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -19,24 +18,26 @@ import {
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoBalance } from '@/hooks/useRockoBalance';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState<undefined | string>();
 
   const { userInfo } = useZeroDev();
-  const { address: zerodevAccount } = useAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const { updateUser, getUserData } = useUserDB();
 
-  const { data: ethBalance } = useBalance({
+  const { data: ethBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
   });
 
-  const { data: usdcBalance } = useBalance({
+  const { data: usdcBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
     token: USDCContract[networkChainId] as `0x${string}`,
   });
 
-  const { data: wethBalance } = useBalance({
+  const { data: wethBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
     token: WETHContract[networkChainId] as `0x${string}`,
   });

@@ -1,21 +1,14 @@
-import closeIcon from '@/assets/Close.svg';
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { parseBalance } from '@/utility/utils';
-import { useAccount, useDisconnect, useWaitForTransaction } from 'wagmi';
 import { ethers } from 'ethers';
-import {
-  usePrepareContractBatchWrite,
-  useContractBatchWrite,
-} from '@zerodev/wagmi';
-import { WETHContract, networkChainId, USDCContract } from '@/constants';
+import closeIcon from '@/assets/Close.svg';
 import logger from '@/utility/logger';
 import addressValidator from '@/utility/addressValidator';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
+import { useRockoWalletTransaction } from '@/hooks/useRockoWalletTransaction';
 import ModalContent from '../ModalContent/ModalContent';
 import TransferConfirmModal from '../TransferConfirmModal/TransferConfirmModal';
-
-const WETHABI = require('../../../constants/weth.json');
-const USDCABI = require('../../../constants/usdc.json');
 
 function TransferFundModal({
   setOpenModalFor,
@@ -32,52 +25,15 @@ function TransferFundModal({
   const [txHash, setTxHash] = useState('');
   const [confirmed, setConfirmed] = useState<boolean>(false);
 
-  const { address: wagmiAddress } = useAccount();
   const [destination, setDestination] = useState('');
-  const { disconnect } = useDisconnect();
-
-  const { config } = usePrepareContractBatchWrite(
-    wagmiAddress && ethers.utils.isAddress(destination)
-      ? {
-          calls: [
-            {
-              to: destination as `0x${string}`,
-              data: '0x',
-              value: ethBalance,
-            },
-            {
-              address: WETHContract[networkChainId],
-              abi: WETHABI,
-              functionName: 'transfer',
-              args: [destination, parseBalance(wethBalance)],
-            },
-            {
-              address: USDCContract[networkChainId],
-              abi: USDCABI,
-              functionName: 'transfer',
-              args: [destination, parseBalance(usdcBalance, 6)],
-            },
-          ],
-          enabled: true,
-        }
-      : {
-          calls: [],
-          enabled: true,
-        },
-  );
-
-  const { sendUserOperation: batchWithdraw, data } =
-    useContractBatchWrite(config);
-
-  useWaitForTransaction({
-    hash: data?.hash,
-    enabled: !!data,
-    onSuccess() {
-      if (data?.hash) {
-        setTxHash(data?.hash);
-        setConfirmed(true);
-      }
-    },
+  const { disconnect } = useRockoDisconnect();
+  const { batchWithdraw } = useRockoWalletTransaction({
+    destination,
+    ethBalance,
+    wethBalance,
+    usdcBalance,
+    setTxHash,
+    setConfirmed,
   });
 
   const withdraw = async () => {
@@ -103,6 +59,7 @@ function TransferFundModal({
             {/* close button start */}
             <div>
               <button
+                type="button"
                 onClick={() => setOpenModalFor('')}
                 className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
               >
@@ -138,6 +95,7 @@ function TransferFundModal({
           </div>
           <div className="flex items-start gap-2 ">
             <button
+              type="button"
               className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
                 ethers.utils.isAddress(destination)
                   ? 'bg-[#2C3B8D] text-white'
@@ -149,6 +107,7 @@ function TransferFundModal({
               Confirm
             </button>
             <button
+              type="button"
               className="py-[10px] px-6  rounded-full text-sm font-semibold bg-grayPrimary text-[#2C3B8D]"
               onClick={() => setOpenModalFor('')}
             >

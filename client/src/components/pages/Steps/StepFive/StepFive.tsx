@@ -8,7 +8,6 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
-import { useAccount, useDisconnect } from 'wagmi';
 import correct from '@/assets/correct.svg';
 import StatusWarning from '@/assets/StatusWarning.svg';
 import HoverTooltip from '@/components/chips/HoverTooltip/HoverTooltip';
@@ -23,6 +22,8 @@ import {
 } from '@/constants/featureFlags';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
+import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
 
 const TOOLTIPS = require('../../../../locales/en_tooltips');
 
@@ -63,8 +64,8 @@ const terms: Term[] = [
 
 const StepFive: React.FC = () => {
   const { loanData, setLoanData } = useLoanData();
-  const { address: zerodevAccount } = useAccount();
-  const { disconnect } = useDisconnect();
+  const { address: zerodevAccount } = useRockoAccount();
+  const { disconnect } = useRockoDisconnect();
 
   // for auto-switch network
   const address = useAddress();
