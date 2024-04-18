@@ -49,6 +49,6 @@ export const useZeroDev = () => {
       setUserInfo(null);
     }
   });
-  console.log({ loginZerodev, isSuccess });
+  console.log({ userInfo, setUserInfo, loginUser: loginZerodev, isSuccess });
   return { userInfo, setUserInfo, loginUser: loginZerodev, isSuccess };
 };
