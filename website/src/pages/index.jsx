@@ -15,7 +15,12 @@ import { faqs } from '../mock/data'
 import getBorrowApr from '../utils/getBorrowApr.ts'
 
 export function Head() {
-  return <Seo />
+  return (
+    <Seo
+      title="Use Rocko to get a crypto-backed loan today"
+      description="Quickly get crypto loans with no credit check required"
+    />
+  )
 }
 
 export default function Homepage() {
