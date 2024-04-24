@@ -84,7 +84,7 @@ const cspHeader = `
 
 const nextConfig = {
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     domains: ['lh3.googleusercontent.com'],
