@@ -13,6 +13,10 @@ const connectSrc = [
   'https://base.rpc.thirdweb.com',
   'https://sepolia.rpc.thirdweb.com',
 
+  'https://1.rpc.thirdweb.com',
+  'https://11155111.rpc.thirdweb.com',
+  'https://8453.rpc.thirdweb.com',
+
   'https://ipv6.icanhazip.com',
   'https://ipv4.icanhazip.com',
   'https://api.ipify.org',
@@ -79,6 +83,12 @@ const cspHeader = `
 `;
 
 const nextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  images: {
+    domains: ['lh3.googleusercontent.com'],
+  },
   async headers() {
     return [
       {

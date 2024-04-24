@@ -8,7 +8,7 @@ router.get('/average_apr', (req, res, next) => {
   try {
     let params = []
     const network = req.query.network || 'mainnet';
-    console.log({network})
+    // console.log({network})
     let sql;
       if (req.query.openDate === "month") {
         sql = `SELECT AVG(borrow_apr) AS average_apr FROM asset_data WHERE fetch_time >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND network = ?`;
@@ -28,7 +28,7 @@ router.get('/average_apr', (req, res, next) => {
           console.error(err);
           return next(new Error('Database query failed'));
         }
-        console.log({results})
+        // console.log({results})
         return res.status(200).json({
           average_apr: results?.[0].average_apr,
           network

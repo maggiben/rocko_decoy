@@ -9,7 +9,7 @@ import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import user from '@/assets/images/user.png';
 import logo from '@/assets/logo.png';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
@@ -26,7 +26,7 @@ function Header() {
   const [openModalFor, setOpenModalFor] = useState('');
   const { disconnect } = useRockoDisconnect();
   const { address, isConnected } = useRockoAccount();
-  const { userInfo, setUserInfo, loginUser } = useZeroDev();
+  const { userInfo, setUserInfo, loginUser } = useUserInfo();
   const { getLoanData } = useLoanDB();
   const {
     getUserData,
@@ -39,6 +39,9 @@ function Header() {
   } = useUserDB();
   const [isUnavailable, setIsUnavailable] = useState(false);
 
+  const profilePic = userInfo?.verifiedCredentials?.find(
+    (info: any) => info.format === 'oauth',
+  )?.oauthAccountPhotos?.[0];
   const OnLogin = () => {
     loginUser();
   };
@@ -105,10 +108,10 @@ function Header() {
   };
 
   const detectUserExist = async () => {
-    if (userInfo && userInfo.idToken) {
+    if (userInfo && userInfo.sessionId) {
       getUserData(userInfo.email).then(async (res) => {
         /* if user not exist */
-        if (!res || (res && res.length === 0)) {
+        if (!res || (res && res.length === 0 && address)) {
           addUser({
             email: userInfo.email,
             walletAddress: address as `0x${string}`,
@@ -147,7 +150,7 @@ function Header() {
       detectReadOnly();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  }, [userInfo, address]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -255,8 +258,8 @@ function Header() {
                     className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
                   >
                     <Image
-                      className="h-7"
-                      src={user}
+                      className="h-7 rounded-full"
+                      src={profilePic || user}
                       alt="user"
                       width={30}
                       height={30}

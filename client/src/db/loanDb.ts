@@ -22,11 +22,11 @@ export const useLoanDB = () => {
     try {
       // TODO update ui execution code and math to use wei, until displayed to user
       const collateralWei = ethers.utils.parseEther(collateral.toString());
-      console.log({
-        deci: assetDecimals?.[loanAsset] || 0,
-        loanAsset,
-        assetDecimals,
-      });
+      // console.log({
+      //   deci: assetDecimals?.[loanAsset] || 0,
+      //   loanAsset,
+      //   assetDecimals,
+      // });
       const loanObject = {
         user,
         transaction_hash: transactionHash,

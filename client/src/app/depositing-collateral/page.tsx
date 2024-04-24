@@ -13,7 +13,7 @@ import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 // import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
@@ -32,7 +32,7 @@ interface DoneTracker {
   step: string;
 }
 
-function DepositingCollateral() {
+const DepositingCollateral = () => {
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const type = router.get('type') || '';
 
@@ -74,7 +74,7 @@ function DepositingCollateral() {
   const [showTxModal, setShowTxModal] = useState(false);
 
   // get User info
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   // for Database
   const { finalizeLoan, getLoanData } = useLoanDB();
   const { getUserId } = useUserDB();
@@ -83,26 +83,22 @@ function DepositingCollateral() {
   const { data } = useRockoBalance({ address: address as `0x${string}` });
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
-  const { address: wagmiAddress } = useRockoAccount();
-  const { data: wagmiBalance } = useRockoBalance({
-    address: wagmiAddress as `0x${string}`,
+  const { address: rockoWalletAddress } = useRockoAccount();
+  const { data: rockoWalletBalance } = useRockoBalance({
+    address: rockoWalletAddress as `0x${string}`,
   });
 
   // const { chain } = useRockoNetwork();
-  const { executeBatchGetLoan, batchGetLoan, success, txHash, error } =
-    useGetLoan(collateral || 0, borrowing || 0);
+  const { executeBatchGetLoan, success, txHash, error } = useGetLoan(
+    collateral || 0,
+    borrowing || 0,
+  );
 
   const start = async () => {
     if (loanData?.paymentMethod !== 'ethereum') return;
-    console.log({
-      pm: loanData?.paymentMethod,
-      wagmiAddress,
-      address,
-      loanData,
-      borrowMoreData,
-    });
+
     if (
-      !wagmiAddress ||
+      !rockoWalletAddress ||
       !address ||
       !(loanData?.collateralNeeded || borrowMoreData?.collateralNeeded)
     )
@@ -123,7 +119,7 @@ function DepositingCollateral() {
       setADone();
 
       // batch transactions
-      executeBatchGetLoan();
+      await executeBatchGetLoan();
       setStartB(true);
     } else {
       setAError();
@@ -133,10 +129,10 @@ function DepositingCollateral() {
   };
 
   const receiveCollateral = async (): Promise<any> => {
-    if (!wagmiAddress || !(loanData || borrowMoreData)) return null;
+    if (!rockoWalletAddress || !(loanData || borrowMoreData)) return null;
 
     const depositResult = await depositZerodevAccount(
-      wagmiAddress,
+      rockoWalletAddress,
       collateral,
       'ETH',
     );
@@ -157,17 +153,6 @@ function DepositingCollateral() {
 
   const setAllDone = async (txHashLoan: string) => {
     const userId = await getUserId(userInfo?.email);
-    console.log({
-      email: userInfo?.email,
-      userId,
-      txHashLoan,
-      p: 'compound',
-      boo: true,
-      c: 'ETH',
-      totalBorrowing,
-      totalCollateral,
-      isExistLoan,
-    });
 
     const result = await finalizeLoan(
       userId,
@@ -205,7 +190,7 @@ function DepositingCollateral() {
       asset_decimals: 18,
       amount: collateral,
       usd_value: loanData?.collateralPrice,
-      recipient_address: wagmiAddress,
+      recipient_address: rockoWalletAddress,
       sender_address: address,
       transaction_type: 'initial_collateral',
       funding_source: loanData?.paymentMethod,
@@ -257,13 +242,13 @@ function DepositingCollateral() {
   };
 
   // const copyToClipboard = async () => {
-  //   await navigator.clipboard.writeText(wagmiAddress as `0x${string}`);
+  //   await navigator.clipboard.writeText(rockoWalletAddress as `0x${string}`);
   // };
 
   useEffect(() => {
     if (
       loanData?.paymentMethod !== 'ethereum' &&
-      Number(wagmiBalance?.formatted) >= Number(collateral) &&
+      Number(rockoWalletBalance?.formatted) >= Number(collateral) &&
       !collateralReceived
     ) {
       setStartA(true);
@@ -273,19 +258,23 @@ function DepositingCollateral() {
 
       toast.success('Collateral is successfully received!');
 
-      // do batchTransactions
-      executeBatchGetLoan();
-      setStartB(true);
+      const doBatchTransactions = async () => {
+        // do batchTransactions
+        await executeBatchGetLoan();
+        setStartB(true);
+      };
+      doBatchTransactions();
     }
-  }, [wagmiBalance]);
+  }, [rockoWalletBalance]);
 
   useEffect(() => {
-    if (batchGetLoan !== undefined && userInfo !== undefined) {
+    // TODO NOTE this fixed the transaction popup issue, just wait for rockoWalletAddress before continuing
+    if (userInfo !== undefined && rockoWalletAddress) {
       setInitialParams();
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [batchGetLoan, userInfo]);
+  }, [userInfo, rockoWalletAddress]);
 
   useEffect(() => {
     if (error) logger(JSON.stringify(error, null, 2));
@@ -365,6 +354,13 @@ function DepositingCollateral() {
             ? 'Waiting for Collateral'
             : 'Depositing Collateral'}
       </h1>
+      <button
+        type="button"
+        onClick={executeBatchGetLoan}
+        className="text-center py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]"
+      >
+        Book Loan
+      </button>
       <p className="text-blackPrimary text-[14px] mt-1">
         Please do not close your browser until all of the steps below are
         completed.
@@ -512,7 +508,7 @@ function DepositingCollateral() {
                 Amount Received
               </p>
               <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
-                {financial(wagmiBalance?.formatted, 4)} ETH{' '}
+                {financial(rockoWalletBalance?.formatted, 4)} ETH{' '}
               </p>
             </div>
           </div>
@@ -530,7 +526,7 @@ function DepositingCollateral() {
                 Rocko Wallet Address
               </p>
               <p className="font-normal	text-blackPrimary text-[16px] leading-6 text-wrap">
-                {wagmiAddress}
+                {rockoWalletAddress}
               </p>
             </div>
             <Image
@@ -607,6 +603,11 @@ function DepositingCollateral() {
       </div>
     </main>
   );
-}
+};
 
-export default DepositingCollateral;
+const CollateralDepositExecution = () => {
+  const { isConnected } = useRockoAccount();
+  return isConnected ? <DepositingCollateral /> : null;
+};
+
+export default CollateralDepositExecution;

@@ -1,10 +1,10 @@
-import Header from '@/components/chips/Header/Header';
+import { Toaster } from 'react-hot-toast';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Header from '@/components/chips/Header/Header';
 import LoanProvider from '@/context/loanContext/loanContext';
 import AlertProvider from '@/context/alertContext/alertContext';
-import { Toaster } from 'react-hot-toast';
 import Providers from './Providers';
 
 const inter = Inter({ subsets: ['latin'] });

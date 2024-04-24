@@ -72,7 +72,7 @@ const StepFive: React.FC = () => {
   const chain = useChain();
   const isMismatched = useNetworkMismatch();
   const switchChain = useSwitchChain();
-  console.log({ loanData });
+  // console.log({ loanData });
   const invoice = [
     {
       description: 'Lending Protocol',

@@ -49,7 +49,6 @@ const Protocol: FC<ProtocolProps> = ({
   // currently this is getting overwritten by the last network data fetched
 
   const updateLoanData = async (protoData: any, setData: any) => {
-    console.log('setting loan data', { protoData });
     try {
       const borrowing = Number(loanData?.borrowing);
       const buffer = Number(loanData?.buffer);
@@ -100,7 +99,7 @@ const Protocol: FC<ProtocolProps> = ({
             rewardRate,
             rewardAmount,
           };
-          console.log({ newLoanData });
+          // console.log({ newLoanData });
           return newLoanData;
         });
       }

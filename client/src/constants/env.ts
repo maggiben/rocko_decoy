@@ -38,3 +38,5 @@ if (typeof window !== 'undefined') {
 }
 export const IS_DEMO_MODE =
   process.env.NEXT_PUBLIC_IS_DEMO_MODE === 'false' || demoMode || sessionFlag;
+
+export const DYNAMIC_PROJECT_ID = process.env.NEXT_PUBLIC_DYNAMIC_PROJECT_ID;

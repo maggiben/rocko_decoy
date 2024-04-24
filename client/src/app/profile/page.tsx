@@ -7,7 +7,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { useUserDB } from '@/db/userDb';
 import {
   USDCContract,
@@ -24,7 +24,7 @@ import { useRockoBalance } from '@/hooks/useRockoBalance';
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState<undefined | string>();
 
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const { address: zerodevAccount } = useRockoAccount();
   const { updateUser, getUserData } = useUserDB();
 

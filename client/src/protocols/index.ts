@@ -13,7 +13,7 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   const { address: rockoWalletAddress } = useRockoAccount();
   const signer: ethers.Signer | undefined = useSigner();
 
-  console.log({ rockoWalletAddress });
+  // console.log({ rockoWalletAddress });
 
   const compoundConfigMainnet = compoundConfig({
     contract: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',

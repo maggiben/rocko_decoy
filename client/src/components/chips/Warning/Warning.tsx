@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import QRCode from 'react-qr-code';
+import Link from 'next/link';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import contentCopy from '@/assets/content_copy.svg';
@@ -78,17 +79,21 @@ function Warning(props: Props) {
       </div>
       <div className="flex justify-center items-center flex-wrap">
         <button
+          type="button"
           onClick={goBack}
           className="py-[10px] px-6 rounded-full text-sm font-semibold bg-[#2C3B8D] text-white"
         >
           Go back and add collateral
         </button>
-        <button
-          onClick={proceedAnyway}
-          className="text-[#141414] font-normal underline-offset-1 underline text-[12px] mt-[8px] w-full text-center p-0 m-0 outline-0 border-0"
-        >
-          Proceed anyway
-        </button>
+        <Link href="/depositing-collateral?type=start">
+          <button
+            type="button"
+            onClick={proceedAnyway}
+            className="text-[#141414] font-normal underline-offset-1 underline text-[12px] mt-[8px] w-full text-center p-0 m-0 outline-0 border-0"
+          >
+            Proceed anyway
+          </button>
+        </Link>
       </div>
     </ModalContent>
   );

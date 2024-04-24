@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { AlertFormProps, AprAlertType, BufferAlertType } from '@/types/type';
 import { useAlertDB } from '@/db/alertDb';
 import { useAlert } from '@/context/alertContext/alertContext';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { useUserDB } from '@/db/userDb';
 import closeIcon from '@/assets/Close.svg';
 import { UPDATE_ALERT } from '@/constants/alertType';
@@ -28,7 +28,7 @@ const AlertForm: FC<AlertFormProps> = ({
   updateIndex,
 }) => {
   const [userPhone, setUserPhone] = useState<string>('');
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const { getUserData } = useUserDB();
   const { addAlert, updateAlert } = useAlertDB();
   const {

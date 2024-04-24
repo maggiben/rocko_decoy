@@ -50,7 +50,7 @@ function TransferCollateral(props: Props) {
   const handleOnContinue = () => {
     const isLowAmount = Number(data?.formatted) < loanData?.collateralNeeded;
 
-    console.log(isLowAmount);
+    // console.log(isLowAmount);
 
     setLowAmount(isLowAmount);
     if (!isLowAmount) onOk();

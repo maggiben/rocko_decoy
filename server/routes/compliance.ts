@@ -33,6 +33,7 @@ enum TransactionType {
     Fee = 'fee'
 }
 
+
 router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
     try {
         // address check

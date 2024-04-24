@@ -33,15 +33,15 @@ const initiateWithdrawal = async (
 };
 
 export default function CoinbaseCallback() {
-  const retrievedData = sessionStorage.getItem('coinbasePayment');
+  const [retrievedData, setRetrievedData] = useState<any>(null);
+  const [stateToken, setStateToken] = useState<any>(null);
+  const [searchParams, setSearchParams] = useState<any>(null);
   const payment: any = JSON.parse(retrievedData || '{}');
 
   const [code, setCode] = useState('');
   const [balance, setBalance] = useState<any>(null);
 
-  const stateToken = sessionStorage.getItem('stateToken');
-  const searchParams = new URLSearchParams(window.location.search);
-  const stateParam = searchParams.get('state');
+  const stateParam = searchParams?.get('state');
   const validStateToken = stateToken === stateParam;
 
   const fetchCoinbaseBalance = () => {
@@ -49,11 +49,11 @@ export default function CoinbaseCallback() {
       .get(`${BACKEND_URL}/coinbase-balance`, {
         withCredentials: true,
       })
-      .then((response) => {
+      .then((response: any) => {
         const { data } = response;
         setBalance(data);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         logger(
           `Error fetching balance: ${JSON.stringify(error, null, 2)}`,
           'error',
@@ -92,11 +92,14 @@ export default function CoinbaseCallback() {
   };
 
   useEffect(() => {
+    setSearchParams(new URLSearchParams(window.location.search));
+    setRetrievedData(sessionStorage?.getItem('coinbasePayment'));
+    setStateToken(sessionStorage?.getItem('stateToken'));
     if (validStateToken) {
       fetchCoinbaseBalance();
     }
     return () => {
-      sessionStorage.removeItem('stateToken');
+      sessionStorage?.removeItem('stateToken');
     };
   }, [validStateToken]);
 

@@ -61,7 +61,9 @@ router.post(
         } catch (error) {
          logger(error, 'error'); 
         }
-      } 
+      } else {
+        return res.status(401).send('Unauthorized');
+      }
     }
 );
   

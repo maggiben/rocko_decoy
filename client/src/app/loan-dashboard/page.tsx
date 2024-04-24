@@ -10,7 +10,7 @@ import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatDate } from '@/utility/utils';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
@@ -21,7 +21,7 @@ function Dashboard() {
   const newLoansPaused = loansPaused || transactionsPaused;
   const { getLoanData } = useLoanDB();
   const { getUserId } = useUserDB();
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
   const { getBorrowAPR } = useSingleLoan();

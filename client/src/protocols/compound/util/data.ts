@@ -17,7 +17,7 @@ const networkChainId = (chain: string) =>
   (chains as { [key: string]: any })[chain]?.id;
 
 const collateralAssetId = (chain: string) =>
-  chain === chains.base.network ? 1 : 2;
+  chain === chains.base.name.toLowerCase() ? 1 : 2;
 
 const getBorrowAPR = async (chain: string): Promise<number> => {
   const BLOCKCHAIN: BlockchainNames =
@@ -121,12 +121,12 @@ const getBorrowBalanceOf = async ({
   chain: string;
   rockoWalletAddress: any;
 }): Promise<number> => {
-  console.log('rockoWalletAddress', rockoWalletAddress);
+  // console.log('getBorrowBalanceOf', { rockoWalletAddress, chain });
   if (!rockoWalletAddress) return 0;
 
   const BLOCKCHAIN: BlockchainNames =
     chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
-  console.log({ BLOCKCHAIN, chain });
+  // console.log({ BLOCKCHAIN, chain });
   const sdk = new ThirdwebSDK(BLOCKCHAIN);
   const contract = await sdk.getContract(
     CometContract[networkChainId(chain)],
@@ -134,9 +134,9 @@ const getBorrowBalanceOf = async ({
   );
 
   const value = await contract.call('borrowBalanceOf', [rockoWalletAddress]);
-  console.log({ value });
+  // console.log('borrowBalanceOf', { value });
   const formattedValue = formatBalance(value, 6, 6);
-
+  // console.log('borrowBalanceOf', { formattedValue });
   return Number(formattedValue);
 };
 

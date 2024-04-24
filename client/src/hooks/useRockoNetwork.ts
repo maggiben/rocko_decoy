@@ -67,6 +67,6 @@ import { useNetwork } from 'wagmi';
 // eslint-disable-next-line import/prefer-default-export
 export const useRockoNetwork = () => {
   const { chain } = useNetwork();
-  console.log({ chain, useNetwork: useNetwork() });
+  // console.log({ chain, useNetwork: useNetwork() });
   return { chain };
 };

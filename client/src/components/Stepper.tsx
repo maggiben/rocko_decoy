@@ -3,12 +3,11 @@
 import { useState, useEffect, useMemo, FC } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
 import useLoanData from '@/hooks/useLoanData';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
 import TransferCollateral from './chips/TransferCollateral/TransferCollateral';
 
@@ -31,11 +30,10 @@ export default function Stepper(props: Props) {
 
   const { address: zerodevAccount } = useRockoAccount();
 
-  const { userInfo, loginUser, isSuccess } = useZeroDev();
+  const { userInfo, loginUser, isSuccess } = useUserInfo();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
   const [showQR, setShowQR] = useState(false);
-  const router = useRouter();
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
@@ -52,7 +50,6 @@ export default function Stepper(props: Props) {
   }, []);
 
   const handleOnOk = () => {
-    router.push('/depositing-collateral?type=start');
     setIsFinalized(false);
     setShowQR(false);
   };
@@ -93,9 +90,12 @@ export default function Stepper(props: Props) {
     }
 
     // if click Finalize Loan button
-    if (currentStep === loanSteps.length - 1 && loanData) {
-      const { sessionStorage } = window;
-      sessionStorage.setItem('loanData', JSON.stringify(loanData));
+    if (
+      currentStep === loanSteps.length - 1 &&
+      loanData &&
+      typeof window !== 'undefined'
+    ) {
+      window.sessionStorage.setItem('loanData', JSON.stringify(loanData));
 
       setIsFinalized(true);
     }
@@ -111,7 +111,11 @@ export default function Stepper(props: Props) {
   const currentData = loanSteps[currentStep];
 
   const isValidateNextButton = () => {
-    if (sessionStorage.getItem('isReadOnly') === 'true') return false;
+    if (
+      typeof window !== 'undefined' &&
+      window.sessionStorage.getItem('isReadOnly') === 'true'
+    )
+      return false;
 
     if (currentStep === loanSteps.length - 1) {
       const isValidate =
@@ -131,7 +135,11 @@ export default function Stepper(props: Props) {
   }, [currentStep]);
 
   useEffect(() => {
-    if (userInfo && sessionStorage.getItem('isReadOnly') === 'true')
+    if (
+      userInfo &&
+      typeof window !== 'undefined' &&
+      window.sessionStorage.getItem('isReadOnly') === 'true'
+    )
       toast.error(
         'Your account is currently under review. You may manage existing loans but cannot create new loans. Please contact support@rocko.co if you need further assistance.',
       );

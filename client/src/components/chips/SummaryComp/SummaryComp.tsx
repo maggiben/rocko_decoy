@@ -59,7 +59,7 @@ function SummaryComp(props: Props) {
   const retrievedData = sessionStorage.getItem('borrowMoreData');
   const borrowMoreData = JSON.parse(retrievedData || '{}');
 
-  console.log(borrowMoreData);
+  // console.log(borrowMoreData);
 
   const loanPayment = borrowMoreData?.payment_loan || 0;
   const collateralPayment = borrowMoreData?.payment_collateral || 0;

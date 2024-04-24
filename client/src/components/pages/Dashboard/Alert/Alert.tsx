@@ -4,7 +4,7 @@ import { useAlert } from '@/context/alertContext/alertContext';
 import { useAlertDB } from '@/db/alertDb';
 import { useUserDB } from '@/db/userDb';
 import { getFrequencyObject } from '@/utility/utils';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import CollateralBufferAlerts from './collateralBufferAlerts/collateralBufferAlerts';
 import ToggleBTN from '../toggleBTN/toggleBTN';
 
@@ -18,7 +18,7 @@ interface Props {
 const Alert: FC<Props> = ({ title, loanId, description, alertFor }) => {
   const [userPhone, setUserPhone] = useState<string>('');
   const { getUserData } = useUserDB();
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const { getAlertData } = useAlertDB();
   const {
     aprAlertState,

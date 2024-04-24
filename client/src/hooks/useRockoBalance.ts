@@ -1,4 +1,6 @@
 import { useBalance } from 'wagmi';
+// import { formatEther } from 'viem';
+// import { useRockoWallet } from './useRockoWallet';
 
 // type FetchBalanceResult = {
 //   decimals: number; // currency decimals, eg 6 or 18
@@ -15,15 +17,33 @@ export const useRockoBalance = ({
   address: `0x${string}`;
   token?: `0x${string}` | undefined;
 }) => {
+  // const { publicClient } = useRockoWallet();
   const { data } = useBalance({ address, token });
-  console.log('balance', { data });
-  return {
-    // todo error handling if data is undefined
-    data: {
-      decimals: data?.decimals,
-      formatted: data?.formatted,
-      symbol: data?.symbol,
-      value: data?.value,
-    },
-  };
+  return { data };
+  // if (token) {
+  //   return { data };
+  // }
+  // const balance = await publicClient.getBalance({
+  //   address,
+  // });
+  // return {
+  //   data: {
+  //     decimals: 18,
+  //     formatted: formatEther(balance),
+  //     symbol: 'ETH',
+  //     value: balance,
+  //   },
+  // };
+
+  // const { data } = useBalance({ address, token });
+  // console.log('balance', { data });
+  // return {
+  //   // todo error handling if data is undefined
+  //   data: {
+  //     decimals: data?.decimals,
+  //     formatted: data?.formatted,
+  //     symbol: data?.symbol,
+  //     value: data?.value,
+  //   },
+  // };
 };

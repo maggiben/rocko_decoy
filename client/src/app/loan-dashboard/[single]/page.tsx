@@ -18,10 +18,11 @@ import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
 import { formatDate } from '@/utility/utils';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
+import { useRockoWallet } from '@/hooks/useRockoWallet';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -58,16 +59,18 @@ const TxPaused = () => (
 );
 
 function SinglePage() {
+  const { rockoWalletAddress } = useRockoWallet();
   const { transactionsPaused } = usePlatformStatus();
   const searchParams = useSearchParams();
   const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
 
   const [openModalFor, setOpenModalFor] = useState('');
 
   const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
+
   const { compPrice } = useCompPrice();
 
   const [loanData, setLoanData] = useState<any>();
@@ -103,10 +106,12 @@ function SinglePage() {
     if (userInfo) {
       const user_id = await getUserId(userInfo?.email);
       const result = await getLoanData(user_id);
+
       if (result) {
         const active_loans = result.filter(
           (loan: any) => loan.loan_active === (isActive ? 1 : 0),
         );
+
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
 
@@ -131,9 +136,11 @@ function SinglePage() {
   };
 
   useEffect(() => {
-    initialize();
+    if (rockoWalletAddress) {
+      initialize();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  }, [userInfo, rockoWalletAddress]);
 
   useEffect(() => {
     getETHPrice()

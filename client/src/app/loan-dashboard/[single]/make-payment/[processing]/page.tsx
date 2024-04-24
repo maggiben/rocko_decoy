@@ -7,8 +7,9 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { writeContract, waitForTransaction, fetchBalance } from 'wagmi/actions';
+import { getBalance, waitForTransactionReceipt } from 'wagmi/actions';
 import { useAddress } from '@thirdweb-dev/react';
+import { encodeFunctionData } from 'viem';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
@@ -23,7 +24,7 @@ import {
   USDCContract,
   networkChainId,
 } from '@/constants';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { etherscanLink, parseBalance } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
@@ -31,8 +32,9 @@ import transactionComp from '@/utility/transactionComp';
 // import { useProtocolConfig } from '@/protocols';
 // import { ProtocolConfig } from '@/protocols/types';
 import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
-import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
+import { wagmiConfig } from '@/app/WagmiWrapper';
+import { useRockoWallet } from '@/hooks/useRockoWallet';
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
@@ -80,22 +82,20 @@ function Processing() {
     token: USDCContract[networkChainId] as `0x${string}`,
   });
   // Wagmi for ZeroDev Smart wallet
-  const { address: zerodevAccount } = useRockoAccount();
-  const { userInfo } = useZeroDev();
+  const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
+  const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
   // const { chain } = useRockoNetwork();
-  const { executeBatchRepaySome, batchRepaySome, success, txHash } =
-    useRepaySome(payment);
+  const { executeBatchRepaySome, success, txHash } = useRepaySome(payment);
   const {
     executeBatchRepayFull,
-    batchRepayFull,
     success: fullySuccess,
     txHash: fullyTxHash,
   } = useRepayFull(collateral);
 
   const [activeDoing, setActiveDoing] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
   const [activeDone, setActiveDone] = useState(false); //! done btn will active and counter coverts to "Completed" when all loader completed.
-  const [startA, setStartA] = useState(false); // true when depositLoan to zerodevAccount
+  const [startA, setStartA] = useState(false); // true when depositLoan to rockoWalletAddress
   const [startB, setStartB] = useState(false); // true when start batchTransactions
 
   const [counter, setCounter] = useState(3); //! countdown
@@ -129,7 +129,7 @@ function Processing() {
   };
 
   const start = async () => {
-    if (!zerodevAccount || !address) return; // !zerodevAccount - logout, !address - no EOA
+    if (!rockoWalletAddress || !address) return; // !rockoWalletAddress - logout, !address - no EOA
     // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
     //   toast.error('Invalid Network!');
     //   return;
@@ -145,10 +145,12 @@ function Processing() {
       setADone();
 
       // batch transactions
-      currentBalance === payment
-        ? executeBatchRepayFull()
-        : executeBatchRepaySome();
-
+      if (currentBalance === payment) {
+        executeBatchRepayFull();
+      } else {
+        executeBatchRepaySome();
+      }
+      // TODO move this above if to fix spinner?
       setStartB(true);
     } else {
       setAError();
@@ -156,9 +158,9 @@ function Processing() {
   };
 
   const receiveLoan = async () => {
-    if (!zerodevAccount) return;
+    if (!rockoWalletAddress) return;
     const depositResult = await depositZerodevAccount(
-      zerodevAccount,
+      rockoWalletAddress,
       payment,
       'USDC',
     );
@@ -194,20 +196,28 @@ function Processing() {
     setCompleteModal(true);
   };
 
-  const withdrawUSDC = async () => {
-    const balance = await fetchBalance({
-      address: zerodevAccount as `0x${string}`,
+  const withdrawUSDC = async ({
+    recipientAddress,
+    smartWalletAddress,
+  }: any) => {
+    if (!recipientAddress || !rockoWalletClient) return;
+
+    const balance = await getBalance(wagmiConfig, {
+      address: smartWalletAddress as `0x${string}`,
       token: USDCContract[networkChainId] as `0x${string}`,
     });
 
-    const { hash } = await writeContract({
-      address: USDCContract[networkChainId] as `0x${string}`,
-      abi: USDCABI,
-      functionName: 'transfer',
-      args: [address, parseBalance(balance?.formatted, 6)],
+    const hash = await rockoWalletClient.sendTransaction({
+      to: USDCContract[networkChainId],
+      value: 0,
+      data: encodeFunctionData({
+        abi: USDCABI,
+        functionName: 'transfer',
+        args: [address, parseBalance(balance?.formatted, 6)],
+      }),
     });
 
-    await waitForTransaction({ hash });
+    await waitForTransactionReceipt(wagmiConfig, { hash });
 
     // save batch transactions
     saveTxRepayFull();
@@ -217,7 +227,7 @@ function Processing() {
         <Image className="w-6 h-6" src={StatusSuccess} alt="success" />
         <Link
           className="hover:text-green-700"
-          href={etherscanLink(fullyTxHash)}
+          href={etherscanLink(hash)}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -226,7 +236,7 @@ function Processing() {
       </div>
     ));
 
-    setAllDone(fullyTxHash);
+    setAllDone(hash);
   };
 
   const saveTxRepaySome = () => {
@@ -237,7 +247,7 @@ function Processing() {
       amount: payment,
       usd_value: payment,
       recipient_address: CometContract[networkChainId],
-      sender_address: zerodevAccount,
+      sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
     };
@@ -256,7 +266,7 @@ function Processing() {
       amount: payment,
       usd_value: payment,
       recipient_address: CometContract[networkChainId],
-      sender_address: zerodevAccount,
+      sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
     };
@@ -271,7 +281,7 @@ function Processing() {
       asset_decimals: 18,
       amount: collateral,
       usd_value: collateral * Number(collateralPrice),
-      recipient_address: zerodevAccount,
+      recipient_address: rockoWalletAddress,
       sender_address: CometContract[networkChainId],
       transaction_type: 'payment',
       funding_source: paymentMethod,
@@ -315,26 +325,27 @@ function Processing() {
 
   useEffect(() => {
     if (
+      rockoWalletAddress &&
       !activeDoing &&
       userInfo !== undefined &&
-      loanData &&
-      batchRepayFull !== undefined &&
-      batchRepaySome !== undefined
+      loanData
     ) {
       start();
       setActiveDoing(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo, loanData, batchRepayFull, batchRepaySome]);
+  }, [userInfo, loanData, rockoWalletAddress]);
 
   useEffect(() => {
-    if (fullySuccess) {
-      withdrawUSDC();
+    if (fullySuccess && rockoWalletAddress) {
+      withdrawUSDC({
+        recipientAddress: address,
+        smartWalletAddress: rockoWalletAddress,
+      });
     }
 
     if (success) {
-      console.log(Number(loanIndex));
       saveTxRepaySome();
 
       toast(() => (

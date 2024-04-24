@@ -9,7 +9,7 @@ const TOOLTIPS = require('../../../locales/en_tooltips');
 
 function LoanSummary() {
   const { loanData } = useLoanData();
-  console.log({ loanData });
+
   return (
     <>
       <p className="text-2xl font-medium text-blackPrimary">Loan Summary</p>

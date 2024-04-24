@@ -19,7 +19,7 @@ import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
-import { useZeroDev } from '@/hooks/useZeroDev';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 import { CometContract, networkChainId } from '@/constants';
@@ -53,18 +53,17 @@ function ModifyStatus() {
   const { data } = useRockoBalance({ address: address as `0x${string}` });
   // Wagmi for ZeroDev Smart wallet
   const { address: zerodevAccount } = useRockoAccount();
-  const { userInfo } = useZeroDev();
+  const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
   // const { chain } = useRockoNetwork();
   // const {
   //   txBatch: { useAddCollateral, useBorrowCollateral },
   // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
-  const { executeBatchAddCollateral, batchAddCollateral, success, txHash } =
+  const { executeBatchAddCollateral, success, txHash } =
     useAddCollateral(payment);
   const {
     executeBatchBorrowCollateral,
-    batchBorrowCollateral,
     success: borrowSuccess,
     txHash: borrowTxHash,
   } = useBorrowCollateral(payment);
@@ -203,15 +202,10 @@ function ModifyStatus() {
   });
 
   useEffect(() => {
-    if (
-      loanData &&
-      batchAddCollateral !== undefined &&
-      batchBorrowCollateral !== undefined
-    )
-      start();
+    if (loanData) start();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zerodevAccount, loanData, batchAddCollateral, batchBorrowCollateral]);
+  }, [zerodevAccount, loanData]);
 
   useEffect(() => {
     if (borrowSuccess) {

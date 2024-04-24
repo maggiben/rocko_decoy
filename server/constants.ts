@@ -49,3 +49,5 @@ export const COINBASE_CLIENT_ID = process.env.COINBASE_CLIENT_ID;
 export const COINBASE_CLIENT_SECRET = process.env.COINBASE_CLIENT_SECRET;
 export const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY;
 export const MAILCHIMP_LIST_ID = process.env.MAILCHIMP_LIST_ID; 
+// TODO remove sandbox key and add to secrets before production
+export const DYNAMIC_PROJECT_ID = process.env.DYNAMIC_PROJECT_ID || '9d135ad4-a679-4475-a8c1-9df3bdf586de'; 

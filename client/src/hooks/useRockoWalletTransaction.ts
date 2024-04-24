@@ -1,13 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import {
-  useContractBatchWrite,
-  usePrepareContractBatchWrite,
-} from '@zerodev/wagmi';
 import { ethers } from 'ethers';
-import { useWaitForTransaction } from 'wagmi';
+import { encodeFunctionData } from 'viem';
 import { USDCContract, WETHContract, networkChainId } from '@/constants';
 import { parseBalance } from '@/utility/utils';
-import { useRockoAccount } from './useRockoAccount';
+import { useRockoWallet } from './useRockoWallet';
 
 const WETHABI = require('../constants/weth.json');
 const USDCABI = require('../constants/usdc.json');
@@ -20,51 +16,73 @@ export const useRockoWalletTransaction = ({
   setTxHash,
   setConfirmed,
 }: any) => {
-  const { address: wagmiAddress } = useRockoAccount();
+  const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
 
-  const { config } = usePrepareContractBatchWrite(
-    wagmiAddress && ethers.utils.isAddress(destination)
-      ? {
-          calls: [
-            {
-              to: destination as `0x${string}`,
-              data: '0x',
-              value: ethBalance,
-            },
-            {
-              address: WETHContract[networkChainId],
+  // const withdrawWETHAndUSDC [
+  //   {
+  //     to: WETHContract[networkChainId],
+  //     value: bigintCollateral,
+  //     data: encodeFunctionData({
+  //       abi: WETHABI,
+  //       functionName: 'deposit',
+  //       args: [],
+  //     }),
+  //   },
+  //   {
+  //     to: WETHContract[networkChainId],
+  //     value: 0,
+  //     data: encodeFunctionData({
+  //       abi: WETHABI,
+  //       functionName: 'approve',
+  //       args: [CometContract[networkChainId], uintMax],
+  //     }),
+  //   },
+  // ];
+
+  const withdrawWETHAndUSDC =
+    rockoWalletAddress && ethers.utils.isAddress(destination)
+      ? [
+          {
+            to: destination as `0x${string}`,
+            data: '0x',
+            value: ethBalance,
+          },
+          {
+            to: WETHContract[networkChainId],
+            value: 0,
+            data: encodeFunctionData({
               abi: WETHABI,
               functionName: 'transfer',
               args: [destination, parseBalance(wethBalance)],
-            },
-            {
-              address: USDCContract[networkChainId],
+            }),
+          },
+          {
+            to: USDCContract[networkChainId],
+            value: 0,
+            data: encodeFunctionData({
               abi: USDCABI,
               functionName: 'transfer',
               args: [destination, parseBalance(usdcBalance, 6)],
-            },
-          ],
-          enabled: true,
-        }
-      : {
-          calls: [],
-          enabled: true,
-        },
-  );
+            }),
+          },
+        ]
+      : [];
+  const batchWithdraw = async () => {
+    try {
+      console.log('start');
+      const txCompleteHash = await rockoWalletClient.sendTransactions({
+        transactions: withdrawWETHAndUSDC,
+      });
 
-  const { sendUserOperation: batchWithdraw, data: batchWithdrawData } =
-    useContractBatchWrite(config);
-
-  useWaitForTransaction({
-    hash: batchWithdrawData?.hash,
-    enabled: !!batchWithdrawData,
-    onSuccess() {
-      if (batchWithdrawData?.hash) {
-        setTxHash(batchWithdrawData?.hash);
-        setConfirmed(true);
-      }
-    },
-  });
+      setTxHash(txCompleteHash);
+      setConfirmed(true);
+      return txCompleteHash;
+    } catch (e) {
+      console.log(e);
+      setConfirmed(false);
+      return null;
+    }
+  };
 
   return {
     batchWithdraw,
