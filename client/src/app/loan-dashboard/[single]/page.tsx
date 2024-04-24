@@ -380,6 +380,10 @@ function SinglePage() {
           <RangeInput
             buffer={buffer === 'N/A' ? 0 : Number(financial(buffer * 100))}
             minCollateral={minCollateral}
+            collateralValue={financial(
+              collateralPrice * collateralBalanceOf,
+              2,
+            )}
           />
           <div className="divide-y-2 space-y-3">
             <div />
