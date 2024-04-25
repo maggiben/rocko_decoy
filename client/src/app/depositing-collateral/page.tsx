@@ -25,6 +25,7 @@ import { useSingleLoan } from '@/contract/single';
 import { useGetLoan } from '@/protocols/compound/util/batch';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
+
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 // import financial from '@/utility/currencyFormate';
 
@@ -119,7 +120,7 @@ const DepositingCollateral = () => {
       setADone();
 
       // batch transactions
-      await executeBatchGetLoan();
+      executeBatchGetLoan();
       setStartB(true);
     } else {
       setAError();
@@ -354,13 +355,13 @@ const DepositingCollateral = () => {
             ? 'Waiting for Collateral'
             : 'Depositing Collateral'}
       </h1>
-      <button
+      {/* <button
         type="button"
         onClick={executeBatchGetLoan}
         className="text-center py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]"
       >
         Book Loan
-      </button>
+      </button> */}
       <p className="text-blackPrimary text-[14px] mt-1">
         Please do not close your browser until all of the steps below are
         completed.
