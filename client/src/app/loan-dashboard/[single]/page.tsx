@@ -70,7 +70,6 @@ function SinglePage() {
   const [openModalFor, setOpenModalFor] = useState('');
 
   const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
-
   const { compPrice } = useCompPrice();
 
   const [loanData, setLoanData] = useState<any>();
@@ -106,12 +105,10 @@ function SinglePage() {
     if (userInfo) {
       const user_id = await getUserId(userInfo?.email);
       const result = await getLoanData(user_id);
-
       if (result) {
         const active_loans = result.filter(
           (loan: any) => loan.loan_active === (isActive ? 1 : 0),
         );
-
         if (active_loans.length > 0) {
           setLoanData(active_loans[0]);
 
@@ -490,7 +487,7 @@ function SinglePage() {
         <ModalContainer>
           <ModifyWallet
             setOpenModalFor={setOpenModalFor}
-            currentBalance={financial(loanData?.outstanding_balance)}
+            currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}
           />
         </ModalContainer>
@@ -499,7 +496,7 @@ function SinglePage() {
         <ModalContainer>
           <BorrowMoreModal
             setOpenModalFor={setOpenModalFor}
-            currentBalance={financial(loanData?.outstanding_balance)}
+            currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}
           />
         </ModalContainer>

@@ -24,8 +24,9 @@ function Dashboard() {
   const { userInfo } = useUserInfo();
   const [activeLoans, setActiveLoans] = useState<any[]>([]);
   const [closedLoans, setClosedLoans] = useState<any[]>([]);
-  const { getBorrowAPR } = useSingleLoan();
+  const { getBorrowAPR, getBorrowBalanceOf } = useSingleLoan();
   const [borrowAPR, setBorrowAPR] = useState<any>(0);
+  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
 
   const initialize = async () => {
     if (userInfo) {
@@ -53,6 +54,9 @@ function Dashboard() {
   useEffect(() => {
     getBorrowAPR()
       .then((_apr) => setBorrowAPR(_apr))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+    getBorrowBalanceOf()
+      .then((_balance) => setBorrowBalanceOf(_balance))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 
@@ -135,7 +139,7 @@ function Dashboard() {
                   <div className="flex">
                     <p className="w-1/2">Balance</p>
                     <p className="w-1/2 text-right md:text-left">
-                      ${financial(loan?.outstanding_balance)}
+                      {financial(borrowBalanceOf, 2)} <small>USDC</small>
                     </p>
                   </div>
                   <div className="flex">

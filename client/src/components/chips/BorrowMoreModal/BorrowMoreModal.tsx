@@ -62,10 +62,11 @@ function BorrowMoreModal({
   };
 
   const onClickContinue = () => {
-    if (collateralFloat === 0) {
-      setIsAlertShow(true);
-      return;
-    }
+    // might be causing a bug so commenting out for now
+    // if (collateralFloat === 0) {
+    //   setIsAlertShow(true);
+    //   return;
+    // }
 
     const borrowMoreObj = {
       payment_loan: inputFloat,
