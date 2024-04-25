@@ -13,7 +13,7 @@ import { useUserDB } from '@/db/userDb';
 import closeIcon from '@/assets/Close.svg';
 import { UPDATE_ALERT } from '@/constants/alertType';
 import { FLAG_SMS_ALERTS } from '@/constants/featureFlags';
-import { ROCKO_WEBSITE_URL } from '@/constants';
+// import { ROCKO_WEBSITE_URL } from '@/constants';
 import SelectOptionTwo from '../collateralBufferAlerts/selectOption/SelectOptionTwo';
 import SelectOptionOne from '../collateralBufferAlerts/selectOption/SelectOptionOne';
 
@@ -431,11 +431,10 @@ const AlertForm: FC<AlertFormProps> = ({
                 ) : (
                   <Link
                     className="grow underline"
-                    href={`${ROCKO_WEBSITE_URL}/profile/`}
-                    target="_blank"
+                    href={`/profile/`}
                     rel="noopener noreferrer"
                   >
-                    Add number via your profile page
+                    Add your number on your profile page
                   </Link>
                 )}
                 {collateralBufferAlert.alertMethods.sms && (
