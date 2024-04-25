@@ -1,5 +1,9 @@
 ## Getting Started
 
+This project is a Next.js app that uses TypeScript, React, and Tailwind CSS. It is a web application that allows users to interact with the blockchain and perform various actions such as borrowing, lending, and trading.
+
+Install Node v20.x and Yarn if you haven't already:
+
 ## Environment variables
 
 - [NEXT_PUBLIC_IS_DEMO_MODE] : if true, app will run in demo mode - otherwise(false), it will run in real mode
