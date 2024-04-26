@@ -49,8 +49,8 @@ const Profile: React.FC = () => {
 
   const [openContactEmailEditBox, setOpenContactEmailEditBox] =
     useState<boolean>(false);
-  const [contactEmail, setContactEmail] = useState('');
-  const [inputContact, setInputContact] = useState('');
+  // const [contactEmail, setContactEmail] = useState('');
+  // const [inputContact, setInputContact] = useState('');
   const [openContactNumberEdit, setOpenContactNumberEdit] =
     useState<boolean>(false);
   const [contactNumber, setContactNumber] = useState('');
@@ -59,10 +59,10 @@ const Profile: React.FC = () => {
 
   const phoneEmailPass = PHONE_EMAIL_PASS_SETTINGS
     ? [
-        {
-          description: 'Contact Email',
-          details: contactEmail,
-        },
+        // {
+        //   description: 'Contact Email',
+        //   details: contactEmail,
+        // },
         {
           description: 'Contact Number',
           details: contactNumber,
@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
           description: 'Total Balance',
           details: `${financial(
             Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
-            3,
+            6,
           )} ETH`,
           subDescription: [
             {
@@ -122,7 +122,7 @@ const Profile: React.FC = () => {
               details: (
                 <div className="flex items-center lg:gap-x-1 w-max">
                   <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(ethBalance?.formatted, 3)} ETH`}
+                    {userInfo && `${financial(ethBalance?.formatted, 6)} ETH`}
                   </span>{' '}
                 </div>
               ),
@@ -136,7 +136,7 @@ const Profile: React.FC = () => {
               details: (
                 <div className="flex items-center lg:gap-x-1 w-max">
                   <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(wethBalance?.formatted, 3)} WETH`}
+                    {userInfo && `${financial(wethBalance?.formatted, 6)} WETH`}
                   </span>{' '}
                 </div>
               ),
@@ -278,7 +278,7 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    {info?.description === 'Contact Email' &&
+                    {/* {info?.description === 'Contact Email' &&
                       openContactEmailEditBox && (
                         <>
                           <input
@@ -317,7 +317,7 @@ const Profile: React.FC = () => {
                             </div>
                           </div>
                         </>
-                      )}
+                      )} */}
                     {info?.description === 'Contact Number' &&
                       openContactNumberEdit && (
                         <>
