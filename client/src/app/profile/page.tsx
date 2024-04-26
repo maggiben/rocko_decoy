@@ -14,6 +14,7 @@ import {
   WETHContract,
   networkChainId,
   exculdedCountries,
+  CompTokenContract,
 } from '@/constants';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
@@ -23,7 +24,6 @@ import { useRockoBalance } from '@/hooks/useRockoBalance';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState<undefined | string>();
-
   const { userInfo } = useUserInfo();
   const { address: zerodevAccount } = useRockoAccount();
   const { updateUser, getUserData } = useUserDB();
@@ -40,6 +40,11 @@ const Profile: React.FC = () => {
   const { data: wethBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
     token: WETHContract[networkChainId] as `0x${string}`,
+  });
+
+  const { data: compBalance } = useRockoBalance({
+    address: zerodevAccount as `0x${string}`,
+    token: CompTokenContract[networkChainId] as `0x${string}`,
   });
 
   const [openContactEmailEditBox, setOpenContactEmailEditBox] =
@@ -97,6 +102,7 @@ const Profile: React.FC = () => {
         ''
       ),
     },
+    Number(compBalance?.formatted) ||
     Number(ethBalance?.formatted) ||
     Number(wethBalance?.formatted) ||
     Number(usdcBalance?.formatted)
@@ -145,6 +151,20 @@ const Profile: React.FC = () => {
                 <div className="flex items-center lg:gap-x-1 w-max">
                   <span className="mr-1 lg:mr-0">
                     {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">COMP </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(compBalance?.formatted, 6)} COMP`}
                   </span>{' '}
                 </div>
               ),
@@ -418,6 +438,7 @@ const Profile: React.FC = () => {
             ethBalance={ethBalance?.value}
             wethBalance={wethBalance?.formatted}
             usdcBalance={usdcBalance?.formatted}
+            compBalance={compBalance?.formatted}
           />
         </ModalContainer>
       )}

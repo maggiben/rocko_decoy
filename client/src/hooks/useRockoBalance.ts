@@ -1,4 +1,5 @@
 import { useBalance } from 'wagmi';
+import { networkChainId } from '@/constants';
 // import { formatEther } from 'viem';
 // import { useRockoWallet } from './useRockoWallet';
 
@@ -18,7 +19,13 @@ export const useRockoBalance = ({
   token?: `0x${string}` | undefined;
 }) => {
   // const { publicClient } = useRockoWallet();
-  const { data } = useBalance({ address, token });
+
+  const { data } = useBalance({
+    address,
+    token,
+    chainId: networkChainId,
+  });
+
   return { data };
   // if (token) {
   //   return { data };

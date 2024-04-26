@@ -431,7 +431,7 @@ const AlertForm: FC<AlertFormProps> = ({
                 ) : (
                   <Link
                     className="grow underline"
-                    href={`/profile/`}
+                    href="/profile/"
                     rel="noopener noreferrer"
                   >
                     Add your number on your profile page

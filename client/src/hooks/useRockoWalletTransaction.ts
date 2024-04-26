@@ -1,7 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import { ethers } from 'ethers';
 import { encodeFunctionData } from 'viem';
-import { USDCContract, WETHContract, networkChainId } from '@/constants';
+import {
+  CompTokenContract,
+  USDCContract,
+  WETHContract,
+  networkChainId,
+} from '@/constants';
 import { parseBalance } from '@/utility/utils';
 import { useRockoWallet } from './useRockoWallet';
 
@@ -13,12 +18,13 @@ export const useRockoWalletTransaction = ({
   ethBalance,
   wethBalance,
   usdcBalance,
+  compBalance,
   setTxHash,
   setConfirmed,
 }: any) => {
   const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
 
-  // const withdrawWETHAndUSDC [
+  // const withdrawTokens [
   //   {
   //     to: WETHContract[networkChainId],
   //     value: bigintCollateral,
@@ -39,7 +45,7 @@ export const useRockoWalletTransaction = ({
   //   },
   // ];
 
-  const withdrawWETHAndUSDC =
+  const withdrawTokens =
     rockoWalletAddress && ethers.utils.isAddress(destination)
       ? [
           {
@@ -65,13 +71,22 @@ export const useRockoWalletTransaction = ({
               args: [destination, parseBalance(usdcBalance, 6)],
             }),
           },
+          {
+            to: CompTokenContract[networkChainId],
+            value: 0,
+            data: encodeFunctionData({
+              abi: WETHABI,
+              functionName: 'transfer',
+              args: [destination, parseBalance(compBalance)],
+            }),
+          },
         ]
       : [];
   const batchWithdraw = async () => {
     try {
       console.log('start');
       const txCompleteHash = await rockoWalletClient.sendTransactions({
-        transactions: withdrawWETHAndUSDC,
+        transactions: withdrawTokens,
       });
 
       setTxHash(txCompleteHash);

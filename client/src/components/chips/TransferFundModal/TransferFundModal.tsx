@@ -15,16 +15,17 @@ function TransferFundModal({
   ethBalance,
   wethBalance,
   usdcBalance,
+  compBalance,
 }: {
   setOpenModalFor: Function;
   ethBalance: bigint | undefined;
   wethBalance: string | undefined;
   usdcBalance: string | undefined;
+  compBalance: string | undefined;
 }) {
   const [txStarted, setTxStarted] = useState<boolean>(false);
   const [txHash, setTxHash] = useState('');
   const [confirmed, setConfirmed] = useState<boolean>(false);
-
   const [destination, setDestination] = useState('');
   const { disconnect } = useRockoDisconnect();
   const { batchWithdraw } = useRockoWalletTransaction({
@@ -32,6 +33,7 @@ function TransferFundModal({
     ethBalance,
     wethBalance,
     usdcBalance,
+    compBalance,
     setTxHash,
     setConfirmed,
   });

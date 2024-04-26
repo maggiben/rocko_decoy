@@ -24,6 +24,12 @@ export const CometRewardContract: { [key: number]: string } = {
   [chains.base.id]: '0x123964802e6ABabBE1Bc9547D72Ef1B69B00A6b1',
 };
 
+export const CompTokenContract: { [key: number]: string } = {
+  [chains.mainnet.id]: '0xc00e94Cb662C3520282E6f5717214004A7f26888',
+  [chains.sepolia.id]: '0xA6c8D1c55951e8AC44a0EaA959Be5Fd21cc07531',
+  [chains.base.id]: '0x9e1028F5F1D5eDE59748FFceE5532509976840E0',
+};
+
 // Comp Wrapped Ether Contract
 // See https://docs.compound.finance/#networks
 export const WETHContract: { [key: number]: string } = {
