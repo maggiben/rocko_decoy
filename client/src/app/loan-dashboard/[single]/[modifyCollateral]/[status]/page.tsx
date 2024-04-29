@@ -218,7 +218,7 @@ function ModifyStatus() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Successfully transaction is completed!
+            Success! Your transaction is complete!
           </Link>
         </div>
       ));
@@ -236,7 +236,7 @@ function ModifyStatus() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Successfully transaction is completed!
+            Success! Your transaction is complete!
           </Link>
         </div>
       ));
