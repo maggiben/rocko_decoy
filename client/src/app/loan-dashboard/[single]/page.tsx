@@ -23,6 +23,7 @@ import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
+import CollateralWarningBanner from '@/components/pages/Dashboard/Banners/collateralWarning';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -210,6 +211,7 @@ function SinglePage() {
           </div>
         ))}
       </div>
+      <CollateralWarningBanner buffer={buffer} />
       <section className="my-6 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-7">
         {/* ------------left-top grid---------------- */}
         <div className="border-2 rounded-2xl p-3 md:p-5 lg:p-6">
