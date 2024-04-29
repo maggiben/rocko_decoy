@@ -98,12 +98,7 @@ const DepositingCollateral = () => {
   const start = async () => {
     if (loanData?.paymentMethod !== 'ethereum') return;
 
-    if (
-      !rockoWalletAddress ||
-      !address ||
-      !(loanData?.collateralNeeded || borrowMoreData?.collateralNeeded)
-    )
-      return;
+    if (!rockoWalletAddress || !address || !collateral) return;
     // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
     //   toast.error('Invalid Network!');
     //   return;
@@ -130,7 +125,7 @@ const DepositingCollateral = () => {
   };
 
   const receiveCollateral = async (): Promise<any> => {
-    if (!rockoWalletAddress || !(loanData || borrowMoreData)) return null;
+    if (!rockoWalletAddress || !collateral) return null;
 
     const depositResult = await depositZerodevAccount(
       rockoWalletAddress,
