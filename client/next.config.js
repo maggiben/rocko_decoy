@@ -12,10 +12,13 @@ const connectSrc = [
   'https://ethereum.rpc.thirdweb.com',
   'https://base.rpc.thirdweb.com',
   'https://sepolia.rpc.thirdweb.com',
+  'https://polygon.rpc.thirdweb.com/',
 
   'https://1.rpc.thirdweb.com',
   'https://11155111.rpc.thirdweb.com',
   'https://8453.rpc.thirdweb.com',
+
+  'bafybeiey4zgbdt7vuydftwmgjrk2jp3o56zznasrivs7zepzaqz3yfglvm.ipfs.cf-ipfs.com',
 
   'https://ipv6.icanhazip.com',
   'https://ipv4.icanhazip.com',

@@ -57,7 +57,7 @@ function Header() {
                   to="/"
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
-                  BORROWING
+                  BORROW
                 </Link>
                 <Link
                   to="/"
@@ -104,7 +104,7 @@ function Header() {
               to="/"
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
-              BORROWING
+              BORROW
             </Link>
 
             <Link

@@ -35,6 +35,7 @@ import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
+import { Balance } from '@/protocols/compound/util/data';
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
@@ -61,7 +62,10 @@ function Processing() {
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
   const [loanData, setLoanData] = useState<any>();
-  const [collateral, setCollateral] = useState<number>(0);
+  const [collateral, setCollateral] = useState<Balance>({
+    formatted: 0,
+    value: undefined,
+  });
   const [collateralPrice, setCollateralPrice] = useState<any>();
   const [outStandingBalance, setOutStandingBalance] = useState<number>(0);
   const [originalborrowBalance, setOriginalBorrowBalance] = useState<number>(0);
@@ -85,6 +89,7 @@ function Processing() {
   const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
+
   // const { chain } = useRockoNetwork();
   const { executeBatchRepaySome, success, txHash } = useRepaySome(payment);
   const {
@@ -106,7 +111,7 @@ function Processing() {
 
   const initialize = async () => {
     if (userInfo) {
-      const borrowBalance = await getBorrowBalanceOf();
+      const { formatted: borrowBalance } = await getBorrowBalanceOf();
       if (originalborrowBalance === 0) {
         setOriginalBorrowBalance(borrowBalance);
       }
@@ -185,7 +190,7 @@ function Processing() {
       loanData?.id,
       outStandingBalance - payment < 0 ? 0 : outStandingBalance - payment,
       currentBalance !== payment,
-      collateral,
+      collateral.formatted,
       originalborrowBalance - outStandingBalance,
       txHash,
     );
@@ -279,8 +284,8 @@ function Processing() {
       loan_id: loanIndex,
       asset: 'weth',
       asset_decimals: 18,
-      amount: collateral,
-      usd_value: collateral * Number(collateralPrice),
+      amount: collateral.formatted,
+      usd_value: collateral.formatted * Number(collateralPrice),
       recipient_address: rockoWalletAddress,
       sender_address: CometContract[networkChainId],
       transaction_type: 'payment',

@@ -8,7 +8,7 @@ import Button from '@/components/Button';
 import Link from 'next/link';
 import Alerts from './Alerts';
 
-export type Balance = {
+export type CurrentBalanceData = {
   dateOpened: string;
   currentApr: string;
   averageApr: string;
@@ -18,7 +18,7 @@ export type Balance = {
 };
 
 type Props = {
-  data: Balance;
+  data: CurrentBalanceData;
   borrowMoreClick: () => void;
 };
 

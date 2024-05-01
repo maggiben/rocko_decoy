@@ -56,7 +56,7 @@ function Dashboard() {
       .then((_apr) => setBorrowAPR(_apr))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
     getBorrowBalanceOf()
-      .then((_balance) => setBorrowBalanceOf(_balance))
+      .then((_balance) => setBorrowBalanceOf(_balance.formatted))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
 

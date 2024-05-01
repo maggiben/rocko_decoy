@@ -24,6 +24,11 @@ export const useRockoBalance = ({
     address,
     token,
     chainId: networkChainId,
+    query: {
+      // Refetch balance automatically every 30 seconds
+      refetchIntervalInBackground: true,
+      refetchInterval: 30000,
+    },
   });
 
   return { data };

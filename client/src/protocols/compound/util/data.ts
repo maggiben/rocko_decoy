@@ -114,15 +114,27 @@ const getPenalty = async (chain: string): Promise<number> => {
   return formattedValue;
 };
 
+// TODO update all remainging functions to use this return type.
+// value = is smallest currency unit
+// formatted = current formatted return value
+export type Balance = {
+  value: any;
+  formatted: number;
+};
+
 const getBorrowBalanceOf = async ({
   chain,
   rockoWalletAddress,
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<number> => {
+}): Promise<Balance> => {
   // console.log('getBorrowBalanceOf', { rockoWalletAddress, chain });
-  if (!rockoWalletAddress) return 0;
+  if (!rockoWalletAddress)
+    return {
+      value: undefined,
+      formatted: 0,
+    };
 
   const BLOCKCHAIN: BlockchainNames =
     chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
@@ -137,7 +149,10 @@ const getBorrowBalanceOf = async ({
   // console.log('borrowBalanceOf', { value });
   const formattedValue = formatBalance(value, 6, 6);
   // console.log('borrowBalanceOf', { formattedValue });
-  return Number(formattedValue);
+  return {
+    value,
+    formatted: Number(formattedValue),
+  };
 };
 
 const getCollateralBalanceOf = async ({
@@ -146,8 +161,12 @@ const getCollateralBalanceOf = async ({
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<number> => {
-  if (!rockoWalletAddress) return 0;
+}): Promise<Balance> => {
+  if (!rockoWalletAddress)
+    return {
+      value: undefined,
+      formatted: 0,
+    };
 
   const BLOCKCHAIN: BlockchainNames =
     chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
@@ -164,7 +183,10 @@ const getCollateralBalanceOf = async ({
   ]);
 
   const formattedValue = Number(ethers.utils.formatEther(value));
-  return formattedValue;
+  return {
+    value,
+    formatted: Number(formattedValue),
+  };
 };
 
 const getRewardRate = async (chain: string): Promise<number> => {

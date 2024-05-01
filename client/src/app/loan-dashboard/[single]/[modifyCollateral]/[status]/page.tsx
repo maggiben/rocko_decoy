@@ -193,7 +193,7 @@ function ModifyStatus() {
 
   useEffect(() => {
     getCollateralBalanceOf()
-      .then((_value) => setCollateral(_value))
+      .then((_value) => setCollateral(_value.formatted))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getETHPrice()

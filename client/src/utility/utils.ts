@@ -1,5 +1,5 @@
-import { NETWORK } from '@/constants/env';
 import { ethers } from 'ethers';
+import { NETWORK } from '@/constants/env';
 
 export const formatBalance = (
   value: ethers.BigNumberish,

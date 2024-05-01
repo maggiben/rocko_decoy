@@ -97,6 +97,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 [TransactionType.RewardsWithdrawal]: TransferType.CryptoWithdrawal,
                 [TransactionType.Fee]: TransferType.CryptoDeposit
             }
+            // TODO move decimal conversion to client, server should only handle wei values
             const assetAmount = req.body.metadata.amount * (10**req.body.metadata.asset_decimals);
             let complianceSubmission: { uuid: string; } | undefined;
             try {

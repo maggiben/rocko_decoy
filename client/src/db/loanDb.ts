@@ -44,7 +44,7 @@ export const useLoanDB = () => {
         `${BACKEND_URL}/add`,
         loanObject,
       );
-      console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');
@@ -175,7 +175,7 @@ export const useLoanDB = () => {
         `${BACKEND_URL}/reward_rate?network=${chain}`,
       );
       // TODO this is wrong ==> Current Rate 6,088.57%
-      console.log({ response });
+      // console.log({ response });
       return response.data?.borrow_reward_rate;
     } catch (error) {
       logger(JSON.stringify(error, null, 2), 'error');

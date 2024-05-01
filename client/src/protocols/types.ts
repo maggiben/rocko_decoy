@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { NetworkNames } from '@/constants/env';
+import { Balance } from './compound/util/data';
 
 type CollateralTokens = {
   ticker: 'ETH' | 'COMP' | 'WBTC' | 'UNI';
@@ -25,8 +26,8 @@ export type ProtocolConfig = {
   getLTV: () => Promise<number>;
   getThreshold: () => Promise<number>;
   getPenalty: () => Promise<number>;
-  getCollateralBalanceOf: () => Promise<number>;
-  getBorrowBalanceOf: () => Promise<number>;
+  getCollateralBalanceOf: () => Promise<Balance>;
+  getBorrowBalanceOf: () => Promise<Balance>;
   getRewardAmount: () => Promise<number>;
   getRewardRate: () => Promise<number>;
   txBatch: {

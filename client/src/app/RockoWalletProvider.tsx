@@ -49,13 +49,13 @@ export const RockoWalletProvider: React.FC<WalletProviderProps> = ({
       const dynamicWalletClient: any =
         await primaryWallet?.connector?.getWalletClient();
       setDynamicWallet(dynamicWalletClient);
-      console.log(
-        'useRockoWallet dynamicWalletClient',
-        JSON.stringify(dynamicWalletClient, null, 2),
-      );
+      // console.log(
+      //   'useRockoWallet dynamicWalletClient',
+      //   JSON.stringify(dynamicWalletClient, null, 2),
+      // );
 
       if (dynamicWalletClient) {
-        console.log('useRockoWallet', { da: dynamicWalletClient.account });
+        // console.log('useRockoWallet', { da: dynamicWalletClient.account });
         // Use the WalletClient from Dynamic to create a SmartAccountSigner
         const smartAccountSigner =
           walletClientToSmartAccountSigner(dynamicWalletClient);
@@ -103,7 +103,7 @@ export const RockoWalletProvider: React.FC<WalletProviderProps> = ({
         });
 
         setKernelClientZeroDev(kernelClient);
-        console.log('useRockoWallet', { kernelClient });
+        // console.log('useRockoWallet', { kernelClient });
 
         const bundlerClientInstance = kernelClient.extend(
           bundlerActions(entryPoint),

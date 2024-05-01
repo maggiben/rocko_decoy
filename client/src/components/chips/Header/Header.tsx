@@ -209,15 +209,17 @@ function Header() {
                   <Link
                     href="/loan-dashboard"
                     className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
+                    onClick={() => setToggle(false)}
                   >
                     DASHBOARD
                   </Link>
                 )}
                 <Link
+                  onClick={() => setToggle(false)}
                   href="/"
                   className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm "
                 >
-                  BORROWING
+                  BORROW
                 </Link>
                 <Link
                   href={`${ROCKO_WEBSITE_URL}/why-defi/`}
@@ -254,6 +256,7 @@ function Header() {
               {isConnected ? (
                 <div className="relative inline-block text-left" ref={loginRef}>
                   <button
+                    type="button"
                     onClick={() => setToggleDown(!toggleDown)}
                     className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
                   >
@@ -276,6 +279,7 @@ function Header() {
                           View Profile
                         </Link>
                         <button
+                          type="button"
                           className="block px-4 py-2 text-sm w-full hover:bg-gray-100 hover:text-gray-900"
                           role="menuitem"
                           onClick={OnLogout}
@@ -288,6 +292,7 @@ function Header() {
                 </div>
               ) : (
                 <button
+                  type="button"
                   className="bg-[#293992] py-[11px] px-[24.6px] text-sm font-semibold rounded-full text-white hover:bg-[#6b3493] duration-500 uppercase"
                   onClick={OnLogin}
                 >
@@ -304,6 +309,7 @@ function Header() {
         >
           <div className="container mx-auto md:px-10 py-4  bg-white ">
             <Link
+              onClick={() => setToggle(false)}
               href="/loan-dashboard"
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
@@ -311,38 +317,45 @@ function Header() {
             </Link>
 
             <Link
+              onClick={() => setToggle(false)}
               href="/"
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
-              BORROWING
+              BORROW
             </Link>
 
             <Link
-              href="/"
+              href={`${ROCKO_WEBSITE_URL}/why-defi/`}
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
               WHY DEFI?
             </Link>
 
             <Link
-              href="/"
+              href={`${ROCKO_WEBSITE_URL}/about/`}
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
               ABOUT US
             </Link>
 
             <Link
-              href="/"
+              href={`${ROCKO_WEBSITE_URL}/faq/`}
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block border-b border-b-[#e0e0e0] "
             >
               FAQ
             </Link>
 
             <Link
-              href="/"
+              href={`${ROCKO_WEBSITE_URL}/contact-us/`}
               className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block"
             >
               CONTACT
+            </Link>
+            <Link
+              href={`${ROCKO_WEBSITE_URL}/learn/`}
+              className="text-blackPrimary font-semibold hover:text-[#6b3493] duration-200 text-sm py-4 block"
+            >
+              LEARN
             </Link>
           </div>
         </div>

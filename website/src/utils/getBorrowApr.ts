@@ -12,8 +12,7 @@ const networkChainId = (chains as { [key: string]: any })[NETWORK]?.id
 const CometContract: { [key: number]: string } = {
   [chains.mainnet.id]: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
   [chains.sepolia.id]: '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e',
-  // !! cUSDbCv3
-  [chains.base.id]: '0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf',
+  [chains.base.id]: '0xb125E6687d4313864e53df431d5425969c15Eb2F',
 }
 
 export const getBorrowAPR = async (): Promise<number> => {

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-
+// import { useSingleLoan } from '@/contract/single';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useUserInfo } from '@/hooks/useUserInfo';
@@ -21,6 +21,8 @@ import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
+// import { useRepayFull } from '@/protocols/compound/util/batch';
+// import { Balance } from '@/protocols/compound/util/data';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState<undefined | string>();
@@ -213,8 +215,13 @@ const Profile: React.FC = () => {
       console.log(error);
     }
   };
-
+  // const [loanBalance, setLoanBalance] = useState<Balance>(0);
+  // const { getCollateralBalanceOf } = useSingleLoan();
+  // const initialize = async () => {
+  //   setLoanBalance((await getCollateralBalanceOf()) || {});
+  // };
   useEffect(() => {
+    // initialize();
     if (userInfo) fetchPhone(userInfo?.email);
   }, [userInfo]);
 
@@ -224,9 +231,28 @@ const Profile: React.FC = () => {
     }
   }, [openModalFor]);
 
+  // const { getComp, getWeth } = useRepayFull(loanBalance);
   return (
     <main className="container mx-auto px-4 md:8 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Profile & Settings</h1>
+      {/* <button
+        type="button"
+        onClick={async () => {
+          const hash = await getWeth();
+          console.log(hash);
+        }}
+      >
+        getWeth
+      </button> */}
+      {/* <button
+        type="button"
+        onClick={async () => {
+          const hash = await getComp();
+          console.log(hash);
+        }}
+      >
+        getComp
+      </button> */}
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6 space-y-2">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
