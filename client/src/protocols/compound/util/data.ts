@@ -1,6 +1,6 @@
 import * as chains from 'wagmi/chains';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { formatBalance } from '@/utility/utils';
 import {
   CometContract,
@@ -118,7 +118,7 @@ const getPenalty = async (chain: string): Promise<number> => {
 // value = is smallest currency unit
 // formatted = current formatted return value
 export type Balance = {
-  value: any;
+  value: BigNumber;
   formatted: number;
 };
 
@@ -132,7 +132,7 @@ const getBorrowBalanceOf = async ({
   // console.log('getBorrowBalanceOf', { rockoWalletAddress, chain });
   if (!rockoWalletAddress)
     return {
-      value: undefined,
+      value: ethers.BigNumber.from(0),
       formatted: 0,
     };
 
@@ -148,7 +148,7 @@ const getBorrowBalanceOf = async ({
   const value = await contract.call('borrowBalanceOf', [rockoWalletAddress]);
   // console.log('borrowBalanceOf', { value });
   const formattedValue = formatBalance(value, 6, 6);
-  // console.log('borrowBalanceOf', { formattedValue });
+  console.log('borrowBalanceOf', { value, formattedValue });
   return {
     value,
     formatted: Number(formattedValue),
@@ -164,7 +164,7 @@ const getCollateralBalanceOf = async ({
 }): Promise<Balance> => {
   if (!rockoWalletAddress)
     return {
-      value: undefined,
+      value: ethers.BigNumber.from(0),
       formatted: 0,
     };
 

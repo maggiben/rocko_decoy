@@ -36,6 +36,7 @@ import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import { Balance } from '@/protocols/compound/util/data';
+import { ethers } from 'ethers';
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
@@ -64,7 +65,7 @@ function Processing() {
   const [loanData, setLoanData] = useState<any>();
   const [collateral, setCollateral] = useState<Balance>({
     formatted: 0,
-    value: undefined,
+    value: ethers.BigNumber.from(0),
   });
   const [collateralPrice, setCollateralPrice] = useState<any>();
   const [outStandingBalance, setOutStandingBalance] = useState<number>(0);
