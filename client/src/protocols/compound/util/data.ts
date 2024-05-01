@@ -148,7 +148,11 @@ const getBorrowBalanceOf = async ({
   const value = await contract.call('borrowBalanceOf', [rockoWalletAddress]);
   // console.log('borrowBalanceOf', { value });
   const formattedValue = formatBalance(value, 6, 6);
-  console.log('borrowBalanceOf', { value, formattedValue });
+  console.log('borrowBalanceOf', {
+    value,
+    valueString: value.toString(),
+    formattedValue,
+  });
   return {
     value,
     formatted: Number(formattedValue),

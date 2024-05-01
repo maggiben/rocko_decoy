@@ -202,7 +202,10 @@ export const useRepaySome = (loan: any) => {
 };
 
 export const useRepayFull = (collateral: any) => {
-  console.log(collateral, 'useRepayFull');
+  console.log(
+    { ...collateral, valueString: collateral.value.toString() },
+    'useRepayFull',
+  );
   const { rockoWalletClient, rockoWalletAddress } = useRockoWallet();
   const address = useAddress();
 

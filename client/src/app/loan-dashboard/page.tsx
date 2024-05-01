@@ -93,7 +93,7 @@ function Dashboard() {
         </div>
         <div className="divide-y-2 space-y-5">
           {active &&
-            activeLoans?.map((loan: any, i: number) => (
+            activeLoans?.reverse()?.map((loan: any, i: number) => (
               <div key={i} className="space-y-6 pt-4">
                 {/* Parents */}
                 <div className="flex gap-x-2 items-center mb-3 relative">
@@ -158,7 +158,7 @@ function Dashboard() {
               </div>
             ))}
           {!active &&
-            closedLoans?.map((loan: any, i: any) => (
+            closedLoans?.reverse()?.map((loan: any, i: any) => (
               <div key={i} className="space-y-6 pt-4">
                 {/* Parents */}
                 <div className="flex gap-x-2 items-center mb-3 relative">
