@@ -28,8 +28,8 @@ const PAYMASTER_RPC_ZERO_DEV_DEFAULT = `https://rpc.zerodev.app/api/v2/paymaster
 const BUNDLER_RPC_ALCHEMY = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=ALCHEMY`;
 const PAYMASTER_RPC_ALCHEMY = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=ALCHEMY`;
 
-const BUNDLER_RPC_STACKUP = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=STACKUP`;
-const PAYMASTER_RPC_STACKUP = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=STACKUP`;
+const BUNDLER_RPC_PIMLICO = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=PIMLICO`;
+const PAYMASTER_RPC_PIMLICO = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=PIMLICO`;
 
 // TODO network switch
 const chain = sepolia;
@@ -114,13 +114,13 @@ export const RockoWalletProvider: React.FC<WalletProviderProps> = ({
           account,
           chain,
           entryPoint,
-          bundlerTransport: http(BUNDLER_RPC_STACKUP),
+          bundlerTransport: http(BUNDLER_RPC_PIMLICO),
           middleware: {
             sponsorUserOperation: async ({ userOperation }) => {
               const zerodevPaymaster = createZeroDevPaymasterClient({
                 chain,
                 entryPoint,
-                transport: http(PAYMASTER_RPC_STACKUP),
+                transport: http(PAYMASTER_RPC_PIMLICO),
               });
               return zerodevPaymaster.sponsorUserOperation({
                 userOperation,
