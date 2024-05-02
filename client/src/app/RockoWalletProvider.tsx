@@ -23,10 +23,13 @@ import { sepolia } from 'viem/chains';
 import { ZERODEV_PROJECT_ID } from '@/constants/env';
 
 const BUNDLER_RPC_ZERO_DEV_DEFAULT = `https://rpc.zerodev.app/api/v2/bundler/${ZERODEV_PROJECT_ID}`;
-const BUNDLER_RPC_ALCHEMY = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=ALCHEMY`;
-
 const PAYMASTER_RPC_ZERO_DEV_DEFAULT = `https://rpc.zerodev.app/api/v2/paymaster/${ZERODEV_PROJECT_ID}`;
+
+const BUNDLER_RPC_ALCHEMY = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=ALCHEMY`;
 const PAYMASTER_RPC_ALCHEMY = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=ALCHEMY`;
+
+const BUNDLER_RPC_STACKUP = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=STACKUP`;
+const PAYMASTER_RPC_STACKUP = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=STACKUP`;
 
 // TODO network switch
 const chain = sepolia;
@@ -86,26 +89,7 @@ export const RockoWalletProvider: React.FC<WalletProviderProps> = ({
           entryPoint,
         });
 
-        // Set up your Kernel client
-        const kernelClient2: any = createKernelAccountClient({
-          account,
-          chain,
-          entryPoint,
-          bundlerTransport: http(BUNDLER_RPC_ZERO_DEV_DEFAULT),
-          middleware: {
-            sponsorUserOperation: async ({ userOperation }) => {
-              const zerodevPaymaster = createZeroDevPaymasterClient({
-                chain,
-                entryPoint,
-                transport: http(PAYMASTER_RPC_ZERO_DEV_DEFAULT),
-              });
-              return zerodevPaymaster.sponsorUserOperation({
-                userOperation,
-                entryPoint,
-              });
-            },
-          },
-        });
+        // Set up Kernel client1 and fallback client2
         const kernelClient1: any = createKernelAccountClient({
           account,
           chain,
@@ -117,6 +101,26 @@ export const RockoWalletProvider: React.FC<WalletProviderProps> = ({
                 chain,
                 entryPoint,
                 transport: http(PAYMASTER_RPC_ALCHEMY),
+              });
+              return zerodevPaymaster.sponsorUserOperation({
+                userOperation,
+                entryPoint,
+              });
+            },
+          },
+        });
+
+        const kernelClient2: any = createKernelAccountClient({
+          account,
+          chain,
+          entryPoint,
+          bundlerTransport: http(BUNDLER_RPC_STACKUP),
+          middleware: {
+            sponsorUserOperation: async ({ userOperation }) => {
+              const zerodevPaymaster = createZeroDevPaymasterClient({
+                chain,
+                entryPoint,
+                transport: http(PAYMASTER_RPC_STACKUP),
               });
               return zerodevPaymaster.sponsorUserOperation({
                 userOperation,
