@@ -156,7 +156,7 @@ function LoanSummary() {
           loanData?.liquidationPrice &&
           loanData?.decreaseToLiquidationPrice ? (
             <p className="font-medium text-[10px] text-[#5E7CF1] bg-[#E7EBFD] rounded-md py-[2px] px-2">
-              -${financial(loanData?.decreaseToLiquidationPrice)}% from current
+              -{financial(loanData?.decreaseToLiquidationPrice)}% from current
               price
             </p>
           ) : null}

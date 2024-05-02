@@ -37,6 +37,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       const loanToValue: any = loanData?.loanToValue;
       const threshold: any = loanData?.liquidationThreshold;
       const ethPrice = loanData?.collateralPrice;
+      const collateralPrice = Number(loanData?.collateralPrice);
       const collateralInUSD = loanData?.borrowing
         ? (loanData?.borrowing / loanToValue) * (1 + newBuffer / 100)
         : 0;
@@ -45,6 +46,8 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
       const liquidationPrice = loanData?.borrowing
         ? loanData?.borrowing / threshold / collateral
         : 0;
+      const decreaseToLiquidationPrice =
+        ((collateralPrice - liquidationPrice) / collateralPrice) * 100;
 
       if (setLoanData) {
         setLoanData((prevLoanData) => ({
@@ -52,6 +55,7 @@ const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
           buffer: newBuffer,
           collateralNeeded: collateral,
           liquidationPrice,
+          decreaseToLiquidationPrice,
           activeNextButton: true,
         }));
       }
