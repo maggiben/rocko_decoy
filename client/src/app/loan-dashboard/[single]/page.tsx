@@ -73,6 +73,7 @@ function SinglePage() {
   const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
   const { compPrice } = useCompPrice();
 
+  const [loanFetchedFromContract, setLoanFetchedFromContract] = useState(false);
   const [loanData, setLoanData] = useState<any>();
   const [collateralPrice, setCollateralPrice] = useState<any>();
   const [apr, setAPR] = useState<any>();
@@ -140,6 +141,19 @@ function SinglePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, rockoWalletAddress]);
 
+  const getBorrowAndCollateralBalances = async () => {
+    try {
+      const borrowBalance = await getBorrowBalanceOf();
+      const collateralBalance = await getCollateralBalanceOf();
+      setBorrowBalanceOf(borrowBalance.formatted);
+      setCollateralBalanceOf(collateralBalance.formatted);
+      console.log('got k', { borrowBalance, collateralBalance });
+      setLoanFetchedFromContract(true);
+    } catch (e) {
+      logger(JSON.stringify(e, null, 2), 'error');
+    }
+  };
+
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
@@ -177,18 +191,39 @@ function SinglePage() {
       .then((_buffer) => setBuffer(_buffer))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getBorrowBalanceOf()
-      .then((_balance) => setBorrowBalanceOf(_balance.formatted))
-      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
-
-    getCollateralBalanceOf()
-      .then((_balance) => setCollateralBalanceOf(_balance.formatted))
-      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+    getBorrowAndCollateralBalances();
 
     getMinCollateral(loanData?.outstanding_balance)
       .then((_collateral) => setMinCollateral(_collateral))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
+
+  if (
+    loanData &&
+    loanFetchedFromContract &&
+    !borrowBalanceOf &&
+    !collateralBalanceOf
+  ) {
+    logger(`Empty loan failed to close for loanId: ${loanData.id}`, 'error');
+
+    // updateLoan(
+    //   'repay', // updateType: string,
+    //   loanData?.id, // id: number,
+    //   borrowBalanceOf, // loan: number, is borrowBalanceOf
+    //   false, // active: boolean,
+    //   collateralBalanceOf, // collateral: number,
+    //   Number(loanData?.outstanding_balance - loanData?.principle_balance), // interest: number,
+    //   '0xEMPTYxLOANxFAILEDxTOxCLOSE', // txHash: string
+    // );
+  }
+
+  if (loanFetchedFromContract && !borrowBalanceOf && collateralBalanceOf) {
+    // TODO notify user to withdraw collateral here or in profile page
+    logger(
+      `Abandoned collateral in protocol for loanId: ${loanData.id}`,
+      'error',
+    );
+  }
 
   return (
     <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
