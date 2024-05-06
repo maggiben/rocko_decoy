@@ -17,13 +17,14 @@ import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
-import { formatDate } from '@/utility/utils';
+import { formatDate, isInputNaN } from '@/utility/utils';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import CollateralWarningBanner from '@/components/pages/Dashboard/Banners/collateralWarning';
+import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -84,8 +85,8 @@ function SinglePage() {
   const [rewardRate, setRewardRate] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
-  const [averageAPR, setAverageAPR] = useState<any>(0);
-  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
+  const [averageAPR, setAverageAPR] = useState<any>();
+  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>();
   const [collateralBalanceOf, setCollateralBalanceOf] = useState<any>(0);
   const [minCollateral, setMinCollateral] = useState<any>(0);
 
@@ -255,21 +256,39 @@ function SinglePage() {
             <div className="flex justify-between flex-wrap gap-1 md:gap-0 pt-4">
               <div className="w-[30%]">
                 <p className="text-2xl  font-medium">
-                  {financial(borrowBalanceOf, 2)} <small>USDC</small>
-                  <span className="block text-sm text-[#545454]">
-                    ${financial(borrowBalanceOf, 2)}
-                  </span>
+                  {isInputNaN(financial(borrowBalanceOf, 2)) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(borrowBalanceOf, 2)} <small>USDC</small>
+                      <span className="block text-sm text-[#545454]">
+                        ${financial(borrowBalanceOf, 2)}
+                      </span>
+                    </>
+                  )}
                 </p>
               </div>
               <div className="w-[30%]">
                 <p className=""> Available to Borrow </p>
                 <span className="block text-xl  font-medium">
-                  {financial(
-                    collateralPrice * collateralBalanceOf * LTV -
-                      borrowBalanceOf,
-                    2,
-                  )}{' '}
-                  <small>USDC</small>
+                  {isInputNaN(
+                    financial(
+                      collateralPrice * collateralBalanceOf * LTV -
+                        borrowBalanceOf,
+                      2,
+                    ),
+                  ) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(
+                        collateralPrice * collateralBalanceOf * LTV -
+                          borrowBalanceOf,
+                        2,
+                      )}{' '}
+                      <small>USDC</small>
+                    </>
+                  )}
                 </span>
               </div>
               <div className="w-[30%]">
@@ -278,12 +297,24 @@ function SinglePage() {
                   <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
                 </div>
                 <span className="block text-xl  font-medium">
-                  {financial(
-                    (borrowBalanceOf /
-                      (collateralPrice * collateralBalanceOf)) *
-                      100,
+                  {isInputNaN(
+                    financial(
+                      (borrowBalanceOf /
+                        (collateralPrice * collateralBalanceOf)) *
+                        100,
+                    ),
+                  ) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(
+                        (borrowBalanceOf /
+                          (collateralPrice * collateralBalanceOf)) *
+                          100,
+                      )}
+                      <small>%</small>
+                    </>
                   )}
-                  <small>%</small>
                 </span>
               </div>
               {/* <Image
@@ -298,19 +329,36 @@ function SinglePage() {
               <div className="w-[30%]">
                 <p className=""> Interest Accrued </p>
                 <span className="block text-xl  font-medium">
-                  {financial(
-                    borrowBalanceOf - loanData?.outstanding_balance,
-                    2,
-                  )}{' '}
-                  <small>USDC</small>
+                  {isInputNaN(
+                    financial(
+                      borrowBalanceOf - loanData?.outstanding_balance,
+                      2,
+                    ),
+                  ) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(
+                        borrowBalanceOf - loanData?.outstanding_balance,
+                        2,
+                      )}{' '}
+                      <small>USDC</small>
+                    </>
+                  )}
                 </span>
               </div>
 
               <div className="w-[30%]">
                 <p className=""> Current APR</p>{' '}
                 <div className="block text-xl  font-medium">
-                  {financial(apr, 2)}
-                  <span className="text-base">%</span>
+                  {isInputNaN(financial(apr, 2)) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(apr, 2)}
+                      <span className="text-base">%</span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -321,8 +369,14 @@ function SinglePage() {
                 </div>
 
                 <div className="block text-xl  font-medium">
-                  {financial(averageAPR * 100, 2)}
-                  <span className="text-base">%</span>
+                  {isInputNaN(financial(averageAPR * 100, 2)) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(averageAPR * 100, 2)}
+                      <span className="text-base">%</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -381,8 +435,14 @@ function SinglePage() {
                 <HoverTooltip text={TOOLTIPS.MAX_LTV} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {LTV * 100}
-                <span className="text-base">%</span>
+                {isNaN(LTV) ? (
+                  <PlaceholderText />
+                ) : (
+                  <>
+                    {LTV * 100}
+                    <span className="text-base">%</span>
+                  </>
+                )}
               </p>
             </div>
             <div className="pt-4">
@@ -391,8 +451,14 @@ function SinglePage() {
                 <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {threshold * 100}
-                <span className="text-base">%</span>
+                {isNaN(threshold) ? (
+                  <PlaceholderText />
+                ) : (
+                  <>
+                    {threshold * 100}
+                    <span className="text-base">%</span>
+                  </>
+                )}
               </p>
             </div>
             <div className="pt-4">
@@ -401,8 +467,14 @@ function SinglePage() {
                 <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {financial(penalty * 100)}
-                <span className="text-base">%</span>
+                {isNaN(penalty) ? (
+                  <PlaceholderText />
+                ) : (
+                  <>
+                    {financial(penalty * 100)}
+                    <span className="text-base">%</span>
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -424,25 +496,42 @@ function SinglePage() {
             <div className="flex pt-3 gap-x-2">
               <p className="w-1/2 font-medium">Collateral Posted</p>
               <p>
-                {financial(collateralBalanceOf, 18)} ETH
-                <span className="block text-sm text-[#545454]">
-                  ${financial(collateralPrice * collateralBalanceOf, 2)}
-                </span>
+                {isInputNaN(
+                  financial(collateralPrice * collateralBalanceOf, 18),
+                ) ? (
+                  <PlaceholderText />
+                ) : (
+                  <>
+                    {financial(collateralBalanceOf, 18)} ETH
+                    <span className="block text-sm text-[#545454]">
+                      ${financial(collateralPrice * collateralBalanceOf, 2)}
+                    </span>
+                  </>
+                )}
               </p>
             </div>
             <div className="flex pt-3 gap-x-2">
               <p className="w-1/2 font-medium">Liquidation Price</p>
               <p>
-                {liquidationPrice === 'N/A'
+                {/* {liquidationPrice === 'N/A'
                   ? 'N/A'
-                  : `$${financial(liquidationPrice, 2)}`}
+                  : `$${financial(liquidationPrice, 2)}`} */}
+                {liquidationPrice === 'N/A' ? (
+                  <PlaceholderText />
+                ) : (
+                  `$${financial(liquidationPrice, 2)}`
+                )}
               </p>
             </div>
             <div>
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
                 <p>
-                  {buffer === 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}
+                  {buffer === 'N/A' ? (
+                    <PlaceholderText />
+                  ) : (
+                    `${financial(buffer * 100)}%`
+                  )}
                 </p>
               </div>
               {/* //!alert start */}
@@ -480,25 +569,37 @@ function SinglePage() {
           <p>Rewards Earned</p>
           <div className="divide-y-2 space-y-3">
             <div className="flex justify-between mt-1">
-              <p className="text-xl font-medium">
-                {financial(rewardAmount, 6)} COMP{' '}
-                <span className="block text-sm text-[#545454] font-normal">
-                  ~${financial(Number(compPrice) * rewardAmount, 2)}
-                </span>
-              </p>
-              <Image
-                width={24}
-                height={24}
-                src={compound}
-                alt=""
-                className="w-6 h-6"
-              />
+              {isInputNaN(financial(rewardAmount, 6)) ? (
+                <PlaceholderText />
+              ) : (
+                <>
+                  <p className="text-xl font-medium">
+                    {financial(rewardAmount, 6)} COMP{' '}
+                    <span className="block text-sm text-[#545454] font-normal">
+                      ~${financial(Number(compPrice) * rewardAmount, 2)}
+                    </span>
+                  </p>
+                  <Image
+                    width={24}
+                    height={24}
+                    src={compound}
+                    alt=""
+                    className="w-6 h-6"
+                  />
+                </>
+              )}
             </div>
             <div className="pt-3">
               <p>Rewards Rate</p>
               <h4 className="text-xl font-medium mt-1 md:mt-3">
-                {financial(rewardRate * 100, 2)}
-                <span className="text-base">%</span>
+                {isInputNaN(financial(rewardRate * 100, 2)) ? (
+                  <PlaceholderText />
+                ) : (
+                  <>
+                    {financial(rewardRate * 100, 2)}
+                    <span className="text-base">%</span>
+                  </>
+                )}
               </h4>
               <p className="p-6 bg-[#F9F9F9] rounded-2xl text-sm mt-12 lg:mt-[88px] text-[#545454]">
                 Compound protocol offers rewards in its Comp token for usage of

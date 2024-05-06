@@ -2,6 +2,8 @@ import financial from '@/utility/currencyFormate';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
+import { isInputNaN } from '@/utility/utils';
+import PlaceholderText from '../PlaceholderText/PlaceholderText';
 
 function RangeInput({
   buffer,
@@ -60,8 +62,14 @@ function RangeInput({
                   Minimum Collateral Required:
                 </p>
                 <p className="text-[#141414] text-xs whitespace-nowrap">
-                  {financial(minCollateral, 3)} ETH ($
-                  {financial(minCollateral * collateralPrice, 2)})
+                  {isInputNaN(financial(minCollateral * collateralPrice, 2)) ? (
+                    <PlaceholderText />
+                  ) : (
+                    <>
+                      {financial(minCollateral, 3)} ETH ($
+                      {financial(minCollateral * collateralPrice, 2)})
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -82,11 +90,17 @@ function RangeInput({
               className="absolute w-23 h-16 left-0 -top-16 text-center text-white bg-[#2C3B8D] rounded-full py-3 px-4"
               style={valueDivStyle}
             >
-              <p className="">${collateralValue}</p>
-              {/*  <div className="w-1 h-10 bg-[#2C3B8D] absolute top-full left-1/2 -translate-x-1/2"></div> */}
-              <p className="text-center text-white text-sm font-thin">
-                Current Value
-              </p>
+              {isInputNaN(collateralValue) ? (
+                <PlaceholderText />
+              ) : (
+                <>
+                  <p className="">${collateralValue}</p>
+                  {/*  <div className="w-1 h-10 bg-[#2C3B8D] absolute top-full left-1/2 -translate-x-1/2"></div> */}
+                  <p className="text-center text-white text-sm font-thin">
+                    Current Value
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

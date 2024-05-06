@@ -105,3 +105,5 @@ export const formatPhoneNumber = (phoneNumber: string) => {
 
   return formattedNumber;
 };
+
+export const isInputNaN = (str: string) => isNaN(parseFloat(str));
