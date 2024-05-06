@@ -25,7 +25,7 @@ import {
   networkChainId,
 } from '@/constants';
 import { useUserInfo } from '@/hooks/useUserInfo';
-import { etherscanLink, parseBalance } from '@/utility/utils';
+import { etherscanLink, parseUnits } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
@@ -35,7 +35,7 @@ import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
-import { Balance } from '@/protocols/compound/util/data';
+import { TokenAmount } from '@/protocols/compound/util/data';
 import { ethers } from 'ethers';
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
@@ -63,7 +63,7 @@ function Processing() {
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
   const [loanData, setLoanData] = useState<any>();
-  const [collateral, setCollateral] = useState<Balance>({
+  const [collateral, setCollateral] = useState<TokenAmount>({
     formatted: 0,
     value: ethers.BigNumber.from(0),
   });
@@ -219,7 +219,7 @@ function Processing() {
       data: encodeFunctionData({
         abi: USDCABI,
         functionName: 'transfer',
-        args: [address, parseBalance(balance?.formatted, 6)],
+        args: [address, parseUnits(balance?.formatted, 6)],
       }),
     });
 

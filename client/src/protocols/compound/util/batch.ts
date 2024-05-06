@@ -1,9 +1,8 @@
-/* global BigInt */
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { useAddress } from '@thirdweb-dev/react';
 import { encodeFunctionData } from 'viem';
-import { parseBalance } from '@/utility/utils';
+import { parseUnits } from '@/utility/utils';
 import {
   USDCContract,
   CometContract,
@@ -12,15 +11,19 @@ import {
   networkChainId,
 } from '@/constants';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
+import { TokenAmount } from './data';
 
 const WETHABI = require('@/constants/weth.json');
 const COMETABI = require('@/constants/comet.json');
 const USDCABI = require('@/constants/usdc.json');
 const REWARDABI = require('@/constants/reward.json');
 
-// const uintMax = ethers.constants.MaxUint256.toHexString();
+const uintMax256 = ethers.constants.MaxUint256;
 
-export const useGetLoan = (collateral: any, loan: any) => {
+export const useGetLoan = (collateral: number, loan: number) => {
+  const bigintCollateral = parseUnits(collateral.toString());
+  const bigIntLoanAmount = parseUnits(loan.toString(), 6);
+
   const { rockoWalletClient, rockoWalletAddress } = useRockoWallet();
   const address = useAddress();
 
@@ -43,11 +46,6 @@ export const useGetLoan = (collateral: any, loan: any) => {
     };
   }
 
-  const bigintCollateral = BigInt(
-    // TODO replace ethers with viem
-    ethers.utils.parseEther(collateral.toString()).toString(),
-  );
-
   // console.log('txs details', {
   //   networkChainId,
   //   bigintCollateral,
@@ -57,7 +55,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
   //   success,
   //   weth: WETHContract[networkChainId],
   //   comet: CometContract[networkChainId],
-  //   collateral: parseBalance(collateral.toString()),
+  //   collateral: parseUnits(collateral.toString()),
   // });
 
   const depositApproveWETH = [
@@ -76,7 +74,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
       data: encodeFunctionData({
         abi: WETHABI,
         functionName: 'approve',
-        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
+        args: [CometContract[networkChainId], uintMax256],
       }),
     },
   ];
@@ -92,10 +90,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
       data: encodeFunctionData({
         abi: COMETABI,
         functionName: 'supply',
-        args: [
-          WETHContract[networkChainId],
-          parseBalance(collateral.toString()),
-        ],
+        args: [WETHContract[networkChainId], bigintCollateral],
       }),
     },
     {
@@ -109,7 +104,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
           // is `|| rockoWalletAddress` just a fallabck incase address is lost or disconnected?
           address || rockoWalletAddress,
           USDCContract[networkChainId],
-          parseBalance(loan.toString(), 6),
+          bigIntLoanAmount,
         ],
       }),
     },
@@ -136,7 +131,7 @@ export const useGetLoan = (collateral: any, loan: any) => {
   return { executeBatchGetLoan, success, txHash, error };
 };
 
-export const useJustBorrowMore = (loan: any) => {
+export const useJustBorrowMore = (loan: number) => {
   const { rockoWalletClient, rockoWalletAddress } = useRockoWallet();
   const address = useAddress();
 
@@ -173,7 +168,7 @@ export const useJustBorrowMore = (loan: any) => {
                 // is `|| rockoWalletAddress` just a fallabck incase address is lost or disconnected?
                 address || rockoWalletAddress,
                 USDCContract[networkChainId],
-                parseBalance(loan.toString(), 6),
+                parseUnits(loan.toString(), 6),
               ],
             }),
           },
@@ -194,7 +189,7 @@ export const useJustBorrowMore = (loan: any) => {
   return { executeJustBorrowMore, success, txHash, error };
 };
 
-export const useRepaySome = (loan: any) => {
+export const useRepaySome = (loan: number) => {
   const { rockoWalletClient } = useRockoWallet();
   const [txHash, setTxHash] = useState<any>();
   const [success, setSuccess] = useState(false);
@@ -224,10 +219,7 @@ export const useRepaySome = (loan: any) => {
             data: encodeFunctionData({
               abi: USDCABI,
               functionName: 'approve',
-              args: [
-                CometContract[networkChainId],
-                ethers.constants.MaxUint256,
-              ],
+              args: [CometContract[networkChainId], uintMax256],
             }),
           },
           {
@@ -238,7 +230,7 @@ export const useRepaySome = (loan: any) => {
               functionName: 'supply',
               args: [
                 USDCContract[networkChainId],
-                parseBalance(loan.toString(), 6),
+                parseUnits(loan.toString(), 6),
               ],
             }),
           },
@@ -259,7 +251,7 @@ export const useRepaySome = (loan: any) => {
   return { executeBatchRepaySome, success, txHash, error };
 };
 
-export const useRepayFull = (collateral: any) => {
+export const useRepayFull = (collateral: TokenAmount) => {
   console.log(
     { ...collateral, valueString: collateral.value.toString() },
     'useRepayFull',
@@ -286,10 +278,6 @@ export const useRepayFull = (collateral: any) => {
     };
   }
 
-  const bigintCollateral = BigInt(
-    ethers.utils.parseEther(collateral?.formatted?.toString()).toString(),
-  );
-
   const approveSupplyUSDC = [
     {
       to: USDCContract[networkChainId],
@@ -297,7 +285,7 @@ export const useRepayFull = (collateral: any) => {
       data: encodeFunctionData({
         abi: USDCABI,
         functionName: 'approve',
-        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
+        args: [CometContract[networkChainId], uintMax256],
       }),
     },
     {
@@ -306,7 +294,7 @@ export const useRepayFull = (collateral: any) => {
       data: encodeFunctionData({
         abi: COMETABI,
         functionName: 'supply',
-        args: [USDCContract[networkChainId], ethers.constants.MaxUint256],
+        args: [USDCContract[networkChainId], uintMax256],
       }),
     },
   ];
@@ -328,7 +316,7 @@ export const useRepayFull = (collateral: any) => {
   //   functionName: 'withdraw',
   //   args: [
   //     WETHContract[networkChainId],
-  //     parseBalance(collateral.toString()),
+  //     parseUnits(collateral.toString()),
   //   ],
   // },
 
@@ -347,33 +335,33 @@ export const useRepayFull = (collateral: any) => {
   //   address: WETHContract[networkChainId],
   //   abi: WETHABI,
   //   functionName: 'withdraw',
-  //   args: [parseBalance(collateral.toString())],
+  //   args: [parseUnits(collateral.toString())],
   // },
 
   // console.log({
   //   withdrawComp,
   //   networkChainId,
   //   COMETABI,
-  //   collateral: parseBalance(collateral?.formatted?.toString()),
+  //   collateral: parseUnits(collateral?.formatted?.toString()),
   // });
   // console.log({
   //   withdrawWETH,
   //   networkChainId,
   //   WETHABI,
-  //   collateral: parseBalance(collateral?.formatted?.toString()),
+  //   collateral: parseUnits(collateral?.formatted?.toString()),
   // });
 
   // console.log({
   //   string: collateral.toString(),
   //   collateral,
-  //   parse: parseBalance(collateral?.formatted?.toString()),
+  //   parse: parseUnits(collateral?.formatted?.toString()),
   // });
 
   const sendFromRockoToUserWallet = [
     {
       to: address as `0x${string}`,
       data: '0x',
-      value: bigintCollateral,
+      value: collateral?.value,
     },
   ];
 
@@ -473,7 +461,7 @@ export const useRepayFull = (collateral: any) => {
   };
 };
 
-export const useAddCollateral = (collateral: any) => {
+export const useAddCollateral = (collateral: number) => {
   const { rockoWalletClient } = useRockoWallet();
   const [txHash, setTxHash] = useState<any>();
   const [success, setSuccess] = useState(false);
@@ -492,9 +480,7 @@ export const useAddCollateral = (collateral: any) => {
     };
   }
 
-  const bigintCollateral = BigInt(
-    ethers.utils.parseEther(collateral.toString()).toString(),
-  );
+  const bigintCollateral = parseUnits(collateral.toString());
 
   const depositApproveWETH = [
     {
@@ -512,7 +498,7 @@ export const useAddCollateral = (collateral: any) => {
       data: encodeFunctionData({
         abi: WETHABI,
         functionName: 'approve',
-        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
+        args: [CometContract[networkChainId], uintMax256],
       }),
     },
   ];
@@ -524,10 +510,7 @@ export const useAddCollateral = (collateral: any) => {
       data: encodeFunctionData({
         abi: COMETABI,
         functionName: 'supply',
-        args: [
-          WETHContract[networkChainId],
-          parseBalance(collateral.toString()),
-        ],
+        args: [WETHContract[networkChainId], parseUnits(collateral.toString())],
       }),
     },
   ];
@@ -553,7 +536,7 @@ export const useAddCollateral = (collateral: any) => {
   return { executeBatchAddCollateral, success, txHash, error };
 };
 
-export const useBorrowCollateral = (collateral: any) => {
+export const useBorrowCollateral = (collateral: number) => {
   const { rockoWalletClient } = useRockoWallet();
   const address = useAddress();
 
@@ -573,9 +556,7 @@ export const useBorrowCollateral = (collateral: any) => {
     };
   }
 
-  const bigintCollateral = BigInt(
-    ethers.utils.parseEther(collateral.toString()).toString(),
-  );
+  const bigintCollateral = parseUnits(collateral.toString());
 
   const executeBatchBorrowCollateral = async () => {
     try {
@@ -590,7 +571,7 @@ export const useBorrowCollateral = (collateral: any) => {
               functionName: 'withdraw',
               args: [
                 WETHContract[networkChainId],
-                parseBalance(collateral.toString()),
+                parseUnits(collateral.toString()),
               ],
             }),
           },
@@ -600,7 +581,7 @@ export const useBorrowCollateral = (collateral: any) => {
             data: encodeFunctionData({
               abi: WETHABI,
               functionName: 'withdraw',
-              args: [parseBalance(collateral.toString())],
+              args: [parseUnits(collateral.toString())],
             }),
           },
           {

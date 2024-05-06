@@ -151,8 +151,12 @@ const DepositingCollateral = () => {
   };
 
   const receiveCollateral = async (): Promise<any> => {
-    if (!collateral) console.log('hey');
-    if (!rockoWalletAddress || !collateral) return null;
+    if (!collateral) {
+      console.log('Mising collateral');
+    }
+    if (!rockoWalletAddress || !collateral) {
+      return null;
+    }
 
     const depositResult = await depositZerodevAccount(
       rockoWalletAddress,

@@ -16,7 +16,7 @@ export const formatBalance = (
   return formatted;
 };
 
-export const parseBalance = (value: any, decimals = 18) =>
+export const parseUnits = (value: string, decimals = 18) =>
   ethers.utils.parseUnits(value || '0', decimals);
 
 export const getDurationFromUnixTime = (unixTimestamp: number) => {

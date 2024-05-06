@@ -1,7 +1,7 @@
 import { BACKEND_URL, NETWORK } from '@/constants/env';
+import { networkChainId } from '@/constants';
 import logger from '@/utility/logger';
 import axiosInterceptor from './axiosInterceptor';
-import { networkChainId } from '@/constants';
 
 // Transaction compliance check
 const transactionComp = async ({

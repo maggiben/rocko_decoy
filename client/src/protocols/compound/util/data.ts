@@ -11,6 +11,14 @@ import {
 const COMETABI = require('../../../constants/comet.json');
 const BASIC_COMETABI = require('../../../constants/basic_comet.json');
 
+// TODO update all remainging functions to use this return type.
+// value = is smallest currency unit
+// formatted = current formatted return value
+export type TokenAmount = {
+  value: BigNumber;
+  formatted: number; // TODO this be a string
+};
+
 type BlockchainNames = 'ethereum' | 'sepolia' | 'base';
 
 const networkChainId = (chain: string) =>
@@ -114,21 +122,13 @@ const getPenalty = async (chain: string): Promise<number> => {
   return formattedValue;
 };
 
-// TODO update all remainging functions to use this return type.
-// value = is smallest currency unit
-// formatted = current formatted return value
-export type Balance = {
-  value: BigNumber;
-  formatted: number;
-};
-
 const getBorrowBalanceOf = async ({
   chain,
   rockoWalletAddress,
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<Balance> => {
+}): Promise<TokenAmount> => {
   // console.log('getBorrowBalanceOf', { rockoWalletAddress, chain });
   if (!rockoWalletAddress)
     return {
@@ -165,7 +165,7 @@ const getCollateralBalanceOf = async ({
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<Balance> => {
+}): Promise<TokenAmount> => {
   if (!rockoWalletAddress)
     return {
       value: ethers.BigNumber.from(0),
