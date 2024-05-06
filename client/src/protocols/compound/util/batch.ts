@@ -136,6 +136,64 @@ export const useGetLoan = (collateral: any, loan: any) => {
   return { executeBatchGetLoan, success, txHash, error };
 };
 
+export const useJustBorrowMore = (loan: any) => {
+  const { rockoWalletClient, rockoWalletAddress } = useRockoWallet();
+  const address = useAddress();
+
+  const [txHash, setTxHash] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<any>(false);
+
+  // prevent error if address or rockoWalletClient is undefined
+  if (!rockoWalletClient || !rockoWalletAddress) {
+    console.log('Waiting for Rocko Wallet Instance...');
+    return {
+      executeJustBorrowMore: () => {
+        console.log('Rocko wallet not available yet :(');
+      },
+      success,
+      txHash,
+      error,
+    };
+  }
+
+  const executeJustBorrowMore = async () => {
+    try {
+      console.log('start');
+      const txCompleteHash = await rockoWalletClient.sendTransactions({
+        transactions: [
+          {
+            to: CometContract[networkChainId],
+            value: 0,
+            data: encodeFunctionData({
+              abi: COMETABI,
+              functionName: 'withdrawTo',
+              args: [
+                // TODO: check if this is correct
+                // is `|| rockoWalletAddress` just a fallabck incase address is lost or disconnected?
+                address || rockoWalletAddress,
+                USDCContract[networkChainId],
+                parseBalance(loan.toString(), 6),
+              ],
+            }),
+          },
+        ],
+      });
+
+      setTxHash(txCompleteHash);
+      setSuccess(true);
+      return txCompleteHash;
+    } catch (e) {
+      console.log(e);
+      setSuccess(false);
+      setError(e);
+      return null;
+    }
+  };
+
+  return { executeJustBorrowMore, success, txHash, error };
+};
+
 export const useRepaySome = (loan: any) => {
   const { rockoWalletClient } = useRockoWallet();
   const [txHash, setTxHash] = useState<any>();

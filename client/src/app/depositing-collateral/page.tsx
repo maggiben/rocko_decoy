@@ -22,7 +22,7 @@ import { CometContract, networkChainId } from '@/constants';
 // import { useProtocolConfig } from '@/protocols';
 // import { ProtocolConfig } from '@/protocols/types';
 import { useSingleLoan } from '@/contract/single';
-import { useGetLoan } from '@/protocols/compound/util/batch';
+import { useGetLoan, useJustBorrowMore } from '@/protocols/compound/util/batch';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 
@@ -55,6 +55,10 @@ const DepositingCollateral = () => {
     type === 'add'
       ? borrowMoreData?.payment_collateral
       : loanData?.collateralNeeded;
+
+  const isJustBorrowMore =
+    type === 'add' &&
+    (!anotherData || borrowMoreData?.payment_collateral === 0);
 
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
   const [existLoanId, setExistLoanId] = useState<number>(0);
@@ -95,36 +99,59 @@ const DepositingCollateral = () => {
     borrowing || 0,
   );
 
+  // jbm means justBorrowMore
+  const {
+    executeJustBorrowMore,
+    success: borrowSuccess,
+    txHash: borrowHash,
+    error: borrowError,
+  } = useJustBorrowMore(borrowing || 0);
+
   const start = async () => {
     if (loanData?.paymentMethod !== 'ethereum') return;
 
-    if (!rockoWalletAddress || !address || !collateral) return;
-    // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
-    //   toast.error('Invalid Network!');
-    //   return;
-    // }
-    if (Number(data?.formatted) < collateral) {
-      toast.error('Insufficient Collateral Balance!');
-      return;
-    }
-    console.log(1, { startA });
-    setStartA(true);
-    console.log(2, { startA });
-    const collateralReceived = await receiveCollateral();
-    if (collateralReceived) {
-      setADone();
+    if (!isJustBorrowMore) {
+      if (!rockoWalletAddress || !address || !collateral) return;
+      // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
+      //   toast.error('Invalid Network!');
+      //   return;
+      // }
+      if (Number(data?.formatted) < collateral) {
+        toast.error('Insufficient Collateral Balance!');
+        return;
+      }
+      console.log(1, { startA });
+      setStartA(true);
+      console.log(2, { startA });
+      const collateralReceived = await receiveCollateral();
+      if (collateralReceived) {
+        setADone();
+
+        // batch transactions
+        executeBatchGetLoan();
+        setStartB(true);
+      } else {
+        setAError();
+
+        navRouter.push('/');
+      }
+    } else {
+      console.log('---just borrowMore---');
+
+      if (!rockoWalletAddress || !address) return;
+      if (Number(data?.formatted) < collateral) {
+        toast.error('Insufficient Collateral Balance!');
+        return;
+      }
 
       // batch transactions
-      executeBatchGetLoan();
+      executeJustBorrowMore();
       setStartB(true);
-    } else {
-      setAError();
-
-      navRouter.push('/');
     }
   };
 
   const receiveCollateral = async (): Promise<any> => {
+    if (!collateral) console.log('hey');
     if (!rockoWalletAddress || !collateral) return null;
 
     const depositResult = await depositZerodevAccount(
@@ -282,6 +309,16 @@ const DepositingCollateral = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success, txHash, error]);
 
+  useEffect(() => {
+    if (borrowError) logger(JSON.stringify(borrowError, null, 2));
+
+    if (borrowSuccess) {
+      setShowTxModal(true);
+      setAllDone(borrowHash);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [borrowSuccess, borrowHash, borrowError]);
+
   // for timer
   useEffect(() => {
     if (startA || startB) {
@@ -344,11 +381,18 @@ const DepositingCollateral = () => {
   return (
     <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
-        {activeDone
+        {isJustBorrowMore
+          ? 'Borrowing More'
+          : activeDone
+            ? 'Fulfilling Loan'
+            : startA
+              ? 'Waiting for Collateral'
+              : 'Depositing Collateral'}
+        {/* {activeDone
           ? 'Fulfilling Loan'
           : startA
             ? 'Waiting for Collateral'
-            : 'Depositing Collateral'}
+            : 'Depositing Collateral'} */}
       </h1>
       {/* <button
         type="button"
@@ -357,10 +401,12 @@ const DepositingCollateral = () => {
       >
         Book Loan
       </button> */}
-      <p className="text-blackPrimary text-[14px] mt-1">
-        Please do not close your browser until all of the steps below are
-        completed.
-      </p>
+      {!isJustBorrowMore && (
+        <p className="text-blackPrimary text-[14px] mt-1">
+          Please do not close your browser until all of the steps below are
+          completed.
+        </p>
+      )}
       <section className="my-6">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <p className="text-blackPrimary">Estimated time remaining</p>
@@ -368,85 +414,89 @@ const DepositingCollateral = () => {
             {' '}
             {`${activeDone ? 'Complete!' : `${counter} minutes`}`}{' '}
           </h1>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
-              className={`${
-                progressTracker === 0 || doneTracker[0]?.step === 'one'
-                  ? 'text-black'
-                  : 'text-gray-400'
-              }`}
-            >
-              Collateral Received
-            </p>
-            {doneTracker[0]?.step === 'one' && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-                  fill="#05944F"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
-                  fill="white"
-                />
-              </svg>
-            )}
-            {progressTracker === 0 && !(doneTracker[0]?.step === 'one') && (
-              <CircleProgressBar
-                circleWidth={18}
-                radius={7}
-                percentage={progress}
-                strokeWidth={2}
-              />
-            )}
-          </div>
-          <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
-            <p
-              className={`${
-                progressTracker === 1 || doneTracker[1]?.step === 'two'
-                  ? 'text-black'
-                  : 'text-gray-400'
-              }`}
-            >
-              Collateral Deposited in Lending Protocol
-            </p>
-            {doneTracker[1]?.step === 'two' && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-                  fill="#05944F"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
-                  fill="white"
-                />
-              </svg>
-            )}
+          {!isJustBorrowMore && (
+            <>
+              <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
+                <p
+                  className={`${
+                    progressTracker === 0 || doneTracker[0]?.step === 'one'
+                      ? 'text-black'
+                      : 'text-gray-400'
+                  }`}
+                >
+                  Collateral Received
+                </p>
+                {doneTracker[0]?.step === 'one' && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
+                      fill="#05944F"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
+                      fill="white"
+                    />
+                  </svg>
+                )}
+                {progressTracker === 0 && !(doneTracker[0]?.step === 'one') && (
+                  <CircleProgressBar
+                    circleWidth={18}
+                    radius={7}
+                    percentage={progress}
+                    strokeWidth={2}
+                  />
+                )}
+              </div>
+              <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
+                <p
+                  className={`${
+                    progressTracker === 1 || doneTracker[1]?.step === 'two'
+                      ? 'text-black'
+                      : 'text-gray-400'
+                  }`}
+                >
+                  Collateral Deposited in Lending Protocol
+                </p>
+                {doneTracker[1]?.step === 'two' && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
+                      fill="#05944F"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
+                      fill="white"
+                    />
+                  </svg>
+                )}
 
-            {progressTracker === 1 && !(doneTracker[1]?.step === 'two') && (
-              <CircleProgressBar
-                circleWidth={18}
-                radius={7}
-                percentage={progress}
-                strokeWidth={2}
-              />
-            )}
-          </div>
+                {progressTracker === 1 && !(doneTracker[1]?.step === 'two') && (
+                  <CircleProgressBar
+                    circleWidth={18}
+                    radius={7}
+                    percentage={progress}
+                    strokeWidth={2}
+                  />
+                )}
+              </div>
+            </>
+          )}
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
@@ -553,7 +603,7 @@ const DepositingCollateral = () => {
             title="Loan Complete"
             details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             id={1}
-            txHash={txHash}
+            txHash={isJustBorrowMore ? borrowHash : txHash}
           />
         </ModalContainer>
       )}
