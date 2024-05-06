@@ -109,7 +109,8 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                     destinationAddress: req.body.metadata.recipient_address,
                     txHash: req.body.transaction_hash,
                     transferType: transactionTypeCompliance[req.body.metadata.transaction_type as TransactionType],
-                    usdValue: Number(req.body.metadata.usd_value).toFixed(2).toString()
+                    usdValue: Number(req.body.metadata.usd_value).toFixed(2).toString(),
+                    network: req.body.network
                 })
 
             } catch (e) {
@@ -166,6 +167,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
 
 });
   
+
 router.get('/platform-status', async (req: Request, res: Response, next) => {
     try {
         let killSwitch = "SELECT loan_booking_blocked, transactions_blocked, status_message FROM platform_status";
@@ -180,7 +182,6 @@ router.get('/platform-status', async (req: Request, res: Response, next) => {
           }
     
           return res.status(200).send(results[0]);
-    
         });
     } catch (error) {
         logger(error, 'error');

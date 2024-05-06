@@ -1,6 +1,7 @@
 import { BACKEND_URL, NETWORK } from '@/constants/env';
 import logger from '@/utility/logger';
 import axiosInterceptor from './axiosInterceptor';
+import { networkChainId } from '@/constants';
 
 // Transaction compliance check
 const transactionComp = async ({
@@ -10,22 +11,25 @@ const transactionComp = async ({
   transactionHash: string;
   metadata: any;
 }) => {
-  if (NETWORK === 'mainnet') {
-    try {
-      const transactionCompliance = await axiosInterceptor.post(
-        `${BACKEND_URL}/comp/transaction`,
-        {
-          transaction_hash: transactionHash,
-          metadata,
-        },
-      );
+  const network = {
+    id: networkChainId,
+    name: NETWORK,
+  };
 
-      return transactionCompliance;
-    } catch (e) {
-      logger(`Failed to send transaction to compliance: ${e}`);
-    }
-    return null;
+  try {
+    const transactionCompliance = await axiosInterceptor.post(
+      `${BACKEND_URL}/comp/transaction`,
+      {
+        transaction_hash: transactionHash,
+        metadata,
+        network,
+      },
+    );
+    return transactionCompliance;
+  } catch (e) {
+    logger(`Failed to send transaction to compliance: ${e}`);
   }
+  return null;
 };
 
 export default transactionComp;

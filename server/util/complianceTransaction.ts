@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { TRM_API_KEY } from '../constants';
 import logger from './logger';
-import { getAddress } from 'ethers';
+import {  getAddress } from 'ethers';
 
 //https://documentation.trmlabs.com/tag/Supported-Asset-List#section/Assets
 enum Asset {
@@ -52,7 +52,8 @@ const complianceTransaction = async ({
     destinationAddress,
     txHash,
     transferType,
-    usdValue
+    usdValue,
+    network
 }: {
     rockoUserId: string,
     asset: Asset,
@@ -61,52 +62,57 @@ const complianceTransaction = async ({
     destinationAddress: string,
     txHash: string,
     transferType: TransferType,
-    usdValue: string
+    usdValue: string,
+    network: any
+
 }): Promise<ComplianceTransactionResponse | undefined> => {
     let validAddress: string = "";
-    try {
-        validAddress = getAddress(destinationAddress);
-    } catch (error) {
-        logger(error, 'error');
-        return undefined;
-    }
-    try {
-        const resp = await axios({
-            method: 'post',
-            url: 'https://api.trmlabs.com/public/v2/tm/transfers',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Basic ${Buffer.from(`${TRM_API_KEY}:${TRM_API_KEY}`).toString('base64')}`
-            },
-            data: {
-              accountExternalId: rockoUserId,
-              asset, // 'btc',
-              assetAmount, // '0.03506012',
-              chain, // 'bitcoin',
-              destinationAddress: validAddress, // '1LBVuSig83hEBzEuvf7KPyB6dYvAQdfBXQ',
-              // The ID that you use to identify the transfer in your own system. 
-              // This field must be unique per transfer. 
-              // Additional transfers using the same externalId will be ignored.
-              externalId: txHash,
-              fiatCurrency: 'USD',
-              fiatValue: usdValue,
-              onchainReference: txHash, // '35150e9824c7536ed694ba4e96046c0417047cc25690880b3274d65dfbdf4d09',
-              // timestamp required
-              // string <date-time> (timestamp)
-              // Onchain transaction timestamp of the transfer to be screened, formatted as an ISO-8601 UTC datetime.
-              timestamp: (new Date()).toISOString(),
-              transferType, // 'CRYPTO_WITHDRAWAL'
-            }
-          })
-    
-        const data = resp.data;
-
-        return {
-            uuid: data.uuid,
+    if(network?.name === "mainnet"){
+        try {
+            validAddress = getAddress(destinationAddress);
+        } catch (error) {
+            logger(error, 'error');
+            return undefined;
         }
-    } catch (error) {
-        logger(error, 'error');
+        try {
+            const resp = await axios({
+                method: 'post',
+                url: 'https://api.trmlabs.com/public/v2/tm/transfers',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Basic ${Buffer.from(`${TRM_API_KEY}:${TRM_API_KEY}`).toString('base64')}`
+                },
+                data: {
+                  accountExternalId: rockoUserId,
+                  asset, // 'btc',
+                  assetAmount, // '0.03506012',
+                  chain, // 'bitcoin',
+                  destinationAddress: validAddress, // '1LBVuSig83hEBzEuvf7KPyB6dYvAQdfBXQ',
+                  // The ID that you use to identify the transfer in your own system. 
+                  // This field must be unique per transfer. 
+                  // Additional transfers using the same externalId will be ignored.
+                  externalId: txHash,
+                  fiatCurrency: 'USD',
+                  fiatValue: usdValue,
+                  onchainReference: txHash, // '35150e9824c7536ed694ba4e96046c0417047cc25690880b3274d65dfbdf4d09',
+                  // timestamp required
+                  // string <date-time> (timestamp)
+                  // Onchain transaction timestamp of the transfer to be screened, formatted as an ISO-8601 UTC datetime.
+                  timestamp: (new Date()).toISOString(),
+                  transferType, // 'CRYPTO_WITHDRAWAL'
+                }
+              })
+        
+            const data = resp.data;
+    
+            return {
+                uuid:  data.uuid,
+            }
+        } catch (error) {
+            logger(error, 'error');
+        }
     }
+    return {uuid: `mock-uuid-${Math.floor(Math.random() * 1000000)}` }
 
 }
 
