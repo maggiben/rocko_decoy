@@ -8,6 +8,7 @@ import logger from '@/utility/logger';
 import { NETWORK } from '@/constants/env';
 import useSelectedNetwork from '@/hooks/useSelectedNetwork';
 import HoverTooltip from '../HoverTooltip/HoverTooltip';
+import PlaceholderText from '../PlaceholderText/PlaceholderText';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
 
@@ -148,11 +149,18 @@ const Protocol: FC<ProtocolProps> = ({
           <div className="flex items-center justify-end gap-2 md:gap-8 ">
             <div className="flex md:flex-col items-center md:items-start gap-2 md:gap-0">
               <p className="text-xl font-bold text-[#141414]">
-                <span style={{ fontSize: '32px' }}>
+                {protocolData?.currentAPR ? (
+                  <span style={{ fontSize: '32px' }}>
+                    {financial(protocolData?.currentAPR, 2)}
+                  </span>
+                ) : (
+                  <PlaceholderText />
+                )}
+                {/* <span style={{ fontSize: '32px' }}>
                   {protocolData?.currentAPR
                     ? financial(protocolData?.currentAPR, 2)
                     : null}
-                </span>
+                </span> */}
                 <span className="text-base">% APR</span>
               </p>
 
