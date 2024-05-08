@@ -6,7 +6,7 @@ export function financial(x: any, decimal = 0): string {
     minimumFractionDigits: decimal,
     maximumFractionDigits: decimal,
     useGrouping: true,
-  }).format(x);
+  }).format(Math.ceil(x * 10 ** decimal) / 10 ** decimal);
 }
 
 export default financial;
