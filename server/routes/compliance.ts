@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 
 import express from 'express';
-import isOFACCompliant from '../util/ofac-crypto';
 import complianceCheckAddress from '../util/complianceCheckAddress';
 import complianceTransaction, { TransferType, Blockchain } from '../util/complianceTransaction';
 import { db } from '../db';
@@ -40,10 +39,9 @@ router.post('/address', checkJwt, async (req: Request, res: Response, next) => {
         if(req.body.address){
             let isCompliant = false;
             try {
-                const isOFACCompliantResult = await isOFACCompliant(req.body.address);
                 const complianceCheckAddressResult = await complianceCheckAddress(req.body.address);
 
-                isCompliant = isOFACCompliantResult && complianceCheckAddressResult;
+                isCompliant = complianceCheckAddressResult;
             } catch (e) {
                 logger(e, 'error');
                 return res.status(502).send('Something went wrong');
