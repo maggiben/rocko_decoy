@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAddress } from '@thirdweb-dev/react';
+import Image from 'next/image';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import { useLoanDB } from '@/db/loanDb';
@@ -20,7 +21,6 @@ import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import FinishLoanTransaction from '@/components/chips/FinishLoan/FinishLoan';
 import financial from '@/utility/currencyFormate';
-import Image from 'next/image';
 import contentCopy from '@/assets/content_copy.svg';
 import CancelLoanModal from '@/components/chips/CancelLoanModal/CancelLoanModal';
 import isSufficientCollateral from '@/utility/isSufficientCollateral';
@@ -657,7 +657,7 @@ const DepositingCollateral = () => {
               </p>
               <div className="flex items-center space-between gap-3">
                 <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
-                  {financial(rockoWalletBalance?.formatted, 18)} ETH{' '}
+                  {financial(rockoWalletBalance?.formatted, 4)} ETH{' '}
                 </p>
                 {collateralReceived && (
                   <svg
@@ -687,7 +687,7 @@ const DepositingCollateral = () => {
               Amount Required
             </p>
             <p className="font-normal	text-blackPrimary text-[16px] leading-6">
-              {financial(collateral, 18)} ETH{' '}
+              {financial(collateral, 4)} ETH{' '}
             </p>
           </div>
           <div className="flex items-center pt-[16px] ">

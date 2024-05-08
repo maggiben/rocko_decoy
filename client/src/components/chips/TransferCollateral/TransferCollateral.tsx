@@ -103,7 +103,7 @@ function TransferCollateral(props: Props) {
                   Amount Received
                 </p>
                 <p className="font-normal	text-blackPrimary text-[16px]">
-                  {financial(balance?.formatted, 18)} ETH
+                  {financial(balance?.formatted, 4)} ETH
                 </p>
               </div>
               <div className="flex items-center gap-x-[4px] bg-[#F7B13329] rounded-[5px] py-[3px] ps-[4px] pe-[8px] cursor-pointer">
@@ -124,7 +124,7 @@ function TransferCollateral(props: Props) {
               Amount Required{' '}
             </p>
             <p className="font-normal	text-blackPrimary text-[16px]">
-              {financial(collateralNeeded, 18)} ETH
+              {financial(collateralNeeded, 4)} ETH
             </p>
           </div>
           <div className=" flex items-center flex-col py-[16px]">
