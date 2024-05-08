@@ -5,9 +5,18 @@ import SummaryComp from '@/components/chips/SummaryComp/SummaryComp';
 import Footer from '@/components/chips/Footer/Footer';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
+import useLoanData from '@/hooks/useLoanData';
 
 const BorrowPayment: FC = () => {
   const [isFinalized, setIsFinalized] = useState(false);
+
+  const { loanData } = useLoanData();
+
+  const onContinue = () => {
+    window.sessionStorage.setItem('loanData', JSON.stringify(loanData));
+
+    setIsFinalized(true);
+  };
 
   return (
     <>
@@ -19,7 +28,7 @@ const BorrowPayment: FC = () => {
           category="borrow_more"
         />
       </div>
-      <Footer setIsFinalized={setIsFinalized} />
+      <Footer setIsFinalized={onContinue} />
       {isFinalized && (
         <ModalContainer>
           <LoanFinalized navType="add" />

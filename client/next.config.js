@@ -7,6 +7,11 @@ const connectSrc = [
   BACKEND_URL,
   `https://${NETWORK}.infura.io`,
 
+  // Alchemy
+  `https://eth-${NETWORK}.g.alchemy.com`,
+  'https://eth-sepolia.g.alchemy.com/v2/Uh7mU3JjGqXM2Tzuup8CqhGraEyDy8hK',
+  'https://eth-sepolia.g.alchemy.com/v2',
+
   // Thirdweb RPC
   `https://${NETWORK === 'mainnet' ? 'ethereum' : NETWORK}.rpc.thirdweb.com`,
   'https://ethereum.rpc.thirdweb.com',

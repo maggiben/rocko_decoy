@@ -169,6 +169,21 @@ function SummaryComp(props: Props) {
     );
   };
 
+  const handleOtherWalletBlur = async (
+    event: React.FocusEvent<HTMLInputElement>,
+  ) => {
+    const otherWallet = event.target.value;
+
+    await addressValidator(otherWallet, disconnect);
+
+    if (setLoanData) {
+      setLoanData((prevLoanData) => ({
+        ...prevLoanData,
+        otherAddress: otherWallet,
+      }));
+    }
+  };
+
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
@@ -363,9 +378,7 @@ function SummaryComp(props: Props) {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                        onBlur={(e) =>
-                          addressValidator(e.target.value, disconnect)
-                        }
+                        onBlur={handleOtherWalletBlur}
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

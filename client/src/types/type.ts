@@ -142,6 +142,15 @@ export interface LoanData {
   activeNextButton?: boolean;
   nextValidation: any;
 }
+
+export interface BorrowMoreData {
+  payment_loan: number;
+  payment_collateral: number;
+  outstanding_balance: number;
+  total_collateral: number;
+  buffer: number;
+  liquidation_price: number;
+}
 // ContextValues interface using the above step interfaces
 export interface ContextValues {
   loanData: LoanData;

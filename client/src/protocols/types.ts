@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { NetworkNames } from '@/constants/env';
+import { BigNumber } from 'ethers';
 import { TokenAmount } from './compound/util/data';
 
 type CollateralTokens = {
@@ -10,6 +11,19 @@ type CollateralTokens = {
 };
 type RateType = 'floating' | 'fixed';
 type LoanTerm = 'open' | 'fixed';
+
+export interface GetLoanReturn {
+  executeBatchTransactions: () => Promise<string | null>;
+  success: boolean;
+  txHash: string;
+  error: Error | null;
+}
+
+export interface Transaction {
+  to: string;
+  value: BigNumber;
+  data: string;
+}
 
 export type ProtocolConfig = {
   name: string;
@@ -31,7 +45,12 @@ export type ProtocolConfig = {
   getRewardAmount: () => Promise<number>;
   getRewardRate: () => Promise<number>;
   txBatch: {
-    useGetLoan: (collateral: any, loan: any) => any;
+    useGetLoan: (
+      collateral: string,
+      borrowing: string,
+      loan: any,
+      mode: 'borrowMore' | 'getLoan',
+    ) => any;
     useRepaySome: (loan: any) => any;
     useRepayFull: (collateral: any) => any;
     useAddCollateral: (collateral: any) => any;

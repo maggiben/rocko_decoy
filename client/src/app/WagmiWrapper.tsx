@@ -7,7 +7,9 @@ export const wagmiConfig = createConfig({
   transports: {
     [base.id]: http(),
     [mainnet.id]: http(),
-    [sepolia.id]: http(),
+    [sepolia.id]: http(
+      'https://eth-sepolia.g.alchemy.com/v2/Uh7mU3JjGqXM2Tzuup8CqhGraEyDy8hK',
+    ),
   },
 });
 

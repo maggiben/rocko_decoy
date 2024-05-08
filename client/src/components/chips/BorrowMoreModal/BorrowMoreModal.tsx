@@ -5,6 +5,7 @@ import closeIcon from '@/assets/Close.svg';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
+import { BorrowMoreData } from '@/types/type';
 import ModalContent from '../ModalContent/ModalContent';
 
 function BorrowMoreModal({
@@ -68,7 +69,7 @@ function BorrowMoreModal({
     //   return;
     // }
 
-    const borrowMoreObj = {
+    const borrowMoreObj: BorrowMoreData = {
       payment_loan: inputFloat,
       payment_collateral: collateralFloat,
       outstanding_balance,

@@ -34,9 +34,10 @@ function Dashboard() {
       const result = await getLoanData(userId);
 
       if (result) {
-        const userActiveLoans = result.filter(
-          (loan: any) => loan.loan_active === 1,
-        );
+        const userActiveLoans = result.filter((loan: any) => {
+          loan.loan_active === 1;
+          console.log(loan);
+        });
         const userClosedLoans = result.filter(
           (loan: any) => loan.loan_active === 0,
         );

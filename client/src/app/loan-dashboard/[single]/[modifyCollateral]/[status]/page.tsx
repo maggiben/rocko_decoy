@@ -60,6 +60,10 @@ function ModifyStatus() {
   //   txBatch: { useAddCollateral, useBorrowCollateral },
   // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
+  useEffect(() => {
+    console.log(`Account Data: ${data}`);
+  }, []);
+
   const { executeBatchAddCollateral, success, txHash } =
     useAddCollateral(payment);
   const {

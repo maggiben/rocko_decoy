@@ -98,6 +98,7 @@ export const useLoanDB = () => {
           outstanding_balance: Number(loan?.outstanding_balance),
           interest: Number(loan?.interest),
           collateral: ethers.utils.formatEther(loan?.collateral),
+          payment_method: loan?.payment_method,
         }));
         return loanDataWithEthValues;
       } catch (error) {

@@ -101,8 +101,12 @@ const compoundConfig = ({
     }),
   getRewardRate: async () => getRewardRate(chain),
   txBatch: {
-    useGetLoan: async (collateral: any, loan: any) =>
-      useGetLoan(collateral, loan),
+    useGetLoan: async (
+      collateral: string,
+      borrowing: string,
+      loan: any,
+      mode: 'borrowMore' | 'getLoan',
+    ) => useGetLoan(collateral, borrowing, loan, mode),
     useRepaySome: async (loan: any) => useRepaySome(loan),
     useRepayFull: async (collateral: any) => useRepayFull(collateral),
     useAddCollateral: async (collateral: any) => useAddCollateral(collateral),
