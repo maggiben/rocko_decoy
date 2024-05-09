@@ -103,7 +103,7 @@ const StepFive: React.FC = () => {
     },
     {
       description: 'Amount Required for Loan',
-      details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
+      details: `${financial(loanData?.collateralNeeded, 4)} ETH`,
       subDetails: `$${financial(
         loanData?.collateralNeeded * loanData?.collateralPrice,
         2,
@@ -111,7 +111,7 @@ const StepFive: React.FC = () => {
       subDescription: [
         {
           description: 'Collateral',
-          details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
+          details: `${financial(loanData?.collateralNeeded, 4)} ETH`,
           subDetails: `$${financial(
             loanData?.collateralNeeded * loanData?.collateralPrice,
             2,

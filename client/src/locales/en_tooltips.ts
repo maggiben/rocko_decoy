@@ -1,6 +1,8 @@
 module.exports = {
   CURRENT_APR:
     'This is a variable (A.K.A. floating) APR and it fluctuates in real-time based on borrowing demand and available supply.',
+  CURRENT_LTV:
+    'This is the current loan-to-value (LTV) ratio for your loan. It is calculated by dividing the USD value of your loan by the USD value of your collateral.',
   PROJECTED_INTEREST:
     'This is based on the current APR and displayed in USD at a 1:1 exchange rate. Your actual interest will likely be different as it is expected the APR will fluctuate during the term of your loan.',
   COLLATERAL_NEEDED:
@@ -22,7 +24,7 @@ module.exports = {
   TRAILING_APRS:
     'Trailing APRs are calculated as the average interest rate for specified time period. Interest rates are collected every 5 minutes as part of the calculation.',
   AVERAGE_APR:
-    'This is the average APR for the length of this loan. It is calculated using your beginning interest rate and then the interest rate at every hour and half hour for the course of your loan.',
+    'This is the estimated average APR for the length of this loan. It is calculated using the beginning interest rate and then the interest rate at every five minute interval for the course of your loan.',
   FLOATING:
-    'Floating rates are interest rates that change in real-time according to a predefined formula — usually based on the market demand and supply of an asset.',
+    'Floating rates are interest rates that change in real time according to a predefined formula — usually based on the market demand and supply of an asset.',
 };

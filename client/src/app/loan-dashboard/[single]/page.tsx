@@ -294,7 +294,7 @@ function SinglePage() {
               <div className="w-[30%]">
                 <div className="flex items-center gap-2 ">
                   <p className=""> Current LTV </p>
-                  <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
+                  <HoverTooltip text={TOOLTIPS.CURRENT_LTV} />
                 </div>
                 <span className="block text-xl  font-medium">
                   {isInputNaN(
@@ -431,7 +431,7 @@ function SinglePage() {
           <div className="divide-y-2 space-y-[15px]">
             <div className="pt-4">
               <div className="flex items-center gap-2 ">
-                <p className="font-normal">Loan-to-Value Ratio</p>{' '}
+                <p className="font-normal">Max Loan-to-Value Ratio</p>{' '}
                 <HoverTooltip text={TOOLTIPS.MAX_LTV} />
               </div>
               <p className="block text-xl font-medium mt-2">
