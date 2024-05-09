@@ -8,6 +8,7 @@ import { FLAG_MULTI_CHAIN } from '@/constants/featureFlags';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { compoundConfig } from './compound';
 import { ProtocolConfig } from './types';
+import { CometContract } from '@/constants';
 
 export const useProtocolConfig = (): ProtocolConfig[] => {
   const { address: rockoWalletAddress } = useRockoAccount();
@@ -16,7 +17,7 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   // console.log({ rockoWalletAddress });
 
   const compoundConfigMainnet = compoundConfig({
-    contract: '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
+    contract: CometContract[chains.mainnet.id],
     chain: 'mainnet',
     chainId: chains.mainnet.id,
     rockoWalletAddress,
@@ -24,7 +25,7 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   });
 
   const compoundConfigBase = compoundConfig({
-    contract: '0xb125E6687d4313864e53df431d5425969c15Eb2F',
+    contract: CometContract[chains.base.id],
     chain: 'base',
     chainId: chains.base.id,
     rockoWalletAddress,
@@ -32,7 +33,7 @@ export const useProtocolConfig = (): ProtocolConfig[] => {
   });
 
   const compoundConfigSepolia = compoundConfig({
-    contract: '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e',
+    contract: CometContract[chains.sepolia.id],
     chain: 'sepolia',
     chainId: chains.sepolia.id,
     rockoWalletAddress,

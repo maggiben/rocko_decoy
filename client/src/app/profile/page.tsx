@@ -15,6 +15,7 @@ import {
   networkChainId,
   exculdedCountries,
   CompTokenContract,
+  CometContract,
 } from '@/constants';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
@@ -47,6 +48,11 @@ const Profile: React.FC = () => {
   const { data: compBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
     token: CompTokenContract[networkChainId] as `0x${string}`,
+  });
+
+  const { data: cusdcv3Balance } = useRockoBalance({
+    address: zerodevAccount as `0x${string}`,
+    token: CometContract[networkChainId] as `0x${string}`,
   });
 
   const [openContactEmailEditBox, setOpenContactEmailEditBox] =
@@ -88,7 +94,81 @@ const Profile: React.FC = () => {
     ...phoneEmailPass,
   ];
 
-  const invoice2 = [
+  const compBalanceRow = Number(compBalance?.formatted)
+    ? {
+        description: (
+          <div className="flex items-center lg:gap-x-1">
+            <span className="mr-1 lg:mr-0">COMP </span>{' '}
+          </div>
+        ),
+        details: (
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="mr-1 lg:mr-0">
+              {userInfo && `${financial(compBalance?.formatted, 6)} COMP`}
+            </span>{' '}
+          </div>
+        ),
+      }
+    : null;
+
+  const wethBalanceRow = Number(wethBalance?.formatted)
+    ? {
+        description: (
+          <div className="flex items-center lg:gap-x-1">
+            <span className="mr-1 lg:mr-0">WETH </span>{' '}
+          </div>
+        ),
+        details: (
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="mr-1 lg:mr-0">
+              {userInfo && `${financial(wethBalance?.formatted, 6)} WETH`}
+            </span>{' '}
+          </div>
+        ),
+      }
+    : null;
+
+  const usdcBalanceRow = Number(usdcBalance?.formatted)
+    ? {
+        description: (
+          <div className="flex items-center lg:gap-x-1">
+            <span className="mr-1 lg:mr-0">USDC </span>{' '}
+          </div>
+        ),
+        details: (
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="mr-1 lg:mr-0">
+              {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
+            </span>{' '}
+          </div>
+        ),
+      }
+    : null;
+  const cusdcv3BalanceRow = Number(cusdcv3Balance?.formatted)
+    ? {
+        description: (
+          <div className="flex items-center lg:gap-x-1">
+            <span className="mr-1 lg:mr-0">cUSDCv3 </span>{' '}
+          </div>
+        ),
+        details: (
+          <div className="flex items-center lg:gap-x-1 w-max">
+            <span className="mr-1 lg:mr-0">
+              {userInfo && `${financial(cusdcv3Balance?.formatted, 6)} cUSDCv3`}
+            </span>{' '}
+          </div>
+        ),
+      }
+    : null;
+
+  const rockoWalletBalance =
+    Number(compBalance?.formatted) ||
+    Number(ethBalance?.formatted) ||
+    Number(wethBalance?.formatted) ||
+    Number(usdcBalance?.formatted) ||
+    Number(cusdcv3Balance?.formatted);
+
+  const invoice2: any = [
     {
       description: 'Address',
       details: zerodevAccount ? (
@@ -104,91 +184,51 @@ const Profile: React.FC = () => {
         ''
       ),
     },
-    Number(compBalance?.formatted) ||
-    Number(ethBalance?.formatted) ||
-    Number(wethBalance?.formatted) ||
-    Number(usdcBalance?.formatted)
-      ? {
-          description: 'Total Balance',
-          details: `${financial(
-            Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
-            6,
-          )} ETH`,
-          subDescription: [
-            {
-              description: (
-                <div className="flex items-center lg:gap-x-1 w-max">
-                  <span className="mr-1 lg:mr-0">ETH </span>{' '}
-                </div>
-              ),
-              details: (
-                <div className="flex items-center lg:gap-x-1 w-max">
-                  <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(ethBalance?.formatted, 6)} ETH`}
-                  </span>{' '}
-                </div>
-              ),
-            },
-            {
-              description: (
-                <div className="flex items-center lg:gap-x-1">
-                  <span className="mr-1 lg:mr-0">WETH </span>{' '}
-                </div>
-              ),
-              details: (
-                <div className="flex items-center lg:gap-x-1 w-max">
-                  <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(wethBalance?.formatted, 6)} WETH`}
-                  </span>{' '}
-                </div>
-              ),
-            },
-            {
-              description: (
-                <div className="flex items-center lg:gap-x-1">
-                  <span className="mr-1 lg:mr-0">USDC </span>{' '}
-                </div>
-              ),
-              details: (
-                <div className="flex items-center lg:gap-x-1 w-max">
-                  <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
-                  </span>{' '}
-                </div>
-              ),
-            },
-            {
-              description: (
-                <div className="flex items-center lg:gap-x-1">
-                  <span className="mr-1 lg:mr-0">COMP </span>{' '}
-                </div>
-              ),
-              details: (
-                <div className="flex items-center lg:gap-x-1 w-max">
-                  <span className="mr-1 lg:mr-0">
-                    {userInfo && `${financial(compBalance?.formatted, 6)} COMP`}
-                  </span>{' '}
-                </div>
-              ),
-            },
-            {
-              description: '',
-              details: (
-                <div className="flex items-center lg:gap-x-1 w-max mt-6">
-                  <button
-                    type="button"
-                    className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
-                    onClick={() => setOpenModalFor('Transfer Fund')}
-                  >
-                    Transfer Funds
-                  </button>
-                </div>
-              ),
-            },
-          ],
-        }
-      : null,
   ];
+
+  if (rockoWalletBalance) {
+    invoice2.push({
+      description: 'Total Balance',
+      details: `${financial(
+        Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
+        6,
+      )} ETH`,
+      subDescription: [
+        {
+          description: (
+            <div className="flex items-center lg:gap-x-1 w-max">
+              <span className="mr-1 lg:mr-0">ETH </span>{' '}
+            </div>
+          ),
+          details: (
+            <div className="flex items-center lg:gap-x-1 w-max">
+              <span className="mr-1 lg:mr-0">
+                {userInfo && `${financial(ethBalance?.formatted, 6)} ETH`}
+              </span>{' '}
+            </div>
+          ),
+        },
+        wethBalanceRow,
+        usdcBalanceRow,
+        cusdcv3BalanceRow,
+        compBalanceRow,
+        {
+          description: '',
+          details: (
+            <div className="flex items-center lg:gap-x-1 w-max mt-6">
+              <button
+                type="button"
+                className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
+                onClick={() => setOpenModalFor('Transfer Fund')}
+              >
+                Transfer Funds
+              </button>
+            </div>
+          ),
+        },
+      ],
+    });
+  }
 
   const handleTermsCheckChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -253,6 +293,7 @@ const Profile: React.FC = () => {
       >
         getComp
       </button> */}
+
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6 space-y-2">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
