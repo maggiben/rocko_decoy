@@ -31,6 +31,9 @@ import {
   getRewardAmount,
   getRewardRate,
   getThreshold,
+  getTotalBorrow,
+  getTotalSupply,
+  getUsdcBalance,
 } from './util/data';
 
 import {
@@ -57,7 +60,7 @@ const compoundConfig = ({
   name: 'Compound',
   url: 'https://compound.finance',
   description:
-    'Compound is an algorithmic, autonomous interest rate protocol built for developers, to unlock a universe of open financial applications.',
+    'Compound III is a popular lending protocol originally deployed on Ethereum in 2022. It allows users to borrow USDC at a floating interest rate — meaning the interest rate can change in real time based on market supply and demand.',
   chain,
   collateral: [
     { ticker: 'ETH', fullName: 'Ether', icon: etherIcon, comingSoon: false },
@@ -75,12 +78,15 @@ const compoundConfig = ({
     },
     { ticker: 'UNI', fullName: 'Uniswap', icon: uniswapIcon, comingSoon: true },
   ],
-  rateType: 'floating',
+  rateType: 'Floating',
   minBorrow: 100,
   maxBorrow: 100000,
-  loanTerm: 'open',
+  loanTerm: 'Open-Ended',
   getETHPrice: async () => getETHPrice(chain),
   getBorrowAPR: async () => getBorrowAPR(chain),
+  getTotalSupply: async () => getTotalSupply(chain),
+  getTotalBorrow: async () => getTotalBorrow(chain),
+  getUsdcBalance: async () => getUsdcBalance(chain),
   getLTV: async () => getLTV(chain),
   getThreshold: async () => getThreshold(chain),
   getPenalty: async () => getPenalty(chain),

@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { LoanData, ProtocolProps } from '@/types/type';
 import useLoanData from '@/hooks/useLoanData';
 import { useLoanDB } from '@/db/loanDb';
@@ -7,7 +8,10 @@ import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
 import { NETWORK } from '@/constants/env';
 import useSelectedNetwork from '@/hooks/useSelectedNetwork';
+import { useProtocolConfig } from '@/protocols';
+import { ProtocolConfig } from '@/protocols/types';
 import HoverTooltip from '../HoverTooltip/HoverTooltip';
+import EthIcon from '../../../assets/coins/ETH.svg';
 import PlaceholderText from '../PlaceholderText/PlaceholderText';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -45,6 +49,10 @@ const Protocol: FC<ProtocolProps> = ({
       borrowing * (1 + apr / seconds) ** ((seconds * days) / 365) - borrowing;
     return interest;
   };
+
+  const protocolConfig = useProtocolConfig().find(
+    (c: ProtocolConfig) => c.chain === NETWORK,
+  )!;
 
   // TODO - Update Loan Data Only AFTER Selection, we need display only values for each network
   // currently this is getting overwritten by the last network data fetched
@@ -109,8 +117,51 @@ const Protocol: FC<ProtocolProps> = ({
     }
   };
 
+  const formatNumber = (num: any, locale = 'en-US', decimals = 2) =>
+    new Intl.NumberFormat(locale, {
+      notation: 'compact',
+      compactDisplay: 'short',
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(num);
+
+  const [totalBorrowed, setTotalBorrowed] = useState<number | undefined>(
+    undefined,
+  );
+  const [availableToBeBorrowed, setAvailableToBeBorrowed] = useState<
+    string | undefined
+  >();
+
+  const getBorrow = async () => {
+    const value = await protocolConfig.getTotalBorrow();
+    setTotalBorrowed(value);
+  };
+
+  const getUsdcBalance = async () => {
+    const value = await protocolConfig.getUsdcBalance();
+    setAvailableToBeBorrowed(value);
+  };
+
+  // Below is to USDC balance of comet contract as it's equal to available liquidity
+
+  // async function getUsdcBalance() {
+  //   const contractAddress = '0xc3d688B66703497DAA19211EEdff47f25384cdc3';
+  //   const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
+  //   const value = await getBalance(wagmiConfig, {
+  //     address: contractAddress,
+  //     token: usdcAddress,
+  //   });
+
+  //   const formattedBalance = value.formatted;
+
+  //   setAvailableToBeBorrowed(formattedBalance);
+  // }
+
   useEffect(() => {
     updateLoanData(protocolInfo, setProtocolData);
+
+    getBorrow();
+    getUsdcBalance();
 
     getMonthAverageAPR(chain)
       .then((_apr) => setMonthAvgAPR(_apr))
@@ -137,7 +188,7 @@ const Protocol: FC<ProtocolProps> = ({
     >
       <div className="px-5">
         {/* protocol name */}
-        <div className="flex items-center justify-between flex-col md:flex-row gap-2">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-2">
           <div className="flex items-center justify-start gap-1">
             <Image src={symbol || ''} alt={name || ''} width={20} height={20} />
             <h1 className="font-medium text-xl text-blackPrimary">{name}</h1>
@@ -189,96 +240,176 @@ const Protocol: FC<ProtocolProps> = ({
         </div>
 
         {/* protocol info */}
-        <div className="py-4 px-6 w-full mt-4">
-          <div className="flex items-start justify-between gap-4 w-full flex-wrap">
-            <div className="flex-1 min-w-[205px]">
-              {/* info title */}
-              <div className="flex items-center gap-1">
-                <p className="font-medium text-blackPrimary">Trailing APRs</p>
-                <HoverTooltip text={TOOLTIPS.TRAILING_APRS} />
-              </div>
-              {/* info */}
-              <div className="py-3 space-y-3">
-                <div className="">
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">30 Day</span>
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {financial(monthAvgAPR * 100, 2)}%
-                  </p>
-                </div>
-                <div className="">
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">90 Day</span>
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {financial(threeMonthAvgAPR * 100, 2)}%
-                  </p>
+        <div className="flex flex-col bg-[#F9F9F9] max-w-[615px] rounded-2xl p-4 my-2">
+          <p className="text-sm text-[#545454]">
+            {protocolConfig.description}{' '}
+            <Link
+              className="text-sm text-[#545454] underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="learn/the-top-defi-protocols-for-borrowing-compound-aave-and-makerdao"
+            >
+              Learn more.
+            </Link>
+          </p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:w-full">
+          <div className="pl-6 pr-6 lg:w-full mt-4 lg:flex">
+            <div className="lg:flex-1 lg:w-auto lg:max-w-[400px]">
+              <h2 className="font-medium text-l text-blackPrimary pb-2">
+                Key Loan Terms
+              </h2>
+              <div className="flex flex-col gap-4">
+                <div className="sm:min-w-[180px]">
+                  <div className="py-3 space-y-3">
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">Current APR</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {financial(monthAvgAPR * 100, 2)}%
+                      </p>
+                    </div>
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">Interest Rate Type</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {protocolConfig.rateType}
+                      </p>
+                    </div>
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">Loan Term</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {protocolConfig.loanTerm}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex-1 min-w-[205px]">
-              {/* info title */}
-              <div className="flex items-center gap-1">
-                <p className="font-medium text-blackPrimary">
-                  Collateral Parameters (ETH)
+            <div className="lg:flex-1 lg:w-auto lg:max-w-[400px]">
+              <div className="lg:py-4" />
+              <div className="flex flex-col gap-4">
+                <div className="sm:min-w-[180px]">
+                  <div className="pt-0 lg:pt-3 pb-3 space-y-3">
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">30 Day Trailing Average APR</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {financial(monthAvgAPR * 100, 2)}%
+                      </p>
+                    </div>
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">90 Day Trailing Average APR</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {financial(threeMonthAvgAPR * 100, 2)}%
+                      </p>
+                    </div>
+                    <div className="pb-3 lg:pb-0">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">Current Reward Rate</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        {financial(Number(protocolData?.rewardRate) * 100, 2)}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="lg:flex-1 lg:w-auto lg:max-w-[400px]">
+              <h2 className="font-medium text-l text-blackPrimary pb-2">
+                Available Liquidity
+              </h2>
+              <div className="flex flex-col gap-4">
+                <div className="sm:min-w-[180px]">
+                  <div className="py-3 space-y-3">
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">Available to Be Borrowed</span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        ${formatNumber(availableToBeBorrowed)}
+                      </p>
+                    </div>
+                    <div className="">
+                      <p className="text-sm text-[#545454] flex gap-1">
+                        <span className="">
+                          Currently Borrowed (Including Interest)
+                        </span>
+                      </p>
+                      <p className="font-semibold text-blackPrimary">
+                        ${formatNumber(totalBorrowed)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pb-4 px-6 w-full mt-4">
+          <div className="flex-1 min-w-[205px]">
+            <div className="flex items-center gap-1">
+              <p className="font-medium text-blackPrimary pb-4">
+                Collateral Parameters
+              </p>
+            </div>
+            <div className="flex border-b border-gray-300 py-2">
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
+                  <span className="">Collateral Asset</span>
                 </p>
               </div>
-              {/* info */}
-              <div className="py-3 space-y-3">
-                <div>
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">Max Loan-to-Value</span>
-                    <HoverTooltip text={TOOLTIPS.MAX_LTV} />
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {Number(protocolData?.loanToValue) * 100}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">Liquidation Threshold</span>
-                    <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {Number(protocolData?.liquidationThreshold) * 100}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">Liquidation Penalty</span>
-                    <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {financial(Number(protocolData?.liquidationPenalty) * 100)}%
-                  </p>
-                </div>
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
+                  <span className="">Max Loan-to-Value</span>
+                  <HoverTooltip text={TOOLTIPS.MAX_LTV} />
+                </p>
+              </div>
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
+                  <span className="">Liquidation Threshold</span>
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
+                </p>
+              </div>
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
+                  <span className="">Liquidation Penalty</span>
+                  <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
+                </p>
               </div>
             </div>
-            <div className="flex-1 min-w-[205px]">
-              {/* info title */}
-              <div className="flex items-center gap-1">
-                <p className="font-medium text-blackPrimary">Rewards</p>
-                <HoverTooltip text={TOOLTIPS.PROTOCOL_REWARDS} />
+            <div className="flex pt-1">
+              <div
+                className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4"
+                style={{ display: 'inline-flex' }}
+              >
+                <Image src={EthIcon} width={24} height={24} alt="Eth icon" />
+                <p className="font-semibold text-blackPrimary ml-2">ETH</p>
               </div>
-              {/* info */}
-              <div className="py-3 space-y-3">
-                <div>
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">Current Rate</span>
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {financial(Number(protocolData?.rewardRate) * 100, 2)}%
-                  </p>
-                </div>
-                {/* <div>
-                  <p className="text-sm text-[#545454] flex items-center justify-start gap-1">
-                    <span className="">Trailing 365 average</span>
-                  </p>
-                  <p className="font-semibold text-blackPrimary">
-                    {financial(avgRewardRate * 100, 2)}%
-                  </p>
-                </div> */}
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="font-semibold text-blackPrimary justify-self-start text-left">
+                  {Number(protocolData?.loanToValue) * 100}%
+                </p>
+              </div>
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="font-semibold text-blackPrimary justify-self-start text-left">
+                  {Number(protocolData?.liquidationThreshold) * 100}%
+                </p>
+              </div>
+              <div className="flex-auto w-1/4 sm:min-w-[85px] lg:w-1/4">
+                <p className="font-semibold text-blackPrimary justify-self-start text-left">
+                  {financial(Number(protocolData?.liquidationPenalty) * 100)}%
+                </p>
               </div>
             </div>
           </div>

@@ -9,8 +9,8 @@ type CollateralTokens = {
   icon: string;
   comingSoon: boolean;
 };
-type RateType = 'floating' | 'fixed';
-type LoanTerm = 'open' | 'fixed';
+type RateType = 'Floating' | 'Fixed';
+type LoanTerm = 'Open-Ended' | 'Fixed';
 
 export interface GetLoanReturn {
   executeBatchTransactions: () => Promise<string | null>;
@@ -44,6 +44,10 @@ export type ProtocolConfig = {
   getBorrowBalanceOf: () => Promise<TokenAmount>;
   getRewardAmount: () => Promise<number>;
   getRewardRate: () => Promise<number>;
+  getTotalBorrow: () => Promise<number>;
+  getTotalSupply: () => Promise<number>;
+  getUsdcBalance: () => Promise<string>;
+
   txBatch: {
     useGetLoan: (
       collateral: string,
