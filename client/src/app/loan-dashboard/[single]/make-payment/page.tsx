@@ -30,6 +30,7 @@ import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
+import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -96,16 +97,19 @@ const MakePayment: FC = () => {
   const [openModalFor, setOpenModalFor] = useState(''); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
-
+  const [borrowBalance, setborrowBalance] = useState<number>(0);
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
-  const currentBalance = parseFloat(router.get('balance') || '0');
+  const repayFull = router.get('repayFull') === 'true';
+  const payment = repayFull
+    ? borrowBalance
+    : parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   const collateral = parseFloat(router.get('collateral') || '0');
+
   const amount = 'add'; //! get the URL parameter amount value
 
   const { disconnect } = useRockoDisconnect();
 
-  const { address: zerodevAccount } = useRockoAccount();
+  const { address: rockoWalletAddress } = useRockoAccount();
   const { getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
@@ -116,6 +120,11 @@ const MakePayment: FC = () => {
   const isMismatched = useNetworkMismatch();
   const switchChain = useSwitchChain();
 
+  const { getBorrowBalanceOf } = useSingleLoan();
+
+  const totalPayment = payment
+    ? payment + (payment === borrowBalance ? Number(PAYMENT_BUFFER) : 0)
+    : 0;
   const invoice: Info[] = [
     {
       description: 'Lending Protocol',
@@ -126,19 +135,23 @@ const MakePayment: FC = () => {
       subDescription: [
         {
           description:
-            payment === currentBalance ? (
-              <p className="text-sm">Outstanding Balance</p>
+            payment && payment === borrowBalance ? (
+              <p className="text-sm" />
             ) : (
               ''
             ),
           details:
-            payment === currentBalance ? `${financial(payment, 6)} USDC` : '',
+            payment && payment === borrowBalance
+              ? `${financial(payment, 6)} USDC`
+              : '',
           subDetails:
-            payment === currentBalance ? `$${financial(payment, 6)}` : '',
+            payment && payment === borrowBalance
+              ? `$${financial(payment, 6)}`
+              : '',
         },
         {
           description:
-            payment === currentBalance ? (
+            payment === borrowBalance ? (
               <div className="flex items-center gap-2">
                 <p className="text-sm">Payment Buffer</p>
                 <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
@@ -146,36 +159,35 @@ const MakePayment: FC = () => {
             ) : (
               ''
             ),
-          details: payment === currentBalance ? `${PAYMENT_BUFFER} USDC` : '',
-          subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : '',
+          details: payment === borrowBalance ? `${PAYMENT_BUFFER} USDC` : '',
+          subDetails: payment === borrowBalance ? `~$${PAYMENT_BUFFER}` : '',
         },
       ],
-      details: (
+      details: payment ? (
         <span className="font-semibold">{`${financial(
-          payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
+          totalPayment,
           6,
         )} USDC`}</span>
+      ) : (
+        <PlaceholderText />
       ),
-      subDetails: `$${financial(
-        payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
-        6,
-      )}`,
+      subDetails: payment ? `$${financial(totalPayment, 6)}` : '',
     },
     {
       description: 'Projected values after payment',
       subDescription: [
         {
-          description: 'Outstanding Balance',
+          description: '',
           details: (
             <span className="font-semibold text-sm">
-              {(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC
+              {(borrowBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC
             </span>
           ),
           subDetails: `~$${new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 6,
           }).format(
             parseFloat(
-              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
+              (borrowBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
             ),
           )}`,
         },
@@ -211,17 +223,37 @@ const MakePayment: FC = () => {
       JSON.stringify({
         currency: 'USDC',
         amount: payment,
-        account: zerodevAccount?.toString(),
+        account: rockoWalletAddress?.toString(),
       }),
     );
   };
 
   useEffect(() => {
-    getLiquidationPrice(currentBalance - payment, collateral)
+    const getOutstandingBalance = async () => {
+      const currentBalance = await getBorrowBalanceOf();
+      setborrowBalance(currentBalance.formatted);
+    };
+    if (repayFull) {
+      const interval = setInterval(() => {
+        // Code to be executed every 3 seconds
+        console.log('Refreshing balance to repay full...');
+        getOutstandingBalance();
+      }, 3000);
+
+      // Clean up the interval on component unmount
+      return () => {
+        clearInterval(interval);
+      };
+    }
+    getOutstandingBalance();
+  }, []);
+
+  useEffect(() => {
+    getLiquidationPrice(borrowBalance - payment, collateral)
       .then((_price) => setLiquidationPrice(_price))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getBuffer(currentBalance - payment, collateral)
+    getBuffer(borrowBalance - payment, collateral)
       .then((_buffer) => setBuffer(_buffer))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
@@ -241,7 +273,7 @@ const MakePayment: FC = () => {
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Make a Payment</h1>
-      {payment === currentBalance ? (
+      {payment === borrowBalance ? (
         <p>
           You’re repaying your loan in full and withdrawing your collateral plus
           any earned rewards
@@ -444,7 +476,7 @@ const MakePayment: FC = () => {
 
           <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
             <ul className="list-disc">
-              {payment === currentBalance
+              {payment === borrowBalance
                 ? termsFull.map((term, i) => (
                     <React.Fragment key={i}>{term.rule}</React.Fragment>
                   ))
@@ -477,17 +509,17 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanId}/${'make-payment'}/processing?method=${paymentMethod}&balance=${currentBalance}&payment=${
+                href={`/loan-dashboard/${loanId}/${'make-payment'}/processing?method=${paymentMethod}&balance=${borrowBalance}&payment=${
                   payment +
-                  (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
+                  (payment === borrowBalance ? Number(PAYMENT_BUFFER) : 0)
                 }`}
               >
                 <button
                   type="button"
                   className={`font-semibold  text-xs md:text-sm ${
-                    address && zerodevAccount ? 'bg-blue' : 'bg-blue/40'
+                    address && rockoWalletAddress ? 'bg-blue' : 'bg-blue/40'
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={!address || !zerodevAccount}
+                  disabled={!address || !rockoWalletAddress}
                 >
                   Confirm
                 </button>
