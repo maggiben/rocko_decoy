@@ -167,21 +167,24 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
 });
 
 router.get('/transactions',checkJwt, async (req: Request, res: Response, next) => {
-    try {
+    if(req.user){
+        try {
         
-        let txQuery = "SELECT transaction_type, create_time, transaction_hash, usd_value, amount, asset, chain, lending_protocol, sender_address FROM transactions WHERE user_id = ?";
-        const params = [req.user.id];
-        db.query(txQuery, params, (err, results) => {
-          if (err) {
-            console.error(err);
-            return next(new Error('Database query failed'));
-          }
-          return res.status(200).send(results);
-        });
-    } catch (error) {
-        logger(error, 'error');
-        return res.status(500).send('Something went wrong');
+            let txQuery = "SELECT transaction_type, create_time, transaction_hash, usd_value, amount, asset, chain, lending_protocol, sender_address FROM transactions WHERE user_id = ?";
+            const params = [req.user.id];
+            db.query(txQuery, params, (err, results) => {
+              if (err) {
+                console.error(err);
+                return next(new Error('Database query failed'));
+              }
+              return res.status(200).send(results);
+            });
+        } catch (error) {
+            logger(error, 'error');
+            return res.status(500).send('Something went wrong');
+        }
     }
+    return res.status(403).send('Unauthorized');
 })
   
 
