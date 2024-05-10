@@ -52,6 +52,10 @@ data "aws_secretsmanager_secret_version" "messagebird_api_key" {
   secret_id = "prod/messagebird_key"
 }
 
+data "aws_secretsmanager_secret_version" "dynamic_project_id" {
+  secret_id = "prod/dynamic_project_id"
+}
+
 data "aws_vpc" "dev-infrastructure-vpc" {
   filter {
     name   = "tag:Name"

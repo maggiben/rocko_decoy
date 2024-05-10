@@ -19,8 +19,8 @@ import {
   ENTRYPOINT_ADDRESS_V07,
 } from 'permissionless';
 import { Client, createPublicClient, http } from 'viem';
-import { sepolia } from 'viem/chains';
 import { ZERODEV_PROJECT_ID } from '@/constants/env';
+import { networkChain } from '@/constants';
 
 const BUNDLER_RPC_ZERO_DEV_DEFAULT = `https://rpc.zerodev.app/api/v2/bundler/${ZERODEV_PROJECT_ID}`;
 const PAYMASTER_RPC_ZERO_DEV_DEFAULT = `https://rpc.zerodev.app/api/v2/paymaster/${ZERODEV_PROJECT_ID}`;
@@ -32,7 +32,7 @@ const BUNDLER_RPC_PIMLICO = `${BUNDLER_RPC_ZERO_DEV_DEFAULT}?provider=PIMLICO`;
 const PAYMASTER_RPC_PIMLICO = `${PAYMASTER_RPC_ZERO_DEV_DEFAULT}?provider=PIMLICO`;
 
 // TODO network switch
-const chain = sepolia;
+const chain = networkChain; // sepolia;
 const entryPoint = ENTRYPOINT_ADDRESS_V07;
 
 interface WalletProviderProps {

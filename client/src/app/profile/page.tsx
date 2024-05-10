@@ -5,6 +5,8 @@ import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 // import { useSingleLoan } from '@/contract/single';
+import { useSearchParams } from 'next/navigation';
+import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useUserInfo } from '@/hooks/useUserInfo';
@@ -30,6 +32,9 @@ const Profile: React.FC = () => {
   const { userInfo } = useUserInfo();
   const { address: zerodevAccount } = useRockoAccount();
   const { updateUser, getUserData } = useUserDB();
+
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const walletDebug = router.get('wallet'); //! get the URL parameter payment value
 
   const { data: ethBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
@@ -474,9 +479,9 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   {info?.subDescription &&
-                    info?.subDescription.map((innerInfo: any, i: number) => (
+                    info?.subDescription.map((innerInfo: any, j: number) => (
                       // eslint-disable-next-line react/no-array-index-key
-                      <React.Fragment key={i}>
+                      <React.Fragment key={j}>
                         <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
                           {innerInfo?.description}
                         </div>
@@ -490,6 +495,7 @@ const Profile: React.FC = () => {
                 </div>
               </React.Fragment>
             ))}
+            {walletDebug ? <DynamicWidget /> : null}
           </div>
         </div>
         {/* <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
