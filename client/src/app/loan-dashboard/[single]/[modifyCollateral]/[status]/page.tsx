@@ -138,6 +138,7 @@ function ModifyStatus() {
       transaction_type:
         status === 'add' ? 'collateral_addition' : 'collateral_withdrawal',
       funding_source: paymentMethod,
+      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: txHash,

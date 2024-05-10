@@ -95,9 +95,8 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 [TransactionType.RewardsWithdrawal]: TransferType.CryptoWithdrawal,
                 [TransactionType.Fee]: TransferType.CryptoDeposit
             }
-            // TODO move decimal conversion to client, server should only handle wei values
-            const assetAmount = req.body.metadata.amount * (10**req.body.metadata.asset_decimals);
-            let complianceSubmission: { uuid: string; } | undefined;
+ const assetAmount = req.body.metadata.amount * (10**req.body.metadata.asset_decimals);
+            let complianceSubmission: { uuid: string;  } | undefined;
             try {
                 complianceSubmission = await complianceTransaction({
                     rockoUserId: req?.user?.id.toString(),
@@ -135,6 +134,8 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
                 transaction_type: req.body.metadata.transaction_type,
                 funding_source: source[req.body.metadata.funding_source as FundingSourceUI],
                 create_time: new Date(),
+            chain: req.body.network.name,
+            lending_protocol: req.body.metadata.lending_protocol,
             };
            
             const txMonQuery = "INSERT INTO transactions SET ?";
@@ -164,6 +165,24 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
     }
 
 });
+
+router.get('/transactions',checkJwt, async (req: Request, res: Response, next) => {
+    try {
+        
+        let txQuery = "SELECT transaction_type, create_time, transaction_hash, usd_value, amount, asset, chain, lending_protocol, sender_address FROM transactions WHERE user_id = ?";
+        const params = [req.user.id];
+        db.query(txQuery, params, (err, results) => {
+          if (err) {
+            console.error(err);
+            return next(new Error('Database query failed'));
+          }
+          return res.status(200).send(results);
+        });
+    } catch (error) {
+        logger(error, 'error');
+        return res.status(500).send('Something went wrong');
+    }
+})
   
 
 router.get('/platform-status', async (req: Request, res: Response, next) => {
@@ -189,3 +208,4 @@ router.get('/platform-status', async (req: Request, res: Response, next) => {
 })
 
 export default router;
+

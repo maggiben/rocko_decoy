@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { getTransactions } from '@/db/transactionDb';
 import compound from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
@@ -17,7 +18,7 @@ import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
-import { formatDate, isInputNaN } from '@/utility/utils';
+import { etherscanLink, formatDate, isInputNaN } from '@/utility/utils';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
@@ -25,6 +26,7 @@ import usePlatformStatus from '@/hooks/usePlatformStatus';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import CollateralWarningBanner from '@/components/pages/Dashboard/Banners/collateralWarning';
 import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
+import { DateTime } from 'luxon';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -89,6 +91,7 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
   const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>();
   const [collateralBalanceOf, setCollateralBalanceOf] = useState<any>(0);
   const [minCollateral, setMinCollateral] = useState<any>(0);
+  const [loanTransaction, setLoanTransaction] = useState<any>();
 
   const {
     getETHPrice,
@@ -106,8 +109,14 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
 
   const initialize = async () => {
     if (userInfo) {
-      const userId = await getUserId(userInfo?.email);
-      const result = await getLoanData(userId);
+      const user_id = await getUserId(userInfo?.email);
+
+      const transactionResponse = await getTransactions(user_id);
+      if (transactionResponse?.length > 0) {
+        setLoanTransaction(transactionResponse.reverse());
+      }
+
+      const result = await getLoanData(user_id);
       if (result) {
         const activeLoans = result.filter(
           (loan) => loan.id === Number(loanId) && loan.loan_active,
@@ -119,7 +128,6 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
 
           if (avg_val) setAverageAPR(avg_val);
         }
-
         if (isBorrowMore) setOpenModalFor('Borrow More');
       }
     }
@@ -225,6 +233,44 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
       'error',
     );
   }
+
+  const txTypes = {
+    new_loan_withdrawal: 'Loan withdrawn',
+    initial_collateral: 'Collateral added',
+    payment: 'Payment',
+    collateral_addition: 'Collateral added',
+    collateral_withdrawal: 'Collateral withdrawn',
+    loan_increase: 'Loan increase',
+    rewards_withdrawal: 'Rewards withdrawn',
+    fee: 'Fee payment',
+  };
+
+  const validateTransactionTypes = (transactionType: keyof typeof txTypes) =>
+    txTypes?.[transactionType] || null;
+
+  const getDateDifference = (transactionDate: any) => {
+    const today = DateTime.local().startOf('day');
+    const yesterday = today.minus({ day: 1 });
+    const formattedDate = DateTime.fromISO(transactionDate).startOf('day');
+
+    if (formattedDate.equals(today)) {
+      return 'Today';
+    }
+    if (formattedDate.equals(yesterday)) {
+      return 'Yesterday';
+    }
+    return formattedDate.toFormat('MM/dd/yyyy');
+  };
+
+  const truncateTransactionHash = (hash: string) => {
+    const hashString = hash;
+    if (hashString.length <= 12) {
+      return hashString;
+    }
+    const hashFirstPart = hashString?.slice(0, 6);
+    const hashLastPart = hashString?.slice(-6);
+    return `${hashFirstPart}......${hashLastPart}`;
+  };
 
   return (
     <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
@@ -609,7 +655,61 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
             </div>
           </div>
         </aside>
+        {/* ---------------------- Transactions ------------------------ */}
       </section>
+
+      <aside className="border-2  rounded-2xl p-3 md:p-6 lg:p-6">
+        <h1 className="text-xl mb-4 font-medium">Transactions</h1>
+        <table className="w-[100%] mt-1 text-left">
+          <thead>
+            <th className="font-medium w-[20%]">Transaction Type</th>
+            <th className="font-medium  w-[15]">Date</th>
+            <th className="font-medium  w-[25%]">Protocol</th>
+            <th className="font-medium  w-[20%]">Transaction Hash</th>
+            <th className="font-medium  w-[20%] text-right ">Amount</th>
+          </thead>
+          <tbody>
+            {loanTransaction?.map((transaction: any) => (
+              <tr className="border-t-2 ">
+                <td className="pt-2 pb-2">
+                  <p>
+                    {validateTransactionTypes(transaction?.transaction_type)}
+                  </p>
+                </td>
+                <td className="pt-2 pb-2">
+                  <p>{getDateDifference(transaction?.create_time)}</p>
+                </td>
+                <td className="pt-2 pb-2">
+                  <p>
+                    {transaction?.lending_protocol?.toUpperCase()}:{' '}
+                    {transaction?.chain?.toUpperCase()}
+                  </p>
+                </td>
+                <td className="pt-2 pb-2">
+                  <a
+                    href={etherscanLink(transaction?.sender_address, 'address')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <p className="underline">
+                      {truncateTransactionHash(transaction?.transaction_hash)}
+                    </p>
+                  </a>
+                </td>
+                <td className="text-right pt-2 pb-2">
+                  <p>
+                    {transaction?.usd_value}{' '}
+                    {(transaction?.asset).toUpperCase()}
+                  </p>{' '}
+                  <p className="pt-1">
+                    ${parseFloat(transaction?.amount).toLocaleString()}
+                  </p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </aside>
       {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
       {openModalFor && openModalFor === 'Make Payment' && (
         <ModalContainer>

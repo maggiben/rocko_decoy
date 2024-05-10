@@ -90,7 +90,6 @@ function Processing() {
   const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
-
   // const { chain } = useRockoNetwork();
   const { executeBatchRepaySome, success, txHash } = useRepaySome(payment);
   const {
@@ -256,6 +255,7 @@ function Processing() {
       sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
+      lending_protocol: loanData?.lending_protocol,
     };
 
     transactionComp({
@@ -275,6 +275,7 @@ function Processing() {
       sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
+      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,
@@ -291,6 +292,7 @@ function Processing() {
       sender_address: CometContract[networkChainId],
       transaction_type: 'payment',
       funding_source: paymentMethod,
+      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,
@@ -307,6 +309,7 @@ function Processing() {
       sender_address: CometRewardContract[networkChainId],
       transaction_type: 'rewards_withdrawal',
       funding_source: paymentMethod,
+      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,

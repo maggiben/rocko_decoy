@@ -78,6 +78,7 @@ const DepositingCollateral = () => {
   const [triggerRefetch, setTriggerRefetch] = useState(true);
   const [startTransactions, setStartTransactions] = useState(false);
   const [isExternalWallet, setIsExternalWallet] = useState(false);
+  const [lendingProtocol, setLendingProtocol] = useState('');
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -364,6 +365,7 @@ const DepositingCollateral = () => {
       sender_address: address,
       transaction_type: 'initial_collateral',
       funding_source: loanData?.paymentMethod,
+      lending_protocol: lendingProtocol,
     };
     const metadata_loan = {
       loan_id: type === 'add' ? existLoanId : loanId,
@@ -376,6 +378,7 @@ const DepositingCollateral = () => {
       transaction_type:
         type === 'add' ? 'loan_increase' : 'new_loan_withdrawal',
       funding_source: loanData?.paymentMethod,
+      lending_protocol: lendingProtocol,
     };
 
     transactionComp({
@@ -399,6 +402,7 @@ const DepositingCollateral = () => {
             (loan: any) => loan.loan_active === 1,
           );
           if (matchLoan && matchLoan.length > 0) {
+            setLendingProtocol(matchLoan[0]?.lending_protocol);
             setExistLoanId(matchLoan[0]?.id);
             setIsExistLoan(true);
             setTotalBorrowing(matchLoan[0].outstanding_balance + borrowing);
