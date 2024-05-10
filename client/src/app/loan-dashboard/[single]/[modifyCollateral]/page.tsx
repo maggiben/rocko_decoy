@@ -3,11 +3,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
-import StatusWarning from '@/assets/StatusWarning.svg';
-import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
-import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
-import correct from '@/assets/correct.svg';
+import React, { useState, useEffect, FC } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import {
@@ -17,6 +13,10 @@ import {
   useAddress,
   useChain,
 } from '@thirdweb-dev/react';
+import StatusWarning from '@/assets/StatusWarning.svg';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+import ChooseWallet from '@/components/chips/ChooseWallet/ChooseWallet';
+import correct from '@/assets/correct.svg';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
@@ -59,17 +59,16 @@ const terms: Term[] = [
   },
 ];
 
-const ModifyCollateral: React.FC = () => {
+const ModifyCollateral: FC = () => {
+  const { single: loanId } = useParams();
   const [paymentMethod, setPaymentMethod] = useState(''); //! capture which payment method or radio btn a user will select
   const [openModalFor, setOpenModalFor] = useState(''); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
   const [collateralPrice, setCollateralPrice] = useState<number>(0);
 
-  const basicRouter = useParams();
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const amount = router.get('try'); //! get the URL parameter value
-  const loanIndex = parseFloat(basicRouter.single.toString() || '0');
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   const basicCollateral = parseFloat(router.get('collateral') || '0');
   const currentBalance = parseFloat(router.get('balance') || '0');
@@ -266,7 +265,10 @@ const ModifyCollateral: React.FC = () => {
                     Sign in
                   </button>
                 ) : (
-                  <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium">
+                  <button
+                    type="button"
+                    className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md text-xs font-medium"
+                  >
                     <Image src={correct} alt="Correct Image" />
                     <p>Connected</p>
                   </button>
@@ -383,7 +385,7 @@ const ModifyCollateral: React.FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/${loanIndex}?active=true`}>
+              <Link href={`/loan-dashboard/${loanId}?active=true`}>
                 <button
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
@@ -393,9 +395,10 @@ const ModifyCollateral: React.FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "status" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanIndex}/${'modify_collateral'}/${amount}?payment=${payment}&method=${paymentMethod}`}
+                href={`/loan-dashboard/${loanId}/modify_collateral/${amount}?payment=${payment}&method=${paymentMethod}`}
               >
                 <button
+                  type="button"
                   className={`font-semibold  text-xs md:text-sm ${
                     address && zerodevAccount ? 'bg-blue' : 'bg-blue/40'
                   } py-[10px]  px-6 rounded-full text-white `}

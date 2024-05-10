@@ -60,11 +60,11 @@ const TxPaused = () => (
   </p>
 );
 
-function SinglePage() {
+function SinglePage({ params: { single: loanId } }: { params: any }) {
+  console.log('single', { loanId });
   const { rockoWalletAddress } = useRockoWallet();
   const { transactionsPaused } = usePlatformStatus();
   const searchParams = useSearchParams();
-  const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
@@ -106,16 +106,16 @@ function SinglePage() {
 
   const initialize = async () => {
     if (userInfo) {
-      const user_id = await getUserId(userInfo?.email);
-      const result = await getLoanData(user_id);
+      const userId = await getUserId(userInfo?.email);
+      const result = await getLoanData(userId);
       if (result) {
-        const active_loans = result.filter(
-          (loan: any) => loan.loan_active === (isActive ? 1 : 0),
+        const activeLoans = result.filter(
+          (loan) => loan.id === Number(loanId) && loan.loan_active,
         );
-        if (active_loans.length > 0) {
-          setLoanData(active_loans[0]);
+        if (activeLoans.length > 0) {
+          setLoanData(activeLoans[0]);
 
-          const avg_val = await getAverageAPR(active_loans[0].create_time);
+          const avg_val = await getAverageAPR(activeLoans[0].create_time);
 
           if (avg_val) setAverageAPR(avg_val);
         }
@@ -624,6 +624,7 @@ function SinglePage() {
       {openModalFor && openModalFor === 'Modify Collateral' && (
         <ModalContainer>
           <ModifyWallet
+            loanId={loanId}
             setOpenModalFor={setOpenModalFor}
             currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}
@@ -633,6 +634,7 @@ function SinglePage() {
       {openModalFor && openModalFor === 'Borrow More' && (
         <ModalContainer>
           <BorrowMoreModal
+            loanId={loanId}
             setOpenModalFor={setOpenModalFor}
             currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}

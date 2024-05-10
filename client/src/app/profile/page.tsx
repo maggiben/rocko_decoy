@@ -459,7 +459,8 @@ const Profile: React.FC = () => {
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <h3 className="text-xl font-medium mb-4">Wallet</h3>
           <div className="divide-y-2">
-            {invoice2.map((info, i) => (
+            {invoice2.map((info: any, i: number) => (
+              // eslint-disable-next-line react/no-array-index-key
               <React.Fragment key={i}>
                 <div className="flex pb-3 pt-2 flex-wrap items-center space-y-2">
                   <p className="font-medium w-[62%] md:w-1/2">
@@ -473,7 +474,8 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   {info?.subDescription &&
-                    info?.subDescription.map((innerInfo, i) => (
+                    info?.subDescription.map((innerInfo: any, i: number) => (
+                      // eslint-disable-next-line react/no-array-index-key
                       <React.Fragment key={i}>
                         <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
                           {innerInfo?.description}

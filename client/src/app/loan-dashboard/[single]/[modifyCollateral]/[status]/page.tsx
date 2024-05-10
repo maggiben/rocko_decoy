@@ -36,7 +36,7 @@ interface DoneTracker {
 }
 
 function ModifyStatus() {
-  const { status, single: loanIndex } = useParams(); //! by using this hook get the URL parameter
+  const { status, single: loanId } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   const paymentMethod = router.get('method') || '';
@@ -126,7 +126,7 @@ function ModifyStatus() {
 
   const saveTx = () => {
     const metadata = {
-      loan_id: loanIndex,
+      loan_id: loanId,
       asset: 'weth',
       asset_decimals: 18,
       amount: payment,
@@ -405,14 +405,14 @@ function ModifyStatus() {
             <LoanComplete
               title="Collateral Deposit Complete"
               details="You have successfully increased your loan collateral"
-              id={Number(loanIndex)}
+              id={Number(loanId)}
               txHash=""
             />
           ) : (
             <LoanComplete
               title="Collateral Withdrawal Complete"
               details="You have successfully withdrawn collateral"
-              id={Number(loanIndex)}
+              id={Number(loanId)}
               txHash=""
             />
           )}

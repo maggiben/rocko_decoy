@@ -24,6 +24,7 @@ function Header() {
   const [toggle, setToggle] = useState(false);
   const [toggleDown, setToggleDown] = useState(false);
   const [openModalFor, setOpenModalFor] = useState('');
+  const [singleActiveLoanId, setSingleActiveLoanId] = useState(0);
   const { disconnect } = useRockoDisconnect();
   const { address, isConnected } = useRockoAccount();
   const { userInfo, setUserInfo, loginUser } = useUserInfo();
@@ -130,6 +131,7 @@ function Header() {
 
             if (active_loans?.length > 0 && pathName === '/') {
               /* if there is an active loan */
+              setSingleActiveLoanId(active_loans[0].id);
               setOpenModalFor('Already Open');
             }
           }
@@ -362,7 +364,10 @@ function Header() {
       )}
       {openModalFor && openModalFor === 'Already Open' && (
         <ModalContainer>
-          <AlreadyOpenModal setOpenModalFor={setOpenModalFor} />
+          <AlreadyOpenModal
+            loanId={singleActiveLoanId}
+            setOpenModalFor={setOpenModalFor}
+          />
         </ModalContainer>
       )}
       {platformStatusMessage ? (

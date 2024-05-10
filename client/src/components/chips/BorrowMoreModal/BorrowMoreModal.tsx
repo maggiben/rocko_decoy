@@ -9,10 +9,12 @@ import { BorrowMoreData } from '@/types/type';
 import ModalContent from '../ModalContent/ModalContent';
 
 function BorrowMoreModal({
+  loanId,
   setOpenModalFor,
   currentBalance,
   collateral,
 }: {
+  loanId: number;
   setOpenModalFor: Function;
   currentBalance: string;
   collateral: string;
@@ -80,7 +82,7 @@ function BorrowMoreModal({
     const { sessionStorage } = window;
     sessionStorage.setItem('borrowMoreData', JSON.stringify(borrowMoreObj));
 
-    router.push('/loan-dashboard/1/borrow-more');
+    router.push(`/loan-dashboard/${loanId}/borrow-more`);
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import frameIcon from '@/assets/frame.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import frameIcon from '@/assets/frame.svg';
 import { etherscanLink } from '@/utility/utils';
 import ModalContent from '../ModalContent/ModalContent';
 import ModalContainer from '../ModalContainer/ModalContainer';

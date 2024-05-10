@@ -46,7 +46,7 @@ interface DoneTracker {
 }
 
 function Processing() {
-  const { single: loanIndex } = useParams(); //! by using this hook get the URL parameter
+  const { single: loanId } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const paymentMethod = router.get('method') || '';
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
@@ -247,7 +247,7 @@ function Processing() {
 
   const saveTxRepaySome = () => {
     const metadata = {
-      loan_id: loanIndex,
+      loan_id: loanId,
       asset: 'usdc',
       asset_decimals: 6,
       amount: payment,
@@ -266,7 +266,7 @@ function Processing() {
 
   const saveTxRepayFull = () => {
     const metadata_loan = {
-      loan_id: loanIndex,
+      loan_id: loanId,
       asset: 'usdc',
       asset_decimals: 6,
       amount: payment,
@@ -282,7 +282,7 @@ function Processing() {
     });
 
     const metadata_collateral = {
-      loan_id: loanIndex,
+      loan_id: loanId,
       asset: 'weth',
       asset_decimals: 18,
       amount: collateral.formatted,
@@ -298,7 +298,7 @@ function Processing() {
     });
 
     const metadata_reward = {
-      loan_id: loanIndex,
+      loan_id: loanId,
       asset: 'comp',
       asset_decimals: 18,
       amount: rewardAmount,
@@ -567,14 +567,14 @@ function Processing() {
             <LoanComplete
               title="Payment Complete"
               details="You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "
-              id={0}
+              id={Number(loanId)}
               txHash=""
             />
           ) : (
             <LoanComplete
               title="Payment Complete"
               details="You have successfully made a payment"
-              id={Number(loanIndex)}
+              id={Number(loanId)}
               txHash=""
             />
           )}

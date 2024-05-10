@@ -1,24 +1,23 @@
-import ModalContent from '@/components/chips/ModalContent/ModalContent';
-import closeIcon from '@/assets/Close.svg';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import ModalContent from '@/components/chips/ModalContent/ModalContent';
+import closeIcon from '@/assets/Close.svg';
 import financial from '@/utility/currencyFormate';
 import { useSingleLoan } from '@/contract/single';
 import logger from '@/utility/logger';
 
 function ModifyWallet({
+  loanId,
   setOpenModalFor,
   currentBalance,
   collateral,
 }: {
+  loanId: number;
   setOpenModalFor: Function;
   currentBalance: string;
   collateral: string;
 }) {
-  const basicRouter = useParams();
-  const loanIndex = parseFloat(basicRouter.single.toString() || '0');
   const [activeInputField, setActiveInputField] = useState(false); //! input field active on selecting radio btn
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>('text'); //! to show value with commas & without commas n inputfiled on onBlur handler
@@ -215,7 +214,7 @@ function ModifyWallet({
       </div>
       {/* continue button */}
       <Link
-        href={`/loan-dashboard/${loanIndex}/${'modify_collateral'}?try=${amount}&payment=${inputNumber}&collateral=${collateral}&balance=${balanceFloat}`}
+        href={`/loan-dashboard/${loanId}/modify_collateral?try=${amount}&payment=${inputNumber}&collateral=${collateral}&balance=${balanceFloat}`}
       >
         {' '}
         {/* passing the user's intention like "add" or "withdraw" throuth query */}

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import comp from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
-import { useLoanDB } from '@/db/loanDb';
+import { LoanData, useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatDate } from '@/utility/utils';
@@ -34,13 +34,8 @@ function Dashboard() {
       const result = await getLoanData(userId);
 
       if (result) {
-        const userActiveLoans = result.filter((loan: any) => {
-          loan.loan_active === 1;
-          console.log(loan);
-        });
-        const userClosedLoans = result.filter(
-          (loan: any) => loan.loan_active === 0,
-        );
+        const userActiveLoans = result.filter((loan) => loan.loan_active === 1);
+        const userClosedLoans = result.filter((loan) => loan.loan_active === 0);
         setActiveLoans(userActiveLoans);
         setClosedLoans(userClosedLoans);
       }
@@ -94,12 +89,12 @@ function Dashboard() {
         </div>
         <div className="divide-y-2 space-y-5">
           {active &&
-            activeLoans?.reverse()?.map((loan: any, i: number) => (
-              <div key={i} className="space-y-6 pt-4">
+            activeLoans?.reverse()?.map((loan: LoanData) => (
+              <div key={loan.id} className="space-y-6 pt-4">
                 {/* Parents */}
                 <div className="flex gap-x-2 items-center mb-3 relative">
                   {/* title Container */}
-                  <div key={i} className="flex items-center gap-x-1">
+                  <div className="flex items-center gap-x-1">
                     <Image
                       width={20}
                       height={20}
@@ -127,7 +122,7 @@ function Dashboard() {
                   </div>
                   <Link
                     href={{
-                      pathname: `/loan-dashboard/${i + 1}`,
+                      pathname: `/loan-dashboard/${loan.id}`,
                       query: { active },
                     }}
                     className="mt-6 py-2 px-6 rounded-3xl text-[#2C3B8D] bg-[#EEE] absolute left-1/2 -translate-x-1/2 top-[116px] md:left-[91%] md:-top-[30px] lg:left-[93%]  w-max text-sm font-semibold"
@@ -159,12 +154,12 @@ function Dashboard() {
               </div>
             ))}
           {!active &&
-            closedLoans?.reverse()?.map((loan: any, i: any) => (
-              <div key={i} className="space-y-6 pt-4">
+            closedLoans?.reverse()?.map((loan) => (
+              <div key={loan.id} className="space-y-6 pt-4">
                 {/* Parents */}
                 <div className="flex gap-x-2 items-center mb-3 relative">
                   {/* title Container */}
-                  <div key={i} className="flex items-center gap-x-1">
+                  <div className="flex items-center gap-x-1">
                     <Image
                       width={20}
                       height={20}

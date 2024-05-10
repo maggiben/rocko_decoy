@@ -3,12 +3,12 @@
 import { ethers } from 'ethers';
 import { useSigner } from '@thirdweb-dev/react';
 import * as chains from 'wagmi/chains';
+import { CometContract } from '@/constants';
 import { NETWORK } from '@/constants/env';
 import { FLAG_MULTI_CHAIN } from '@/constants/featureFlags';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { compoundConfig } from './compound';
 import { ProtocolConfig } from './types';
-import { CometContract } from '@/constants';
 
 export const useProtocolConfig = (): ProtocolConfig[] => {
   const { address: rockoWalletAddress } = useRockoAccount();
