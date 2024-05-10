@@ -10,6 +10,7 @@ import financial from '@/utility/currencyFormate';
 import ModalContent from '../ModalContent/ModalContent';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
+import { parseEther } from 'viem';
 
 type Props = {
   onOk: () => void;
@@ -128,7 +129,10 @@ function TransferCollateral(props: Props) {
             </p>
           </div>
           <div className=" flex items-center flex-col py-[16px]">
-            <QRCode value={rockoWalletAddress} size={200} />
+            <QRCode
+              value={`ethereum:${rockoWalletAddress}?value=${parseEther(collateralNeeded.toString()).toString()}`}
+              size={200}
+            />
             <p className="text-blackSecondary text-[14px] text-center mt-[12px]">
               Scan within your exchange mobile app
             </p>

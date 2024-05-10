@@ -71,7 +71,7 @@ function Warning(props: Props) {
           />
         </div>
         <div className=" flex   flex-col py-[5px]">
-          <QRCode value={loanData?.otherAddress} size={100} />
+          <QRCode value={`ethereum:${loanData?.otherAddress}`} size={100} />
           <p className="text-blackSecondary text-[14px]   mt-[12px]">
             Scan within your exchange mobile app
           </p>
