@@ -8,7 +8,13 @@ import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
 import useLoanData from '@/hooks/useLoanData';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useUserInfo } from '@/hooks/useUserInfo';
-import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
+import {
+  AssetStep,
+  CurrencyStep,
+  PaymentMethods,
+  ProtocolStep,
+  RiskStep,
+} from '@/types/type';
 
 export type Step = {
   label: string;
@@ -55,7 +61,7 @@ export default function Stepper(props: Props) {
     }
 
     if (
-      loanData?.paymentMethod === 'other' &&
+      loanData?.paymentMethod === PaymentMethods.ExternalWallet &&
       loanData?.otherAddress === '' &&
       currentStep === loanSteps.length - 1
     ) {
@@ -111,9 +117,9 @@ export default function Stepper(props: Props) {
 
     if (currentStep === loanSteps.length - 1) {
       const isValidate =
-        loanData?.paymentMethod === 'ethereum'
+        loanData?.paymentMethod === PaymentMethods.MetaMask
           ? address !== null
-          : loanData?.paymentMethod !== '';
+          : loanData?.paymentMethod !== null;
 
       return isValidate;
     }
@@ -125,7 +131,7 @@ export default function Stepper(props: Props) {
     if (
       (!isValidateNextButton() && !isFinalized) ||
       (currentStep === loanSteps.length - 1 && !loanData?.termsChecked) ||
-      (loanData?.paymentMethod === 'other' &&
+      (loanData?.paymentMethod === PaymentMethods.ExternalWallet &&
         loanData?.otherAddress === '' &&
         currentStep === loanSteps.length - 1)
     )

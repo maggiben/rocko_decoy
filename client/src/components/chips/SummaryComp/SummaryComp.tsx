@@ -21,6 +21,7 @@ import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
+import { PaymentMethods } from '@/types/type';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import ChooseWallet from '../ChooseWallet/ChooseWallet';
 import LoanFinalized from '../LoanFinalized/LoanFinalized';
@@ -199,13 +200,14 @@ function SummaryComp(props: Props) {
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const inputValue = event.target.value;
+    const inputValue = event.target.value as unknown as PaymentMethods;
+
     setPaymentMethod(inputValue);
 
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
-        paymentMethod: inputValue || '',
+        paymentMethod: inputValue || null,
       }));
     }
   };
@@ -296,7 +298,7 @@ function SummaryComp(props: Props) {
                   type="radio"
                   id="wallet1"
                   name="contact"
-                  value="default"
+                  value={PaymentMethods.CoinBase}
                   checked={paymentMethod === 'default'}
                   className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
                   onChange={(e) => handlePaymentMethodChange(e)}
@@ -330,7 +332,7 @@ function SummaryComp(props: Props) {
                 type="radio"
                 id="wallet2"
                 name="contact"
-                value="ethereum"
+                value={PaymentMethods.MetaMask}
                 onChange={(e) => handlePaymentMethodChange(e)}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
@@ -357,7 +359,7 @@ function SummaryComp(props: Props) {
                 type="radio"
                 id="wallet3"
                 name="contact"
-                value="other"
+                value={PaymentMethods.ExternalWallet}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
                 onChange={(e) => handlePaymentMethodChange(e)}
               />

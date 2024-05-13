@@ -5,7 +5,7 @@ import compoundIcon from '@/assets/coins/Compound (COMP).svg';
 import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
 import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
-import { ProtocolConfig } from '../types';
+import { ProtocolConfig, TransactionMode } from '../types';
 import {
   approveWETH,
   addCollateral,
@@ -111,7 +111,7 @@ const compoundConfig = ({
       collateral: string,
       borrowing: string,
       loan: any,
-      mode: 'borrowMore' | 'getLoan',
+      mode: TransactionMode,
     ) => useGetLoan(collateral, borrowing, loan, mode),
     useRepaySome: async (loan: any) => useRepaySome(loan),
     useRepayFull: async (collateral: any) => useRepayFull(collateral),

@@ -13,6 +13,14 @@ import {
 import { ProtocolConfig } from '@/protocols/types';
 import { NetworkNames } from '@/constants/env';
 
+/* eslint-disable no-unused-vars */
+export enum PaymentMethods {
+  CoinBase = 'COINBASE',
+  ExternalWallet = 'EXTERNAL_WALLET',
+  MetaMask = 'METAMASK',
+}
+/* eslint-enable no-unused-vars */
+
 export interface CoinCardProps {
   coinIcon: string;
   coinName: string;
@@ -122,7 +130,7 @@ export interface LoanData {
   sixMonthInterest: number;
   twelveMonthInterest: number;
   twentyFourMonthInterest: number;
-  paymentMethod: string;
+  paymentMethod: PaymentMethods | null;
   otherAddress: string;
   cryptoName: string;
   cryptoIcon: string;

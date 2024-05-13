@@ -11,13 +11,19 @@ import {
   networkChainId,
 } from '@/constants';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
-import { LoanData } from '@/types/type';
-import { GetLoanReturn, Transaction } from '@/protocols/types';
+import { LoanData, PaymentMethods } from '@/types/type';
+import { GetLoanReturn, Transaction, TransactionMode } from '@/protocols/types';
 import { TokenAmount } from './data';
 import {
-  createBorrowMore,
   createDepositApproveWETH,
   createSupplyWithdrawalToComp,
+  createBorrowMore,
+  createApproveUSDC,
+  createSupplyUSDC,
+  createWithdrawComp,
+  createWithdrawWETH,
+  createTransferETHToUser,
+  createCollectRewards,
 } from './transactions';
 
 const WETHABI = require('@/constants/weth.json');
@@ -31,7 +37,7 @@ export const useGetLoan = (
   collateral: string,
   borrowing: string,
   loan: LoanData,
-  mode: 'borrowMore' | 'getLoan',
+  mode: TransactionMode,
 ): GetLoanReturn => {
   const bigintCollateral = parseUnits(collateral.toString());
   const bigIntLoanAmount = parseUnits(borrowing.toString(), 6);
@@ -44,7 +50,7 @@ export const useGetLoan = (
 
   useEffect(() => {
     const addressToUse =
-      loan.paymentMethod === 'other' && loan.otherAddress
+      loan.paymentMethod === PaymentMethods.ExternalWallet && loan.otherAddress
         ? loan.otherAddress
         : metamaskAddress;
     if (addressToUse && addressToUse !== address) setAddress(addressToUse);
@@ -54,7 +60,7 @@ export const useGetLoan = (
     const transactions: Transaction[] = [];
     if (!rockoWalletAddress || !rockoWalletClient) return transactions;
     switch (mode) {
-      case 'getLoan':
+      case TransactionMode.getLoan:
         transactions.push(
           ...createDepositApproveWETH(bigintCollateral),
           ...createSupplyWithdrawalToComp(
@@ -64,8 +70,24 @@ export const useGetLoan = (
           ),
         );
         break;
-      case 'borrowMore':
+      case TransactionMode.borrowMore:
         transactions.push(...createBorrowMore(bigIntLoanAmount, address));
+        break;
+      case TransactionMode.repaySome:
+        transactions.push(
+          ...createApproveUSDC(),
+          ...createSupplyUSDC(bigIntLoanAmount),
+        );
+        break;
+      case TransactionMode.repayFull:
+        transactions.push(
+          ...createApproveUSDC(),
+          ...createSupplyUSDC(uintMax256),
+          ...createWithdrawComp(bigintCollateral),
+          ...createWithdrawWETH(bigintCollateral),
+          ...createTransferETHToUser(bigintCollateral, address),
+          ...createCollectRewards(rockoWalletAddress, address),
+        );
         break;
       default:
         break;

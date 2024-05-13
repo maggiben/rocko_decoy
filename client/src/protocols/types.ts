@@ -3,6 +3,13 @@ import { NetworkNames } from '@/constants/env';
 import { BigNumber } from 'ethers';
 import { TokenAmount } from './compound/util/data';
 
+export enum TransactionMode {
+  borrowMore = 'BORROW_MORE',
+  getLoan = 'GET_LOAN',
+  repaySome = 'REPAY_SOME',
+  repayFull = 'REPAY_FULL',
+}
+
 type CollateralTokens = {
   ticker: 'ETH' | 'COMP' | 'WBTC' | 'UNI';
   fullName: string;
@@ -53,7 +60,7 @@ export type ProtocolConfig = {
       collateral: string,
       borrowing: string,
       loan: any,
-      mode: 'borrowMore' | 'getLoan',
+      mode: TransactionMode,
     ) => any;
     useRepaySome: (loan: any) => any;
     useRepayFull: (collateral: any) => any;

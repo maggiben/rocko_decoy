@@ -319,7 +319,7 @@ export const loanContext = createContext<ContextValues>({
     sixMonthInterest: 0,
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
-    paymentMethod: '',
+    paymentMethod: null,
     otherAddress: '',
 
     buffer: 0,
@@ -368,7 +368,7 @@ const LoanProvider: FC<LoanProviderProps> = ({ children }) => {
     sixMonthInterest: 0,
     twelveMonthInterest: 0,
     twentyFourMonthInterest: 0,
-    paymentMethod: '',
+    paymentMethod: null,
     otherAddress: '',
     buffer: 0,
     collateralNeeded: 0,

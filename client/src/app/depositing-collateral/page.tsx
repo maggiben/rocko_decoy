@@ -9,7 +9,7 @@ import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
-import { LoanData } from '@/types/type';
+import { LoanData, PaymentMethods } from '@/types/type';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
@@ -24,6 +24,7 @@ import financial from '@/utility/currencyFormate';
 import contentCopy from '@/assets/content_copy.svg';
 import CancelLoanModal from '@/components/chips/CancelLoanModal/CancelLoanModal';
 import isSufficientCollateral from '@/utility/isSufficientCollateral';
+import { TransactionMode } from '@/protocols/types';
 
 interface DoneTracker {
   step: string;
@@ -105,9 +106,9 @@ const DepositingCollateral = () => {
     address: rockoWalletAddress as `0x${string}`,
   });
 
-  const transactionMode = () => {
-    if (isJustBorrowMore) return 'borrowMore';
-    return 'getLoan';
+  const transactionMode = (): TransactionMode => {
+    if (isJustBorrowMore) return TransactionMode.borrowMore;
+    return TransactionMode.getLoan;
   };
 
   const { executeBatchTransactions, success, txHash, error } = useGetLoan(
@@ -120,7 +121,7 @@ const DepositingCollateral = () => {
   /* USE EFFECTS */
   // Check if this loan is for an external wallet
   useEffect(() => {
-    if (loanData?.paymentMethod === 'other') {
+    if (loanData?.paymentMethod === PaymentMethods.ExternalWallet) {
       setIsExternalWallet(true);
     }
   }, [loanData]);
@@ -136,8 +137,8 @@ const DepositingCollateral = () => {
       setADone();
       updateUiState({
         showTransferCollateralModal: false,
-        showFinishLoanModal: true,
       });
+      proceedAnyway();
     } else {
       updateUiState({
         showTransferCollateralModal: true,
@@ -266,9 +267,7 @@ const DepositingCollateral = () => {
 
   const initiateLoan = async () => {
     if (!rockoWalletAddress || (isExternalWallet && !loanData.otherAddress)) {
-      console.log('No Wallet Address');
-      console.log(rockoWalletAddress);
-      console.log(loanData);
+      console.log('No Wallet Address set for external wallet payment method.');
       return;
     }
     console.log(1, { startA });
@@ -448,8 +447,10 @@ const DepositingCollateral = () => {
   };
 
   const proceedAnyway = () => {
+    setStartTransactions(true);
+    setTriggerRefetch(false);
     updateUiState({
-      showFinishLoanModal: true,
+      showFinishLoanModal: false,
       showTransferCollateralModal: false,
     });
   };

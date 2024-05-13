@@ -1,8 +1,9 @@
 'use client';
 
+import useLoanData from '@/hooks/useLoanData';
+import { PaymentMethods } from '@/types/type';
 import { useAddress } from '@thirdweb-dev/react';
 import Link from 'next/link';
-import useLoanData from '@/hooks/useLoanData';
 
 interface Props {
   loanId: number;
@@ -20,9 +21,9 @@ function Footer(props: Props) {
 
   const isValidateNextButton = () => {
     const isValidate =
-      loanData?.paymentMethod === 'ethereum'
+      loanData?.paymentMethod === PaymentMethods.MetaMask
         ? address !== null
-        : loanData?.paymentMethod !== '';
+        : loanData?.paymentMethod !== null;
 
     return isValidate;
   };
