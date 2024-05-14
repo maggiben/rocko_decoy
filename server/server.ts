@@ -9,7 +9,7 @@ import cors from "cors";
 
 // @ts-ignore
 import router from './routes';
-import { BACKEND_URL, CLIENT_URL } from "./constants";
+import { BACKEND_URL, CLIENT_URL, DYNAMIC_PROJECT_ID } from "./constants";
 import logger from "./util/logger";
 const app = express();
 
@@ -59,5 +59,6 @@ connectDB();
 app.use('/', router);
 
 app.listen(5000, () => {
-  logger(`Server started on ${BACKEND_URL}, with Client ${CLIENT_URL}`, 'info');
+  logger(`Server started on ${BACKEND_URL}, with Client ${CLIENT_URL}\n
+  Dynamic Project ID: ${DYNAMIC_PROJECT_ID}`, 'info');
 });
