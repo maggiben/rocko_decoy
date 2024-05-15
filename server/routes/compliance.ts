@@ -166,7 +166,7 @@ router.post('/transaction', checkJwt, async (req: Request, res: Response, next) 
 
 });
 
-router.get('/transactions',checkJwt, async (req: Request, res: Response, next) => {
+router.get('/transactions', checkJwt, async (req: Request, res: Response, next) => {
     if(req.user){
         try {
         
@@ -184,7 +184,6 @@ router.get('/transactions',checkJwt, async (req: Request, res: Response, next) =
             return res.status(500).send('Something went wrong');
         }
     }
-    return res.status(403).send('Unauthorized');
 })
   
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { DateTime } from 'luxon';
 import { getTransactions } from '@/db/transactionDb';
 import compound from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
@@ -26,7 +27,6 @@ import usePlatformStatus from '@/hooks/usePlatformStatus';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import CollateralWarningBanner from '@/components/pages/Dashboard/Banners/collateralWarning';
 import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
-import { DateTime } from 'luxon';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -63,7 +63,6 @@ const TxPaused = () => (
 );
 
 function SinglePage({ params: { single: loanId } }: { params: any }) {
-  console.log('single', { loanId });
   const { rockoWalletAddress } = useRockoWallet();
   const { transactionsPaused } = usePlatformStatus();
   const searchParams = useSearchParams();
@@ -121,6 +120,7 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
         const activeLoans = result.filter(
           (loan) => loan.id === Number(loanId) && loan.loan_active,
         );
+
         if (activeLoans.length > 0) {
           setLoanData(activeLoans[0]);
 

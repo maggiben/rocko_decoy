@@ -66,23 +66,26 @@ router.get('/average_reward_rate', (req, res, next) => {
 router.get('/reward_rate', (req, res, next) => {
   try {
     const network = req.query.network || 'mainnet';
-    let sql = `SELECT borrow_reward_rate FROM asset_data WHERE network = ? ORDER BY fetch_time DESC LIMIT 1`;
+    const sql = `SELECT borrow_reward_rate FROM asset_data WHERE network = ? ORDER BY fetch_time DESC LIMIT 1`;
 
     db.query(sql, [network], (err, results) => {
       if (err) {
-        console.error(err);
+        console.error(err, 'error getting reward rate');
         return next(new Error('Database query failed'));
       }
+      if (!results || results.length === 0) {
+        return res.status(404).json({ error: 'No reward rate found for the specified network' });
+      }
       return res.status(200).json({
-        borrow_reward_rate: results?.[0].borrow_reward_rate,
+        borrow_reward_rate: results?.[0].borrow_reward_rate || 0,
         network
       });
-    })
+    });
   } catch (error) {
     logger(error, 'error');
     return res.status(500).send('Something went wrong');
   }
+});
 
-})
 
 export default router;
