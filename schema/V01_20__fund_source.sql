@@ -1,1 +1,0 @@
-ALTER TABLE transactions ADD COLUMN funding_source ENUM('exchange_oauth', 'connected_wallet', 'external_transfer');

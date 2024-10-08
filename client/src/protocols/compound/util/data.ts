@@ -1,26 +1,15 @@
 import * as chains from 'wagmi/chains';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { BigNumber, ethers } from 'ethers';
-import { getBalance } from 'wagmi/actions';
-import { wagmiConfig } from '@/app/WagmiWrapper';
 import { formatBalance } from '@/utility/utils';
 import {
   CometContract,
   ChainlinkEthPriceFeed,
   WETHContract,
-  USDCContract,
 } from '@/constants';
 
 const COMETABI = require('../../../constants/comet.json');
 const BASIC_COMETABI = require('../../../constants/basic_comet.json');
-
-// TODO update all remainging functions to use this return type.
-// value = is smallest currency unit
-// formatted = current formatted return value
-export type TokenAmount = {
-  value: BigNumber;
-  formatted: number; // TODO this be a string
-};
 
 type BlockchainNames = 'ethereum' | 'sepolia' | 'base';
 
@@ -125,13 +114,21 @@ const getPenalty = async (chain: string): Promise<number> => {
   return formattedValue;
 };
 
+// TODO update all remainging functions to use this return type.
+// value = is smallest currency unit
+// formatted = current formatted return value
+export type Balance = {
+  value: BigNumber;
+  formatted: number;
+};
+
 const getBorrowBalanceOf = async ({
   chain,
   rockoWalletAddress,
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<TokenAmount> => {
+}): Promise<Balance> => {
   // console.log('getBorrowBalanceOf', { rockoWalletAddress, chain });
   if (!rockoWalletAddress)
     return {
@@ -168,7 +165,7 @@ const getCollateralBalanceOf = async ({
 }: {
   chain: string;
   rockoWalletAddress: any;
-}): Promise<TokenAmount> => {
+}): Promise<Balance> => {
   if (!rockoWalletAddress)
     return {
       value: ethers.BigNumber.from(0),
@@ -299,64 +296,6 @@ const getBuffer = async ({
   return newBuffer;
 };
 
-const getTotalSupply = async (chain: string): Promise<number> => {
-  const BLOCKCHAIN: BlockchainNames =
-    chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
-
-  const sdk = new ThirdwebSDK(BLOCKCHAIN);
-
-  const contract = await sdk.getContract(
-    CometContract[networkChainId(chain)],
-    COMETABI,
-  );
-  const totalSupply = await contract.call('totalSupply');
-
-  return totalSupply.toString();
-};
-
-const getTotalBorrow = async (chain: string): Promise<number> => {
-  const BLOCKCHAIN: BlockchainNames =
-    chain === 'mainnet' ? 'ethereum' : (chain as BlockchainNames);
-
-  const sdk = new ThirdwebSDK(BLOCKCHAIN);
-
-  const contract = await sdk.getContract(
-    CometContract[networkChainId(chain)],
-    COMETABI,
-  );
-  const totalBorrow = await contract.call('totalBorrow');
-
-  return totalBorrow.toString();
-};
-
-async function getUsdcBalance(chain: string) {
-  // Sepolia addresses, not working
-  // const contractAddress = '0xAec1F48e02Cfb822Be958B68C7957156EB3F0b6e';
-  // const usdcAddress = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238';
-  // Mainnet addresses
-  // const contractAddress = '0xc3d688B66703497DAA19211EEdff47f25384cdc3',
-  // const usdcAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
-
-  // TODO: only working on mainnet
-  try {
-    const contractAddress = CometContract[
-      networkChainId(chain)
-    ] as `0x${string}`;
-    const usdcAddress = USDCContract[networkChainId(chain)] as `0x${string}`;
-    const balance = await getBalance(wagmiConfig, {
-      address: contractAddress,
-      token: usdcAddress,
-      chainId: networkChainId(chain),
-    });
-    console.log(chain, balance);
-    return balance.value.toString();
-  } catch (e) {
-    console.log(e);
-  }
-
-  return '0';
-}
-
 export {
   getBorrowAPR,
   getETHPrice,
@@ -371,7 +310,4 @@ export {
   getBuffer,
   getMinCollateral,
   networkChainId,
-  getTotalSupply,
-  getTotalBorrow,
-  getUsdcBalance,
 };

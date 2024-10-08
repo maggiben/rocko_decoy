@@ -19,19 +19,10 @@ export const useRockoBalance = ({
   token?: `0x${string}` | undefined;
 }) => {
   // const { publicClient } = useRockoWallet();
-  let adjustedAddress: `0x${string}` = address;
-  let adjustedToken: `0x${string}` | undefined = token;
-  if (address && address.startsWith('0x0x')) {
-    adjustedAddress = address.replace('0x0x', '0x') as `0x${string}`;
-  }
 
-  if (token && token.startsWith('0x0x')) {
-    adjustedToken = token.replace('0x0x', '0x') as `0x${string}`;
-  }
-
-  const { data, refetch } = useBalance({
-    address: adjustedAddress,
-    token: adjustedToken,
+  const { data } = useBalance({
+    address,
+    token,
     chainId: networkChainId,
     query: {
       // Refetch balance automatically every 30 seconds
@@ -40,7 +31,7 @@ export const useRockoBalance = ({
     },
   });
 
-  return { data, refetch };
+  return { data };
   // if (token) {
   //   return { data };
   // }

@@ -13,14 +13,6 @@ import {
 import { ProtocolConfig } from '@/protocols/types';
 import { NetworkNames } from '@/constants/env';
 
-/* eslint-disable no-unused-vars */
-export enum PaymentMethods {
-  CoinBase = 'COINBASE',
-  ExternalWallet = 'EXTERNAL_WALLET',
-  MetaMask = 'METAMASK',
-}
-/* eslint-enable no-unused-vars */
-
 export interface CoinCardProps {
   coinIcon: string;
   coinName: string;
@@ -130,7 +122,7 @@ export interface LoanData {
   sixMonthInterest: number;
   twelveMonthInterest: number;
   twentyFourMonthInterest: number;
-  paymentMethod: PaymentMethods | null;
+  paymentMethod: string;
   otherAddress: string;
   cryptoName: string;
   cryptoIcon: string;
@@ -149,15 +141,6 @@ export interface LoanData {
   termsChecked: boolean;
   activeNextButton?: boolean;
   nextValidation: any;
-}
-
-export interface BorrowMoreData {
-  payment_loan: number;
-  payment_collateral: number;
-  outstanding_balance: number;
-  total_collateral: number;
-  buffer: number;
-  liquidation_price: number;
 }
 // ContextValues interface using the above step interfaces
 export interface ContextValues {

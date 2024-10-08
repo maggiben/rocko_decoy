@@ -1,29 +1,25 @@
 'use client';
 
 import useLoanData from '@/hooks/useLoanData';
-import { PaymentMethods } from '@/types/type';
 import { useAddress } from '@thirdweb-dev/react';
 import Link from 'next/link';
 
 interface Props {
-  loanId: number;
-  // eslint-disable-next-line react/require-default-props
   steps?: number;
-  // eslint-disable-next-line react/require-default-props
   currentStep?: number;
   setIsFinalized: React.Dispatch<any>;
 }
 
 function Footer(props: Props) {
-  const { steps = 1, currentStep = 1, setIsFinalized, loanId } = props;
+  const { steps = 1, currentStep = 1, setIsFinalized } = props;
   const { loanData } = useLoanData();
   const address = useAddress();
 
   const isValidateNextButton = () => {
     const isValidate =
-      loanData?.paymentMethod === PaymentMethods.MetaMask
+      loanData?.paymentMethod === 'ethereum'
         ? address !== null
-        : loanData?.paymentMethod !== null;
+        : loanData?.paymentMethod !== '';
 
     return isValidate;
   };
@@ -41,9 +37,8 @@ function Footer(props: Props) {
       <div className="container mx-auto">
         <div className="p-4 flex items-center justify-end  ">
           <div className="flex items-center justify-end gap-3">
-            <Link href={`/loan-dashboard/${loanId}?active=true`}>
+            <Link href="/loan-dashboard/1?active=true">
               <button
-                type="button"
                 className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full ${
                   currentStep === 0 ? 'bg-grayPrimary' : 'bg-gray-200'
                 }`}
@@ -53,7 +48,6 @@ function Footer(props: Props) {
               </button>
             </Link>
             <button
-              type="button"
               onClick={() => setIsFinalized(true)}
               className={`font-semibold  text-xs md:text-sm ${
                 isValidateNextButton() ? 'bg-blue' : 'bg-blue/40'

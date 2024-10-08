@@ -1,1 +1,0 @@
-ALTER TABLE loans MODIFY COLUMN user_id INT not null;

@@ -1,1 +1,0 @@
-ALTER TABLE users MODIFY COLUMN ipaddress_lastlogin VARCHAR(45);

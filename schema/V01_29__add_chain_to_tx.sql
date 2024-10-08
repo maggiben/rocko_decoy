@@ -1,1 +1,0 @@
-ALTER TABLE transactions ADD COLUMN chain varchar(20) AFTER `transaction_hash`;

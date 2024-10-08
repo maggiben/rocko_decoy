@@ -1,7 +1,7 @@
+import frameIcon from '@/assets/frame.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import frameIcon from '@/assets/frame.svg';
 import { etherscanLink } from '@/utility/utils';
 import CircleProgressBar from '../CircleProgressBar/CircleProgressBar';
 
@@ -77,7 +77,6 @@ function TransferConfirmModal({
       {/* continue button */}
       <div className="mt-8">
         <button
-          type="button"
           onClick={() => {
             setOpenModalFor('');
           }}

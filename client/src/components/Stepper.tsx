@@ -8,13 +8,8 @@ import LoanFinalized from '@/components/chips/LoanFinalized/LoanFinalized';
 import useLoanData from '@/hooks/useLoanData';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useUserInfo } from '@/hooks/useUserInfo';
-import {
-  AssetStep,
-  CurrencyStep,
-  PaymentMethods,
-  ProtocolStep,
-  RiskStep,
-} from '@/types/type';
+import { AssetStep, CurrencyStep, ProtocolStep, RiskStep } from '@/types/type';
+import TransferCollateral from './chips/TransferCollateral/TransferCollateral';
 
 export type Step = {
   label: string;
@@ -38,6 +33,7 @@ export default function Stepper(props: Props) {
   const { userInfo, loginUser, isSuccess } = useUserInfo();
   const address = useAddress();
   const [isFinalized, setIsFinalized] = useState(false);
+  const [showQR, setShowQR] = useState(false);
   const { loanSteps, currentStep, setCurrentStep, loanData, setLoanData } =
     useLoanData();
 
@@ -53,6 +49,11 @@ export default function Stepper(props: Props) {
     return { stepsName: names, Steps: components };
   }, []);
 
+  const handleOnOk = () => {
+    setIsFinalized(false);
+    setShowQR(false);
+  };
+
   const nextStep = async () => {
     if (!zerodevAccount && currentStep === 2) {
       toast.error('Please log in to finalize your loan!');
@@ -61,7 +62,7 @@ export default function Stepper(props: Props) {
     }
 
     if (
-      loanData?.paymentMethod === PaymentMethods.ExternalWallet &&
+      loanData?.paymentMethod === 'other' &&
       loanData?.otherAddress === '' &&
       currentStep === loanSteps.length - 1
     ) {
@@ -77,6 +78,7 @@ export default function Stepper(props: Props) {
       return;
     }
 
+    setShowQR(loanData.paymentMethod === 'other' && currentStep === 4);
     if (currentStep < loanSteps.length - 1 && setCurrentStep) {
       setCurrentStep(currentStep + 1);
       if (setLoanData) {
@@ -117,9 +119,9 @@ export default function Stepper(props: Props) {
 
     if (currentStep === loanSteps.length - 1) {
       const isValidate =
-        loanData?.paymentMethod === PaymentMethods.MetaMask
+        loanData?.paymentMethod === 'ethereum'
           ? address !== null
-          : loanData?.paymentMethod !== null;
+          : loanData?.paymentMethod !== '';
 
       return isValidate;
     }
@@ -127,23 +129,11 @@ export default function Stepper(props: Props) {
     return loanData?.activeNextButton;
   };
 
-  const canFinalizeLoan = () => {
-    if (
-      (!isValidateNextButton() && !isFinalized) ||
-      (currentStep === loanSteps.length - 1 && !loanData?.termsChecked) ||
-      (loanData?.paymentMethod === PaymentMethods.ExternalWallet &&
-        loanData?.otherAddress === '' &&
-        currentStep === loanSteps.length - 1)
-    )
-      return true;
-  };
-
   // keep always scroll as top
   useEffect(() => {
     if (typeof window !== 'undefined') window.scrollTo(0, 0);
   }, [currentStep]);
 
-  // account under review toast
   useEffect(() => {
     if (
       userInfo &&
@@ -155,7 +145,6 @@ export default function Stepper(props: Props) {
       );
   }, [userInfo]);
 
-  // auto next step when success
   useEffect(() => {
     if (isSuccess && setCurrentStep && setLoanData && currentStep === 2) {
       setCurrentStep(currentStep + 1);
@@ -165,7 +154,6 @@ export default function Stepper(props: Props) {
       }));
     }
   }, [isSuccess]);
-
   return (
     <>
       <CurrentStepComponent {...currentData} />
@@ -203,11 +191,17 @@ export default function Stepper(props: Props) {
                 type="button"
                 onClick={nextStep}
                 className={`font-semibold  text-xs md:text-sm ${
-                  !isValidateNextButton() || canFinalizeLoan()
+                  !isValidateNextButton() ||
+                  (currentStep === loanSteps.length - 1 &&
+                    !loanData?.termsChecked)
                     ? 'bg-blue/40'
                     : 'bg-blue'
                 } py-[10px]  px-6 rounded-full text-white`}
-                disabled={canFinalizeLoan()}
+                disabled={
+                  (!isValidateNextButton() && !isFinalized) ||
+                  (currentStep === loanSteps.length - 1 &&
+                    !loanData?.termsChecked)
+                }
               >
                 {currentStep === loanSteps.length - 1
                   ? 'Finalize Loan'
@@ -217,7 +211,16 @@ export default function Stepper(props: Props) {
           </div>
         </div>
       </div>
-      {isFinalized && (
+      {isFinalized && showQR && (
+        <TransferCollateral
+          onOk={handleOnOk}
+          onCancel={() => {
+            setShowQR(false);
+            setIsFinalized(false);
+          }}
+        />
+      )}
+      {isFinalized && !showQR && (
         <ModalContainer>
           <LoanFinalized navType="start" />
         </ModalContainer>

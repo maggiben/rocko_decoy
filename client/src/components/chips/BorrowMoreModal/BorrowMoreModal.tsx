@@ -5,16 +5,13 @@ import closeIcon from '@/assets/Close.svg';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
-import { BorrowMoreData } from '@/types/type';
 import ModalContent from '../ModalContent/ModalContent';
 
 function BorrowMoreModal({
-  loanId,
   setOpenModalFor,
   currentBalance,
   collateral,
 }: {
-  loanId: number;
   setOpenModalFor: Function;
   currentBalance: string;
   collateral: string;
@@ -71,7 +68,7 @@ function BorrowMoreModal({
     //   return;
     // }
 
-    const borrowMoreObj: BorrowMoreData = {
+    const borrowMoreObj = {
       payment_loan: inputFloat,
       payment_collateral: collateralFloat,
       outstanding_balance,
@@ -82,7 +79,7 @@ function BorrowMoreModal({
     const { sessionStorage } = window;
     sessionStorage.setItem('borrowMoreData', JSON.stringify(borrowMoreObj));
 
-    router.push(`/loan-dashboard/${loanId}/borrow-more`);
+    router.push('/loan-dashboard/1/borrow-more');
   };
 
   useEffect(() => {

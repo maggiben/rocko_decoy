@@ -3,9 +3,9 @@
 'use client';
 
 import Image from 'next/image';
-import React, { FC, JSX, useEffect, useState } from 'react';
+import React, { JSX, FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
   ConnectWallet,
   useNetworkMismatch,
@@ -30,7 +30,6 @@ import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
-import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
 
 interface InnerInfo {
   description: string | JSX.Element;
@@ -92,24 +91,21 @@ const termsFull: Term[] = [
 ];
 
 const MakePayment: FC = () => {
-  const { single: loanId } = useParams();
   const [paymentMethod, setPaymentMethod] = useState(''); //! capture which payment method or radio btn a user will select
   const [openModalFor, setOpenModalFor] = useState(''); //! if openModalFor's value is empty string then popup modal is closed if it's not empty string then it'll show up
   const [modalStep, setModalStep] = useState(0); //! passing modalStep value to chooseWallet popup/modal. If modalStep's value is 1 then it will redirect to loanFinalized popup after user clicking continue btn on chooseWallet popup/modal.
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
-  const [borrowBalance, setborrowBalance] = useState<number>(0);
-  const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const repayFull = router.get('repayFull') === 'true';
-  const payment = repayFull
-    ? borrowBalance
-    : parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
-  const collateral = parseFloat(router.get('collateral') || '0');
 
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
+  const loanIndex = parseFloat(router.get('id') || '0');
+  const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
+  const currentBalance = parseFloat(router.get('balance') || '0');
+  const collateral = parseFloat(router.get('collateral') || '0');
   const amount = 'add'; //! get the URL parameter amount value
 
   const { disconnect } = useRockoDisconnect();
 
-  const { address: rockoWalletAddress } = useRockoAccount();
+  const { address: zerodevAccount } = useRockoAccount();
   const { getLiquidationPrice, getBuffer } = useSingleLoan();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
@@ -120,11 +116,6 @@ const MakePayment: FC = () => {
   const isMismatched = useNetworkMismatch();
   const switchChain = useSwitchChain();
 
-  const { getBorrowBalanceOf } = useSingleLoan();
-
-  const totalPayment = payment
-    ? payment + (payment === borrowBalance ? Number(PAYMENT_BUFFER) : 0)
-    : 0;
   const invoice: Info[] = [
     {
       description: 'Lending Protocol',
@@ -135,23 +126,19 @@ const MakePayment: FC = () => {
       subDescription: [
         {
           description:
-            payment && payment === borrowBalance ? (
-              <p className="text-sm" />
+            payment === currentBalance ? (
+              <p className="text-sm">Outstanding Balance</p>
             ) : (
               ''
             ),
           details:
-            payment && payment === borrowBalance
-              ? `${financial(payment, 6)} USDC`
-              : '',
+            payment === currentBalance ? `${financial(payment, 6)} USDC` : '',
           subDetails:
-            payment && payment === borrowBalance
-              ? `$${financial(payment, 6)}`
-              : '',
+            payment === currentBalance ? `$${financial(payment, 6)}` : '',
         },
         {
           description:
-            payment === borrowBalance ? (
+            payment === currentBalance ? (
               <div className="flex items-center gap-2">
                 <p className="text-sm">Payment Buffer</p>
                 <HoverTooltip text="A Payment Buffer is added to your payment to ensure the loan is fully repaid while accounting for interest that accrues each second. Any excess amount will be returned to you along with your collateral." />
@@ -159,35 +146,36 @@ const MakePayment: FC = () => {
             ) : (
               ''
             ),
-          details: payment === borrowBalance ? `${PAYMENT_BUFFER} USDC` : '',
-          subDetails: payment === borrowBalance ? `~$${PAYMENT_BUFFER}` : '',
+          details: payment === currentBalance ? `${PAYMENT_BUFFER} USDC` : '',
+          subDetails: payment === currentBalance ? `~$${PAYMENT_BUFFER}` : '',
         },
       ],
-      details: payment ? (
+      details: (
         <span className="font-semibold">{`${financial(
-          totalPayment,
+          payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
           6,
         )} USDC`}</span>
-      ) : (
-        <PlaceholderText />
       ),
-      subDetails: payment ? `$${financial(totalPayment, 6)}` : '',
+      subDetails: `$${financial(
+        payment + (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0),
+        6,
+      )}`,
     },
     {
       description: 'Projected values after payment',
       subDescription: [
         {
-          description: '',
+          description: 'Outstanding Balance',
           details: (
             <span className="font-semibold text-sm">
-              {(borrowBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC
+              {(currentBalance - payment).toFixed(6).replace(/\.?0+$/, '')} USDC
             </span>
           ),
           subDetails: `~$${new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 6,
           }).format(
             parseFloat(
-              (borrowBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
+              (currentBalance - payment).toFixed(6).replace(/\.?0+$/, ''),
             ),
           )}`,
         },
@@ -223,37 +211,17 @@ const MakePayment: FC = () => {
       JSON.stringify({
         currency: 'USDC',
         amount: payment,
-        account: rockoWalletAddress?.toString(),
+        account: zerodevAccount?.toString(),
       }),
     );
   };
 
   useEffect(() => {
-    const getOutstandingBalance = async () => {
-      const currentBalance = await getBorrowBalanceOf();
-      setborrowBalance(currentBalance.formatted);
-    };
-    if (repayFull) {
-      const interval = setInterval(() => {
-        // Code to be executed every 3 seconds
-        console.log('Refreshing balance to repay full...');
-        getOutstandingBalance();
-      }, 3000);
-
-      // Clean up the interval on component unmount
-      return () => {
-        clearInterval(interval);
-      };
-    }
-    getOutstandingBalance();
-  }, []);
-
-  useEffect(() => {
-    getLiquidationPrice(borrowBalance - payment, collateral)
+    getLiquidationPrice(currentBalance - payment, collateral)
       .then((_price) => setLiquidationPrice(_price))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getBuffer(borrowBalance - payment, collateral)
+    getBuffer(currentBalance - payment, collateral)
       .then((_buffer) => setBuffer(_buffer))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
@@ -273,7 +241,7 @@ const MakePayment: FC = () => {
   return (
     <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl font-semibold">Make a Payment</h1>
-      {payment === borrowBalance ? (
+      {payment === currentBalance ? (
         <p>
           You’re repaying your loan in full and withdrawing your collateral plus
           any earned rewards
@@ -375,10 +343,7 @@ const MakePayment: FC = () => {
                     Sign in
                   </button>
                 ) : (
-                  <button
-                    type="button"
-                    className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md"
-                  >
+                  <button className="mx-auto md:m-0 flex items-center gap-x-1 px-2 py-1 text-green-600 bg-green-100 rounded-md">
                     <Image src={correct} alt="Correct Image" />
                     <p>Connected</p>
                   </button>
@@ -476,7 +441,7 @@ const MakePayment: FC = () => {
 
           <div className="mt-2 p-5 bg-gray-100 rounded-2xl">
             <ul className="list-disc">
-              {payment === borrowBalance
+              {payment === currentBalance
                 ? termsFull.map((term, i) => (
                     <React.Fragment key={i}>{term.rule}</React.Fragment>
                   ))
@@ -498,9 +463,8 @@ const MakePayment: FC = () => {
           <div className="p-4">
             <div className="flex items-center justify-end gap-3">
               {/* //!after clicking back btn it'll redirect to previous page */}
-              <Link href={`/loan-dashboard/${loanId}?active=true`}>
+              <Link href={`/loan-dashboard/${loanIndex}?active=true`}>
                 <button
-                  type="button"
                   className={`font-semibold  text-xs md:text-sm text-blue  py-[10px]  px-6 rounded-full 
                    bg-grayPrimary`}
                 >
@@ -509,17 +473,16 @@ const MakePayment: FC = () => {
               </Link>
               {/* //!after clicking continue page it'll redirect to "processing" page with dynamic URL */}
               <Link
-                href={`/loan-dashboard/${loanId}/${'make-payment'}/processing?method=${paymentMethod}&balance=${borrowBalance}&payment=${
+                href={`/loan-dashboard/${loanIndex}/${'make-payment'}/processing?method=${paymentMethod}&balance=${currentBalance}&payment=${
                   payment +
-                  (payment === borrowBalance ? Number(PAYMENT_BUFFER) : 0)
+                  (payment === currentBalance ? Number(PAYMENT_BUFFER) : 0)
                 }`}
               >
                 <button
-                  type="button"
                   className={`font-semibold  text-xs md:text-sm ${
-                    address && rockoWalletAddress ? 'bg-blue' : 'bg-blue/40'
+                    address && zerodevAccount ? 'bg-blue' : 'bg-blue/40'
                   } py-[10px]  px-6 rounded-full text-white `}
-                  disabled={!address || !rockoWalletAddress}
+                  disabled={!address || !zerodevAccount}
                 >
                   Confirm
                 </button>

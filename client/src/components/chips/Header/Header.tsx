@@ -12,7 +12,6 @@ import logo from '@/assets/logo.png';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
-import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
 import AlreadyOpenModal from '../AlreadyOpenModal/AlreadyOpenModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
@@ -25,7 +24,6 @@ function Header() {
   const [toggle, setToggle] = useState(false);
   const [toggleDown, setToggleDown] = useState(false);
   const [openModalFor, setOpenModalFor] = useState('');
-  const [singleActiveLoanId, setSingleActiveLoanId] = useState(0);
   const { disconnect } = useRockoDisconnect();
   const { address, isConnected } = useRockoAccount();
   const { userInfo, setUserInfo, loginUser } = useUserInfo();
@@ -132,7 +130,6 @@ function Header() {
 
             if (active_loans?.length > 0 && pathName === '/') {
               /* if there is an active loan */
-              setSingleActiveLoanId(active_loans[0].id);
               setOpenModalFor('Already Open');
             }
           }
@@ -140,20 +137,6 @@ function Header() {
       });
     }
   };
-
-  const redirectToFirstPage = async () => {
-    const dynamicJwtToken = await getAuthToken();
-
-    if (
-      !dynamicJwtToken &&
-      (pathName === '/profile' || pathName.includes('/loan-dashboard'))
-    )
-      router.push('/blank');
-  };
-
-  useEffect(() => {
-    redirectToFirstPage();
-  }, [userInfo]);
 
   /* search user in users table and add userInfo to table if nothing */
   useEffect(() => {
@@ -379,10 +362,7 @@ function Header() {
       )}
       {openModalFor && openModalFor === 'Already Open' && (
         <ModalContainer>
-          <AlreadyOpenModal
-            loanId={singleActiveLoanId}
-            setOpenModalFor={setOpenModalFor}
-          />
+          <AlreadyOpenModal setOpenModalFor={setOpenModalFor} />
         </ModalContainer>
       )}
       {platformStatusMessage ? (

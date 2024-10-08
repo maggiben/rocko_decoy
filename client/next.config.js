@@ -2,20 +2,10 @@
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const NETWORK = process.env.NEXT_PUBLIC_NETWORK;
-const ETH_NODE_URL_BASE = process.env.NEXT_PUBLIC_ETH_NODE_URL_BASE;
-const ETH_NODE_URL_MAINNET = process.env.NEXT_PUBLIC_ETH_NODE_URL_MAINNET;
-const ETH_NODE_URL_SEPOLIA = process.env.NEXT_PUBLIC_ETH_NODE_URL_SEPOLIA;
 
 const connectSrc = [
-  ETH_NODE_URL_BASE,
-  ETH_NODE_URL_MAINNET,
-  ETH_NODE_URL_SEPOLIA,
   BACKEND_URL,
   `https://${NETWORK}.infura.io`,
-
-  // Alchemy
-  `https://eth-${NETWORK}.g.alchemy.com`,
-  'https://eth-sepolia.g.alchemy.com',
 
   // Thirdweb RPC
   `https://${NETWORK === 'mainnet' ? 'ethereum' : NETWORK}.rpc.thirdweb.com`,

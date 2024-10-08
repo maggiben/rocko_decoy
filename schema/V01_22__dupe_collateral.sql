@@ -1,1 +1,0 @@
-ALTER TABLE loans DROP COLUMN collateral_asset;

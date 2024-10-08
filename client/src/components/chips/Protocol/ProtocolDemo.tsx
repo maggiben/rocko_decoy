@@ -71,9 +71,6 @@ const ProtocolDemo: FC<ProtocolProps> = ({
       {/* protocol info */}
       <div className="py-4 px-6 w-full mt-4">
         <div className="flex items-start justify-between gap-4 w-full flex-wrap">
-          <h2 className="font-medium text-xl text-blackPrimary">
-            Key Loan Terms
-          </h2>
           {protocolInfos?.map((protocolInfo) => (
             <div className="flex-1 min-w-[205px]" key={protocolInfo.id}>
               {/* info title */}
@@ -103,11 +100,6 @@ const ProtocolDemo: FC<ProtocolProps> = ({
               </div>
             </div>
           ))}
-        </div>
-      </div>
-      <div>
-        <div className="py-4 px-6 w-full mt-4">
-          <div className="flex items-start justify-between gap-4 w-full flex-wrap" />
         </div>
       </div>
     </div>

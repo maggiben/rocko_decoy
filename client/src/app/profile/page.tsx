@@ -5,8 +5,6 @@ import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 // import { useSingleLoan } from '@/contract/single';
-import { useSearchParams } from 'next/navigation';
-import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useUserInfo } from '@/hooks/useUserInfo';
@@ -17,7 +15,6 @@ import {
   networkChainId,
   exculdedCountries,
   CompTokenContract,
-  CometContract,
 } from '@/constants';
 import financial from '@/utility/currencyFormate';
 import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
@@ -32,9 +29,6 @@ const Profile: React.FC = () => {
   const { userInfo } = useUserInfo();
   const { address: zerodevAccount } = useRockoAccount();
   const { updateUser, getUserData } = useUserDB();
-
-  const router = useSearchParams(); //! use the hooks for getting the URL parameters
-  const walletDebug = router.get('wallet'); //! get the URL parameter payment value
 
   const { data: ethBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
@@ -53,11 +47,6 @@ const Profile: React.FC = () => {
   const { data: compBalance } = useRockoBalance({
     address: zerodevAccount as `0x${string}`,
     token: CompTokenContract[networkChainId] as `0x${string}`,
-  });
-
-  const { data: cusdcv3Balance } = useRockoBalance({
-    address: zerodevAccount as `0x${string}`,
-    token: CometContract[networkChainId] as `0x${string}`,
   });
 
   const [openContactEmailEditBox, setOpenContactEmailEditBox] =
@@ -99,81 +88,7 @@ const Profile: React.FC = () => {
     ...phoneEmailPass,
   ];
 
-  const compBalanceRow = Number(compBalance?.formatted)
-    ? {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">COMP </span>{' '}
-          </div>
-        ),
-        details: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">
-              {userInfo && `${financial(compBalance?.formatted, 6)} COMP`}
-            </span>{' '}
-          </div>
-        ),
-      }
-    : null;
-
-  const wethBalanceRow = Number(wethBalance?.formatted)
-    ? {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">WETH </span>{' '}
-          </div>
-        ),
-        details: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">
-              {userInfo && `${financial(wethBalance?.formatted, 6)} WETH`}
-            </span>{' '}
-          </div>
-        ),
-      }
-    : null;
-
-  const usdcBalanceRow = Number(usdcBalance?.formatted)
-    ? {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">USDC </span>{' '}
-          </div>
-        ),
-        details: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">
-              {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
-            </span>{' '}
-          </div>
-        ),
-      }
-    : null;
-  const cusdcv3BalanceRow = Number(cusdcv3Balance?.formatted)
-    ? {
-        description: (
-          <div className="flex items-center lg:gap-x-1">
-            <span className="mr-1 lg:mr-0">cUSDCv3 </span>{' '}
-          </div>
-        ),
-        details: (
-          <div className="flex items-center lg:gap-x-1 w-max">
-            <span className="mr-1 lg:mr-0">
-              {userInfo && `${financial(cusdcv3Balance?.formatted, 6)} cUSDCv3`}
-            </span>{' '}
-          </div>
-        ),
-      }
-    : null;
-
-  const rockoWalletBalance =
-    Number(compBalance?.formatted) ||
-    Number(ethBalance?.formatted) ||
-    Number(wethBalance?.formatted) ||
-    Number(usdcBalance?.formatted) ||
-    Number(cusdcv3Balance?.formatted);
-
-  const invoice2: any = [
+  const invoice2 = [
     {
       description: 'Address',
       details: zerodevAccount ? (
@@ -189,51 +104,91 @@ const Profile: React.FC = () => {
         ''
       ),
     },
+    Number(compBalance?.formatted) ||
+    Number(ethBalance?.formatted) ||
+    Number(wethBalance?.formatted) ||
+    Number(usdcBalance?.formatted)
+      ? {
+          description: 'Total Balance',
+          details: `${financial(
+            Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
+            6,
+          )} ETH`,
+          subDescription: [
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">ETH </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(ethBalance?.formatted, 6)} ETH`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">WETH </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(wethBalance?.formatted, 6)} WETH`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">USDC </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(usdcBalance?.formatted, 6)} USDC`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: (
+                <div className="flex items-center lg:gap-x-1">
+                  <span className="mr-1 lg:mr-0">COMP </span>{' '}
+                </div>
+              ),
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max">
+                  <span className="mr-1 lg:mr-0">
+                    {userInfo && `${financial(compBalance?.formatted, 6)} COMP`}
+                  </span>{' '}
+                </div>
+              ),
+            },
+            {
+              description: '',
+              details: (
+                <div className="flex items-center lg:gap-x-1 w-max mt-6">
+                  <button
+                    type="button"
+                    className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
+                    onClick={() => setOpenModalFor('Transfer Fund')}
+                  >
+                    Transfer Funds
+                  </button>
+                </div>
+              ),
+            },
+          ],
+        }
+      : null,
   ];
-
-  if (rockoWalletBalance) {
-    invoice2.push({
-      description: 'Total Balance',
-      details: `${financial(
-        Number(ethBalance?.formatted) + Number(wethBalance?.formatted),
-        6,
-      )} ETH`,
-      subDescription: [
-        {
-          description: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">ETH </span>{' '}
-            </div>
-          ),
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max">
-              <span className="mr-1 lg:mr-0">
-                {userInfo && `${financial(ethBalance?.formatted, 6)} ETH`}
-              </span>{' '}
-            </div>
-          ),
-        },
-        wethBalanceRow,
-        usdcBalanceRow,
-        cusdcv3BalanceRow,
-        compBalanceRow,
-        {
-          description: '',
-          details: (
-            <div className="flex items-center lg:gap-x-1 w-max mt-6">
-              <button
-                type="button"
-                className="font-semibold  text-xs md:text-sm text-blue py-[10px]  px-6 rounded-full bg-grayPrimary mr-2"
-                onClick={() => setOpenModalFor('Transfer Fund')}
-              >
-                Transfer Funds
-              </button>
-            </div>
-          ),
-        },
-      ],
-    });
-  }
 
   const handleTermsCheckChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -298,7 +253,6 @@ const Profile: React.FC = () => {
       >
         getComp
       </button> */}
-
       {/* ---------------------- First Section Start ------------------------ */}
       <section className="my-6 space-y-2">
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
@@ -464,8 +418,7 @@ const Profile: React.FC = () => {
         <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">
           <h3 className="text-xl font-medium mb-4">Wallet</h3>
           <div className="divide-y-2">
-            {invoice2.map((info: any, i: number) => (
-              // eslint-disable-next-line react/no-array-index-key
+            {invoice2.map((info, i) => (
               <React.Fragment key={i}>
                 <div className="flex pb-3 pt-2 flex-wrap items-center space-y-2">
                   <p className="font-medium w-[62%] md:w-1/2">
@@ -479,9 +432,8 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   {info?.subDescription &&
-                    info?.subDescription.map((innerInfo: any, j: number) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <React.Fragment key={j}>
+                    info?.subDescription.map((innerInfo, i) => (
+                      <React.Fragment key={i}>
                         <div className="pt-1 md:pt-0 w-[65%] md:w-1/2 lg:pl-6">
                           {innerInfo?.description}
                         </div>
@@ -495,7 +447,6 @@ const Profile: React.FC = () => {
                 </div>
               </React.Fragment>
             ))}
-            {walletDebug ? <DynamicWidget /> : null}
           </div>
         </div>
         {/* <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:p-6">

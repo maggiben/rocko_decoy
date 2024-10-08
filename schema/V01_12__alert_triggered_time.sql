@@ -1,1 +1,0 @@
-alter table alerts add column triggered_time timestamp;

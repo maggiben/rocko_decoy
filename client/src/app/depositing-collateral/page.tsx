@@ -1,47 +1,47 @@
+/* eslint-disable no-nested-ternary */
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAddress } from '@thirdweb-dev/react';
-import Image from 'next/image';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
+import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+// import { BLOCKCHAIN } from '@/constants/env';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
-import { LoanData, PaymentMethods } from '@/types/type';
+import { LoanData } from '@/types/type';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
+// import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
 import transactionComp from '@/utility/transactionComp';
 import { CometContract, networkChainId } from '@/constants';
+// import { useProtocolConfig } from '@/protocols';
+// import { ProtocolConfig } from '@/protocols/types';
 import { useSingleLoan } from '@/contract/single';
 import { useGetLoan } from '@/protocols/compound/util/batch';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
-import FinishLoanTransaction from '@/components/chips/FinishLoan/FinishLoan';
-import financial from '@/utility/currencyFormate';
-import contentCopy from '@/assets/content_copy.svg';
-import CancelLoanModal from '@/components/chips/CancelLoanModal/CancelLoanModal';
-import isSufficientCollateral from '@/utility/isSufficientCollateral';
-import { TransactionMode } from '@/protocols/types';
+
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
+// import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
   step: string;
 }
 
-interface UiState {
-  showTransferCollateralModal: boolean;
-  showFinishLoanModal: boolean;
-  showLoanCompleteModal: boolean;
-  showCancelLoanModal: boolean;
-}
-
 const DepositingCollateral = () => {
-  // Router
-  const router = useSearchParams();
+  const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const type = router.get('type') || '';
+
   const navRouter = useRouter();
+
+  // const {
+  //   txBatch: { useGetLoan },
+  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');
@@ -56,30 +56,11 @@ const DepositingCollateral = () => {
       ? borrowMoreData?.payment_collateral
       : loanData?.collateralNeeded;
 
-  const isJustBorrowMore =
-    type === 'add' &&
-    (!anotherData || borrowMoreData?.payment_collateral === 0);
-
-  const [uiState, setUiState] = useState({
-    showTransferCollateralModal: false,
-    showFinishLoanModal: false,
-    showLoanCompleteModal: false,
-    showCancelLoanModal: false,
-  });
-
-  const updateUiState = (newState: Partial<UiState>) => {
-    setUiState((prev) => ({ ...prev, ...newState }));
-  };
-
   const [isExistLoan, setIsExistLoan] = useState<boolean>(false);
   const [existLoanId, setExistLoanId] = useState<number>(0);
   const [totalBorrowing, setTotalBorrowing] = useState<number>(borrowing);
   const [totalCollateral, setTotalCollateral] = useState<number>(collateral);
   const [collateralReceived, setCollateralReceived] = useState<boolean>(false);
-  const [triggerRefetch, setTriggerRefetch] = useState(true);
-  const [startTransactions, setStartTransactions] = useState(false);
-  const [isExternalWallet, setIsExternalWallet] = useState(false);
-  const [lendingProtocol, setLendingProtocol] = useState('');
 
   const [activeDone, setActiveDone] = useState(false);
   const [startA, setStartA] = useState(false);
@@ -89,6 +70,9 @@ const DepositingCollateral = () => {
   const [progress, setProgress] = useState(0);
   const [progressTracker, setProgressTracker] = useState(0);
   const [doneTracker, setDoneTracker] = useState<DoneTracker[]>([]);
+  const [completeModal, setCompleteModal] = useState(false);
+  const [showFinalModal, setShowFinalModal] = useState(false);
+  const [showTxModal, setShowTxModal] = useState(false);
 
   // get User info
   const { userInfo } = useUserInfo();
@@ -97,210 +81,52 @@ const DepositingCollateral = () => {
   const { getUserId } = useUserDB();
   // Thirdweb for EOA
   const address = useAddress();
-
+  const { data } = useRockoBalance({ address: address as `0x${string}` });
   const { depositZerodevAccount } = useSingleLoan();
   // Wagmi for ZeroDev Smart wallet
   const { address: rockoWalletAddress } = useRockoAccount();
-
-  const { data: rockoWalletBalance, refetch } = useRockoBalance({
+  const { data: rockoWalletBalance } = useRockoBalance({
     address: rockoWalletAddress as `0x${string}`,
   });
 
-  const transactionMode = (): TransactionMode => {
-    if (isJustBorrowMore) return TransactionMode.borrowMore;
-    return TransactionMode.getLoan;
-  };
-
-  const { executeBatchTransactions, success, txHash, error } = useGetLoan(
+  // const { chain } = useRockoNetwork();
+  const { executeBatchGetLoan, success, txHash, error } = useGetLoan(
     collateral || 0,
     borrowing || 0,
-    loanData,
-    transactionMode(),
   );
 
-  /* USE EFFECTS */
-  // Check if this loan is for an external wallet
-  useEffect(() => {
-    if (loanData?.paymentMethod === PaymentMethods.ExternalWallet) {
-      setIsExternalWallet(true);
-    }
-  }, [loanData]);
+  const start = async () => {
+    if (loanData?.paymentMethod !== 'ethereum') return;
 
-  useEffect(() => {
-    if (!triggerRefetch) return;
-
-    if (
-      isSufficientCollateral(rockoWalletBalance?.formatted, collateral) &&
-      !startTransactions
-    ) {
-      setCollateralReceived(true);
-      setADone();
-      updateUiState({
-        showTransferCollateralModal: false,
-      });
-      proceedAnyway();
-    } else {
-      updateUiState({
-        showTransferCollateralModal: true,
-        showFinishLoanModal: false,
-      });
-    }
-
-    const intervalId = setInterval(refetch, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [triggerRefetch, refetch, rockoWalletBalance]);
-
-  /* Use Effect for handling metamask payment method */
-  useEffect(() => {
-    if (userInfo !== undefined && rockoWalletAddress && !isExternalWallet) {
-      if (!isSufficientCollateral(rockoWalletBalance?.formatted, collateral)) {
-        metaMaskCollectCollateral();
-      }
-    }
-  }, [userInfo, rockoWalletAddress, isExternalWallet]);
-
-  // Runs when the user clicks the confirm button on the FinishLoanTransaction Modal
-  useEffect(() => {
-    if (startTransactions) {
-      setInitialParams();
-      initiateLoan();
-    }
-  }, [startTransactions]);
-
-  // Handles the success or error of the ZeroDev transactions
-  useEffect(() => {
-    if (error) {
-      logger(JSON.stringify(error, null, 2));
-      setStartTransactions(false);
-      updateUiState({
-        showFinishLoanModal: true,
-      });
-    }
-
-    if (success) {
-      console.log('TxHash: ', txHash);
-      console.log('success');
-      setTriggerRefetch(false);
-      setStartTransactions(false);
-      setAllDone(txHash);
-      updateUiState({
-        showFinishLoanModal: false,
-        showLoanCompleteModal: true,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success, txHash, error]);
-
-  /* Timer and Progress Bar */
-  // for timer
-  useEffect(() => {
-    if (startA || startB) {
-      const interval = setInterval(() => {
-        if (counter === 0) {
-          clearInterval(interval);
-        } else {
-          setCounter(counter - 1);
-        }
-      }, 60000);
-
-      return () => clearInterval(interval);
-    }
-  }, [startA, startB, counter]);
-
-  // for progressbar interface
-  useEffect(() => {
-    if (startA) {
-      setProgressTracker(0);
-
-      const interval = setInterval(() => {
-        if (progress === 80) {
-          clearInterval(interval);
-        } else {
-          setProgress((prevProg) => prevProg + 20);
-        }
-      }, 7000);
-
-      return () => clearInterval(interval);
-    }
-    if (startB) {
-      setProgressTracker(1);
-
-      const interval = setInterval(() => {
-        if (progress === 80) {
-          clearInterval(interval);
-        } else {
-          setProgress((prevProg) => prevProg + 20);
-        }
-      }, 7000);
-
-      return () => clearInterval(interval);
-    }
-  }, [startA, startB, progress]);
-
-  useEffect(() => {
-    if (type === 'start') {
-      setStartA(true);
-    }
-  }, [type]);
-
-  /* Functions */
-  // Initiates the loan creation flow
-  const metaMaskCollectCollateral = async () => {
-    if (!rockoWalletAddress) return;
-    console.log(1, { startA });
-    setStartA(true);
-    console.log(2, { startA });
-
-    let rockoAccountHasCollateral = collateralReceived;
-    if (!collateralReceived && !isExternalWallet) {
-      rockoAccountHasCollateral = await receiveCollateral();
-    }
-    if (rockoAccountHasCollateral) {
-      updateUiState({
-        showTransferCollateralModal: false,
-        showFinishLoanModal: true,
-      });
-    }
-    setCollateralReceived(rockoAccountHasCollateral);
-  };
-
-  const initiateLoan = async () => {
-    if (!rockoWalletAddress || (isExternalWallet && !loanData.otherAddress)) {
-      console.log('No Wallet Address set for external wallet payment method.');
+    if (!rockoWalletAddress || !address || !collateral) return;
+    // if (chain && chain.name.toUpperCase() !== BLOCKCHAIN.toUpperCase()) {
+    //   toast.error('Invalid Network!');
+    //   return;
+    // }
+    if (Number(data?.formatted) < collateral) {
+      toast.error('Insufficient Collateral Balance!');
       return;
     }
     console.log(1, { startA });
     setStartA(true);
     console.log(2, { startA });
-
-    if (!isSufficientCollateral(rockoWalletBalance?.formatted, collateral)) {
-      toast.error('Insufficient Collateral Balance!');
-      setStartTransactions(false);
-      setTriggerRefetch(true);
-      updateUiState({
-        showTransferCollateralModal: true,
-        showFinishLoanModal: false,
-      });
-      setAError();
-    } else {
-      setCollateralReceived(true);
+    const collateralReceived = await receiveCollateral();
+    if (collateralReceived) {
       setADone();
 
-      executeBatchTransactions();
+      // batch transactions
+      executeBatchGetLoan();
       setStartB(true);
+    } else {
+      setAError();
+
+      navRouter.push('/');
     }
   };
 
   const receiveCollateral = async (): Promise<any> => {
-    if (!collateral) {
-      console.log('Mising collateral');
-    }
-    if (!rockoWalletAddress || !collateral) {
-      return null;
-    }
+    if (!rockoWalletAddress || !collateral) return null;
 
-    console.log('Depositing Collateral');
     const depositResult = await depositZerodevAccount(
       rockoWalletAddress,
       collateral,
@@ -346,7 +172,7 @@ const DepositingCollateral = () => {
     setDoneTracker([...doneTracker, { step: 'two' }]);
     setStartB(false);
     setActiveDone(true);
-    updateUiState({ showTransferCollateralModal: false });
+    setCompleteModal(true);
   };
 
   const clearLoanDataSession = () => {
@@ -364,7 +190,6 @@ const DepositingCollateral = () => {
       sender_address: address,
       transaction_type: 'initial_collateral',
       funding_source: loanData?.paymentMethod,
-      lending_protocol: lendingProtocol,
     };
     const metadata_loan = {
       loan_id: type === 'add' ? existLoanId : loanId,
@@ -377,7 +202,6 @@ const DepositingCollateral = () => {
       transaction_type:
         type === 'add' ? 'loan_increase' : 'new_loan_withdrawal',
       funding_source: loanData?.paymentMethod,
-      lending_protocol: lendingProtocol,
     };
 
     transactionComp({
@@ -401,7 +225,6 @@ const DepositingCollateral = () => {
             (loan: any) => loan.loan_active === 1,
           );
           if (matchLoan && matchLoan.length > 0) {
-            setLendingProtocol(matchLoan[0]?.lending_protocol);
             setExistLoanId(matchLoan[0]?.id);
             setIsExistLoan(true);
             setTotalBorrowing(matchLoan[0].outstanding_balance + borrowing);
@@ -414,105 +237,126 @@ const DepositingCollateral = () => {
     }
   };
 
-  const renderLoanStatus = () => {
-    if (activeDone) return 'Fulfilling Loan';
-    if (startA) return 'Waiting for Collateral';
-    return 'Depositing Collateral';
-  };
+  // const copyToClipboard = async () => {
+  //   await navigator.clipboard.writeText(rockoWalletAddress as `0x${string}`);
+  // };
 
-  const canCancelLoan = () => {
-    if (activeDone) return false;
-    if (startTransactions) return false;
-    return true;
-  };
+  useEffect(() => {
+    if (
+      loanData?.paymentMethod !== 'ethereum' &&
+      Number(rockoWalletBalance?.formatted) >= Number(collateral) &&
+      !collateralReceived
+    ) {
+      setStartA(true);
 
-  const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(rockoWalletAddress);
-  };
+      setCollateralReceived(true);
+      setADone();
 
-  const handleCopy = () => {
-    copyToClipboard();
-  };
+      toast.success('Collateral is successfully received!');
 
-  /* Modal Functions */
-  const onBackTransferCollateral = () => {
-    updateUiState({ showTransferCollateralModal: false });
-  };
+      const doBatchTransactions = async () => {
+        // do batchTransactions
+        await executeBatchGetLoan();
+        setStartB(true);
+      };
+      doBatchTransactions();
+    }
+  }, [rockoWalletBalance]);
 
-  const onBackFinishLoan = () => {
-    updateUiState({
-      showFinishLoanModal: false,
-      showTransferCollateralModal: false,
-    });
+  useEffect(() => {
+    // TODO NOTE this fixed the transaction popup issue, just wait for rockoWalletAddress before continuing
+    if (userInfo !== undefined && rockoWalletAddress) {
+      setInitialParams();
+      start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo, rockoWalletAddress]);
+
+  useEffect(() => {
+    if (error) logger(JSON.stringify(error, null, 2));
+
+    if (success) {
+      setShowTxModal(true);
+      setAllDone(txHash);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success, txHash, error]);
+
+  // for timer
+  useEffect(() => {
+    if (startA || startB) {
+      const interval = setInterval(() => {
+        if (counter === 0) {
+          clearInterval(interval);
+        } else {
+          setCounter(counter - 1);
+        }
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }
+  }, [startA, startB, counter]);
+  // for progressbar interface
+  useEffect(() => {
+    if (startA) {
+      setProgressTracker(0);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => prevProg + 20);
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+    if (startB) {
+      setProgressTracker(1);
+
+      const interval = setInterval(() => {
+        if (progress === 80) {
+          clearInterval(interval);
+        } else {
+          setProgress((prevProg) => prevProg + 20);
+        }
+      }, 7000);
+
+      return () => clearInterval(interval);
+    }
+  }, [startA, startB, progress]);
+
+  useEffect(() => {
+    if (type === 'start') {
+      setStartA(true);
+    }
+  }, [type]);
+
+  const onBack = () => {
+    setCompleteModal(false);
   };
 
   const proceedAnyway = () => {
-    setStartTransactions(true);
-    setTriggerRefetch(false);
-    updateUiState({
-      showFinishLoanModal: false,
-      showTransferCollateralModal: false,
-    });
-  };
-
-  const finalizeLoanTransfer = () => {
-    setStartTransactions(true);
-    setTriggerRefetch(false);
-    updateUiState({
-      showFinishLoanModal: false,
-    });
-  };
-
-  const cancelLoan = () => {
-    updateUiState({
-      showFinishLoanModal: false,
-      showTransferCollateralModal: false,
-      showCancelLoanModal: true,
-    });
-  };
-
-  const confirmCancel = () => {
-    updateUiState({
-      showCancelLoanModal: false,
-    });
-    navRouter.push('/');
-  };
-
-  const onViewDetails = () => {
-    if (!isExternalWallet) {
-      metaMaskCollectCollateral;
-    } else {
-      updateUiState({
-        showTransferCollateralModal: true,
-      });
-    }
-  };
-
-  const onFinishLoan = () => {
-    updateUiState({
-      showCancelLoanModal: false,
-    });
-  };
-
-  const onProgressLoan = () => {
-    if (collateralReceived) {
-      updateUiState({
-        showFinishLoanModal: true,
-        showTransferCollateralModal: false,
-      });
-    } else {
-      updateUiState({
-        showTransferCollateralModal: true,
-        showFinishLoanModal: false,
-      });
-    }
+    setCompleteModal(false);
+    setShowFinalModal(true);
   };
 
   return (
-    <main className="container mx-auto px-[15px] sm:py-6">
+    <main className="container mx-auto px-[15px] py-4 sm:py-6 lg:py-10">
       <h1 className="text-2xl lg:text-3xl text-blackPrimary lg:text-start text-center">
-        {renderLoanStatus()}
+        {activeDone
+          ? 'Fulfilling Loan'
+          : startA
+            ? 'Waiting for Collateral'
+            : 'Depositing Collateral'}
       </h1>
+      {/* <button
+        type="button"
+        onClick={executeBatchGetLoan}
+        className="text-center py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]"
+      >
+        Book Loan
+      </button> */}
       <p className="text-blackPrimary text-[14px] mt-1">
         Please do not close your browser until all of the steps below are
         completed.
@@ -534,7 +378,7 @@ const DepositingCollateral = () => {
             >
               Collateral Received
             </p>
-            {collateralReceived && (
+            {doneTracker[0]?.step === 'one' && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -554,7 +398,7 @@ const DepositingCollateral = () => {
                 />
               </svg>
             )}
-            {!collateralReceived && (
+            {progressTracker === 0 && !(doneTracker[0]?.step === 'one') && (
               <CircleProgressBar
                 circleWidth={18}
                 radius={7}
@@ -603,7 +447,6 @@ const DepositingCollateral = () => {
               />
             )}
           </div>
-
           <div className="px-4 py-6 rounded-lg bg-[#F9F9F9] flex justify-between items-center mb-3">
             <p
               className={`${
@@ -647,7 +490,7 @@ const DepositingCollateral = () => {
             )}
           </div>
         </div>
-        <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:pt-6 lg:px-6 lg:mt-6 mt-4">
+        {/* <div className="lg:w-3/5 border-2 rounded-2xl p-3 lg:pt-6 lg:px-6 lg:mt-6 mt-4">
           <h6 className="text-blackPrimary lg:text-[20px] text-[16px] font-medium	leading-8">
             Collateral Instructions
           </h6>
@@ -660,31 +503,9 @@ const DepositingCollateral = () => {
               <p className="font-normal	text-blackSecondary text-[14px] leading-5	">
                 Amount Received
               </p>
-              <div className="flex items-center space-between gap-3">
-                <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
-                  {financial(rockoWalletBalance?.formatted, 4)} ETH{' '}
-                </p>
-                {collateralReceived && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      d="M18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-                      fill="#05944F"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M14.7566 8.08964L8.75071 14.0956L4.82812 10.173L6.00664 8.99447L8.75071 11.7385L13.5781 6.91113L14.7566 8.08964Z"
-                      fill="white"
-                    />
-                  </svg>
-                )}
-              </div>
+              <p className="font-normal	text-blackPrimary text-[16px] leading-6	">
+                {financial(rockoWalletBalance?.formatted, 4)} ETH{' '}
+              </p>
             </div>
           </div>
           <div className="py-[16px]  border-y	">
@@ -695,63 +516,47 @@ const DepositingCollateral = () => {
               {financial(collateral, 4)} ETH{' '}
             </p>
           </div>
-          <div className="flex items-center pt-[16px] ">
-            <div className="">
+          <div className="flex justify-between items-center pt-[16px] ">
+            <div>
               <p className="font-normal	text-blackSecondary text-[14px] leading-5">
                 Rocko Wallet Address
               </p>
-              <div className="flex items-center">
-                <p className="font-normal	text-blackPrimary text-[16px] leading-6 text-wrap">
-                  {rockoWalletAddress}
-                </p>
-                <div className="px-[16px]">
-                  <Image
-                    src={contentCopy}
-                    onClick={handleCopy}
-                    alt="contentCopy"
-                    className="cursor-pointer"
-                  />
-                </div>
-                {!collateralReceived && (
-                  <button
-                    type="button"
-                    onClick={onViewDetails}
-                    className="font-semibold  text-xs md:text-sm bg-blue py-[10px] px-6 rounded-full text-white"
-                  >
-                    Transfer
-                  </button>
-                )}
-              </div>
+              <p className="font-normal	text-blackPrimary text-[16px] leading-6 text-wrap">
+                {rockoWalletAddress}
+              </p>
             </div>
+            <Image
+              src={contentCopy}
+              alt="contentCopy"
+              className="cursor-pointer"
+              onClick={copyToClipboard}
+            />
           </div>
-        </div>
-        {uiState.showTransferCollateralModal && (
-          <TransferCollateral
-            balance={rockoWalletBalance}
-            collateralNeeded={collateral}
-            onCancel={onBackTransferCollateral}
-            onOk={proceedAnyway}
+        </div> */}
+      </section>
+      {completeModal && (
+        <TransferCollateral onCancel={onBack} onOk={proceedAnyway} />
+      )}
+      {showFinalModal && (
+        <ModalContainer>
+          <LoanComplete
+            title="Loan Complete"
+            details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
+            id={1}
+            txHash=""
           />
-        )}
-        {uiState.showFinishLoanModal && (
-          <FinishLoanTransaction
-            balance={rockoWalletBalance}
-            onConfirm={finalizeLoanTransfer}
-            onCancel={onBackFinishLoan}
-          />
-        )}
-        {uiState.showLoanCompleteModal && (
+        </ModalContainer>
+      )}
+      {showTxModal && (
+        <ModalContainer>
           <LoanComplete
             title="Loan Complete"
             details="Your loan has been fulfilled and you can access your funds in the exchange account or wallet address provided."
             id={1}
             txHash={txHash}
           />
-        )}
-        {uiState.showCancelLoanModal && (
-          <CancelLoanModal onCancel={onFinishLoan} onConfirm={confirmCancel} />
-        )}
-      </section>
+        </ModalContainer>
+      )}
 
       {/* footer */}
       <div className="h-20 w-full" />
@@ -773,38 +578,21 @@ const DepositingCollateral = () => {
             {loanData?.activeNextButton?.valueOf()} */}
             </p>
             <div className="flex items-center justify-end gap-3">
-              {canCancelLoan() && (
-                <button
-                  disabled={startTransactions}
-                  type="button"
-                  onClick={cancelLoan}
-                  className="py-[10px] px-6 rounded-full text-sm font-semibold bg-[#EEEEEE] text-[#2C3B8D]"
-                >
-                  Cancel
-                </button>
-              )}
-              {!startTransactions && !activeDone ? (
-                <button
-                  type="button"
-                  onClick={onProgressLoan}
-                  className={`font-semibold  text-xs md:text-sm ${'bg-blue'} py-[10px] px-6 rounded-full text-white`}
-                >
-                  Next
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  disabled={!activeDone}
-                  onClick={() => {
-                    navRouter.push('/loan-dashboard');
-                  }}
-                  className={`font-semibold  text-xs md:text-sm ${
-                    !activeDone ? 'bg-blue/40' : 'bg-blue'
-                  } py-[10px] px-6 rounded-full text-white`}
-                >
-                  Done
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setCompleteModal(true);
+                  navRouter.push('/loan-dashboard');
+                }}
+                className={`font-semibold  text-xs md:text-sm ${
+                  !activeDone ? 'bg-blue/40' : 'bg-blue'
+                } py-[10px] px-6 rounded-full text-white`}
+                // TODO disable until transaction is completed
+                // why was this commented out Alberto?
+                // disabled={activeDone}
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>

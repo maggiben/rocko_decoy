@@ -1,5 +1,4 @@
-/* eslint-disable no-nested-ternary */
-import React, { FC, useRef, useState, useEffect } from 'react';
+import { FC, useRef, useState, useEffect } from 'react';
 import { IoIosCheckbox, IoMdCall } from 'react-icons/io';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { AiOutlineMail } from 'react-icons/ai';
@@ -590,7 +589,6 @@ const AlertForm: FC<AlertFormProps> = ({
 
       <div className="flex gap-x-3">
         <button
-          type="button"
           // type="submit"
           onClick={handleCollateralForm}
           disabled={
@@ -619,7 +617,6 @@ const AlertForm: FC<AlertFormProps> = ({
           Save
         </button>
         <button
-          type="button"
           onClick={() => setNext(false)}
           className="py-[10px] px-6 rounded-3xl text-[#2C3B8D] bg-[#EEEEEE] font-semibold"
         >

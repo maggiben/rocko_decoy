@@ -25,7 +25,7 @@ import {
   networkChainId,
 } from '@/constants';
 import { useUserInfo } from '@/hooks/useUserInfo';
-import { etherscanLink, parseUnits } from '@/utility/utils';
+import { etherscanLink, parseBalance } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
@@ -35,7 +35,7 @@ import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
-import { TokenAmount } from '@/protocols/compound/util/data';
+import { Balance } from '@/protocols/compound/util/data';
 import { ethers } from 'ethers';
 // import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
@@ -46,7 +46,7 @@ interface DoneTracker {
 }
 
 function Processing() {
-  const { single: loanId } = useParams(); //! by using this hook get the URL parameter
+  const { single: loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const paymentMethod = router.get('method') || '';
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
@@ -63,7 +63,7 @@ function Processing() {
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
   const [loanData, setLoanData] = useState<any>();
-  const [collateral, setCollateral] = useState<TokenAmount>({
+  const [collateral, setCollateral] = useState<Balance>({
     formatted: 0,
     value: ethers.BigNumber.from(0),
   });
@@ -90,6 +90,7 @@ function Processing() {
   const { rockoWalletAddress, rockoWalletClient } = useRockoWallet();
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
+
   // const { chain } = useRockoNetwork();
   const { executeBatchRepaySome, success, txHash } = useRepaySome(payment);
   const {
@@ -218,7 +219,7 @@ function Processing() {
       data: encodeFunctionData({
         abi: USDCABI,
         functionName: 'transfer',
-        args: [address, parseUnits(balance?.formatted, 6)],
+        args: [address, parseBalance(balance?.formatted, 6)],
       }),
     });
 
@@ -246,7 +247,7 @@ function Processing() {
 
   const saveTxRepaySome = () => {
     const metadata = {
-      loan_id: loanId,
+      loan_id: loanIndex,
       asset: 'usdc',
       asset_decimals: 6,
       amount: payment,
@@ -255,7 +256,6 @@ function Processing() {
       sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
-      lending_protocol: loanData?.lending_protocol,
     };
 
     transactionComp({
@@ -266,7 +266,7 @@ function Processing() {
 
   const saveTxRepayFull = () => {
     const metadata_loan = {
-      loan_id: loanId,
+      loan_id: loanIndex,
       asset: 'usdc',
       asset_decimals: 6,
       amount: payment,
@@ -275,7 +275,6 @@ function Processing() {
       sender_address: rockoWalletAddress,
       transaction_type: 'payment',
       funding_source: paymentMethod,
-      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,
@@ -283,7 +282,7 @@ function Processing() {
     });
 
     const metadata_collateral = {
-      loan_id: loanId,
+      loan_id: loanIndex,
       asset: 'weth',
       asset_decimals: 18,
       amount: collateral.formatted,
@@ -292,7 +291,6 @@ function Processing() {
       sender_address: CometContract[networkChainId],
       transaction_type: 'payment',
       funding_source: paymentMethod,
-      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,
@@ -300,7 +298,7 @@ function Processing() {
     });
 
     const metadata_reward = {
-      loan_id: loanId,
+      loan_id: loanIndex,
       asset: 'comp',
       asset_decimals: 18,
       amount: rewardAmount,
@@ -309,7 +307,6 @@ function Processing() {
       sender_address: CometRewardContract[networkChainId],
       transaction_type: 'rewards_withdrawal',
       funding_source: paymentMethod,
-      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: fullyTxHash,
@@ -570,14 +567,14 @@ function Processing() {
             <LoanComplete
               title="Payment Complete"
               details="You have successfully repaid your loan. Your collateral and any earned rewards have been withdrawn to your account or wallet. "
-              id={Number(loanId)}
+              id={0}
               txHash=""
             />
           ) : (
             <LoanComplete
               title="Payment Complete"
               details="You have successfully made a payment"
-              id={Number(loanId)}
+              id={Number(loanIndex)}
               txHash=""
             />
           )}

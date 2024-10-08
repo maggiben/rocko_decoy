@@ -106,7 +106,7 @@ function LoanSummary() {
             {loanData?.collateralNeeded && loanData?.cryptoName ? (
               <>
                 {' '}
-                {financial(loanData?.collateralNeeded, 4)}{' '}
+                {financial(loanData?.collateralNeeded, 3)}{' '}
                 <span className="text-base"> {loanData?.cryptoName}</span>
               </>
             ) : (

@@ -1,18 +1,13 @@
 import { WagmiProvider, http, createConfig } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { base, mainnet, sepolia } from 'wagmi/chains';
-import {
-  ETH_NODE_URL_BASE,
-  ETH_NODE_URL_MAINNET,
-  ETH_NODE_URL_SEPOLIA,
-} from '@/constants/env';
 
 export const wagmiConfig = createConfig({
-  chains: [mainnet, sepolia, base],
+  chains: [mainnet, sepolia],
   transports: {
-    [base.id]: http(ETH_NODE_URL_BASE),
-    [mainnet.id]: http(ETH_NODE_URL_MAINNET),
-    [sepolia.id]: http(ETH_NODE_URL_SEPOLIA),
+    [base.id]: http(),
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
   },
 });
 

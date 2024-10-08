@@ -40,10 +40,3 @@ export const IS_DEMO_MODE =
   process.env.NEXT_PUBLIC_IS_DEMO_MODE === 'false' || demoMode || sessionFlag;
 
 export const DYNAMIC_PROJECT_ID = process.env.NEXT_PUBLIC_DYNAMIC_PROJECT_ID;
-
-// ETH Nodes
-export const ETH_NODE_URL_MAINNET =
-  process.env.NEXT_PUBLIC_ETH_NODE_URL_MAINNET;
-export const ETH_NODE_URL_BASE = process.env.NEXT_PUBLIC_ETH_NODE_URL_BASE;
-export const ETH_NODE_URL_SEPOLIA =
-  process.env.NEXT_PUBLIC_ETH_NODE_URL_SEPOLIA;

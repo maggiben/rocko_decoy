@@ -13,7 +13,7 @@ import logger from '@/utility/logger';
 
 const StepFour: FC<RiskStep> = ({ title, subTitle, description }) => {
   const [selectedValue, setSelectedValue] = useState<number>(150);
-  const [value, setValue] = useState<number>(25);
+  const [value, setValue] = useState<number>(10);
   const [selectedCoin, setSelectedCoin] = useState('');
   const { loanData, setLoanData } = useLoanData();
   const [hasOther, setHasOther] = useState(0);

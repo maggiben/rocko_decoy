@@ -1,1 +1,0 @@
-ALTER TABLE transactions ADD COLUMN lending_protocol varchar(20) AFTER `chain`;

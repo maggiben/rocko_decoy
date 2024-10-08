@@ -36,7 +36,7 @@ interface DoneTracker {
 }
 
 function ModifyStatus() {
-  const { status, single: loanId } = useParams(); //! by using this hook get the URL parameter
+  const { status, single: loanIndex } = useParams(); //! by using this hook get the URL parameter
   const router = useSearchParams(); //! use the hooks for getting the URL parameters
   const payment = parseFloat(router.get('payment') || '0'); //! get the URL parameter payment value
   const paymentMethod = router.get('method') || '';
@@ -59,10 +59,6 @@ function ModifyStatus() {
   // const {
   //   txBatch: { useAddCollateral, useBorrowCollateral },
   // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
-
-  useEffect(() => {
-    console.log(`Account Data: ${data}`);
-  }, []);
 
   const { executeBatchAddCollateral, success, txHash } =
     useAddCollateral(payment);
@@ -126,7 +122,7 @@ function ModifyStatus() {
 
   const saveTx = () => {
     const metadata = {
-      loan_id: loanId,
+      loan_id: loanIndex,
       asset: 'weth',
       asset_decimals: 18,
       amount: payment,
@@ -138,7 +134,6 @@ function ModifyStatus() {
       transaction_type:
         status === 'add' ? 'collateral_addition' : 'collateral_withdrawal',
       funding_source: paymentMethod,
-      lending_protocol: loanData?.lending_protocol,
     };
     transactionComp({
       transactionHash: txHash,
@@ -406,14 +401,14 @@ function ModifyStatus() {
             <LoanComplete
               title="Collateral Deposit Complete"
               details="You have successfully increased your loan collateral"
-              id={Number(loanId)}
+              id={Number(loanIndex)}
               txHash=""
             />
           ) : (
             <LoanComplete
               title="Collateral Withdrawal Complete"
               details="You have successfully withdrawn collateral"
-              id={Number(loanId)}
+              id={Number(loanIndex)}
               txHash=""
             />
           )}

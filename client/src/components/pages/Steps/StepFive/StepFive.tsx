@@ -24,9 +24,6 @@ import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoDisconnect } from '@/hooks/useRockoDisconnect';
-import { PaymentMethods } from '@/types/type';
-import toast from 'react-hot-toast';
-import { ethers } from 'ethers';
 
 const TOOLTIPS = require('../../../../locales/en_tooltips');
 
@@ -106,7 +103,7 @@ const StepFive: React.FC = () => {
     },
     {
       description: 'Amount Required for Loan',
-      details: `${financial(loanData?.collateralNeeded, 4)} ETH`,
+      details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
       subDetails: `$${financial(
         loanData?.collateralNeeded * loanData?.collateralPrice,
         2,
@@ -114,7 +111,7 @@ const StepFive: React.FC = () => {
       subDescription: [
         {
           description: 'Collateral',
-          details: `${financial(loanData?.collateralNeeded, 4)} ETH`,
+          details: `${financial(loanData?.collateralNeeded, 3)} ETH`,
           subDetails: `$${financial(
             loanData?.collateralNeeded * loanData?.collateralPrice,
             2,
@@ -200,40 +197,33 @@ const StepFive: React.FC = () => {
     },
   ];
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(
-    PaymentMethods.CoinBase,
-  );
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [openModalFor, setOpenModalFor] = useState('');
   const [modalStep, setModalStep] = useState(0);
   const [connect, setConnect] = useState<boolean>(true); //! after choosing wallet on chooseWallet popup/modal then it'll show connected on the page
-  const [isValid, setIsValid] = useState<boolean>(true);
 
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const inputValue = event.target.value as unknown as PaymentMethods;
-
-    if (!Object.values(PaymentMethods).includes(inputValue)) {
-      throw new Error(`Invalid payment method: ${inputValue}`);
-    }
+    const inputValue = event.target.value;
     setPaymentMethod(inputValue);
 
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
-        paymentMethod: inputValue || null,
+        paymentMethod: inputValue || '',
       }));
     }
   };
 
   const OnSignIn = () => {
     setOpenModalFor('Coinbase or Gemini');
-    setPaymentMethod(PaymentMethods.CoinBase);
+    setPaymentMethod('default');
 
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
-        paymentMethod: PaymentMethods.CoinBase,
+        paymentMethod: 'default',
       }));
     }
 
@@ -255,10 +245,6 @@ const StepFive: React.FC = () => {
 
     await addressValidator(otherWallet, disconnect);
 
-    if (!isValid) {
-      toast.error('Provided address is invalid');
-    }
-
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
@@ -278,11 +264,6 @@ const StepFive: React.FC = () => {
         termsChecked: isChecked,
       }));
     }
-  };
-
-  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputAddress = event.target.value;
-    setIsValid(ethers.utils.isAddress(inputAddress));
   };
 
   useEffect(() => {
@@ -375,8 +356,8 @@ const StepFive: React.FC = () => {
                   type="radio"
                   id="wallet1"
                   name="contact"
-                  value={PaymentMethods.CoinBase}
-                  checked={paymentMethod === PaymentMethods.CoinBase}
+                  value="default"
+                  checked={paymentMethod === 'default'}
                   className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
                   onChange={(e) => handlePaymentMethodChange(e)}
                 />
@@ -419,7 +400,7 @@ const StepFive: React.FC = () => {
                 type="radio"
                 id="wallet2"
                 name="contact"
-                value={PaymentMethods.MetaMask}
+                value="ethereum"
                 onChange={(e) => {
                   handlePaymentMethodChange(e);
                   setConnect(true);
@@ -435,14 +416,8 @@ const StepFive: React.FC = () => {
                 btnTitle="Connect"
                 theme="light"
                 style={{
-                  background:
-                    paymentMethod === PaymentMethods.MetaMask
-                      ? '#2C3B8D'
-                      : '#eee',
-                  color:
-                    paymentMethod === PaymentMethods.MetaMask
-                      ? '#eee'
-                      : '#2C3B8D',
+                  background: paymentMethod === 'ethereum' ? '#2C3B8D' : '#eee',
+                  color: paymentMethod === 'ethereum' ? '#eee' : '#2C3B8D',
                   borderRadius: '1.5rem',
                   minWidth: '8rem',
                 }}
@@ -455,7 +430,7 @@ const StepFive: React.FC = () => {
                 type="radio"
                 id="wallet3"
                 name="contact"
-                value={PaymentMethods.ExternalWallet}
+                value="other"
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
                 onChange={(e) => {
                   handlePaymentMethodChange(e);
@@ -470,7 +445,7 @@ const StepFive: React.FC = () => {
                 </label>
 
                 {/* if select other address then it will be active  start */}
-                {paymentMethod === PaymentMethods.ExternalWallet && (
+                {paymentMethod === 'other' && (
                   <div className="">
                     <p className="text-sm font-semibold font-inter mb-2">
                       Enter Wallet Address
@@ -479,18 +454,8 @@ const StepFive: React.FC = () => {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                        onChange={handleAddressChange}
                         onBlur={handleOtherWalletBlur}
                       />
-                      {isValid !== null && (
-                        <div>
-                          {!isValid && (
-                            <span style={{ color: 'red' }}>
-                              Invalid address!
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">
                       <Image

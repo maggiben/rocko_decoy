@@ -11,7 +11,7 @@ function ModalContent({
   return (
     <div
       className={clsx(
-        'p-6 bg-white max-w-[546px] w-full rounded-[20px] flex flex-col gap-8',
+        'p-6 bg-white max-w-[496px] w-full rounded-[20px] flex flex-col gap-8',
         className,
       )}
     >

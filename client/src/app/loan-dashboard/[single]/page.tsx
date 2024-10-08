@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { DateTime } from 'luxon';
-import { getTransactions } from '@/db/transactionDb';
 import compound from '@/assets/coins/Compound (COMP).svg';
 import eth from '@/assets/coins/Ether (ETH).svg';
 import usdc from '@/assets/coins/USD Coin (USDC).svg';
@@ -19,14 +17,13 @@ import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { useCompPrice } from '@/hooks/usePrice';
-import { etherscanLink, formatDate, isInputNaN } from '@/utility/utils';
+import { formatDate } from '@/utility/utils';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
 import financial from '@/utility/currencyFormate';
 import usePlatformStatus from '@/hooks/usePlatformStatus';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import CollateralWarningBanner from '@/components/pages/Dashboard/Banners/collateralWarning';
-import PlaceholderText from '@/components/chips/PlaceholderText/PlaceholderText';
 import ModifyWallet from './modifyWallet/modifyWallet';
 
 const TOOLTIPS = require('../../../locales/en_tooltips');
@@ -62,10 +59,11 @@ const TxPaused = () => (
   </p>
 );
 
-function SinglePage({ params: { single: loanId } }: { params: any }) {
+function SinglePage() {
   const { rockoWalletAddress } = useRockoWallet();
   const { transactionsPaused } = usePlatformStatus();
   const searchParams = useSearchParams();
+  const isActive = searchParams.get('active');
   const isBorrowMore = searchParams.get('borrow-more');
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
@@ -75,7 +73,6 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
   const { getLoanData, getAverageAPR, getRewardRate } = useLoanDB();
   const { compPrice } = useCompPrice();
 
-  const [loanFetchedFromContract, setLoanFetchedFromContract] = useState(false);
   const [loanData, setLoanData] = useState<any>();
   const [collateralPrice, setCollateralPrice] = useState<any>();
   const [apr, setAPR] = useState<any>();
@@ -86,11 +83,10 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
   const [rewardRate, setRewardRate] = useState<any>();
   const [liquidationPrice, setLiquidationPrice] = useState<any>();
   const [buffer, setBuffer] = useState<any>();
-  const [averageAPR, setAverageAPR] = useState<any>();
-  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>();
+  const [averageAPR, setAverageAPR] = useState<any>(0);
+  const [borrowBalanceOf, setBorrowBalanceOf] = useState<any>(0);
   const [collateralBalanceOf, setCollateralBalanceOf] = useState<any>(0);
   const [minCollateral, setMinCollateral] = useState<any>(0);
-  const [loanTransaction, setLoanTransaction] = useState<any>();
 
   const {
     getETHPrice,
@@ -109,25 +105,19 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
   const initialize = async () => {
     if (userInfo) {
       const user_id = await getUserId(userInfo?.email);
-
-      const transactionResponse = await getTransactions(user_id);
-      if (transactionResponse?.length > 0) {
-        setLoanTransaction(transactionResponse.reverse());
-      }
-
       const result = await getLoanData(user_id);
       if (result) {
-        const activeLoans = result.filter(
-          (loan) => loan.id === Number(loanId) && loan.loan_active,
+        const active_loans = result.filter(
+          (loan: any) => loan.loan_active === (isActive ? 1 : 0),
         );
+        if (active_loans.length > 0) {
+          setLoanData(active_loans[0]);
 
-        if (activeLoans.length > 0) {
-          setLoanData(activeLoans[0]);
-
-          const avg_val = await getAverageAPR(activeLoans[0].create_time);
+          const avg_val = await getAverageAPR(active_loans[0].create_time);
 
           if (avg_val) setAverageAPR(avg_val);
         }
+
         if (isBorrowMore) setOpenModalFor('Borrow More');
       }
     }
@@ -149,19 +139,6 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, rockoWalletAddress]);
-
-  const getBorrowAndCollateralBalances = async () => {
-    try {
-      const borrowBalance = await getBorrowBalanceOf();
-      const collateralBalance = await getCollateralBalanceOf();
-      setBorrowBalanceOf(borrowBalance.formatted);
-      setCollateralBalanceOf(collateralBalance.formatted);
-      console.log('got k', { borrowBalance, collateralBalance });
-      setLoanFetchedFromContract(true);
-    } catch (e) {
-      logger(JSON.stringify(e, null, 2), 'error');
-    }
-  };
 
   useEffect(() => {
     getETHPrice()
@@ -200,77 +177,18 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
       .then((_buffer) => setBuffer(_buffer))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
-    getBorrowAndCollateralBalances();
+    getBorrowBalanceOf()
+      .then((_balance) => setBorrowBalanceOf(_balance.formatted))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
+
+    getCollateralBalanceOf()
+      .then((_balance) => setCollateralBalanceOf(_balance.formatted))
+      .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
 
     getMinCollateral(loanData?.outstanding_balance)
       .then((_collateral) => setMinCollateral(_collateral))
       .catch((e) => logger(JSON.stringify(e, null, 2), 'error'));
   });
-
-  if (
-    loanData &&
-    loanFetchedFromContract &&
-    !borrowBalanceOf &&
-    !collateralBalanceOf
-  ) {
-    logger(`Empty loan failed to close for loanId: ${loanData.id}`, 'error');
-
-    // updateLoan(
-    //   'repay', // updateType: string,
-    //   loanData?.id, // id: number,
-    //   borrowBalanceOf, // loan: number, is borrowBalanceOf
-    //   false, // active: boolean,
-    //   collateralBalanceOf, // collateral: number,
-    //   Number(loanData?.outstanding_balance - loanData?.principle_balance), // interest: number,
-    //   '0xEMPTYxLOANxFAILEDxTOxCLOSE', // txHash: string
-    // );
-  }
-
-  if (loanFetchedFromContract && !borrowBalanceOf && collateralBalanceOf) {
-    // TODO notify user to withdraw collateral here or in profile page
-    logger(
-      `Abandoned collateral in protocol for loanId: ${loanData.id}`,
-      'error',
-    );
-  }
-
-  const txTypes = {
-    new_loan_withdrawal: 'Loan withdrawn',
-    initial_collateral: 'Collateral added',
-    payment: 'Payment',
-    collateral_addition: 'Collateral added',
-    collateral_withdrawal: 'Collateral withdrawn',
-    loan_increase: 'Loan increase',
-    rewards_withdrawal: 'Rewards withdrawn',
-    fee: 'Fee payment',
-  };
-
-  const validateTransactionTypes = (transactionType: keyof typeof txTypes) =>
-    txTypes?.[transactionType] || null;
-
-  const getDateDifference = (transactionDate: any) => {
-    const today = DateTime.local().startOf('day');
-    const yesterday = today.minus({ day: 1 });
-    const formattedDate = DateTime.fromISO(transactionDate).startOf('day');
-
-    if (formattedDate.equals(today)) {
-      return 'Today';
-    }
-    if (formattedDate.equals(yesterday)) {
-      return 'Yesterday';
-    }
-    return formattedDate.toFormat('MM/dd/yyyy');
-  };
-
-  const truncateTransactionHash = (hash: string) => {
-    const hashString = hash;
-    if (hashString.length <= 12) {
-      return hashString;
-    }
-    const hashFirstPart = hashString?.slice(0, 6);
-    const hashLastPart = hashString?.slice(-6);
-    return `${hashFirstPart}......${hashLastPart}`;
-  };
 
   return (
     <main className="container mx-auto px-4 py-6 pt-20 lg:py-10 lg:pt-24 ">
@@ -302,65 +220,35 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
             <div className="flex justify-between flex-wrap gap-1 md:gap-0 pt-4">
               <div className="w-[30%]">
                 <p className="text-2xl  font-medium">
-                  {isInputNaN(financial(borrowBalanceOf, 2)) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(borrowBalanceOf, 2)} <small>USDC</small>
-                      <span className="block text-sm text-[#545454]">
-                        ${financial(borrowBalanceOf, 2)}
-                      </span>
-                    </>
-                  )}
+                  {financial(borrowBalanceOf, 2)} <small>USDC</small>
+                  <span className="block text-sm text-[#545454]">
+                    ${financial(borrowBalanceOf, 2)}
+                  </span>
                 </p>
               </div>
               <div className="w-[30%]">
                 <p className=""> Available to Borrow </p>
                 <span className="block text-xl  font-medium">
-                  {isInputNaN(
-                    financial(
-                      collateralPrice * collateralBalanceOf * LTV -
-                        borrowBalanceOf,
-                      2,
-                    ),
-                  ) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(
-                        collateralPrice * collateralBalanceOf * LTV -
-                          borrowBalanceOf,
-                        2,
-                      )}{' '}
-                      <small>USDC</small>
-                    </>
-                  )}
+                  {financial(
+                    collateralPrice * collateralBalanceOf * LTV -
+                      borrowBalanceOf,
+                    2,
+                  )}{' '}
+                  <small>USDC</small>
                 </span>
               </div>
               <div className="w-[30%]">
                 <div className="flex items-center gap-2 ">
                   <p className=""> Current LTV </p>
-                  <HoverTooltip text={TOOLTIPS.CURRENT_LTV} />
+                  <HoverTooltip text={TOOLTIPS.AVERAGE_APR} />
                 </div>
                 <span className="block text-xl  font-medium">
-                  {isInputNaN(
-                    financial(
-                      (borrowBalanceOf /
-                        (collateralPrice * collateralBalanceOf)) *
-                        100,
-                    ),
-                  ) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(
-                        (borrowBalanceOf /
-                          (collateralPrice * collateralBalanceOf)) *
-                          100,
-                      )}
-                      <small>%</small>
-                    </>
+                  {financial(
+                    (borrowBalanceOf /
+                      (collateralPrice * collateralBalanceOf)) *
+                      100,
                   )}
+                  <small>%</small>
                 </span>
               </div>
               {/* <Image
@@ -375,36 +263,19 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
               <div className="w-[30%]">
                 <p className=""> Interest Accrued </p>
                 <span className="block text-xl  font-medium">
-                  {isInputNaN(
-                    financial(
-                      borrowBalanceOf - loanData?.outstanding_balance,
-                      2,
-                    ),
-                  ) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(
-                        borrowBalanceOf - loanData?.outstanding_balance,
-                        2,
-                      )}{' '}
-                      <small>USDC</small>
-                    </>
-                  )}
+                  {financial(
+                    borrowBalanceOf - loanData?.outstanding_balance,
+                    2,
+                  )}{' '}
+                  <small>USDC</small>
                 </span>
               </div>
 
               <div className="w-[30%]">
                 <p className=""> Current APR</p>{' '}
                 <div className="block text-xl  font-medium">
-                  {isInputNaN(financial(apr, 2)) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(apr, 2)}
-                      <span className="text-base">%</span>
-                    </>
-                  )}
+                  {financial(apr, 2)}
+                  <span className="text-base">%</span>
                 </div>
               </div>
 
@@ -415,14 +286,8 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
                 </div>
 
                 <div className="block text-xl  font-medium">
-                  {isInputNaN(financial(averageAPR * 100, 2)) ? (
-                    <PlaceholderText />
-                  ) : (
-                    <>
-                      {financial(averageAPR * 100, 2)}
-                      <span className="text-base">%</span>
-                    </>
-                  )}
+                  {financial(averageAPR * 100, 2)}
+                  <span className="text-base">%</span>
                 </div>
               </div>
             </div>
@@ -477,18 +342,12 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
           <div className="divide-y-2 space-y-[15px]">
             <div className="pt-4">
               <div className="flex items-center gap-2 ">
-                <p className="font-normal">Max Loan-to-Value Ratio</p>{' '}
+                <p className="font-normal">Loan-to-Value Ratio</p>{' '}
                 <HoverTooltip text={TOOLTIPS.MAX_LTV} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {isNaN(LTV) ? (
-                  <PlaceholderText />
-                ) : (
-                  <>
-                    {LTV * 100}
-                    <span className="text-base">%</span>
-                  </>
-                )}
+                {LTV * 100}
+                <span className="text-base">%</span>
               </p>
             </div>
             <div className="pt-4">
@@ -497,14 +356,8 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
                 <HoverTooltip text={TOOLTIPS.LIQUIDATION_THRESHOLD} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {isNaN(threshold) ? (
-                  <PlaceholderText />
-                ) : (
-                  <>
-                    {threshold * 100}
-                    <span className="text-base">%</span>
-                  </>
-                )}
+                {threshold * 100}
+                <span className="text-base">%</span>
               </p>
             </div>
             <div className="pt-4">
@@ -513,14 +366,8 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
                 <HoverTooltip text={TOOLTIPS.LIQUIDATION_PENALTY} />
               </div>
               <p className="block text-xl font-medium mt-2">
-                {isNaN(penalty) ? (
-                  <PlaceholderText />
-                ) : (
-                  <>
-                    {financial(penalty * 100)}
-                    <span className="text-base">%</span>
-                  </>
-                )}
+                {financial(penalty * 100)}
+                <span className="text-base">%</span>
               </p>
             </div>
           </div>
@@ -542,42 +389,25 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
             <div className="flex pt-3 gap-x-2">
               <p className="w-1/2 font-medium">Collateral Posted</p>
               <p>
-                {isInputNaN(
-                  financial(collateralPrice * collateralBalanceOf, 18),
-                ) ? (
-                  <PlaceholderText />
-                ) : (
-                  <>
-                    {financial(collateralBalanceOf, 18)} ETH
-                    <span className="block text-sm text-[#545454]">
-                      ${financial(collateralPrice * collateralBalanceOf, 2)}
-                    </span>
-                  </>
-                )}
+                {financial(collateralBalanceOf, 18)} ETH
+                <span className="block text-sm text-[#545454]">
+                  ${financial(collateralPrice * collateralBalanceOf, 2)}
+                </span>
               </p>
             </div>
             <div className="flex pt-3 gap-x-2">
               <p className="w-1/2 font-medium">Liquidation Price</p>
               <p>
-                {/* {liquidationPrice === 'N/A'
+                {liquidationPrice === 'N/A'
                   ? 'N/A'
-                  : `$${financial(liquidationPrice, 2)}`} */}
-                {liquidationPrice === 'N/A' ? (
-                  <PlaceholderText />
-                ) : (
-                  `$${financial(liquidationPrice, 2)}`
-                )}
+                  : `$${financial(liquidationPrice, 2)}`}
               </p>
             </div>
             <div>
               <div className="flex items-center gap-x-2 py-5 relative">
                 <p className="w-1/2 font-medium">Collateral Buffer</p>
                 <p>
-                  {buffer === 'N/A' ? (
-                    <PlaceholderText />
-                  ) : (
-                    `${financial(buffer * 100)}%`
-                  )}
+                  {buffer === 'N/A' ? 'N/A' : `${financial(buffer * 100)}%`}
                 </p>
               </div>
               {/* //!alert start */}
@@ -615,37 +445,25 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
           <p>Rewards Earned</p>
           <div className="divide-y-2 space-y-3">
             <div className="flex justify-between mt-1">
-              {isInputNaN(financial(rewardAmount, 6)) ? (
-                <PlaceholderText />
-              ) : (
-                <>
-                  <p className="text-xl font-medium">
-                    {financial(rewardAmount, 6)} COMP{' '}
-                    <span className="block text-sm text-[#545454] font-normal">
-                      ~${financial(Number(compPrice) * rewardAmount, 2)}
-                    </span>
-                  </p>
-                  <Image
-                    width={24}
-                    height={24}
-                    src={compound}
-                    alt=""
-                    className="w-6 h-6"
-                  />
-                </>
-              )}
+              <p className="text-xl font-medium">
+                {financial(rewardAmount, 6)} COMP{' '}
+                <span className="block text-sm text-[#545454] font-normal">
+                  ~${financial(Number(compPrice) * rewardAmount, 2)}
+                </span>
+              </p>
+              <Image
+                width={24}
+                height={24}
+                src={compound}
+                alt=""
+                className="w-6 h-6"
+              />
             </div>
             <div className="pt-3">
               <p>Rewards Rate</p>
               <h4 className="text-xl font-medium mt-1 md:mt-3">
-                {isInputNaN(financial(rewardRate * 100, 2)) ? (
-                  <PlaceholderText />
-                ) : (
-                  <>
-                    {financial(rewardRate * 100, 2)}
-                    <span className="text-base">%</span>
-                  </>
-                )}
+                {financial(rewardRate * 100, 2)}
+                <span className="text-base">%</span>
               </h4>
               <p className="p-6 bg-[#F9F9F9] rounded-2xl text-sm mt-12 lg:mt-[88px] text-[#545454]">
                 Compound protocol offers rewards in its Comp token for usage of
@@ -655,61 +473,7 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
             </div>
           </div>
         </aside>
-        {/* ---------------------- Transactions ------------------------ */}
       </section>
-
-      <aside className="border-2  rounded-2xl p-3 md:p-6 lg:p-6">
-        <h1 className="text-xl mb-4 font-medium">Transactions</h1>
-        <table className="w-[100%] mt-1 text-left">
-          <thead>
-            <th className="font-medium w-[20%]">Transaction Type</th>
-            <th className="font-medium  w-[15]">Date</th>
-            <th className="font-medium  w-[25%]">Protocol</th>
-            <th className="font-medium  w-[20%]">Transaction Hash</th>
-            <th className="font-medium  w-[20%] text-right ">Amount</th>
-          </thead>
-          <tbody>
-            {loanTransaction?.map((transaction: any) => (
-              <tr className="border-t-2 ">
-                <td className="pt-2 pb-2">
-                  <p>
-                    {validateTransactionTypes(transaction?.transaction_type)}
-                  </p>
-                </td>
-                <td className="pt-2 pb-2">
-                  <p>{getDateDifference(transaction?.create_time)}</p>
-                </td>
-                <td className="pt-2 pb-2">
-                  <p>
-                    {transaction?.lending_protocol?.toUpperCase()}:{' '}
-                    {transaction?.chain?.toUpperCase()}
-                  </p>
-                </td>
-                <td className="pt-2 pb-2">
-                  <a
-                    href={etherscanLink(transaction?.sender_address, 'address')}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <p className="underline">
-                      {truncateTransactionHash(transaction?.transaction_hash)}
-                    </p>
-                  </a>
-                </td>
-                <td className="text-right pt-2 pb-2">
-                  <p>
-                    {transaction?.usd_value}{' '}
-                    {(transaction?.asset).toUpperCase()}
-                  </p>{' '}
-                  <p className="pt-1">
-                    ${parseFloat(transaction?.amount).toLocaleString()}
-                  </p>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </aside>
       {/* ---------------------- when choose Coinbase or Gemini Account start ------------------------ */}
       {openModalFor && openModalFor === 'Make Payment' && (
         <ModalContainer>
@@ -724,7 +488,6 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
       {openModalFor && openModalFor === 'Modify Collateral' && (
         <ModalContainer>
           <ModifyWallet
-            loanId={loanId}
             setOpenModalFor={setOpenModalFor}
             currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}
@@ -734,7 +497,6 @@ function SinglePage({ params: { single: loanId } }: { params: any }) {
       {openModalFor && openModalFor === 'Borrow More' && (
         <ModalContainer>
           <BorrowMoreModal
-            loanId={loanId}
             setOpenModalFor={setOpenModalFor}
             currentBalance={financial(borrowBalanceOf, 6)}
             collateral={collateralBalanceOf}

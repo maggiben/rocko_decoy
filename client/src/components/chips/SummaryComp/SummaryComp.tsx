@@ -21,7 +21,6 @@ import { useSingleLoan } from '@/contract/single';
 import useLoanData from '@/hooks/useLoanData';
 import { networkChainId } from '@/constants';
 import addressValidator from '@/utility/addressValidator';
-import { PaymentMethods } from '@/types/type';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import ChooseWallet from '../ChooseWallet/ChooseWallet';
 import LoanFinalized from '../LoanFinalized/LoanFinalized';
@@ -170,21 +169,6 @@ function SummaryComp(props: Props) {
     );
   };
 
-  const handleOtherWalletBlur = async (
-    event: React.FocusEvent<HTMLInputElement>,
-  ) => {
-    const otherWallet = event.target.value;
-
-    await addressValidator(otherWallet, disconnect);
-
-    if (setLoanData) {
-      setLoanData((prevLoanData) => ({
-        ...prevLoanData,
-        otherAddress: otherWallet,
-      }));
-    }
-  };
-
   useEffect(() => {
     getETHPrice()
       .then((_price) => setCollateralPrice(_price))
@@ -200,14 +184,13 @@ function SummaryComp(props: Props) {
   const handlePaymentMethodChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const inputValue = event.target.value as unknown as PaymentMethods;
-
+    const inputValue = event.target.value;
     setPaymentMethod(inputValue);
 
     if (setLoanData) {
       setLoanData((prevLoanData) => ({
         ...prevLoanData,
-        paymentMethod: inputValue || null,
+        paymentMethod: inputValue || '',
       }));
     }
   };
@@ -298,7 +281,7 @@ function SummaryComp(props: Props) {
                   type="radio"
                   id="wallet1"
                   name="contact"
-                  value={PaymentMethods.CoinBase}
+                  value="default"
                   checked={paymentMethod === 'default'}
                   className="w-[30px] h-[30px] md:w-7 md:h-7 border-2 border-black"
                   onChange={(e) => handlePaymentMethodChange(e)}
@@ -332,7 +315,7 @@ function SummaryComp(props: Props) {
                 type="radio"
                 id="wallet2"
                 name="contact"
-                value={PaymentMethods.MetaMask}
+                value="ethereum"
                 onChange={(e) => handlePaymentMethodChange(e)}
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
               />
@@ -359,7 +342,7 @@ function SummaryComp(props: Props) {
                 type="radio"
                 id="wallet3"
                 name="contact"
-                value={PaymentMethods.ExternalWallet}
+                value="other"
                 className="w-5 h-5 md:w-7 md:h-7 border-2 border-black"
                 onChange={(e) => handlePaymentMethodChange(e)}
               />
@@ -380,7 +363,9 @@ function SummaryComp(props: Props) {
                       <input
                         type="text"
                         className="w-full p-4 border border-[#E6E6E6] rounded-[10px] block focus:outline-none"
-                        onBlur={handleOtherWalletBlur}
+                        onBlur={(e) =>
+                          addressValidator(e.target.value, disconnect)
+                        }
                       />
                     </div>
                     <div className="my-4 p-4 rounded-[10px] bg-[#FFFAF0] flex items-center justify-start gap-2 border border-[#dbdbda]">

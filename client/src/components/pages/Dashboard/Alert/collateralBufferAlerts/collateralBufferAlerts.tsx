@@ -1,10 +1,10 @@
-import React, { FC, Fragment, useState } from 'react';
+import ModalContent from '@/components/chips/ModalContent/ModalContent';
 import { FiPlus } from 'react-icons/fi';
 import { AiOutlineMail, AiOutlineRight } from 'react-icons/ai';
 import Image from 'next/image';
-import { IoMdCall } from 'react-icons/io';
+import { FC, Fragment, useState } from 'react';
 import closeIcon from '@/assets/Close.svg';
-import ModalContent from '@/components/chips/ModalContent/ModalContent';
+import { IoMdCall } from 'react-icons/io';
 import notification from '@/assets/notifications_active.svg';
 import remove from '@/assets/delete.svg';
 import { useAlert } from '@/context/alertContext/alertContext';
@@ -420,7 +420,6 @@ const CollateralBufferAlerts: FC<Props> = ({
           </div>
           <div className="">
             <button
-              type="button"
               // type="submit"
               onClick={handleCloseButton}
               className="py-[10px] px-6 rounded-3xl text-white font-semibold bg-[#2C3B8D]"

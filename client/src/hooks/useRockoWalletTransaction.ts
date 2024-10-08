@@ -7,7 +7,7 @@ import {
   WETHContract,
   networkChainId,
 } from '@/constants';
-import { parseUnits } from '@/utility/utils';
+import { parseBalance } from '@/utility/utils';
 import { useRockoWallet } from './useRockoWallet';
 
 const WETHABI = require('../constants/weth.json');
@@ -59,7 +59,7 @@ export const useRockoWalletTransaction = ({
             data: encodeFunctionData({
               abi: WETHABI,
               functionName: 'transfer',
-              args: [destination, parseUnits(wethBalance)],
+              args: [destination, parseBalance(wethBalance)],
             }),
           },
           {
@@ -68,7 +68,7 @@ export const useRockoWalletTransaction = ({
             data: encodeFunctionData({
               abi: USDCABI,
               functionName: 'transfer',
-              args: [destination, parseUnits(usdcBalance, 6)],
+              args: [destination, parseBalance(usdcBalance, 6)],
             }),
           },
           {
@@ -77,7 +77,7 @@ export const useRockoWalletTransaction = ({
             data: encodeFunctionData({
               abi: WETHABI,
               functionName: 'transfer',
-              args: [destination, parseUnits(compBalance)],
+              args: [destination, parseBalance(compBalance)],
             }),
           },
         ]

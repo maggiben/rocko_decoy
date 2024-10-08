@@ -8,24 +8,6 @@ const assetDecimals: any = {
   ETH: 18,
 };
 
-export interface LoanData {
-  collateral: string;
-  collateral_decimals: number;
-  create_time: Date; // "2024-05-08T18:39:52.000Z"
-  id: number; // 83
-  interest: number; // 0
-  lending_protocol: string; // "compound"
-  loan_active: number; // 1
-  loan_asset: string; // "ETH"
-  modified_time: Date; // "2024-05-08T18:55:04.000Z"
-  outstanding_balance: number; // 300
-  payment_method: string | undefined; // undefined
-  principal_balance: number; // 100
-  protocol_chain: string; // "sepolia"
-  transaction_hash: string; // "0xe6cbfc70bbb49862e38a2c653dc006c744b4ae265bdf00ecaf0676c99cd20d67"
-  user_id: number; // 4
-}
-
 export const useLoanDB = () => {
   const finalizeLoan = async (
     user: string,
@@ -101,7 +83,7 @@ export const useLoanDB = () => {
     axiosInterceptor.post(`${BACKEND_URL}/update`, updateObject);
   };
 
-  const getLoanData = async (user: string): Promise<LoanData[] | undefined> => {
+  const getLoanData = async (user: string) => {
     if (user) {
       try {
         const response = await axiosInterceptor.get(
@@ -116,12 +98,11 @@ export const useLoanDB = () => {
           outstanding_balance: Number(loan?.outstanding_balance),
           interest: Number(loan?.interest),
           collateral: ethers.utils.formatEther(loan?.collateral),
-          payment_method: loan?.payment_method,
         }));
         return loanDataWithEthValues;
       } catch (error) {
         logger(JSON.stringify(error, null, 2), 'error');
-        return undefined;
+        return null;
       }
     }
   };

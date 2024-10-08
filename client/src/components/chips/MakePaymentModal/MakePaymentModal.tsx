@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable no-nested-ternary */
+import closeIcon from '@/assets/Close.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import closeIcon from '@/assets/Close.svg';
+import { useParams } from 'next/navigation';
 import { useSingleLoan } from '@/contract/single';
 import financial from '@/utility/currencyFormate';
 import logger from '@/utility/logger';
@@ -20,7 +19,8 @@ function MakePaymentModal({
   currentBalance: string;
   collateral: string;
 }) {
-  const [repayFull, setRepayFull] = useState<boolean>(false);
+  const basicRouter = useParams();
+  const loanIndex = parseFloat(basicRouter.single.toString() || '0');
   const [activeInputField, setActiveInputField] = useState<boolean>(true);
   const [inputNumber, setInputNumber] = useState<string | undefined>(); //! turning inputNumber into inputText to save & show number with commas on onBlur handler & number without commas on onFocus handler in inputfiled
   const [changeInputType, setChangeInputType] = useState<string>('text'); //! to show value with commas & without commas n inputfiled on onBlur handler
@@ -40,7 +40,6 @@ function MakePaymentModal({
   const handleBorrowValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setRepayFull(false);
     const inputValue = event.target.value;
 
     const isValid =
@@ -53,10 +52,9 @@ function MakePaymentModal({
     setChangeInputType('number'); /* show number without commas */
   };
 
-  const handleRepayFullBtn = () => {
+  const handleRepayBtn = () => {
     setInputNumber(currentBalance);
     setActiveInputField(true);
-    setRepayFull(true);
   };
 
   useEffect(() => {
@@ -76,7 +74,6 @@ function MakePaymentModal({
         {/* close button start */}
         <div>
           <button
-            type="button"
             onClick={() => setOpenModalFor('')}
             className="w-8 h-8 rounded-full p-2 bg-[#EEE] block"
           >
@@ -124,7 +121,7 @@ function MakePaymentModal({
           }}
           className="w-full p-4 focus:outline-none border-2 border-gray-200 rounded-lg bg-white number-input"
           placeholder={currentBalance.toString()}
-          value={repayFull ? currentBalance : inputNumber}
+          value={inputNumber}
           onFocus={() => {
             const valueWithoutCommas = inputNumber?.replace(/,/g, '');
             setInputNumber(valueWithoutCommas);
@@ -168,8 +165,7 @@ function MakePaymentModal({
       )}
       <div className="flex items-center justify-between">
         <button
-          type="button"
-          onClick={handleRepayFullBtn}
+          onClick={handleRepayBtn}
           className="py-2 px-4 rounded-full text-[#2C3B8D] bg-[#EEEEEE] font-semibold text-xs "
         >
           Repay Loan in Full
@@ -220,14 +216,13 @@ function MakePaymentModal({
       </div>
       {/* continue button */}
       <Link
-        href={`/loan-dashboard/${loanId}/${'make-payment'}?repayFull=${repayFull}&id=${loanId}&payment=${parseFloat(
+        href={`/loan-dashboard/${loanIndex}/${'make-payment'}?id=${loanId}&payment=${parseFloat(
           inputNumber?.replace(/,/g, '') || '0',
-        )}&collateral=${collateral}
+        )}&balance=${balanceFloat}&collateral=${collateral}
         `}
       >
         {/* passing the user's intention like "add" or "withdraw" throuth query */}
         <button
-          type="button"
           className={`py-[10px] px-6  rounded-full text-sm font-semibold  ${
             parseFloat(inputNumber?.replace(/,/g, '') || '0') > 0 &&
             activeInputField

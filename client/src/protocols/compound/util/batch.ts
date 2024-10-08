@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+/* global BigInt */
+import { useState } from 'react';
 import { ethers } from 'ethers';
 import { useAddress } from '@thirdweb-dev/react';
 import { encodeFunctionData } from 'viem';
-import { parseUnits } from '@/utility/utils';
+import { parseBalance } from '@/utility/utils';
 import {
   USDCContract,
   CometContract,
@@ -11,130 +12,131 @@ import {
   networkChainId,
 } from '@/constants';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
-import { LoanData, PaymentMethods } from '@/types/type';
-import { GetLoanReturn, Transaction, TransactionMode } from '@/protocols/types';
-import { TokenAmount } from './data';
-import {
-  createDepositApproveWETH,
-  createSupplyWithdrawalToComp,
-  createBorrowMore,
-  createApproveUSDC,
-  createSupplyUSDC,
-  createWithdrawComp,
-  createWithdrawWETH,
-  createTransferETHToUser,
-  createCollectRewards,
-} from './transactions';
 
 const WETHABI = require('@/constants/weth.json');
 const COMETABI = require('@/constants/comet.json');
 const USDCABI = require('@/constants/usdc.json');
 const REWARDABI = require('@/constants/reward.json');
 
-const uintMax256 = ethers.constants.MaxUint256;
+// const uintMax = ethers.constants.MaxUint256.toHexString();
 
-export const useGetLoan = (
-  collateral: string,
-  borrowing: string,
-  loan: LoanData,
-  mode: TransactionMode,
-): GetLoanReturn => {
-  const bigintCollateral = parseUnits(collateral.toString());
-  const bigIntLoanAmount = parseUnits(borrowing.toString(), 6);
+export const useGetLoan = (collateral: any, loan: any) => {
   const { rockoWalletClient, rockoWalletAddress } = useRockoWallet();
+  const address = useAddress();
+
+  // console.log('useGetLoan', JSON.stringify(rockoWalletAddress, null, 2));
+
   const [txHash, setTxHash] = useState('');
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [address, setAddress] = useState(rockoWalletAddress);
-  const metamaskAddress = useAddress();
+  const [error, setError] = useState<any>(false);
 
-  useEffect(() => {
-    const addressToUse =
-      loan.paymentMethod === PaymentMethods.ExternalWallet && loan.otherAddress
-        ? loan.otherAddress
-        : metamaskAddress;
-    if (addressToUse && addressToUse !== address) setAddress(addressToUse);
-  }, [rockoWalletAddress, loan, metamaskAddress, mode, address]);
-
-  const transactionBuilder = useCallback(() => {
-    const transactions: Transaction[] = [];
-    if (!rockoWalletAddress || !rockoWalletClient) return transactions;
-    switch (mode) {
-      case TransactionMode.getLoan:
-        transactions.push(
-          ...createDepositApproveWETH(bigintCollateral),
-          ...createSupplyWithdrawalToComp(
-            bigintCollateral,
-            bigIntLoanAmount,
-            address,
-          ),
-        );
-        break;
-      case TransactionMode.borrowMore:
-        transactions.push(...createBorrowMore(bigIntLoanAmount, address));
-        break;
-      case TransactionMode.repaySome:
-        transactions.push(
-          ...createApproveUSDC(),
-          ...createSupplyUSDC(bigIntLoanAmount),
-        );
-        break;
-      case TransactionMode.repayFull:
-        transactions.push(
-          ...createApproveUSDC(),
-          ...createSupplyUSDC(uintMax256),
-          ...createWithdrawComp(bigintCollateral),
-          ...createWithdrawWETH(bigintCollateral),
-          ...createTransferETHToUser(bigintCollateral, address),
-          ...createCollectRewards(rockoWalletAddress, address),
-        );
-        break;
-      default:
-        break;
-    }
-    return transactions;
-  }, [
-    mode,
-    bigintCollateral,
-    bigIntLoanAmount,
-    address,
-    rockoWalletClient,
-    rockoWalletAddress,
-  ]);
-
-  // Checking wallet availability after declaring hooks
+  // prevent error if address or rockoWalletClient is undefined
   if (!rockoWalletClient || !rockoWalletAddress) {
     console.log('Waiting for Rocko Wallet Instance...');
     return {
-      executeBatchTransactions: async () => null,
+      executeBatchGetLoan: () => {
+        console.log('Rocko wallet not available yet :(');
+      },
       success,
       txHash,
       error,
     };
   }
 
-  const executeBatchTransactions = async () => {
+  const bigintCollateral = BigInt(
+    // TODO replace ethers with viem
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
+
+  // console.log('txs details', {
+  //   networkChainId,
+  //   bigintCollateral,
+  //   address,
+  //   rockoWalletAddress,
+  //   txHash,
+  //   success,
+  //   weth: WETHContract[networkChainId],
+  //   comet: CometContract[networkChainId],
+  //   collateral: parseBalance(collateral.toString()),
+  // });
+
+  const depositApproveWETH = [
+    {
+      to: WETHContract[networkChainId],
+      value: bigintCollateral,
+      data: encodeFunctionData({
+        abi: WETHABI,
+        functionName: 'deposit',
+        args: [],
+      }),
+    },
+    {
+      to: WETHContract[networkChainId],
+      value: 0,
+      data: encodeFunctionData({
+        abi: WETHABI,
+        functionName: 'approve',
+        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
+      }),
+    },
+  ];
+  // console.log('loanTo', {
+  //   loanTo: address || rockoWalletAddress,
+  //   address,
+  //   rockoWalletAddress,
+  // });
+  const supplyWithdrawalToComp = [
+    {
+      to: CometContract[networkChainId],
+      value: 0,
+      data: encodeFunctionData({
+        abi: COMETABI,
+        functionName: 'supply',
+        args: [
+          WETHContract[networkChainId],
+          parseBalance(collateral.toString()),
+        ],
+      }),
+    },
+    {
+      to: CometContract[networkChainId],
+      value: 0,
+      data: encodeFunctionData({
+        abi: COMETABI,
+        functionName: 'withdrawTo',
+        args: [
+          // TODO: check if this is correct
+          // is `|| rockoWalletAddress` just a fallabck incase address is lost or disconnected?
+          address || rockoWalletAddress,
+          USDCContract[networkChainId],
+          parseBalance(loan.toString(), 6),
+        ],
+      }),
+    },
+  ];
+
+  const executeBatchGetLoan = async () => {
     try {
-      console.log('Sending transactions...');
-      const transactions = transactionBuilder();
+      console.log('start');
       const txCompleteHash = await rockoWalletClient.sendTransactions({
-        transactions,
+        transactions: [...depositApproveWETH, ...supplyWithdrawalToComp],
       });
+
       setTxHash(txCompleteHash);
       setSuccess(true);
       return txCompleteHash;
     } catch (e) {
-      console.error(e);
+      console.log(e);
       setSuccess(false);
-      setError(e instanceof Error ? e : new Error('Unknown error occurred'));
+      setError(e);
       return null;
     }
   };
 
-  return { executeBatchTransactions, success, txHash, error };
+  return { executeBatchGetLoan, success, txHash, error };
 };
 
-export const useRepaySome = (loan: number) => {
+export const useRepaySome = (loan: any) => {
   const { rockoWalletClient } = useRockoWallet();
   const [txHash, setTxHash] = useState<any>();
   const [success, setSuccess] = useState(false);
@@ -164,7 +166,10 @@ export const useRepaySome = (loan: number) => {
             data: encodeFunctionData({
               abi: USDCABI,
               functionName: 'approve',
-              args: [CometContract[networkChainId], uintMax256],
+              args: [
+                CometContract[networkChainId],
+                ethers.constants.MaxUint256,
+              ],
             }),
           },
           {
@@ -175,7 +180,7 @@ export const useRepaySome = (loan: number) => {
               functionName: 'supply',
               args: [
                 USDCContract[networkChainId],
-                parseUnits(loan.toString(), 6),
+                parseBalance(loan.toString(), 6),
               ],
             }),
           },
@@ -196,7 +201,7 @@ export const useRepaySome = (loan: number) => {
   return { executeBatchRepaySome, success, txHash, error };
 };
 
-export const useRepayFull = (collateral: TokenAmount) => {
+export const useRepayFull = (collateral: any) => {
   console.log(
     { ...collateral, valueString: collateral.value.toString() },
     'useRepayFull',
@@ -223,6 +228,10 @@ export const useRepayFull = (collateral: TokenAmount) => {
     };
   }
 
+  const bigintCollateral = BigInt(
+    ethers.utils.parseEther(collateral?.formatted?.toString()).toString(),
+  );
+
   const approveSupplyUSDC = [
     {
       to: USDCContract[networkChainId],
@@ -230,7 +239,7 @@ export const useRepayFull = (collateral: TokenAmount) => {
       data: encodeFunctionData({
         abi: USDCABI,
         functionName: 'approve',
-        args: [CometContract[networkChainId], uintMax256],
+        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
       }),
     },
     {
@@ -239,7 +248,7 @@ export const useRepayFull = (collateral: TokenAmount) => {
       data: encodeFunctionData({
         abi: COMETABI,
         functionName: 'supply',
-        args: [USDCContract[networkChainId], uintMax256],
+        args: [USDCContract[networkChainId], ethers.constants.MaxUint256],
       }),
     },
   ];
@@ -261,7 +270,7 @@ export const useRepayFull = (collateral: TokenAmount) => {
   //   functionName: 'withdraw',
   //   args: [
   //     WETHContract[networkChainId],
-  //     parseUnits(collateral.toString()),
+  //     parseBalance(collateral.toString()),
   //   ],
   // },
 
@@ -280,33 +289,33 @@ export const useRepayFull = (collateral: TokenAmount) => {
   //   address: WETHContract[networkChainId],
   //   abi: WETHABI,
   //   functionName: 'withdraw',
-  //   args: [parseUnits(collateral.toString())],
+  //   args: [parseBalance(collateral.toString())],
   // },
 
   // console.log({
   //   withdrawComp,
   //   networkChainId,
   //   COMETABI,
-  //   collateral: parseUnits(collateral?.formatted?.toString()),
+  //   collateral: parseBalance(collateral?.formatted?.toString()),
   // });
   // console.log({
   //   withdrawWETH,
   //   networkChainId,
   //   WETHABI,
-  //   collateral: parseUnits(collateral?.formatted?.toString()),
+  //   collateral: parseBalance(collateral?.formatted?.toString()),
   // });
 
   // console.log({
   //   string: collateral.toString(),
   //   collateral,
-  //   parse: parseUnits(collateral?.formatted?.toString()),
+  //   parse: parseBalance(collateral?.formatted?.toString()),
   // });
 
   const sendFromRockoToUserWallet = [
     {
       to: address as `0x${string}`,
       data: '0x',
-      value: collateral?.value,
+      value: bigintCollateral,
     },
   ];
 
@@ -406,7 +415,7 @@ export const useRepayFull = (collateral: TokenAmount) => {
   };
 };
 
-export const useAddCollateral = (collateral: number) => {
+export const useAddCollateral = (collateral: any) => {
   const { rockoWalletClient } = useRockoWallet();
   const [txHash, setTxHash] = useState<any>();
   const [success, setSuccess] = useState(false);
@@ -425,7 +434,9 @@ export const useAddCollateral = (collateral: number) => {
     };
   }
 
-  const bigintCollateral = parseUnits(collateral.toString());
+  const bigintCollateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
 
   const depositApproveWETH = [
     {
@@ -443,7 +454,7 @@ export const useAddCollateral = (collateral: number) => {
       data: encodeFunctionData({
         abi: WETHABI,
         functionName: 'approve',
-        args: [CometContract[networkChainId], uintMax256],
+        args: [CometContract[networkChainId], ethers.constants.MaxUint256],
       }),
     },
   ];
@@ -455,7 +466,10 @@ export const useAddCollateral = (collateral: number) => {
       data: encodeFunctionData({
         abi: COMETABI,
         functionName: 'supply',
-        args: [WETHContract[networkChainId], parseUnits(collateral.toString())],
+        args: [
+          WETHContract[networkChainId],
+          parseBalance(collateral.toString()),
+        ],
       }),
     },
   ];
@@ -481,7 +495,7 @@ export const useAddCollateral = (collateral: number) => {
   return { executeBatchAddCollateral, success, txHash, error };
 };
 
-export const useBorrowCollateral = (collateral: number) => {
+export const useBorrowCollateral = (collateral: any) => {
   const { rockoWalletClient } = useRockoWallet();
   const address = useAddress();
 
@@ -501,7 +515,9 @@ export const useBorrowCollateral = (collateral: number) => {
     };
   }
 
-  const bigintCollateral = parseUnits(collateral.toString());
+  const bigintCollateral = BigInt(
+    ethers.utils.parseEther(collateral.toString()).toString(),
+  );
 
   const executeBatchBorrowCollateral = async () => {
     try {
@@ -516,7 +532,7 @@ export const useBorrowCollateral = (collateral: number) => {
               functionName: 'withdraw',
               args: [
                 WETHContract[networkChainId],
-                parseUnits(collateral.toString()),
+                parseBalance(collateral.toString()),
               ],
             }),
           },
@@ -526,7 +542,7 @@ export const useBorrowCollateral = (collateral: number) => {
             data: encodeFunctionData({
               abi: WETHABI,
               functionName: 'withdraw',
-              args: [parseUnits(collateral.toString())],
+              args: [parseBalance(collateral.toString())],
             }),
           },
           {

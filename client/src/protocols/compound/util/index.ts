@@ -1,7 +1,7 @@
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { ethers } from 'ethers';
 import logger from '@/utility/logger';
-import { parseUnits } from '@/utility/utils';
+import { parseBalance } from '@/utility/utils';
 import {
   CometContract,
   CometRewardContract,
@@ -181,7 +181,7 @@ const addCollateral = async ({
   try {
     const tx = await contract.call('supply', [
       WETHContract[networkChainId(chain)],
-      parseUnits(amount.toString()),
+      parseBalance(amount.toString()),
     ]);
     return tx;
   } catch (e) {
@@ -210,7 +210,7 @@ const addLoan = async ({
   try {
     const tx = await contract.call('supply', [
       USDCContract[networkChainId(chain)],
-      parseUnits(amount.toString(), 6),
+      parseBalance(amount.toString(), 6),
     ]);
     return tx;
   } catch (e) {
@@ -239,7 +239,7 @@ const borrowLoan = async ({
   try {
     const tx = await contract.call('withdraw', [
       USDCContract[networkChainId(chain)],
-      parseUnits(amount.toString(), 6),
+      parseBalance(amount.toString(), 6),
     ]);
     return tx;
   } catch (e) {
@@ -268,7 +268,7 @@ const borrowCollateral = async ({
   try {
     const tx = await contract.call('withdraw', [
       WETHContract[networkChainId(chain)],
-      parseUnits(amount.toString()),
+      parseBalance(amount.toString()),
     ]);
     return tx;
   } catch (e) {

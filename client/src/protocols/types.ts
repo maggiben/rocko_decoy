@@ -1,14 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { NetworkNames } from '@/constants/env';
-import { BigNumber } from 'ethers';
-import { TokenAmount } from './compound/util/data';
-
-export enum TransactionMode {
-  borrowMore = 'BORROW_MORE',
-  getLoan = 'GET_LOAN',
-  repaySome = 'REPAY_SOME',
-  repayFull = 'REPAY_FULL',
-}
+import { Balance } from './compound/util/data';
 
 type CollateralTokens = {
   ticker: 'ETH' | 'COMP' | 'WBTC' | 'UNI';
@@ -16,21 +8,8 @@ type CollateralTokens = {
   icon: string;
   comingSoon: boolean;
 };
-type RateType = 'Floating' | 'Fixed';
-type LoanTerm = 'Open-Ended' | 'Fixed';
-
-export interface GetLoanReturn {
-  executeBatchTransactions: () => Promise<string | null>;
-  success: boolean;
-  txHash: string;
-  error: Error | null;
-}
-
-export interface Transaction {
-  to: string;
-  value: BigNumber;
-  data: string;
-}
+type RateType = 'floating' | 'fixed';
+type LoanTerm = 'open' | 'fixed';
 
 export type ProtocolConfig = {
   name: string;
@@ -47,21 +26,12 @@ export type ProtocolConfig = {
   getLTV: () => Promise<number>;
   getThreshold: () => Promise<number>;
   getPenalty: () => Promise<number>;
-  getCollateralBalanceOf: () => Promise<TokenAmount>;
-  getBorrowBalanceOf: () => Promise<TokenAmount>;
+  getCollateralBalanceOf: () => Promise<Balance>;
+  getBorrowBalanceOf: () => Promise<Balance>;
   getRewardAmount: () => Promise<number>;
   getRewardRate: () => Promise<number>;
-  getTotalBorrow: () => Promise<number>;
-  getTotalSupply: () => Promise<number>;
-  getUsdcBalance: () => Promise<string>;
-
   txBatch: {
-    useGetLoan: (
-      collateral: string,
-      borrowing: string,
-      loan: any,
-      mode: TransactionMode,
-    ) => any;
+    useGetLoan: (collateral: any, loan: any) => any;
     useRepaySome: (loan: any) => any;
     useRepayFull: (collateral: any) => any;
     useAddCollateral: (collateral: any) => any;

@@ -5,7 +5,7 @@ import compoundIcon from '@/assets/coins/Compound (COMP).svg';
 import uniswapIcon from '@/assets/coins/Uniswap (UNI).svg';
 import wBitcoinIcon from '@/assets/coins/Wrapped Bitcoin (WBTC).svg';
 
-import { ProtocolConfig, TransactionMode } from '../types';
+import { ProtocolConfig } from '../types';
 import {
   approveWETH,
   addCollateral,
@@ -31,9 +31,6 @@ import {
   getRewardAmount,
   getRewardRate,
   getThreshold,
-  getTotalBorrow,
-  getTotalSupply,
-  getUsdcBalance,
 } from './util/data';
 
 import {
@@ -60,7 +57,7 @@ const compoundConfig = ({
   name: 'Compound',
   url: 'https://compound.finance',
   description:
-    'Compound III is a popular lending protocol originally deployed on Ethereum in 2022. It allows users to borrow USDC at a floating interest rate — meaning the interest rate can change in real time based on market supply and demand.',
+    'Compound is an algorithmic, autonomous interest rate protocol built for developers, to unlock a universe of open financial applications.',
   chain,
   collateral: [
     { ticker: 'ETH', fullName: 'Ether', icon: etherIcon, comingSoon: false },
@@ -78,15 +75,12 @@ const compoundConfig = ({
     },
     { ticker: 'UNI', fullName: 'Uniswap', icon: uniswapIcon, comingSoon: true },
   ],
-  rateType: 'Floating',
+  rateType: 'floating',
   minBorrow: 100,
   maxBorrow: 100000,
-  loanTerm: 'Open-Ended',
+  loanTerm: 'open',
   getETHPrice: async () => getETHPrice(chain),
   getBorrowAPR: async () => getBorrowAPR(chain),
-  getTotalSupply: async () => getTotalSupply(chain),
-  getTotalBorrow: async () => getTotalBorrow(chain),
-  getUsdcBalance: async () => getUsdcBalance(chain),
   getLTV: async () => getLTV(chain),
   getThreshold: async () => getThreshold(chain),
   getPenalty: async () => getPenalty(chain),
@@ -107,12 +101,8 @@ const compoundConfig = ({
     }),
   getRewardRate: async () => getRewardRate(chain),
   txBatch: {
-    useGetLoan: async (
-      collateral: string,
-      borrowing: string,
-      loan: any,
-      mode: TransactionMode,
-    ) => useGetLoan(collateral, borrowing, loan, mode),
+    useGetLoan: async (collateral: any, loan: any) =>
+      useGetLoan(collateral, loan),
     useRepaySome: async (loan: any) => useRepaySome(loan),
     useRepayFull: async (collateral: any) => useRepayFull(collateral),
     useAddCollateral: async (collateral: any) => useAddCollateral(collateral),

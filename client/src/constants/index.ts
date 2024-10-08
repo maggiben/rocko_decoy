@@ -47,7 +47,6 @@ export const ChainlinkEthPriceFeed: { [key: number]: string } = {
 };
 
 export const networkChainId = (chains as { [key: string]: any })[NETWORK]?.id;
-export const networkChain = (chains as { [key: string]: any })[NETWORK];
 export const NetworkContextName = 'NETWORK';
 
 export const ErrorMessages = {
