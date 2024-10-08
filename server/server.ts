@@ -3,7 +3,7 @@ require('dotenv').config();
 import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 const { default: fetch, Headers, Request, Response } = require('node-fetch');
-import { connectDB } from './db';
+// import { connectDB } from './db';
 import cors from "cors";
 
 
@@ -53,7 +53,7 @@ app.use(cookieParser());
 app.use(setSecurityHeaders);
 
 // Connect Database
-connectDB();
+// connectDB();
 
 /////////////// Define Routes
 app.use('/', router);
