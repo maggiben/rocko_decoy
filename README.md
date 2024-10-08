@@ -1,15 +1,3 @@
-# Get Rocko
-
-Rocko App: [![Netlify Status](https://api.netlify.com/api/v1/badges/d2dfebc9-87e2-42ba-b82b-6bf07050d318/deploy-status)](https://app.netlify.com/sites/get-rocko-0x7f3f368defb751b7401b5f6d8/deploys)
-
-Rocko Web: [![Netlify Status](https://api.netlify.com/api/v1/badges/3ef1e8f8-dbc7-4b2b-910a-0d54ec6bcee8/deploy-status)](https://app.netlify.com/sites/rocko-web-0xd5e9047ab88b098defb751b74/deploys)
-
-Rocko Site: [![Netlify Status](https://api.netlify.com/api/v1/badges/610f0a49-b81b-415e-bb3d-ffb7c5ac44c4/deploy-status)](https://app.netlify.com/sites/amazing-twilight-1b6090/deploys)
-
-Backend Dev: [![Backend Build and Deploy](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_dev.yml/badge.svg)](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_dev.yml)
-
-Backend Prod: [![Backend Build and Deploy](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_prod.yml/badge.svg)](https://github.com/getrocko/rockodefi/actions/workflows/backend_deploy_prod.yml)
-
 ## Dev Environment Setup (Mac)
 
 - Install VSCode  (https://code.visualstudio.com/)
@@ -25,3 +13,17 @@ Backend Prod: [![Backend Build and Deploy](https://github.com/getrocko/rockodefi
     - Install asdf nodejs plugin `asdf plugin add nodejs`
     - Install nodejs 18.19.0 `asdf install nodejs 18.19.0`
     - Install oh my zsh `https://ohmyz.sh/`
+
+## Dev Environment Setup (Windows)
+
+- Install VSCode  (https://code.visualstudio.com/)
+- Install VSCode Extensions:
+    - ESlint 
+    - Prettier
+- Install node.js v18.18.0
+- Install yarn `npm install -g yarn`
+- Project Install: 
+    - Install client 'cd client ; yarn install'
+    - Run client 'yarn dev'
+    - Install server 'cd server ; yarn install'
+    - Run server 'yarn dev'
