@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-// import { useSingleLoan } from '@/contract/single';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useUserInfo } from '@/hooks/useUserInfo';
@@ -21,8 +20,6 @@ import { etherscanLink, formatPhoneNumber } from '@/utility/utils';
 import { PHONE_EMAIL_PASS_SETTINGS } from '@/constants/featureFlags';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
-// import { useRepayFull } from '@/protocols/compound/util/batch';
-// import { Balance } from '@/protocols/compound/util/data';
 
 const Profile: React.FC = () => {
   const [openModalFor, setOpenModalFor] = useState<undefined | string>();
@@ -51,8 +48,6 @@ const Profile: React.FC = () => {
 
   const [openContactEmailEditBox, setOpenContactEmailEditBox] =
     useState<boolean>(false);
-  // const [contactEmail, setContactEmail] = useState('');
-  // const [inputContact, setInputContact] = useState('');
   const [openContactNumberEdit, setOpenContactNumberEdit] =
     useState<boolean>(false);
   const [contactNumber, setContactNumber] = useState('');
@@ -61,10 +56,6 @@ const Profile: React.FC = () => {
 
   const phoneEmailPass = PHONE_EMAIL_PASS_SETTINGS
     ? [
-        // {
-        //   description: 'Contact Email',
-        //   details: contactEmail,
-        // },
         {
           description: 'Contact Number',
           details: contactNumber,
