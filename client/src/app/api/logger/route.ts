@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from 'next/server';
 // eslint-disable-next-line import/prefer-default-export
 export async function POST(req: NextRequest) {
   if (SLACK_WEBHOOK_URL) {
-    // disable logger
     try {
       const { message, level } = await req.json();
 

@@ -9,18 +9,25 @@ import { useAddress } from '@thirdweb-dev/react';
 import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
+// import { BLOCKCHAIN } from '@/constants/env';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
 import { LoanData } from '@/types/type';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import logger from '@/utility/logger';
+// import contentCopy from '@/assets/content_copy.svg';
 import TransferCollateral from '@/components/chips/TransferCollateral/TransferCollateral';
 import transactionComp from '@/utility/transactionComp';
 import { CometContract, networkChainId } from '@/constants';
+// import { useProtocolConfig } from '@/protocols';
+// import { ProtocolConfig } from '@/protocols/types';
 import { useSingleLoan } from '@/contract/single';
 import { useGetLoan } from '@/protocols/compound/util/batch';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
+
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
+// import financial from '@/utility/currencyFormate';
 
 interface DoneTracker {
   step: string;
@@ -31,6 +38,10 @@ const DepositingCollateral = () => {
   const type = router.get('type') || '';
 
   const navRouter = useRouter();
+
+  // const {
+  //   txBatch: { useGetLoan },
+  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   const retrievedData = sessionStorage.getItem('loanData');
   const loanData: LoanData = JSON.parse(retrievedData || '{}');

@@ -29,12 +29,15 @@ import { etherscanLink, parseBalance } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
+// import { useProtocolConfig } from '@/protocols';
+// import { ProtocolConfig } from '@/protocols/types';
 import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import { Balance } from '@/protocols/compound/util/data';
 import { ethers } from 'ethers';
+// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
 
@@ -52,6 +55,10 @@ function Processing() {
     payment - currentBalance === Number(PAYMENT_BUFFER)
       ? Number(PAYMENT_BUFFER)
       : 0;
+
+  // const {
+  //   txBatch: { useRepayFull, useRepaySome },
+  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   // DB for getting loanBalance and collateral
   const { getLoanData, updateLoan } = useLoanDB();
