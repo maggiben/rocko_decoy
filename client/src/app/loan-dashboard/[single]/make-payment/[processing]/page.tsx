@@ -29,15 +29,12 @@ import { etherscanLink, parseBalance } from '@/utility/utils';
 import { useCompPrice } from '@/hooks/usePrice';
 import logger from '@/utility/logger';
 import transactionComp from '@/utility/transactionComp';
-// import { useProtocolConfig } from '@/protocols';
-// import { ProtocolConfig } from '@/protocols/types';
 import { useRepayFull, useRepaySome } from '@/protocols/compound/util/batch';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
 import { wagmiConfig } from '@/app/WagmiWrapper';
 import { useRockoWallet } from '@/hooks/useRockoWallet';
 import { Balance } from '@/protocols/compound/util/data';
 import { ethers } from 'ethers';
-// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 
 const USDCABI = require('../../../../../constants/usdc.json');
 

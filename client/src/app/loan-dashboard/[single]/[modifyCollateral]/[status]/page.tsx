@@ -12,10 +12,8 @@ import LoanComplete from '@/components/chips/LoanComplete/LoanComplete';
 import CircleProgressBar from '@/components/chips/CircleProgressBar/CircleProgressBar';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import StatusSuccess from '@/assets/StatusSuccess.png';
-// import { NETWORK } from '@/constants/env';
 import { useRockoAccount } from '@/hooks/useRockoAccount';
 import { useRockoBalance } from '@/hooks/useRockoBalance';
-// import { useRockoNetwork } from '@/hooks/useRockoNetwork';
 import { useSingleLoan } from '@/contract/single';
 import { useLoanDB } from '@/db/loanDb';
 import { useUserDB } from '@/db/userDb';
@@ -24,8 +22,6 @@ import { etherscanLink } from '@/utility/utils';
 import logger from '@/utility/logger';
 import { CometContract, networkChainId } from '@/constants';
 import transactionComp from '@/utility/transactionComp';
-// import { useProtocolConfig } from '@/protocols';
-// import { ProtocolConfig } from '@/protocols/types';
 import {
   useAddCollateral,
   useBorrowCollateral,
@@ -55,10 +51,6 @@ function ModifyStatus() {
   const { address: zerodevAccount } = useRockoAccount();
   const { userInfo } = useUserInfo();
   const { getUserId } = useUserDB();
-  // const { chain } = useRockoNetwork();
-  // const {
-  //   txBatch: { useAddCollateral, useBorrowCollateral },
-  // } = useProtocolConfig().find((c: ProtocolConfig) => c.chain === NETWORK)!;
 
   const { executeBatchAddCollateral, success, txHash } =
     useAddCollateral(payment);

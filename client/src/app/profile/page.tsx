@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-// import { useSingleLoan } from '@/contract/single';
 import TransferFundModal from '@/components/chips/TransferFundModal/TransferFundModal';
 import ModalContainer from '@/components/chips/ModalContainer/ModalContainer';
 import { useUserInfo } from '@/hooks/useUserInfo';
