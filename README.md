@@ -1,3 +1,7 @@
+# WARNING THIS CODE CONTAINS MALWARE DESIGNED TO STEAL YOUR CREDENTIALS.
+The purpose of having this repo online is for security researches to do analysis.
+DO NOT DOWNLOAD OR RUN THIS CODE, IM NOT THE OWNER AND IM NOT RESPONSIBLE FOR ITS MISSUSE
+
 ## Dev Environment Setup (Mac)
 
 - Install VSCode  (https://code.visualstudio.com/)
